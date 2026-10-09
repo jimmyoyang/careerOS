@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import db from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 import {
   FactsSchema,
   type EvidenceSnapshot,
@@ -71,7 +72,10 @@ export async function reviseEvidence(
     return row;
   });
 }
-export async function latestEvidence(userId: string, client = db) {
+export async function latestEvidence(
+  userId: string,
+  client: Prisma.TransactionClient = db,
+) {
   const rows = await client.careerEvidence.findMany({
     where: { userId },
     orderBy: { revision: "desc" },
@@ -85,8 +89,9 @@ export async function latestEvidence(userId: string, client = db) {
 }
 export async function confirmedEvidence(
   userId: string,
+  client: Prisma.TransactionClient = db,
 ): Promise<EvidenceSnapshot[]> {
-  return (await latestEvidence(userId))
+  return (await latestEvidence(userId, client))
     .filter((row) => row.status === "confirmed")
     .map((row) => ({
       evidenceKey: row.evidenceKey,
@@ -97,8 +102,11 @@ export async function confirmedEvidence(
       facts: FactsSchema.parse(JSON.parse(row.factsJson)),
     }));
 }
-export async function getPreferences(userId: string) {
-  const settings = await db.userSettings.findUnique({ where: { userId } });
+export async function getPreferences(
+  userId: string,
+  client: Prisma.TransactionClient = db,
+) {
+  const settings = await client.userSettings.findUnique({ where: { userId } });
   return PreferencesSchema.parse(
     JSON.parse(settings?.settings ?? "{}").career ?? {},
   );

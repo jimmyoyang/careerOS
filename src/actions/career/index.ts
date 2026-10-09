@@ -48,7 +48,7 @@ const keySchema = z.string().min(8).max(120);
 const idSchema = z.string().min(1).max(120);
 export async function getWorkspaceAction() {
   return action(async (userId) => {
-    const [jobs, evidence, resumes, preferences, runs, materials] =
+    const [jobs, evidence, resumes, preferences, runs, materialCount] =
       await Promise.all([
         db.job.findMany({
           where: { userId },
@@ -66,11 +66,7 @@ export async function getWorkspaceAction() {
           orderBy: { createdAt: "desc" },
           take: 40,
         }),
-        db.careerMaterial.findMany({
-          where: { userId },
-          orderBy: { createdAt: "desc" },
-          select: { id: true, jobId: true, materialKey: true, createdAt: true },
-        }),
+        db.careerMaterial.count({ where: { userId } }),
       ]);
     return {
       jobs: jobs.map((j) => ({
@@ -100,10 +96,7 @@ export async function getWorkspaceAction() {
         errorCode: r.errorCode,
         createdAt: r.createdAt.toISOString(),
       })),
-      materials: materials.map((m) => ({
-        ...m,
-        createdAt: m.createdAt.toISOString(),
-      })),
+      materialCount,
     };
   });
 }
@@ -132,6 +125,7 @@ export async function getPreparationAction(jobId: string) {
         select: { eventKey: true },
       }),
     ]);
+    const reviewedKeys = new Set(reviewed.map((event) => event.eventKey));
     const analysis = context.analysisJson
       ? MatchSchema.parse(JSON.parse(context.analysisJson))
       : null;
@@ -152,9 +146,7 @@ export async function getPreparationAction(jobId: string) {
         id: m.id,
         materialKey: m.materialKey,
         createdAt: m.createdAt.toISOString(),
-        approved: reviewed.some(
-          (e) => e.eventKey === `material-reviewed:${m.materialKey}`,
-        ),
+        approved: reviewedKeys.has(`material-reviewed:${m.materialKey}`),
       })),
     };
   });

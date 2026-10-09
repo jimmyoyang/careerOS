@@ -21,10 +21,12 @@ import db from "@/lib/db";
 import { collectBackupData, buildBackupZip } from "@/lib/backup/export";
 import { importBackup } from "@/lib/backup/import";
 vi.mock("@/lib/scheduler", () => ({ syncSchedulerState: vi.fn() }));
+import { DraftSchema } from "@/lib/career/contracts";
 import { currentInputs } from "@/lib/career/inputs";
 import { processNextRun } from "@/lib/career/worker";
 import {
   queueCompilation,
+  uploadMaterial,
   approveMaterial,
   materialBytes,
   validatePdf,
@@ -286,3 +288,39 @@ it("rejects PDFs larger than the shared backup restore limit", async () => {
     code: "COMPILE_FAILED",
   });
 });
+
+
+it("preserves rejected bullets for compilation retries and PDF upload fallback", async () => {
+  const userId = await seedAccount(db, "partial-review@example.com");
+  const { jobId } = await importJob(userId, input, randomUUID());
+  for (const text of ["使用 Python 完成检索，延迟降低 20%。", "完成接口测试。"])
+    await reviseEvidence(userId, {
+      kind: "project", title: "项目", facts: { schemaVersion: 1, text }, status: "confirmed",
+    });
+  const run = await enqueueRun(userId, jobId, "tailor", {}, randomUUID());
+  await processNextRun("partial-review-worker");
+  const tailored = await db.careerRun.findUniqueOrThrow({ where: { id: run.id } });
+  const draft = DraftSchema.parse(JSON.parse(tailored.resultJson!));
+  expect(draft.bullets).toHaveLength(2);
+  const bullets = draft.bullets.map((bullet, index) => ({
+    ...bullet, verification: index === 0 ? "accepted" as const : "rejected" as const,
+  }));
+  const contact = { name: "张三" };
+  const key = randomUUID();
+  const compilation = await queueCompilation(userId, run.id, bullets, contact, key);
+  expect((await queueCompilation(userId, run.id, bullets, contact, key)).id).toBe(compilation.id);
+  await db.careerRun.update({ where: { id: compilation.id }, data: { status: "failed" } });
+  const retry = await queueCompilation(userId, run.id, bullets, contact, randomUUID());
+  expect(retry.id).not.toBe(compilation.id);
+  await db.careerRun.update({ where: { id: retry.id }, data: { status: "failed" } });
+
+  const pdf = fs.readFileSync(path.join(process.cwd(), "__tests__/fixtures/career-zh.pdf"));
+  const uploadKey = randomUUID();
+  const uploaded = await uploadMaterial(userId, run.id, bullets, contact, pdf, uploadKey);
+  expect(await uploadMaterial(userId, run.id, bullets, contact, pdf, uploadKey)).toEqual(uploaded);
+  const reviewed = await db.careerRun.findUniqueOrThrow({ where: { id: run.id } });
+  expect(DraftSchema.parse(JSON.parse(reviewed.resultJson!)).bullets.map(b => b.verification))
+    .toEqual(["accepted", "rejected"]);
+  const material = await db.careerMaterial.findUniqueOrThrow({ where: { id: uploaded.materialId! } });
+  expect(JSON.parse(material.payloadJson).draft.bullets).toHaveLength(1);
+}, 30000);

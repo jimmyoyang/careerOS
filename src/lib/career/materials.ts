@@ -63,6 +63,7 @@ export async function acceptedDraft(
   validateTailoring(accepted, inputs.snapshot.evidence);
   return {
     run,
+    reviewedDraft: draft,
     draft: { ...draft, bullets: accepted },
     contact: ContactSchema.parse(contactInput),
     inputs,
@@ -109,7 +110,7 @@ export async function queueCompilation(
       data: {
         status: "succeeded",
         step: "accepted",
-        resultJson: JSON.stringify(accepted.draft),
+        resultJson: JSON.stringify(accepted.reviewedDraft),
         version: { increment: 1 },
       },
     });
@@ -395,7 +396,7 @@ export async function uploadMaterial(
         data: {
           status: "succeeded",
           step: "accepted",
-          resultJson: JSON.stringify(accepted.draft),
+          resultJson: JSON.stringify(accepted.reviewedDraft),
         },
       });
       const result = { schemaVersion: 1, materialId: material.id };

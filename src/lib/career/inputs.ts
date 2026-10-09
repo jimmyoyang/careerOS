@@ -1,12 +1,8 @@
 import type { Prisma } from "@prisma/client";
 import db from "@/lib/db";
 import { resumeDetailInclude } from "@/lib/jobs/resumeDetailInclude";
-import {
-  FactsSchema,
-  PreferencesSchema,
-  RequirementsSchema,
-  type EvidenceSnapshot,
-} from "./contracts";
+import { RequirementsSchema } from "./contracts";
+import { confirmedEvidence, getPreferences } from "./evidence";
 import { CareerError } from "./errors";
 import { hash } from "./hash";
 import { ownedJob } from "./access";
@@ -45,30 +41,9 @@ export async function currentInputs(
   const job = await ownedJob(userId, jobId, tx);
   const context = job.careerContext;
   if (!context) throw new CareerError("NOT_FOUND", "请先将岗位加入求职准备。");
-  const rows = await tx.careerEvidence.findMany({
-    where: { userId },
-    orderBy: { revision: "desc" },
-  });
-  const seen = new Set<string>();
-  const evidence: EvidenceSnapshot[] = [];
-  for (const row of rows) {
-    if (seen.has(row.evidenceKey)) continue;
-    seen.add(row.evidenceKey);
-    if (row.status === "confirmed")
-      evidence.push({
-        evidenceKey: row.evidenceKey,
-        revision: row.revision,
-        contentHash: row.contentHash,
-        kind: row.kind,
-        title: row.title,
-        facts: FactsSchema.parse(JSON.parse(row.factsJson)),
-      });
-  }
+  const evidence = await confirmedEvidence(userId, tx);
   evidence.sort((a, b) => a.evidenceKey.localeCompare(b.evidenceKey));
-  const settings = await tx.userSettings.findUnique({ where: { userId } });
-  const preferences = PreferencesSchema.parse(
-    JSON.parse(settings?.settings ?? "{}").career ?? {},
-  );
+  const preferences = await getPreferences(userId, tx);
   const resume = job.resumeId
     ? await tx.resume.findFirst({
         where: { id: job.resumeId, profile: { userId } },

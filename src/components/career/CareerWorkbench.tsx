@@ -116,7 +116,7 @@ export function CareerWorkbench({
               },
               {
                 label: "简历材料",
-                value: workspace.materials.length,
+                value: workspace.materialCount,
                 icon: FileText,
               },
             ].map(({ label, value, icon: Icon }) => (
