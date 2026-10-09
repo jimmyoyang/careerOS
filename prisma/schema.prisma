@@ -38,6 +38,11 @@ model User {
   Question       Question[]
   McpAccessToken McpAccessToken[]
   ChatConversation ChatConversation?
+  careerEvidence CareerEvidence[]
+  careerJobContexts CareerJobContext[]
+  careerMaterials CareerMaterial[]
+  careerRuns CareerRun[]
+  careerEvents CareerEvent[]
   defaultResumeId String?
   defaultResume   Resume?          @relation("UserDefaultResume", fields: [defaultResumeId], references: [id], onDelete: SetNull)
 }
@@ -90,6 +95,7 @@ model Resume {
   Job            Job[]
   Automation     Automation[]
   defaultForUser User[]          @relation("UserDefaultResume")
+  careerMaterials CareerMaterial[]
   reviewData     String?
 }
 
@@ -111,6 +117,7 @@ model File {
   fileType   String
   uploadedAt DateTime @default(now())
   Resume     Resume?
+  careerMaterials CareerMaterial[]
 }
 
 model ResumeSection {
@@ -461,6 +468,10 @@ model Job {
   contactLinks  JobContact[]
   stages        JobStage[]
 
+  careerContext CareerJobContext?
+  careerMaterials CareerMaterial[]
+  careerRuns CareerRun[]
+
   // Automation discovery fields
   automationId    String?
   automation      Automation? @relation(fields: [automationId], references: [id], onDelete: SetNull)
@@ -685,4 +696,123 @@ model ChatConversation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+// Career JSON columns contain versioned, validated documents. Stable logical
+// keys inside frozen documents remain unchanged across backup restoration.
+model CareerEvidence {
+  id                 String    @id @default(uuid())
+  userId             String
+  user               User      @relation(fields: [userId], references: [id])
+  evidenceKey        String
+  revision           Int       @default(1)
+  kind               String
+  title              String
+  factsJson          String
+  protectedPathsJson String
+  sourceJson         String
+  status             String    @default("draft")
+  contentHash        String
+  confirmedAt        DateTime?
+  createdAt          DateTime  @default(now())
+
+  @@unique([userId, evidenceKey, revision])
+  @@index([userId, status])
+}
+
+model CareerJobContext {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  jobId             String   @unique
+  job               Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  platform          String
+  recruitmentType   String
+  cohort            String
+  postingKey        String?
+  rawJd             String
+  rawJdHash          String
+  sourcesJson       String
+  requirementsJson  String
+  analysisJson      String?
+  referralJson      String?
+  preparationStatus String   @default("draft")
+  version           Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([userId, postingKey])
+  @@index([userId, preparationStatus])
+}
+
+model CareerMaterial {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  materialKey    String
+  jobId          String
+  job            Job      @relation(fields: [jobId], references: [id], onDelete: Restrict)
+  sourceResumeId String?
+  sourceResume   Resume?  @relation(fields: [sourceResumeId], references: [id], onDelete: SetNull)
+  fileId         String
+  file           File     @relation(fields: [fileId], references: [id], onDelete: Restrict)
+  payloadJson    String
+  texSource      String
+  payloadHash    String
+  pdfHash        String
+  createdAt      DateTime @default(now())
+  runs           CareerRun[]
+
+  @@unique([userId, materialKey])
+  @@index([jobId])
+  @@index([fileId])
+}
+
+model CareerRun {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  operationKey   String
+  idempotencyKey String
+  jobId          String?
+  job            Job?      @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  materialId     String?
+  material       CareerMaterial? @relation(fields: [materialId], references: [id], onDelete: SetNull)
+  kind           String
+  step           String
+  status         String    @default("queued")
+  accountLockKey String?
+  requestHash    String
+  inputJson      String
+  resultJson     String?
+  attempts       Int       @default(0)
+  leaseOwner     String?
+  leaseUntil     DateTime?
+  version        Int       @default(0)
+  errorCode      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, operationKey])
+  @@unique([userId, idempotencyKey])
+  @@index([status, leaseUntil])
+  @@index([userId, createdAt])
+  // Partial unique indexes for job work, account applications and maintenance
+  // live in the incremental career_core migration.
+}
+
+model CareerEvent {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  eventKey     String
+  operationKey String?
+  type         String
+  actor        String
+  payloadJson  String
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, eventKey])
+  @@index([userId, createdAt])
 }

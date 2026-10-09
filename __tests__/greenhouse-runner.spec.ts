@@ -22,6 +22,7 @@ vi.mock("@prisma/client", () => {
     jobStageType: { findUnique: vi.fn(), aggregate: vi.fn(), create: vi.fn() },
     jobStage: { create: vi.fn() },
   };
+  Object.assign(m, { $transaction: vi.fn((fn: (tx: unknown) => unknown) => fn(m)), careerRun: { updateMany: vi.fn().mockResolvedValue({ count: 0 }), findFirst: vi.fn().mockResolvedValue(null) } });
   return {
     PrismaClient: vi.fn(function () {
       return m;

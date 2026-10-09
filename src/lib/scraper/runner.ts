@@ -1,3 +1,5 @@
+import { transaction } from "@/lib/career/transaction";
+import { assertNoMaintenance } from "@/lib/career/maintenance";
 import db from "@/lib/db";
 import type { Automation } from "@/models/automation.model";
 import { ATS_PROVIDERS } from "./ats/registry";
@@ -71,11 +73,9 @@ async function runAutomationTraced(
   // relying on the DB constraint instead closes that race for good.
   let run;
   try {
-    run = await db.automationRun.create({
-      data: {
-        automationId: automation.id,
-        status: "running",
-      },
+    run = await transaction(async (tx) => {
+      await assertNoMaintenance(tx, automation.userId);
+      return tx.automationRun.create({ data: { automationId: automation.id, status: "running" } });
     });
   } catch (error: any) {
     if (error?.code === "P2002") {

@@ -8,6 +8,7 @@ import {
   JobTitle,
   Tag,
 } from "@/models/job.model";
+import { CareerJobPanel } from "@/components/career/CareerJobPanel";
 import { TipTapContentViewer } from "../TipTapContentViewer";
 import { Badge } from "../ui/badge";
 import { Card } from "../ui/card";
@@ -51,6 +52,7 @@ import type { JobStage, JobStageTypeRef } from "@/models/jobStage.model";
 const JOB_DETAIL_TABS = [
   "description",
   "timeline",
+  "career",
   "match",
   "letter",
   "contacts",
@@ -249,6 +251,7 @@ function JobDetails({
                 </Badge>
               )}
             </TabsTrigger>
+            <TabsTrigger value="career">CareerOS</TabsTrigger>
             <TabsTrigger value="match">AI Match</TabsTrigger>
             <TabsTrigger value="letter">Cover Letter</TabsTrigger>
             <TabsTrigger value="contacts">
@@ -272,6 +275,9 @@ function JobDetails({
             <Card className="p-6">
               <TipTapContentViewer content={job?.description} />
             </Card>
+          </TabsContent>
+          <TabsContent value="career" className="mt-4">
+            <CareerJobPanel jobId={job.id} />
           </TabsContent>
           <TabsContent value="match" className="mt-4">
             <Card className="p-6">

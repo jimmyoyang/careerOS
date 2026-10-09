@@ -19,7 +19,7 @@ vi.mock("@/lib/backup/snapshot", () => ({
 }));
 
 vi.mock("@/lib/db", () => {
-  const counted = () => ({ count: vi.fn().mockResolvedValue(0), deleteMany: vi.fn(), createMany: vi.fn(), findMany: vi.fn().mockResolvedValue([]), create: vi.fn(), update: vi.fn(), upsert: vi.fn(), findFirst: vi.fn().mockResolvedValue(null) });
+  const counted = () => ({ count: vi.fn().mockResolvedValue(0), deleteMany: vi.fn(), createMany: vi.fn(), findMany: vi.fn().mockResolvedValue([]), create: vi.fn().mockResolvedValue({ id: "maintenance" }), updateMany: vi.fn().mockResolvedValue({ count: 1 }), update: vi.fn(), upsert: vi.fn(), findFirst: vi.fn().mockResolvedValue(null) });
   const mock: Record<string, unknown> = {
     automationRun: { ...counted(), findFirst: vi.fn().mockResolvedValue(null) },
     jobStatus: { findMany: vi.fn().mockResolvedValue([]), create: vi.fn() },
@@ -27,6 +27,7 @@ vi.mock("@/lib/db", () => {
     $transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => fn(mock)),
   };
   for (const key of [
+    "careerEvidence", "careerJobContext", "careerMaterial", "careerRun", "careerEvent",
     "company", "jobTitle", "location", "jobSource", "tag", "activityType",
     "profile", "file", "resume", "contactInfo", "summary", "resumeSection",
     "workExperience", "education", "licenseOrCertification", "otherSection",
@@ -38,6 +39,9 @@ vi.mock("@/lib/db", () => {
   ]) {
     mock[key] = counted();
   }
+  (mock.careerRun as ReturnType<typeof counted>).findFirst.mockImplementation((args: { where: { id?: string } }) =>
+    Promise.resolve(args.where.id ? { id: args.where.id } : null),
+  );
   return { default: mock };
 });
 
@@ -62,7 +66,7 @@ describe("importBackup guards", () => {
     expect(mockDb.job.deleteMany).not.toHaveBeenCalled();
   });
 
-  it("refuses before any write when the target has a run in flight", async () => {
+  it("refuses before wiping when the target has a run in flight", async () => {
     mockDb.automationRun.findFirst.mockResolvedValueOnce({ id: "run-1" });
     await expect(
       importBackup(await emptyBackup(), "user-1", EMAIL, true),

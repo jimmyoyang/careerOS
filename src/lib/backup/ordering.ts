@@ -35,7 +35,12 @@ export type BackupModel =
   | "Activity"
   | "Question"
   | "AutomationRun"
-  | "UserSettings";
+  | "UserSettings"
+  | "CareerEvidence"
+  | "CareerJobContext"
+  | "CareerMaterial"
+  | "CareerRun"
+  | "CareerEvent";
 
 export interface ModelSpec {
   // Prisma client delegate key, e.g. prisma[spec.delegate].findMany(...)
@@ -68,9 +73,11 @@ export const MODEL_SPECS: Record<BackupModel, ModelSpec> = {
 
   Profile: { delegate: "profile", owner: "userId", fks: {}, scope: byUser },
 
-  // File holds no foreign key — Resume.FileId points at it — so it is scoped
-  // through the back-relation, matching deleteFile in profile.actions.ts.
-  File: { delegate: "file", fks: {}, scope: byResume },
+  // Frozen Career PDFs are independent of Resume.FileId.
+  File: {
+    delegate: "file", fks: {},
+    scope: (userId) => ({ OR: [byResume(userId), { careerMaterials: { some: { userId } } }] }),
+  },
 
   Resume: {
     delegate: "resume",
@@ -211,6 +218,18 @@ export const MODEL_SPECS: Record<BackupModel, ModelSpec> = {
     fks: { automationId: "Automation" },
     scope: (userId) => ({ automation: { userId } }),
   },
+  CareerEvidence: { delegate: "careerEvidence", owner: "userId", fks: {}, scope: byUser },
+  CareerJobContext: { delegate: "careerJobContext", owner: "userId", fks: { jobId: "Job" }, scope: byUser },
+  CareerMaterial: {
+    delegate: "careerMaterial", owner: "userId",
+    fks: { jobId: "Job", sourceResumeId: "Resume", fileId: "File" }, scope: byUser,
+  },
+  CareerRun: {
+    delegate: "careerRun", owner: "userId", fks: { jobId: "Job", materialId: "CareerMaterial" },
+    // The row protecting a restore must survive its wipe and never be exported.
+    scope: (userId) => ({ userId, kind: { not: "maintenance" } }),
+  },
+  CareerEvent: { delegate: "careerEvent", owner: "userId", fks: {}, scope: byUser },
   UserSettings: { delegate: "userSettings", owner: "userId", fks: {}, scope: byUser },
 };
 
@@ -251,6 +270,11 @@ export const INSERT_ORDER: BackupModel[] = [
   "Activity",
   "AutomationRun",
   "UserSettings",
+  "CareerEvidence",
+  "CareerJobContext",
+  "CareerMaterial",
+  "CareerRun",
+  "CareerEvent",
 ];
 
 export const DELETE_ORDER: BackupModel[] = [...INSERT_ORDER].reverse();
@@ -274,4 +298,9 @@ export const EMPTINESS_MODELS: BackupModel[] = [
   "Activity",
   "Question",
   "Automation",
+  "CareerEvidence",
+  "CareerJobContext",
+  "CareerMaterial",
+  "CareerRun",
+  "CareerEvent",
 ];

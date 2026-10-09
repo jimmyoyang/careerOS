@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.career
+    ports:
+      - "127.0.0.1:3737:3737"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: file:/data/career.db
+      UPLOADS_DIR: /data
+      AUTH_SECRET: ${AUTH_SECRET:?Set a persistent random AUTH_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?Set a persistent random ENCRYPTION_KEY}
+      NEXTAUTH_URL: http://localhost:3737
+      AUTH_TRUST_HOST: "true"
+      CAREER_ENABLED: "true"
+      CAREER_LATEX_URL: http://latex:3738
+      MCP_ENABLED: "false"
+      TZ: Asia/Shanghai
+    volumes:
+      - career-data:/data
+    networks: [default, compiler]
+    depends_on: [latex]
+    restart: unless-stopped
+  latex:
+    build:
+      context: .
+      dockerfile: services/latex/Dockerfile
+    networks: [compiler]
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 64
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+networks:
+  compiler:
+    internal: true
+volumes:
+  career-data:

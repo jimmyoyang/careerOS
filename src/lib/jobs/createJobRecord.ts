@@ -33,7 +33,7 @@ export async function createFirstStage(
   });
 }
 
-export async function createJobRecord(fields: {
+export async function buildJobCreateData(fields: {
   jobTitleId: string;
   companyId: string;
   locationId?: string | null;
@@ -61,8 +61,7 @@ export async function createJobRecord(fields: {
     where: { id: fields.statusId },
     select: { value: true },
   });
-  return await prisma.job.create({
-    data: {
+  return {
       ...rest,
       ...jobFieldsForStage(
         status?.value ?? "",
@@ -73,6 +72,9 @@ export async function createJobRecord(fields: {
       createdAt,
       ...(tagIds.length > 0 ? { tags: { connect: tagIds.map((id) => ({ id })) } } : {}),
       stages,
-    },
-  });
+  };
+}
+
+export async function createJobRecord(fields: Parameters<typeof buildJobCreateData>[0]) {
+  return prisma.job.create({ data: await buildJobCreateData(fields) });
 }

@@ -39,3 +39,10 @@ describe("classifyDescriptionCompleteness", () => {
     expect(classifyDescriptionCompleteness("")).toBe("title-only");
   });
 });
+
+describe("mixed Chinese content units", () => {
+  it("counts Chinese characters and English words without treating a whole JD as one word", () => {
+    expect(countWords("熟悉 Python 开发")).toBe(5);
+    expect(classifyDescriptionCompleteness("负责设计实现测试维护".repeat(20))).toBe("full");
+  });
+});

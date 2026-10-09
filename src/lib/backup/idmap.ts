@@ -5,6 +5,9 @@ import { MODEL_SPECS, type BackupModel } from "./ordering";
 // these is degraded to null (the spec's defaultResumeId rule generalised);
 // a dangling required key aborts the import instead of silently reshaping it.
 const OPTIONAL_FKS = new Set<string>([
+  "CareerMaterial.sourceResumeId",
+  "CareerRun.jobId",
+  "CareerRun.materialId",
   "Resume.FileId",
   "ResumeSection.summaryId",
   "WorkExperience.resumeSectionId",

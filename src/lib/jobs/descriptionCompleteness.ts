@@ -4,7 +4,9 @@ import type { DescriptionCompleteness } from "@/models/job.model";
 export function countWords(text: string): number {
   const trimmed = text.trim();
   if (!trimmed) return 0;
-  return trimmed.split(/\s+/).length;
+  // One Han character or whitespace-delimited non-Han token is one content unit.
+  // This is a length heuristic, not a measure of requirement completeness.
+  return (trimmed.match(/\p{Script=Han}|[^\p{Script=Han}\s]+/gu) ?? []).length;
 }
 
 // Classified from the RAW submitted text, before markdown rendering, so

@@ -266,7 +266,9 @@ export const deleteJobById = async (
     revalidatePath("/dashboard");
     return { res, success: true };
   } catch (error) {
-    const msg = "Failed to delete job.";
+    const msg = (error as { code?: string }).code === "P2003"
+      ? "This job has frozen application materials. Export a backup before using a full account restore to remove archived data."
+      : "Failed to delete job.";
     return handleError(error, msg);
   }
 };

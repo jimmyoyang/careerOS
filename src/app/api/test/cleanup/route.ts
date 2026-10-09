@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { removeResumeFile } from "@/lib/resumeFiles";
 import { deleteResumeById } from "@/actions/profile.actions";
 
 // Test-only endpoint used by e2e fixtures to tear down what a test created:
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
     contacts = [],
     contactRoles = [],
     jobStageTypes = [],
+    careerEvidenceTitles = [],
   }: {
     jobIds?: string[];
     resumes?: string[];
@@ -50,6 +52,7 @@ export async function POST(req: NextRequest) {
     contacts?: string[];
     contactRoles?: string[];
     jobStageTypes?: string[];
+    careerEvidenceTitles?: string[];
   } = await req.json();
 
   // Delete automations before resumes: Automation.resumeId is a required FK, so
@@ -64,7 +67,28 @@ export async function POST(req: NextRequest) {
   // Delete jobs, resumes and tasks first (they/their sections reference the
   // Library items), so those items become unused and eligible for deletion.
   for (const id of jobIds) {
-    await prisma.job.deleteMany({ where: { id, userId } });
+    // This explicit test teardown is disabled above in production. Normal job
+    // deletion keeps the CareerMaterial Restrict constraint intact.
+    const files = await prisma.careerMaterial.findMany({
+      where: { jobId: id, userId },
+      select: { file: true },
+    });
+    await prisma.$transaction(async (tx) => {
+      await tx.careerRun.deleteMany({ where: { jobId: id, userId } });
+      await tx.careerMaterial.deleteMany({ where: { jobId: id, userId } });
+      await tx.job.deleteMany({ where: { id, userId } });
+    });
+    for (const { file } of files) {
+      const removed = await prisma.file.deleteMany({
+        where: { id: file.id, Resume: null, careerMaterials: { none: {} } },
+      });
+      if (removed.count) await removeResumeFile(file.filePath);
+    }
+  }
+  if (careerEvidenceTitles.length) {
+    await prisma.careerEvidence.deleteMany({
+      where: { userId, title: { in: careerEvidenceTitles } },
+    });
   }
   for (const title of resumes) {
     const rows = await prisma.resume.findMany({
@@ -166,10 +190,7 @@ type RefModel =
 
 // Count every place a Library row can still be referenced from, so we never
 // delete one that another job or resume section still uses.
-async function referenceCount(
-  model: RefModel,
-  refId: string,
-): Promise<number> {
+async function referenceCount(model: RefModel, refId: string): Promise<number> {
   if (model === "jobTitle") {
     return (
       (await prisma.job.count({ where: { jobTitleId: refId } })) +

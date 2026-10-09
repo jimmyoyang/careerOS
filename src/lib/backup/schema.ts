@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const BACKUP_FORMAT_VERSION = 1;
+export const BACKUP_FORMAT_VERSION = 2;
 
 export const ManifestSchema = z.object({
-  formatVersion: z.literal(BACKUP_FORMAT_VERSION),
+  formatVersion: z.union([z.literal(1), z.literal(BACKUP_FORMAT_VERSION)]),
   appVersion: z.string(),
   exportedAt: z.string(),
   sourceEmail: z.string(),
@@ -359,10 +359,55 @@ const UserSettings = z.object({
   updatedAt: dt,
 });
 
+// Career payloads retain their bytes (and content hashes), but only supported
+// object versions are accepted. Per-operation schemas validate their contents.
+const careerJson = str.refine((value) => {
+  try {
+    const parsed = JSON.parse(value);
+    return parsed !== null && typeof parsed === "object" && !Array.isArray(parsed) && parsed.schemaVersion === 1;
+  } catch {
+    return false;
+  }
+}, "Expected a Career JSON object with schemaVersion 1");
+
+const CareerEvidence = z.object({
+  id, evidenceKey: id, revision: int.positive(), kind: str, title: str,
+  factsJson: careerJson, protectedPathsJson: careerJson, sourceJson: careerJson,
+  status: z.enum(["draft", "confirmed", "withdrawn"]), contentHash: id,
+  confirmedAt: optDt, createdAt: dt,
+});
+const CareerJobContext = z.object({
+  id, jobId: id, platform: str, recruitmentType: str, cohort: str, postingKey: optId,
+  rawJd: str, rawJdHash: id, sourcesJson: careerJson, requirementsJson: careerJson,
+  analysisJson: careerJson.nullable(), referralJson: careerJson.nullable(),
+  preparationStatus: str, version: int.nonnegative(), createdAt: dt, updatedAt: dt,
+});
+const CareerMaterial = z.object({
+  id, materialKey: id, jobId: id, sourceResumeId: optId, fileId: id,
+  payloadJson: careerJson, texSource: str, payloadHash: id, pdfHash: id, createdAt: dt,
+});
+const CareerRun = z.object({
+  id, operationKey: id, idempotencyKey: id, jobId: optId, materialId: optId,
+  kind: z.enum(["import", "parse", "match", "tailor", "compile", "application"]),
+  step: str, status: z.enum(["queued", "running", "awaiting_review", "awaiting_human", "awaiting_receipt", "needs_verification", "succeeded", "failed", "cancelled", "interrupted"]),
+  accountLockKey: optId, requestHash: id, inputJson: careerJson,
+  resultJson: careerJson.nullable(), attempts: int.nonnegative(), leaseOwner: optId,
+  leaseUntil: optDt, version: int.nonnegative(), errorCode: optStr, createdAt: dt, updatedAt: dt,
+});
+const CareerEvent = z.object({
+  id, eventKey: id, operationKey: optId, type: str, actor: str,
+  payloadJson: careerJson, createdAt: dt,
+});
+
 const group = <T extends z.ZodTypeAny>(schema: T) =>
   z.array(schema).default([]);
 
 export const BackupDataSchema = z.object({
+  CareerEvidence: group(CareerEvidence),
+  CareerJobContext: group(CareerJobContext),
+  CareerMaterial: group(CareerMaterial),
+  CareerRun: group(CareerRun),
+  CareerEvent: group(CareerEvent),
   Company: group(Company),
   JobTitle: group(JobTitle),
   Location: group(Location),

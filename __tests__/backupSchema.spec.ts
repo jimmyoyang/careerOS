@@ -14,8 +14,8 @@ const validManifest = {
 };
 
 describe("manifest schema", () => {
-  it("pins the format version at 1", () => {
-    expect(BACKUP_FORMAT_VERSION).toBe(1);
+  it("pins the export format version at 2", () => {
+    expect(BACKUP_FORMAT_VERSION).toBe(2);
   });
 
   it("accepts a well-formed manifest", () => {
@@ -23,7 +23,7 @@ describe("manifest schema", () => {
   });
 
   it("rejects a different formatVersion", () => {
-    const res = ManifestSchema.safeParse({ ...validManifest, formatVersion: 2 });
+    const res = ManifestSchema.safeParse({ ...validManifest, formatVersion: 3 });
     expect(res.success).toBe(false);
   });
 

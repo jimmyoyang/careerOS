@@ -1,0 +1,23 @@
+FROM node:24-bookworm-slim AS build
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+ENV DATABASE_URL=file:/data/career.db CAREER_ENABLED=false NEXT_TELEMETRY_DISABLED=1
+RUN npx prisma generate && npm run build
+
+FROM node:24-bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/node_modules ./node_modules
+COPY services/career-entrypoint.sh ./
+RUN mkdir -p /data && chown node:node /data && chmod +x career-entrypoint.sh
+USER node
+ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3737
+EXPOSE 3737
+ENTRYPOINT ["./career-entrypoint.sh"]

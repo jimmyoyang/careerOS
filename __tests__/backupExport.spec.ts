@@ -17,6 +17,7 @@ vi.mock("@/lib/db", () => {
     jobStatus: { findMany: vi.fn().mockResolvedValue([]) },
   };
   for (const key of [
+    "careerEvidence", "careerJobContext", "careerMaterial", "careerRun", "careerEvent",
     "company", "jobTitle", "location", "jobSource", "tag", "activityType",
     "profile", "file", "resume", "contactInfo", "summary", "resumeSection",
     "workExperience", "education", "licenseOrCertification", "otherSection",

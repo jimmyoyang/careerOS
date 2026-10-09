@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import type JSZip from "jszip";
 import db from "@/lib/db";
+import { MaintenanceError, withMaintenanceLease, type MaintenanceLeaseGuard } from "@/lib/career/maintenance";
 import { APP_CONSTANTS, CONTACT_ROLES, JOB_STAGES } from "@/lib/constants";
 import { IdMap, buildCreateData } from "./idmap";
 import { BackupError, openBackupZip, readManifest } from "./manifest";
@@ -97,24 +98,31 @@ async function readData(zip: JSZip): Promise<BackupData> {
       `Backup data failed validation: ${parsed.error.issues[0]?.path.join(".")} ${parsed.error.issues[0]?.message}`,
     );
   }
+  validateCareerReferences(parsed.data);
   return parsed.data;
 }
 
-// The scheduler holds a live handle to an in-flight run and a partial unique
-// index enforces one per automation, so deleting it mid-flight is not a
-// contention problem the "database busy" retry covers.
-async function assertNoActiveRun(userId: string): Promise<void> {
-  const active = await db.automationRun.findFirst({
-    where: {
-      status: { in: ["running", "cancelling"] },
-      automation: { userId },
-    },
-    select: { id: true },
-  });
-  if (active) {
-    throw new BackupError(
-      "An automation run is in progress. Wait for it to finish, then import again.",
-    );
+function validateCareerReferences(data: BackupData): void {
+  const owners = new Map<string, BackupModel>();
+  for (const model of INSERT_ORDER) {
+    for (const row of rowsFor(data, model)) {
+      const id = row.id as string;
+      if (owners.has(id)) throw new BackupError(`Duplicate backup id in ${model}.`);
+      owners.set(id, model);
+    }
+  }
+  for (const model of ["CareerJobContext", "CareerMaterial", "CareerRun"] as const) {
+    for (const row of rowsFor(data, model)) {
+      for (const [field, target] of Object.entries(MODEL_SPECS[model].fks)) {
+        const value = row[field] as string | null;
+        if (value === null) continue;
+        const actual = owners.get(value);
+        const optional = (model === "CareerMaterial" && field === "sourceResumeId") || model === "CareerRun";
+        if (actual !== target && (actual !== undefined || !optional)) {
+          throw new BackupError(`${model}.${field} does not reference a ${target} row in this backup.`);
+        }
+      }
+    }
   }
 }
 
@@ -181,6 +189,11 @@ async function insertLookups(
 }
 
 async function wipe(tx: Tx, userId: string): Promise<void> {
+  // Ownership traverses relations that the wipe itself removes. Capture IDs
+  // while those relations still exist, then delete only this owner's files.
+  const files = await tx.file.findMany({
+    where: MODEL_SPECS.File.scope(userId), select: { id: true },
+  }) as { id: string }[];
   // Null the back-reference first: User.defaultResumeId is a foreign key into
   // a table the wipe is about to empty.
   await tx.user.update({
@@ -194,7 +207,8 @@ async function wipe(tx: Tx, userId: string): Promise<void> {
 
   for (const model of DELETE_ORDER) {
     const spec = MODEL_SPECS[model];
-    await tx[spec.delegate].deleteMany({ where: spec.scope(userId) });
+    const where = model === "File" ? { id: { in: files.map((file) => file.id) } } : spec.scope(userId);
+    await tx[spec.delegate].deleteMany({ where });
   }
 }
 
@@ -202,31 +216,15 @@ function rowsFor(data: BackupData, model: BackupModel): Record<string, unknown>[
   return (data as unknown as Record<string, Record<string, unknown>[]>)[model];
 }
 
-export async function importBackup(
-  bytes: Buffer,
+async function restoreBackup(
+  zip: JSZip,
+  manifest: BackupManifest,
+  data: BackupData,
   userId: string,
   userEmail: string,
   confirmWipe: boolean,
+  assertLease: MaintenanceLeaseGuard,
 ): Promise<ImportResult> {
-  // A JWT session outlives the database it was minted against: a container
-  // with a fresh dev.db still accepts the old cookie, and every scoped read
-  // returns empty instead of failing. wipe()'s user.update is the only
-  // statement that needs the row itself, so without this the import dies
-  // mid-transaction on an opaque P2025.
-  const owner = await db.user.findUnique({
-    where: { id: userId },
-    select: { id: true },
-  });
-  if (!owner) {
-    throw new BackupError(
-      "Your sign-in is out of date. Sign out, sign in again, then retry the import.",
-    );
-  }
-
-  const zip = await openBackupZip(bytes);
-  const manifest = await readManifest(zip);
-  const data = await readData(zip);
-
   const targetCounts = await countTargetContent(userId);
   const targetIsEmpty = Object.values(targetCounts).every((n) => n === 0);
   if (!targetIsEmpty && !confirmWipe) {
@@ -234,8 +232,6 @@ export async function importBackup(
       "This account already holds data. Confirm that you want it replaced before importing.",
     );
   }
-
-  await assertNoActiveRun(userId);
 
   // The safety net, and the last thing that happens before this function is
   // able to destroy anything. The transaction below protects against a crash;
@@ -325,6 +321,7 @@ export async function importBackup(
       async (transaction) => {
         const tx = transaction as unknown as Tx;
 
+        await assertLease(transaction);
         await wipe(tx, userId);
         await insertLookups(tx, data, idMap, userId, statusByValue);
 
@@ -386,6 +383,16 @@ export async function importBackup(
             if (model === "Automation") {
               payload = normalizeAutomation(payload as never);
             }
+            if (model === "CareerRun") {
+              const terminal = ["succeeded", "failed", "cancelled", "interrupted"].includes(payload.status as string);
+              payload = {
+                ...payload,
+                status: terminal ? payload.status : payload.kind === "application" ? "needs_verification" : "interrupted",
+                leaseOwner: null, leaseUntil: null,
+                version: (payload.version as number) + 1,
+                errorCode: terminal ? payload.errorCode : "RESTORED_REQUIRES_REVIEW",
+              };
+            }
             if (model === "AutomationRun") {
               payload = normalizeAutomationRun(payload as never);
             }
@@ -415,6 +422,7 @@ export async function importBackup(
           ? (idMap.get(data.user.defaultResumeId) ?? null)
           : null;
         await tx.user.update({ where: { id: userId }, data: { defaultResumeId } });
+        await assertLease(transaction);
       },
       { timeout: 120_000, maxWait: 15_000 },
     );
@@ -456,4 +464,26 @@ export async function importBackup(
   await syncSchedulerState();
 
   return { counts, filesWritten: writtenPaths.length, snapshotPath };
+}
+
+
+export async function importBackup(
+  bytes: Buffer,
+  userId: string,
+  userEmail: string,
+  confirmWipe: boolean,
+): Promise<ImportResult> {
+  // Validate identity before creating the owner-scoped lease so stale sessions
+  // retain the existing helpful error instead of a foreign-key failure.
+  const owner = await db.user.findUnique({ where: { id: userId }, select: { id: true } });
+  if (!owner) throw new BackupError("Your sign-in is out of date. Sign out, sign in again, then retry the import.");
+  const zip = await openBackupZip(bytes);
+  const manifest = await readManifest(zip);
+  const data = await readData(zip);
+  try {
+    return await withMaintenanceLease(userId, (assertLease) => restoreBackup(zip, manifest, data, userId, userEmail, confirmWipe, assertLease));
+  } catch (error) {
+    if (error instanceof MaintenanceError) throw new BackupError(error.message);
+    throw error;
+  }
 }

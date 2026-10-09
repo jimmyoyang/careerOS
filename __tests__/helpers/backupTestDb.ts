@@ -13,7 +13,9 @@ import {
 
 export function makeTestDbUrl(): { url: string; dir: string } {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jobsync-backup-"));
-  return { url: `file:${path.join(dir, "test.db")}`, dir };
+  const file = path.join(dir, "test.db");
+  fs.writeFileSync(file, "");
+  return { url: `file:${file}`, dir };
 }
 
 // db push rather than migrate deploy: the round-trip asserts against the
