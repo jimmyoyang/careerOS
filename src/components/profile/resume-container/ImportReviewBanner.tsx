@@ -31,25 +31,22 @@ export function ImportReviewBanner({
               {isStructuring ? (
                 <>
                   <Loader className="h-4 w-4 text-blue-500 animate-spin" />
-                  Structuring your document… you can review and accept items
-                  once it finishes.
+                  正在整理文档…完成后即可逐项核对并采纳。
                 </>
               ) : (
                 <>
                   <Sparkles className="h-4 w-4 text-blue-500" />
-                  We pre-filled this from your document. Review each item
-                  and accept the ones you want.
+                  已根据文档预填内容，请逐项核对并采纳需要的条目。
                   {importTruncated &&
-                    " Only the first 5 pages were imported."}
+                    " 仅导入了前 5 页。"}
                 </>
               )}
             </p>
             {unrecognizedSections.length > 0 && (
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                 <AlertTriangle className="h-3 w-3" />
-                Some sections couldn&apos;t be imported (
-                {unrecognizedSections.join(", ")}) — the resume model
-                doesn&apos;t support these yet.
+                以下模块暂不支持导入（
+                {unrecognizedSections.join(", ")}）。
               </p>
             )}
           </div>
@@ -59,7 +56,7 @@ export function ImportReviewBanner({
             className="shrink-0 text-destructive border-destructive/30 hover:bg-destructive/10"
             onClick={onDiscardImport}
           >
-            Discard import
+            放弃导入
           </Button>
         </div>
         <div className="mt-3 space-y-2">

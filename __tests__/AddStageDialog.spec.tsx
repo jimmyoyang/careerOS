@@ -55,7 +55,7 @@ describe("AddStageDialog", () => {
 
   it("ticks Set as current stage by default", () => {
     render(<AddStageDialog {...props} />);
-    expect(screen.getByRole("checkbox", { name: /Set as current stage/ })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /设为当前阶段/ })).toBeChecked();
   });
 
   // Nothing demotes a stage, so a live checkbox here would silently do nothing.
@@ -67,22 +67,22 @@ describe("AddStageDialog", () => {
       />,
     );
 
-    const box = screen.getByRole("checkbox", { name: /Set as current stage/ });
+    const box = screen.getByRole("checkbox", { name: /设为当前阶段/ });
     expect(box).toBeChecked();
     expect(box).toBeDisabled();
-    expect(screen.getByText(/tick the box on another stage to move it/)).toBeInTheDocument();
+    expect(screen.getByText(/请在其他阶段勾选此项/)).toBeInTheDocument();
   });
 
   it("hides the parent-status picker until a custom name is typed", async () => {
     render(<AddStageDialog {...props} />);
-    expect(screen.queryByText(/PARENT STATUS/i)).toBeNull();
+    expect(screen.queryByText(/对应状态/i)).toBeNull();
 
     await userEvent.type(
-      screen.getByPlaceholderText("e.g. Panel Interview, Reference Check…"),
+      screen.getByPlaceholderText("例如：群面、背景调查……"),
       "Panel Interview",
     );
 
-    expect(screen.getByText(/PARENT STATUS/i)).toBeInTheDocument();
+    expect(screen.getByText(/对应状态/i)).toBeInTheDocument();
   });
 
   // Adding a stage records something that just happened, so the date and time
@@ -92,7 +92,7 @@ describe("AddStageDialog", () => {
 
     await openStageTypePicker();
     await userEvent.click(screen.getByRole("option", { name: "Offer" }));
-    await userEvent.click(screen.getByRole("button", { name: "Add Stage" }));
+    await userEvent.click(screen.getByRole("button", { name: "添加阶段" }));
 
     expect(addJobStage).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -108,11 +108,11 @@ describe("AddStageDialog", () => {
   it("refuses to save with neither a type nor a custom name", async () => {
     render(<AddStageDialog {...props} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Add Stage" }));
+    await userEvent.click(screen.getByRole("button", { name: "添加阶段" }));
 
     expect(addJobStage).not.toHaveBeenCalled();
     expect(
-      await screen.findByText(/Pick a stage or enter a custom stage name/),
+      await screen.findByText(/请选择阶段或填写自定义阶段名称/),
     ).toBeInTheDocument();
   });
 });

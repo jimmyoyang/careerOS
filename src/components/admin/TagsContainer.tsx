@@ -86,16 +86,16 @@ function TagsContainer() {
         <Card>
           <ResponsiveCardHeader>
             <div className="flex items-baseline gap-2">
-              <CardTitle>Skills/Tags</CardTitle>
+              <CardTitle>技能 / 标签</CardTitle>
               {!initialLoading && totalTags > 0 && (
-                <RecordsCount count={tags.length} total={totalTags} label="skills" />
+                <RecordsCount count={tags.length} total={totalTags} label="技能" />
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
               <SearchInput
                 value={searchTerm}
                 onChange={setSearchTerm}
-                placeholder="Search skills..."
+                placeholder="搜索技能…"
               />
               <AddTag reloadTags={reloadTags} />
             </div>

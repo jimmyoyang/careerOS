@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import {
   Dialog,
@@ -63,14 +65,14 @@ export function DiscoveredJobDetail({
     try {
       const result = await analyzeDiscoveredJob(job.id);
       if (result.success) {
-        toastSuccess("AI match score is ready.", "Match analyzed");
+        toastSuccess("AI 匹配评分已生成。", "匹配分析完成");
         onOpenChange(false);
         onRefresh();
       } else {
         toastError(result.message);
       }
     } catch {
-      toastError("Failed to analyze job");
+      toastError("分析岗位失败");
     } finally {
       setLoadingAction(null);
     }
@@ -81,14 +83,14 @@ export function DiscoveredJobDetail({
     try {
       const result = await acceptDiscoveredJob(job.id);
       if (result.success) {
-        toastSuccess("The job has been added to your tracked jobs.", "Job accepted");
+        toastSuccess("已将此岗位添加到跟踪列表。", "岗位已接受");
         onOpenChange(false);
         onRefresh();
       } else {
         toastError(result.message);
       }
     } catch {
-      toastError("Failed to accept job");
+      toastError("接受岗位失败");
     } finally {
       setLoadingAction(null);
     }
@@ -99,14 +101,14 @@ export function DiscoveredJobDetail({
     try {
       const result = await dismissDiscoveredJob(job.id);
       if (result.success) {
-        toastSuccess("Job dismissed");
+        toastSuccess("岗位已忽略");
         onOpenChange(false);
         onRefresh();
       } else {
         toastError(result.message);
       }
     } catch {
-      toastError("Failed to dismiss job");
+      toastError("忽略岗位失败");
     } finally {
       setLoadingAction(null);
     }
@@ -126,7 +128,7 @@ export function DiscoveredJobDetail({
                 </span>
                 <span className="flex items-start gap-1">
                   <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
-                  {job.Location?.label || "N/A"}
+                  {job.Location?.label || "暂无"}
                 </span>
                 {job.workplaceType && (
                   <Badge variant="outline">
@@ -139,7 +141,7 @@ export function DiscoveredJobDetail({
               job.matchScore != null && (
                 <div className="flex flex-col items-center gap-1 shrink-0">
                   <CircularScore score={job.matchScore} size="md" />
-                  <span className="text-xs text-muted-foreground">AI Match</span>
+                  <span className="text-xs text-muted-foreground">AI 匹配</span>
                 </div>
               )
             ) : (
@@ -154,7 +156,7 @@ export function DiscoveredJobDetail({
                 ) : (
                   <Sparkles className="h-4 w-4 mr-2" />
                 )}
-                Analyze match
+                分析匹配度
               </Button>
             )}
           </div>
@@ -164,7 +166,7 @@ export function DiscoveredJobDetail({
           <div className="space-y-4 pr-4">
             {job.jobUrl && (
               <div>
-                <span className="font-semibold mr-2">Job URL:</span>
+                <span className="font-semibold mr-2">岗位链接：</span>
                 <a
                   href={formatUrl(job.jobUrl)}
                   target="_blank"
@@ -176,10 +178,10 @@ export function DiscoveredJobDetail({
             )}
 
             <div className="flex items-center gap-4">
-              <Badge variant="outline">{job.discoveryStatus}</Badge>
+              <Badge variant="outline">{zhLabel(job.discoveryStatus)}</Badge>
               {job.automation && (
                 <span className="text-sm text-muted-foreground">
-                  from {job.automation.name}
+                  来自 {job.automation.name}
                 </span>
               )}
             </div>
@@ -192,7 +194,7 @@ export function DiscoveredJobDetail({
             )}
 
             <div>
-              <h4 className="font-medium mb-2">Description</h4>
+              <h4 className="font-medium mb-2">描述</h4>
               <div className="text-sm text-muted-foreground">
                 <TipTapContentViewer content={job.description ?? ""} />
               </div>
@@ -214,7 +216,7 @@ export function DiscoveredJobDetail({
               ) : (
                 <X className="h-4 w-4 mr-2" />
               )}
-              Dismiss
+              忽略
             </Button>
             <Button onClick={handleAccept} disabled={loadingAction !== null}>
               {loadingAction === "accept" ? (
@@ -222,7 +224,7 @@ export function DiscoveredJobDetail({
               ) : (
                 <Check className="h-4 w-4 mr-2" />
               )}
-              Accept
+              接受
             </Button>
           </DialogFooter>
         )}

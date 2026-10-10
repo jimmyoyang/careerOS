@@ -47,7 +47,7 @@ export function ClearJobsDialog({
     onOpenChange(false);
 
     if (result.success) {
-      toastSuccess(`Removed ${result.deleted ?? 0} job(s).`, "Discovered jobs cleared");
+      toastSuccess(`已移除 ${result.deleted ?? 0} 个岗位。`, "已清空发现的岗位");
       onRefresh();
     } else {
       toastError(result.message);
@@ -58,12 +58,11 @@ export function ClearJobsDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Clear discovered jobs?</AlertDialogTitle>
+          <AlertDialogTitle>清空发现的岗位？</AlertDialogTitle>
           <AlertDialogDescription>
-            Accepted jobs are always kept. This permanently deletes all
-            dismissed jobs
-            {includeNew && newCount > 0 ? " and all unreviewed new jobs" : ""}
-            . This action cannot be undone.
+            已接受的岗位会保留。此操作将永久删除所有已忽略的岗位
+            {includeNew && newCount > 0 ? "以及所有尚未审核的新岗位" : ""}
+            。此操作无法撤销。
           </AlertDialogDescription>
         </AlertDialogHeader>
         {newCount > 0 && (
@@ -74,11 +73,11 @@ export function ClearJobsDialog({
               checked={includeNew}
               onChange={(e) => onIncludeNewChange(e.target.checked)}
             />
-            Also delete {newCount} unreviewed new job(s)
+            同时删除 {newCount} 个尚未审核的新岗位
           </label>
         )}
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={clearing}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={clearing}>取消</AlertDialogCancel>
           <AlertDialogAction
             className={buttonVariants({ variant: "destructive" })}
             disabled={clearing}
@@ -90,7 +89,7 @@ export function ClearJobsDialog({
             {clearing ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              "Delete"
+              "删除"
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

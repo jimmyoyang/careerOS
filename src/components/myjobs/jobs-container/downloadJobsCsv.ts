@@ -10,7 +10,7 @@ export async function downloadJobsList() {
       },
     });
     if (!res.ok) {
-      throw new Error("Failed to download jobs!");
+      throw new Error("下载职位失败！");
     }
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
@@ -20,10 +20,10 @@ export async function downloadJobsList() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toastSuccess("Downloaded successfully!");
+    toastSuccess("下载成功！");
   } catch (error) {
     toastError(
-      error instanceof Error ? error.message : "Unknown error occurred.",
+      error instanceof Error ? error.message : "发生未知错误。",
     );
   }
 }

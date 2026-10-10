@@ -7,12 +7,12 @@ import type { SimpleStyles } from "./styles/simple.styles";
 import { ResumeHtmlNodes } from "./generateResumePdf";
 
 function formatDate(date: Date | undefined | null): string {
-  if (!date) return "Present";
-  return format(new Date(date), "MMM yyyy");
+  if (!date) return "至今";
+  return format(new Date(date), "yyyy年M月");
 }
 
 function formatLocation(label: string | undefined): string {
-  return label && label !== "Not specified" ? label : "";
+  return label && label !== "未填写" && label !== "Not specified" ? label : "";
 }
 
 function SectionHeading({
@@ -93,7 +93,7 @@ export function SimpleResumeDocument({ resume, htmlNodes, styles }: Props) {
         {/* Summary */}
         {htmlNodes.summary.length > 0 && (
           <View>
-            <SectionHeading title="Summary" styles={styles} />
+            <SectionHeading title="个人简介" styles={styles} />
             {htmlNodes.summary}
           </View>
         )}
@@ -168,7 +168,7 @@ export function SimpleResumeDocument({ resume, htmlNodes, styles }: Props) {
                     </Text>
                     <Text style={styles.entryMeta}>
                       {formatDate(edu.startDate)} –{" "}
-                      {edu.endDate ? formatDate(edu.endDate) : "Present"}
+                      {edu.endDate ? formatDate(edu.endDate) : "至今"}
                       {formatLocation(edu.location.label) &&
                         ` · ${formatLocation(edu.location.label)}`}
                     </Text>

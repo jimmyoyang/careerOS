@@ -39,7 +39,7 @@ describe("useActivitySwitchConfirm", () => {
     expect(action).toHaveBeenCalledTimes(1);
     expect(mockStopActivity).not.toHaveBeenCalled();
     expect(
-      screen.queryByText(/Stop current activity and start a new one/i)
+      screen.queryByText(/“Writing docs”正在进行中/)
     ).not.toBeInTheDocument();
   });
 
@@ -57,10 +57,7 @@ describe("useActivitySwitchConfirm", () => {
     expect(action).not.toHaveBeenCalled();
     expect(mockStopActivity).not.toHaveBeenCalled();
     expect(
-      await screen.findByText(/Stop current activity and start a new one/i)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/"Writing docs" is currently in progress/i)
+      await screen.findByText(/“Writing docs”正在进行中/)
     ).toBeInTheDocument();
   });
 
@@ -76,7 +73,7 @@ describe("useActivitySwitchConfirm", () => {
     await user.click(screen.getByText("Trigger Start"));
 
     const confirmButton = await screen.findByRole("button", {
-      name: "Stop & Start",
+      name: "结束并开始",
     });
     await user.click(confirmButton);
 
@@ -87,7 +84,7 @@ describe("useActivitySwitchConfirm", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText(/Stop current activity and start a new one/i)
+        screen.queryByText(/“Other session activity”正在进行中/)
       ).not.toBeInTheDocument();
     });
   });
@@ -112,10 +109,10 @@ describe("useActivitySwitchConfirm", () => {
 
     await waitFor(() => expect(mockRefresh).toHaveBeenCalledTimes(1));
     expect(
-      await screen.findByText(/Stop current activity and start a new one/i)
+      await screen.findByText(/“Other session activity”正在进行中/)
     ).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Stop & Start" }));
+    await user.click(screen.getByRole("button", { name: "结束并开始" }));
 
     await waitFor(() => {
       expect(mockStopActivity).toHaveBeenCalledTimes(1);
@@ -138,7 +135,7 @@ describe("useActivitySwitchConfirm", () => {
 
     await waitFor(() => expect(mockRefresh).toHaveBeenCalledTimes(1));
     expect(
-      screen.queryByText(/Stop current activity and start a new one/i)
+      screen.queryByText(/“Other session activity”正在进行中/)
     ).not.toBeInTheDocument();
     expect(action).toHaveBeenCalledTimes(1);
   });
@@ -171,12 +168,12 @@ describe("useActivitySwitchConfirm", () => {
 
     await user.click(screen.getByText("Trigger Start"));
 
-    const cancelButton = await screen.findByRole("button", { name: "Cancel" });
+    const cancelButton = await screen.findByRole("button", { name: "取消" });
     await user.click(cancelButton);
 
     await waitFor(() => {
       expect(
-        screen.queryByText(/Stop current activity and start a new one/i)
+        screen.queryByText(/“Other session activity”正在进行中/)
       ).not.toBeInTheDocument();
     });
 

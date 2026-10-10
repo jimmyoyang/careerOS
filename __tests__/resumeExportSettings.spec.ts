@@ -75,7 +75,7 @@ describe("PDF_NUMERIC_SETTINGS", () => {
 
   it("gives font size half-point steps in points", () => {
     expect(PDF_NUMERIC_SETTINGS.fontSize).toEqual({
-      label: "Font size",
+      label: "字号",
       min: 8,
       max: 16,
       step: 0.5,
@@ -104,7 +104,7 @@ describe("PDF_NUMERIC_SETTINGS", () => {
 describe("PDF_NUMERIC_SETTINGS vs RESUME_NUMERIC_FIELDS", () => {
   it("carries paragraphSpacing in the shared table", () => {
     expect(PDF_NUMERIC_SETTINGS.paragraphSpacing).toEqual({
-      label: "Paragraph spacing",
+      label: "段落间距",
       min: 0,
       max: 24,
       step: 1,

@@ -1,4 +1,6 @@
 "use client";
+
+import { zhMessage } from "@/lib/i18n/zh-CN";
 import { useCallback, useEffect, useState } from "react";
 import {
   AiModel,
@@ -115,7 +117,7 @@ function AiSettings() {
             if (!connResult.isConnected) {
               if (!cancelled) {
                 setFetchedModels(fallback);
-                setConnectionError(connResult.error || "Ollama is not reachable.");
+                setConnectionError(connResult.error || "无法连接到 Ollama。");
               }
               return;
             }
@@ -125,8 +127,8 @@ function AiSettings() {
             const errorData = await response.json().catch(() => null);
             const errorMsg = errorData?.error
               || (entry.category === "local"
-                ? `Failed to fetch ${entry.displayName} models. Make sure ${entry.displayName} is running.`
-                : `Failed to fetch ${entry.displayName} models. Please check your API key in API Keys settings.`);
+                ? `无法获取 ${entry.displayName} 模型。请确认 ${entry.displayName} 正在运行。`
+                : `无法获取 ${entry.displayName} 模型。请在 API 密钥设置中检查您的 API 密钥。`);
             if (!cancelled) {
               setFetchError(errorMsg);
               setFetchedModels(fallback);
@@ -150,8 +152,8 @@ function AiSettings() {
             setFetchedModels(fallback);
             setFetchError(
               entry.category === "local"
-                ? `Failed to fetch ${entry.displayName} models. Make sure ${entry.displayName} is running.`
-                : `Failed to fetch ${entry.displayName} models. Please check your API key in API Keys settings.`,
+                ? `无法获取 ${entry.displayName} 模型。请确认 ${entry.displayName} 正在运行。`
+                : `无法获取 ${entry.displayName} 模型。请在 API 密钥设置中检查您的 API 密钥。`,
             );
           }
         } finally {
@@ -175,7 +177,7 @@ function AiSettings() {
 
   const saveModelSettings = async () => {
     if (!selectedModel.model) {
-      toastError("Please select a model to save.");
+      toastError("请先选择模型再保存。");
       return;
     }
     setIsSaving(true);
@@ -185,14 +187,14 @@ function AiSettings() {
         model: selectedModel.model,
       });
       if (result.success) {
-        toastSuccess("AI Settings saved successfully.", "Saved!");
+        toastSuccess("AI 设置已保存。", "已保存");
         if (isAgentChatOpen) void refreshPreflight();
       } else {
-        toastError(result.message || "Failed to save AI settings.");
+        toastError(result.message || "保存 AI 设置失败。");
       }
     } catch (error) {
       console.error("Error saving AI settings:", error);
-      toastError("Failed to save AI settings.");
+      toastError("保存 AI 设置失败。");
     } finally {
       setIsSaving(false);
     }
@@ -210,14 +212,14 @@ function AiSettings() {
     return (
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium">AI Provider</h3>
+          <h3 className="text-lg font-medium">AI 服务商</h3>
           <p className="text-sm text-muted-foreground">
-            Configure your AI service provider and model.
+            配置 AI 服务商和模型。
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Loading settings...</span>
+          <span>正在加载设置…</span>
         </div>
       </div>
     );
@@ -226,14 +228,14 @@ function AiSettings() {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium">AI Provider</h3>
+        <h3 className="text-lg font-medium">AI 服务商</h3>
         <p className="text-sm text-muted-foreground">
-          Configure your AI service provider and model.
+          配置 AI 服务商和模型。
         </p>
       </div>
       <div>
         <Label className="my-4" htmlFor="ai-provider">
-          AI Service Provider
+          AI 服务商
         </Label>
         <Select
           value={selectedModel.provider}
@@ -241,10 +243,10 @@ function AiSettings() {
         >
           <SelectTrigger
             id="ai-provider"
-            aria-label="Select AI provider"
+            aria-label="选择 AI 服务商"
             className="w-[180px]"
           >
-            <SelectValue placeholder="Select AI Service Provider" />
+            <SelectValue placeholder="选择 AI 服务商" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -262,7 +264,7 @@ function AiSettings() {
       </div>
       <div>
         <Label className="my-4" htmlFor="ai-model">
-          Model
+          模型
         </Label>
         <div className="flex flex-wrap items-start gap-2">
           <Select
@@ -272,7 +274,7 @@ function AiSettings() {
           >
             <SelectTrigger
               id="ai-model"
-              aria-label="Select Model"
+              aria-label="选择模型"
               className="w-[180px]"
             >
               {/* a flex row here must nest inside SelectValue's span, which the
@@ -282,10 +284,10 @@ function AiSettings() {
                   isLoadingModels ? (
                     <span className="flex items-center gap-2 whitespace-nowrap">
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      Loading models...
+                      正在加载模型…
                     </span>
                   ) : (
-                    "Select Model"
+                    "选择模型"
                   )
                 }
               />
@@ -303,7 +305,7 @@ function AiSettings() {
           {fetchError && (
             <div className="flex items-start gap-1 text-red-600 text-sm mt-2">
               <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
-              <span>{fetchError}</span>
+              <span>{zhMessage(fetchError)}</span>
             </div>
           )}
           {connectionError && (
@@ -316,11 +318,11 @@ function AiSettings() {
                 disabled={isLoadingModels}
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isLoadingModels ? "animate-spin" : ""}`} />
-                Retry
+                重试
               </Button>
               <div className="flex items-start gap-1 text-red-600 text-sm">
                 <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>{connectionError}</span>
+                <span>{zhMessage(connectionError)}</span>
               </div>
             </div>
           )}
@@ -332,7 +334,7 @@ function AiSettings() {
         disabled={!selectedModel.model || isLoadingModels || isSaving}
       >
         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Save
+        保存
       </Button>
     </div>
   );

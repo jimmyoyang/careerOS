@@ -21,6 +21,7 @@ const MINUTES = Array.from({ length: 60 }, (_, i) =>
   String(i).padStart(2, "0")
 );
 const MERIDIEMS = ["AM", "PM"];
+const MERIDIEM_LABELS: Record<string, string> = { AM: "上午", PM: "下午" };
 
 const TIME_PATTERN = /^(0[1-9]|1[0-2]):([0-5][0-9]) (AM|PM)$/;
 
@@ -46,9 +47,10 @@ interface TimeColumnProps {
   options: string[];
   selected: string | null;
   onSelect: (option: string) => void;
+  optionLabels?: Record<string, string>;
 }
 
-function TimeColumn({ label, options, selected, onSelect }: TimeColumnProps) {
+function TimeColumn({ label, options, selected, onSelect, optionLabels }: TimeColumnProps) {
   const listRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLButtonElement>(null);
 
@@ -82,7 +84,7 @@ function TimeColumn({ label, options, selected, onSelect }: TimeColumnProps) {
             className={cn("w-full", !isSelected && "font-normal")}
             onClick={() => onSelect(option)}
           >
-            {option}
+            {optionLabels?.[option] ?? option}
           </Button>
         );
       })}
@@ -98,6 +100,9 @@ interface TimePickerProps {
 export function TimePicker({ field, fullWidth }: TimePickerProps) {
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const { hour, minute, meridiem } = parseTime(field.value);
+  const displayTime = hour && minute && meridiem
+    ? `${MERIDIEM_LABELS[meridiem]} ${hour}:${minute}`
+    : field.value;
 
   const update = (parts: Partial<TimeParts>) => {
     const next = {
@@ -137,26 +142,27 @@ export function TimePicker({ field, fullWidth }: TimePickerProps) {
               )}
             >
               <Clock className="mr-2 h-4 w-4" />
-              {field.value ? field.value : <span>Pick a time</span>}
+              {displayTime || <span>选择时间</span>}
             </Button>
           </FormControl>
         </PopoverTrigger>
         <PopoverContent className="flex w-auto gap-2 p-2" align="start">
           <TimeColumn
-            label="Hour"
+            label="小时"
             options={HOURS}
             selected={hour}
             onSelect={(value) => update({ hour: value })}
           />
           <TimeColumn
-            label="Minute"
+            label="分钟"
             options={MINUTES}
             selected={minute}
             onSelect={(value) => update({ minute: value })}
           />
           <TimeColumn
-            label="AM/PM"
+            label="时段"
             options={MERIDIEMS}
+            optionLabels={MERIDIEM_LABELS}
             selected={meridiem}
             onSelect={(value) => update({ meridiem: value })}
           />
@@ -166,7 +172,7 @@ export function TimePicker({ field, fullWidth }: TimePickerProps) {
         type="button"
         variant="outline"
         size="icon"
-        aria-label={`${STEP_MINUTES} minutes earlier`}
+        aria-label={`提前 ${STEP_MINUTES} 分钟`}
         className="shrink-0 rounded-none border-l-0"
         onClick={() => shift(-STEP_MINUTES)}
       >
@@ -176,7 +182,7 @@ export function TimePicker({ field, fullWidth }: TimePickerProps) {
         type="button"
         variant="outline"
         size="icon"
-        aria-label={`${STEP_MINUTES} minutes later`}
+        aria-label={`推迟 ${STEP_MINUTES} 分钟`}
         className="shrink-0 rounded-l-none border-l-0"
         onClick={() => shift(STEP_MINUTES)}
       >

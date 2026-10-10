@@ -57,10 +57,8 @@ function CompaniesTable({
     if (totalJobs > 0) {
       setAlert({
         openState: true,
-        title: "Associated jobs exist!",
-        description: `This company has ${totalJobs} associated job${
-          totalJobs === 1 ? "" : "s"
-        } (applied or not). Remove or reassign them before deleting this company.`,
+        title: "存在关联职位！",
+        description: `该公司关联了 ${totalJobs} 个职位（包括未投递的职位）。请先删除或调整这些职位的关联，再删除该公司。`,
         deleteAction: false,
       });
     } else {
@@ -81,8 +79,8 @@ function CompaniesTable({
     if (res.success) {
       toastSuccess(
         next
-          ? `${company.label} added to your watchlist`
-          : `${company.label} removed from your watchlist. It stays in your Library.`,
+          ? `${company.label}已加入关注列表`
+          : `${company.label}已从关注列表移除，仍保留在公司库中。`,
       );
       reloadCompanies();
     } else {
@@ -94,7 +92,7 @@ function CompaniesTable({
     if (companyId) {
       const { res, success, message } = await deleteCompanyById(companyId);
       if (success) {
-        toastSuccess(`Company has been deleted successfully`);
+        toastSuccess("公司已删除");
         reloadCompanies();
       } else {
         toastError(message);
@@ -108,27 +106,27 @@ function CompaniesTable({
         <TableHeader>
           <TableRow>
             <TableHead className="hidden w-[100px] sm:table-cell">
-              <span className="sr-only">Company Logo</span>
+              <span className="sr-only">公司标志</span>
             </TableHead>
-            <TableHead>Company Name</TableHead>
+            <TableHead>公司名称</TableHead>
             {scope === "watchlist" ? (
               <>
-                <TableHead>Board</TableHead>
-                <TableHead>Jobs</TableHead>
-                <TableHead>Watched</TableHead>
+                <TableHead>招聘平台</TableHead>
+                <TableHead>职位</TableHead>
+                <TableHead>已关注</TableHead>
               </>
             ) : (
               <>
-                <TableHead className="hidden sm:table-cell">Value</TableHead>
-                <TableHead>Total Jobs</TableHead>
-                <TableHead>Jobs Applied</TableHead>
-                <TableHead>Rejected</TableHead>
-                <TableHead>Contacts</TableHead>
+                <TableHead className="hidden sm:table-cell">标识值</TableHead>
+                <TableHead>职位总数</TableHead>
+                <TableHead>已投递职位</TableHead>
+                <TableHead>已拒绝</TableHead>
+                <TableHead>联系人</TableHead>
               </>
             )}
-            <TableHead>Actions</TableHead>
+            <TableHead>操作</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -139,7 +137,7 @@ function CompaniesTable({
                 <TableCell className="hidden sm:table-cell">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    alt="Company logo"
+                    alt="公司标志"
                     className="w-8 h-8 rounded-md object-cover"
                     src={company.logoUrl || "/images/jobsync-logo.svg"}
                     onError={(e) => {
@@ -158,7 +156,7 @@ function CompaniesTable({
                     </Link>
                     {company.watched && (
                       <span
-                        title="On your watchlist"
+                        title="已加入关注列表"
                         className="text-emerald-600 dark:text-emerald-400"
                       >
                         <Eye className="h-3.5 w-3.5" />
@@ -227,15 +225,15 @@ function CompaniesTable({
                     <DropdownMenuTrigger asChild>
                       <Button aria-haspopup="true" size="icon" variant="ghost">
                         <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">打开菜单</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>操作</DropdownMenuLabel>
                       <DropdownMenuItem className="cursor-pointer" asChild>
                         <Link href={detailsHref(company.id)}>
                           <Building2 className="mr-2 h-4 w-4" />
-                          View details
+                          查看详情
                         </Link>
                       </DropdownMenuItem>
                       {company._count?.jobsApplied ? (
@@ -244,7 +242,7 @@ function CompaniesTable({
                             href={`/dashboard/myjobs?company=${encodeURIComponent(company.value)}&applied=true`}
                           >
                             <Briefcase className="mr-2 h-4 w-4" />
-                            View Jobs
+                            查看职位
                           </Link>
                         </DropdownMenuItem>
                       ) : null}
@@ -253,7 +251,7 @@ function CompaniesTable({
                         onClick={() => editCompany(company.id)}
                       >
                         <Pencil className="mr-2 h-4 w-4" />
-                        Edit Company
+                        编辑公司
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="cursor-pointer"
@@ -264,14 +262,14 @@ function CompaniesTable({
                         ) : (
                           <Eye className="mr-2 h-4 w-4" />
                         )}
-                        {company.watched ? "Unwatch" : "Watch"}
+                        {company.watched ? "取消关注" : "关注"}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="text-red-600 cursor-pointer"
                         onClick={() => onDeleteCompany(company)}
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        删除
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -282,7 +280,7 @@ function CompaniesTable({
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="company"
+        pageTitle="公司"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteCompany(alert.itemId)}

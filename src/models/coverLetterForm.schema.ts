@@ -4,19 +4,19 @@ export const CoverLetterFormSchema = z.object({
   id: z.string().optional(),
   title: z
     .string({
-      error: "Cover letter title is required.",
+      error: "请填写求职信标题。",
     })
     .min(1, {
-      message: "Cover letter title is required.",
+      message: "请填写求职信标题。",
     })
     .max(100, {
-      message: "Title must be less than 100 characters.",
+      message: "标题必须少于 100 个字符。",
     }),
   content: z
     .string({
-      error: "Cover letter content is required.",
+      error: "请填写求职信内容。",
     })
     .min(10, {
-      message: "Cover letter content must be at least 10 characters.",
+      message: "求职信内容至少需要 10 个字符。",
     }),
 });

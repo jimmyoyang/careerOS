@@ -44,9 +44,9 @@ describe("AddPrepQuestionsDialog", () => {
   it("heads the dialog with the stage and explains the asked workflow", async () => {
     render(<AddPrepQuestionsDialog open stage={stage} onOpenChange={() => {}} onAdded={() => {}} />);
 
-    expect(await screen.findByText("Final / Onsite Interview · Sep 24, 2026")).toBeInTheDocument();
+    expect(await screen.findByText("终面 / 现场面试 · 2026年9月24日")).toBeInTheDocument();
     expect(
-      screen.getByText(/check them off as "asked" from the Timeline tab/),
+      screen.getByText(/勾选实际问过的题目/),
     ).toBeInTheDocument();
   });
 
@@ -68,11 +68,11 @@ describe("AddPrepQuestionsDialog", () => {
       await screen.findByRole("checkbox", { name: /Tell me about a conflict/ }),
     );
     expect(
-      screen.getByRole("button", { name: /Remove Tell me about a conflict/ }),
+      screen.getByRole("button", { name: /移除Tell me about a conflict/ }),
     ).toBeInTheDocument();
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Done — 1 question added to prep list" }),
+      screen.getByRole("button", { name: "完成，已将 1 道题目加入准备清单" }),
     );
 
     expect(addStagePrepQuestions).toHaveBeenCalledWith("st1", ["q2"]);

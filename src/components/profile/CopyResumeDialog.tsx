@@ -95,7 +95,7 @@ function CopyResumeDialog({
       reset({ title: "" });
       setOpen(false);
       onCopied();
-      toastSuccess(`Copy created: "${data.title}"`);
+      toastSuccess(`已创建副本：“${data.title}”`);
     });
   };
 
@@ -103,10 +103,10 @@ function CopyResumeDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create a copy</DialogTitle>
+          <DialogTitle>创建副本</DialogTitle>
           <DialogDescription>
-            Copies the sections and contact info of &quot;{sourceDoc?.title}
-            &quot;. The attachment is not copied.
+            复制“{sourceDoc?.title}
+            ”的模块和联系方式。附件不会复制。
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -122,7 +122,7 @@ function CopyResumeDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Resume Title</FormLabel>
+                  <FormLabel>简历标题</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -141,13 +141,13 @@ function CopyResumeDialog({
                 className="mt-2 md:mt-0"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 type="submit"
                 disabled={!isValid || isPending || loadingTitle}
               >
-                Create copy
+                创建副本
                 {isPending && (
                   <Loader className="h-4 w-4 shrink-0 animate-spin" />
                 )}

@@ -1,4 +1,5 @@
 "use client";
+import { zhCN } from "date-fns/locale";
 import { useState } from "react";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import { format, parseISO } from "date-fns";
@@ -34,10 +35,10 @@ export default function ActivityCalendar({
     <Card className="w-[100%]">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg text-green-600">Activity Calendar</CardTitle>
+          <CardTitle className="text-lg text-green-600">活动日历</CardTitle>
           <Select value={year} onValueChange={setYear}>
-            <SelectTrigger className="w-[100px]" aria-label="Select year">
-              <SelectValue placeholder="Select year" />
+            <SelectTrigger className="w-[100px]" aria-label="选择年份">
+              <SelectValue placeholder="选择年份" />
             </SelectTrigger>
             <SelectContent>
               {years.map((y) => (
@@ -51,6 +52,7 @@ export default function ActivityCalendar({
       </CardHeader>
       <CardContent className="h-[200px]">
         <ResponsiveCalendar
+          monthLegend={(_year, month) => `${month + 1}月`}
           data={data}
           from={`${year}-04-02`}
           to={`${year}-04-02`}
@@ -75,9 +77,9 @@ export default function ActivityCalendar({
                   whiteSpace: "nowrap",
                 }}
               >
-                <div><strong>{format(parseISO(day.day), "EEE MMM d, yyyy")}</strong></div>
-                <div>{day.value} job{Number(day.value) === 1 ? "" : "s"} applied</div>
-                <div>{hours} hr{hours === 1 ? "" : "s"} activity</div>
+                <div><strong>{format(parseISO(day.day), "PPP EEEE", { locale: zhCN })}</strong></div>
+                <div>已投递 {day.value} 个职位</div>
+                <div>活动时长 {hours} 小时</div>
               </div>
             );
           }}

@@ -87,7 +87,7 @@ export function PdfExportDialog({
             variant="outline"
             onClick={() => onOpenChange(false)}
           >
-            Cancel
+            取消
           </Button>
           <Button
             type="button"
@@ -101,7 +101,7 @@ export function PdfExportDialog({
             }}
           >
             <FileDown className="h-4 w-4" />
-            Export
+            导出
           </Button>
         </DialogFooter>
       </DialogContent>

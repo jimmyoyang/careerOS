@@ -54,12 +54,12 @@ function ContactRolesContainer() {
       <Card x-chunk="dashboard-06-chunk-0">
         <ResponsiveCardHeader>
           <div className="flex items-baseline gap-2">
-            <CardTitle>Contact Roles</CardTitle>
+            <CardTitle>联系人角色</CardTitle>
             {!loading && totalRoles > 0 && (
               <RecordsCount
                 count={roles.length}
                 total={totalRoles}
-                label="roles"
+                label="角色"
               />
             )}
           </div>
@@ -67,7 +67,7 @@ function ContactRolesContainer() {
             <SearchInput
               value={searchTerm}
               onChange={setSearchTerm}
-              placeholder="Search roles..."
+              placeholder="搜索角色…"
             />
             <AddContactRole reloadRoles={reloadRoles} />
           </div>
@@ -86,7 +86,7 @@ function ContactRolesContainer() {
                 disabled={loading}
                 className="btn btn-primary"
               >
-                {loading ? "Loading..." : "Load More"}
+                {loading ? "加载中…" : "加载更多"}
               </Button>
             </div>
           )}

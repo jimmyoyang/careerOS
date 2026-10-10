@@ -12,7 +12,7 @@ describe("warnInsufficientResumeSections", () => {
 
     expect(mockToastError).toHaveBeenCalledWith(
       buildInsufficientSectionsMessage("setting this resume as default"),
-      "Not enough content",
+      "简历内容不足",
     );
   });
 
@@ -27,7 +27,7 @@ describe("warnInsufficientResumeSections", () => {
         "running a review",
         "e.g. Summary and Experience",
       ),
-      "Not enough content",
+      "简历内容不足",
     );
   });
 });

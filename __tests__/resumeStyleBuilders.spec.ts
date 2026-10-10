@@ -20,7 +20,7 @@ describe("buildSimpleStyles at the defaults", () => {
   // The defaults are copied from this sheet, so this is a hard identity.
   it("keeps the page exactly as the static sheet had it", () => {
     expect(s.page).toEqual({
-      fontFamily: "Helvetica",
+      fontFamily: ["Helvetica", "NotoSansSC"],
       fontSize: 11,
       paddingTop: 40,
       paddingBottom: 40,
@@ -33,7 +33,7 @@ describe("buildSimpleStyles at the defaults", () => {
   it("keeps the section title exactly as the static sheet had it", () => {
     expect(s.sectionTitle).toEqual({
       fontSize: 11,
-      fontFamily: "Helvetica-Bold",
+      fontFamily: ["Helvetica-Bold", "NotoSansSC"],
       textTransform: "uppercase",
       letterSpacing: 0.8,
       marginBottom: 3,
@@ -85,7 +85,7 @@ describe("buildProfessionalStyles at the defaults", () => {
   });
 
   it("keeps everything else on the page exactly as it was", () => {
-    expect(s.page.fontFamily).toBe("Helvetica");
+    expect(s.page.fontFamily).toEqual(["Helvetica", "NotoSansSC"]);
     expect(s.page.fontSize).toBe(11);
     expect(s.page.paddingBottom).toBe(40);
     expect(s.page.color).toBe("#1a1a1a");
@@ -150,32 +150,32 @@ describe("buildProfessionalStyles at the defaults", () => {
 describe("the font setting", () => {
   it("swaps every Simple face to the Times quartet", () => {
     const s = simple({ font: "times" });
-    expect(s.page.fontFamily).toBe("Times-Roman");
-    expect(s.bold.fontFamily).toBe("Times-Bold");
-    expect(s.italic.fontFamily).toBe("Times-Italic");
-    expect(s.boldItalic.fontFamily).toBe("Times-BoldItalic");
-    expect(s.heading.fontFamily).toBe("Times-Bold");
-    expect(s.sectionTitle.fontFamily).toBe("Times-Bold");
-    expect(s.entryTitle.fontFamily).toBe("Times-Bold");
-    expect(s.h2text.fontFamily).toBe("Times-Bold");
-    expect(s.skillCat.fontFamily).toBe("Times-Bold");
+    expect(s.page.fontFamily).toEqual(["Times-Roman", "NotoSansSC"]);
+    expect(s.bold.fontFamily).toEqual(["Times-Bold", "NotoSansSC"]);
+    expect(s.italic.fontFamily).toEqual(["Times-Italic", "NotoSansSC"]);
+    expect(s.boldItalic.fontFamily).toEqual(["Times-BoldItalic", "NotoSansSC"]);
+    expect(s.heading.fontFamily).toEqual(["Times-Bold", "NotoSansSC"]);
+    expect(s.sectionTitle.fontFamily).toEqual(["Times-Bold", "NotoSansSC"]);
+    expect(s.entryTitle.fontFamily).toEqual(["Times-Bold", "NotoSansSC"]);
+    expect(s.h2text.fontFamily).toEqual(["Times-Bold", "NotoSansSC"]);
+    expect(s.skillCat.fontFamily).toEqual(["Times-Bold", "NotoSansSC"]);
   });
 
   it("swaps every Professional face to the Courier quartet", () => {
     const s = professional({ font: "courier" });
-    expect(s.page.fontFamily).toBe("Courier");
-    expect(s.bold.fontFamily).toBe("Courier-Bold");
-    expect(s.italic.fontFamily).toBe("Courier-Oblique");
-    expect(s.boldItalic.fontFamily).toBe("Courier-BoldOblique");
-    expect(s.name.fontFamily).toBe("Courier-Bold");
-    expect(s.headline.fontFamily).toBe("Courier");
-    expect(s.contactLine.fontFamily).toBe("Courier");
-    expect(s.sectionHeadingLabel.fontFamily).toBe("Courier-Bold");
-    expect(s.entryTitle.fontFamily).toBe("Courier-Bold");
-    expect(s.entryTitleBlock.fontFamily).toBe("Courier-Bold");
-    expect(s.entryDate.fontFamily).toBe("Courier");
-    expect(s.h2text.fontFamily).toBe("Courier-Bold");
-    expect(s.skillCatLabel.fontFamily).toBe("Courier-Bold");
+    expect(s.page.fontFamily).toEqual(["Courier", "NotoSansSC"]);
+    expect(s.bold.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
+    expect(s.italic.fontFamily).toEqual(["Courier-Oblique", "NotoSansSC"]);
+    expect(s.boldItalic.fontFamily).toEqual(["Courier-BoldOblique", "NotoSansSC"]);
+    expect(s.name.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
+    expect(s.headline.fontFamily).toEqual(["Courier", "NotoSansSC"]);
+    expect(s.contactLine.fontFamily).toEqual(["Courier", "NotoSansSC"]);
+    expect(s.sectionHeadingLabel.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
+    expect(s.entryTitle.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
+    expect(s.entryTitleBlock.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
+    expect(s.entryDate.fontFamily).toEqual(["Courier", "NotoSansSC"]);
+    expect(s.h2text.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
+    expect(s.skillCatLabel.fontFamily).toEqual(["Courier-Bold", "NotoSansSC"]);
   });
 
   it("leaves every number alone", () => {

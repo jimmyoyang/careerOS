@@ -1,3 +1,4 @@
+import { withCjkFallback } from "@/components/pdf-export/cjk-font";
 import { StyleSheet } from "@react-pdf/renderer";
 import { HtmlStyleSet } from "@/components/pdf-export/types";
 import { styleTokens } from "@/components/pdf-export/tokens";
@@ -5,10 +6,11 @@ import type { CoverLetterExportSettings } from "@/models/coverLetterExport.model
 
 export function buildLetterStyles(settings: CoverLetterExportSettings) {
   const t = styleTokens(settings);
+  const font = withCjkFallback(t.font);
 
   const styles = StyleSheet.create({
     page: {
-      fontFamily: t.font.regular,
+      fontFamily: font.regular,
       fontSize: t.fontSize,
       paddingTop: t.marginVertical,
       paddingBottom: t.marginVertical,
@@ -18,7 +20,7 @@ export function buildLetterStyles(settings: CoverLetterExportSettings) {
     },
     name: {
       fontSize: t.pt(16),
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       marginBottom: 4,
     },
     headline: {
@@ -42,16 +44,16 @@ export function buildLetterStyles(settings: CoverLetterExportSettings) {
       fontSize: t.fontSize,
       marginBottom: 16,
     },
-    bold: { fontFamily: t.font.bold },
-    italic: { fontFamily: t.font.italic },
-    boldItalic: { fontFamily: t.font.boldItalic },
+    bold: { fontFamily: font.bold },
+    italic: { fontFamily: font.italic },
+    boldItalic: { fontFamily: font.boldItalic },
     // paragraphSpacing reaches exactly this one property. Every other gap
     // in the letterhead is a plain literal. Read off `settings`, not `t` —
     // the shared tokens expose only the five universal values, exactly as
     // resumeStyleTokens adds the resume's two rather than pushing them down.
     bodyText: { fontSize: t.fontSize, marginBottom: settings.paragraphSpacing },
     h2text: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.pt(13),
       marginBottom: 3,
       marginTop: 4,

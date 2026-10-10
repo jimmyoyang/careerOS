@@ -17,7 +17,7 @@ import {
 import { CoverLetterSettingsPanel } from "./cover-letter-export-dialog/CoverLetterSettingsPanel";
 import { canExportCoverLetter } from "./cover-letter-export-dialog/canExportCoverLetter";
 
-const EMPTY_MESSAGE = "Add some content to this cover letter to preview it.";
+const EMPTY_MESSAGE = "添加求职信内容后即可预览。";
 
 type CoverLetterExportDialogProps = {
   open: boolean;
@@ -77,7 +77,7 @@ export function CoverLetterExportDialog({
     prepared: { blob: Blob; filename: string } | null,
   ) => {
     if (!letter || !canExportCoverLetter(letter.content)) {
-      toastError("Add some content before exporting.", "Nothing to export");
+      toastError("请先添加内容再导出。", "暂无可导出的内容");
       return;
     }
     try {
@@ -85,9 +85,9 @@ export function CoverLetterExportDialog({
       // failed preview.
       const output = prepared ?? (await generate(settings));
       triggerDownload(output.blob, output.filename);
-      toastSuccess("Saved to your Downloads folder.", "PDF exported");
+      toastSuccess("已保存到下载文件夹。", "PDF 已导出");
     } catch {
-      toastError("Failed to generate PDF. Please try again.");
+      toastError("生成 PDF 失败，请重试。");
     }
   };
 
@@ -95,9 +95,9 @@ export function CoverLetterExportDialog({
     <PdfExportDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Export to PDF"
-      description="Adjust the settings and preview the file before exporting."
-      previewLabel="Cover letter preview"
+      title="导出 PDF"
+      description="调整设置并预览后再导出文件。"
+      previewLabel="求职信预览"
       emptyMessage={EMPTY_MESSAGE}
       blob={blob}
       filename={filename}

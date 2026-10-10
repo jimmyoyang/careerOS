@@ -68,10 +68,10 @@ export function AutomationWizard({
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {editAutomation ? "Edit Automation" : "Create Automation"}
+            {editAutomation ? "编辑自动化" : "创建自动化"}
           </DialogTitle>
           <DialogDescription>
-            Step {step + 1} of {STEPS.length}: {STEPS[step].description}
+            步骤 {step + 1} / {STEPS.length}： {STEPS[step].description}
           </DialogDescription>
         </DialogHeader>
 
@@ -91,7 +91,7 @@ export function AutomationWizard({
             onSubmit={form.handleSubmit(onSubmit, (errors) => {
               const firstError = Object.values(errors)[0];
               if (firstError?.message) {
-                toastError(firstError.message as string, "Validation Error");
+                toastError(firstError.message as string, "校验失败");
               }
             })}
           >
@@ -141,7 +141,7 @@ export function AutomationWizard({
               {step > 0 && (
                 <Button type="button" variant="outline" onClick={prevStep}>
                   <ChevronLeft className="h-4 w-4 mr-1" />
-                  Back
+                  上一步
                 </Button>
               )}
               {step < STEPS.length - 1 ? (
@@ -150,7 +150,7 @@ export function AutomationWizard({
                   onClick={nextStep}
                   disabled={!canGoNext()}
                 >
-                  Next
+                  下一步
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               ) : (
@@ -158,7 +158,7 @@ export function AutomationWizard({
                   {isSubmitting && (
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                   )}
-                  {editAutomation ? "Update" : "Create"} Automation
+                  {editAutomation ? "更新" : "创建"} 自动化
                 </Button>
               )}
             </DialogFooter>

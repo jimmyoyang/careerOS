@@ -76,7 +76,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
   useEffect(() => {
     if (!isOver || overtimeWarnedRef.current || !breakStartedMs) return;
     overtimeWarnedRef.current = true;
-    toastSuccess("Break time is up");
+    toastSuccess("休息时间到");
   }, [isOver, breakStartedMs]);
 
   if (!open || !currentActivity) return null;
@@ -125,7 +125,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
           onInteractOutside={(e) => e.preventDefault()}
           className="fixed left-[50%] top-[50%] z-50 w-full max-w-sm translate-x-[-50%] translate-y-[-50%] rounded-lg border bg-background p-6 shadow-lg"
         >
-          <DialogTitle className="sr-only">Break in progress</DialogTitle>
+          <DialogTitle className="sr-only">正在休息</DialogTitle>
 
           {/* Only an unstarted break can be walked away from; once it is
               running the pause button is the way out. */}
@@ -136,7 +136,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
               className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">关闭</span>
             </button>
           )}
 
@@ -146,8 +146,8 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
               <button
                 type="button"
                 disabled={pending}
-                aria-label={isOnBreak ? "Resume activity" : "Start break"}
-                title={isOnBreak ? "Resume activity" : "Start break"}
+                aria-label={isOnBreak ? "继续活动（播放按钮）" : "开始休息（播放按钮）"}
+                title={isOnBreak ? "继续活动" : "开始休息"}
                 onClick={isOnBreak ? handleResume : handleStart}
                 className="absolute inset-0 m-auto flex size-20 flex-col items-center justify-center gap-1 rounded-full bg-background text-muted-foreground transition-colors hover:text-foreground focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
               >
@@ -157,7 +157,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
                   <Play className="size-8" />
                 )}
                 <span className="text-xs font-medium">
-                  {isOnBreak ? "Resume" : "Start"}
+                  {isOnBreak ? "继续" : "开始"}
                 </span>
               </button>
             </div>
@@ -169,7 +169,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
                   : formatClock(Math.ceil((plannedMs - elapsedMs) / 1000))}
               </div>
               <div className="text-sm text-muted-foreground">
-                {isOver ? "Break over" : "Break"}
+                {isOver ? "休息结束" : "休息"}
               </div>
             </div>
 
@@ -177,7 +177,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
               <Button
                 variant="outline"
                 size="icon"
-                aria-label="Decrease break length"
+                aria-label="缩短休息时间"
                 disabled={
                   plannedMinutes <= APP_CONSTANTS.ACTIVITY_BREAK_MIN_MINUTES
                 }
@@ -197,14 +197,14 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
                   variant={preset === plannedMinutes ? "default" : "outline"}
                   onClick={() => changeLength(preset)}
                 >
-                  {preset} min
+                  {preset} 分钟
                 </Button>
               ))}
 
               <Button
                 variant="outline"
                 size="icon"
-                aria-label="Increase break length"
+                aria-label="延长休息时间"
                 disabled={
                   plannedMinutes >= APP_CONSTANTS.ACTIVITY_BREAK_MAX_MINUTES
                 }
@@ -230,7 +230,7 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
                 ) : (
                   <Play className="mr-2 size-4" />
                 )}
-                {isOnBreak ? "Resume Activity" : "Start Break"}
+                {isOnBreak ? "继续活动" : "开始休息"}
               </Button>
               <Button
                 variant="outline"
@@ -238,19 +238,19 @@ export function BreakModal({ open, onClose }: BreakModalProps) {
                 onClick={() => setConfirmStopOpen(true)}
               >
                 <CircleStop className="mr-2 size-4 text-red-500 dark:text-red-400" />
-                Stop Activity
+                结束活动
               </Button>
             </div>
           </div>
 
           <DeleteAlertDialog
-            pageTitle="activity"
+            pageTitle="活动"
             open={confirmStopOpen}
             onOpenChange={setConfirmStopOpen}
             onDelete={handleStop}
-            alertTitle="Stop this activity?"
-            alertDescription="This ends and logs the activity, break time included. It cannot be resumed afterwards."
-            actionLabel="Stop Activity"
+            alertTitle="结束这个活动？"
+            alertDescription="这会结束并记录活动，包含休息时间。结束后无法继续此活动。"
+            actionLabel="结束活动"
           />
         </DialogPrimitive.Content>
       </DialogPortal>

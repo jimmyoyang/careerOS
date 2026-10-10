@@ -63,37 +63,37 @@ describe("AdminTabsContainer", () => {
   it("should render all tabs", () => {
     render(<AdminTabsContainer />);
 
-    expect(screen.getByRole("tab", { name: "Companies" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "公司" })).toBeInTheDocument();
     expect(
-      screen.getByRole("tab", { name: "Job Titles" })
+      screen.getByRole("tab", { name: "职位名称" })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("tab", { name: "Locations" })
+      screen.getByRole("tab", { name: "地点" })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("tab", { name: "Activity Types" })
+      screen.getByRole("tab", { name: "活动类型" })
     ).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Contacts" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Roles" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "联系人" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "角色" })).toBeInTheDocument();
   });
 
   it("offers a Stages tab", () => {
     render(<AdminTabsContainer />);
 
-    expect(screen.getByRole("tab", { name: "Stages" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "阶段" })).toBeInTheDocument();
   });
 
   it("should default to companies tab", () => {
     render(<AdminTabsContainer />);
 
-    const companiesTab = screen.getByRole("tab", { name: "Companies" });
+    const companiesTab = screen.getByRole("tab", { name: "公司" });
     expect(companiesTab).toHaveAttribute("data-state", "active");
   });
 
   it("should switch tabs and update URL", async () => {
     render(<AdminTabsContainer />);
 
-    const jobTitlesTab = screen.getByRole("tab", { name: "Job Titles" });
+    const jobTitlesTab = screen.getByRole("tab", { name: "职位名称" });
     await user.click(jobTitlesTab);
 
     expect(mockPush).toHaveBeenCalledWith(
@@ -104,7 +104,7 @@ describe("AdminTabsContainer", () => {
   it("should switch to locations tab and update URL", async () => {
     render(<AdminTabsContainer />);
 
-    const locationsTab = screen.getByRole("tab", { name: "Locations" });
+    const locationsTab = screen.getByRole("tab", { name: "地点" });
     await user.click(locationsTab);
 
     expect(mockPush).toHaveBeenCalledWith(
@@ -116,7 +116,7 @@ describe("AdminTabsContainer", () => {
     render(<AdminTabsContainer />);
 
     const activityTypesTab = screen.getByRole("tab", {
-      name: "Activity Types",
+      name: "活动类型",
     });
     await user.click(activityTypesTab);
 

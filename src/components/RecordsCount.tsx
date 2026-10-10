@@ -9,18 +9,10 @@ type RecordsCountProps = {
 export function RecordsCount({
   count,
   total,
-  label = "records",
 }: RecordsCountProps) {
   return (
     <div className="text-xs text-muted-foreground whitespace-nowrap">
-      Showing <strong>1 to {count}</strong>
-      {total !== undefined && (
-        <>
-          {" "}
-          of<strong> {total}</strong>
-        </>
-      )}{" "}
-      {label}
+      已显示 <strong>{count}</strong>{total !== undefined && <> / 共 <strong>{total}</strong></>} 条
     </div>
   );
 }

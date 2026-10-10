@@ -91,9 +91,9 @@ export function JobsToolbar({
   return (
     <CardHeader className="flex-row flex-wrap justify-between items-center gap-3">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <CardTitle>Jobs</CardTitle>
+        <CardTitle>职位</CardTitle>
         {!initialLoading && totalJobs > 0 && (
-          <RecordsCount count={jobsCount} total={totalJobs} label="jobs" />
+          <RecordsCount count={jobsCount} total={totalJobs} label="职位" />
         )}
       </div>
       <div className="flex flex-wrap items-center justify-end gap-2 ml-auto">
@@ -139,18 +139,18 @@ export function JobsToolbar({
           variant="outline"
           className="h-8 w-8 p-0"
           disabled={initialLoading}
-          title="Reload jobs"
+          title="重新加载职位"
           onClick={onReload}
         >
           <RefreshCw
             className={`h-3.5 w-3.5 ${initialLoading ? "animate-spin" : ""}`}
           />
-          <span className="sr-only">Reload jobs</span>
+          <span className="sr-only">重新加载职位</span>
         </Button>
         <SearchInput
           value={searchTerm}
           onChange={onSearchTermChange}
-          placeholder="Search jobs..."
+          placeholder="搜索职位…"
         />
         <Select value={filterKey} onValueChange={onFilterChange}>
           <SelectTrigger
@@ -158,20 +158,20 @@ export function JobsToolbar({
             data-testid="job-filter-select"
           >
             <ListFilter className="h-3.5 w-3.5" />
-            <SelectValue placeholder="Filter" />
+            <SelectValue placeholder="筛选" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Filter by</SelectLabel>
+              <SelectLabel>筛选条件</SelectLabel>
               <SelectSeparator />
-              <SelectItem value="none">All (Except Dismissed)</SelectItem>
-              <SelectItem value="applied">Applied</SelectItem>
-              <SelectItem value="interview">Interview</SelectItem>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-              <SelectItem value="PT">Part-time</SelectItem>
-              <SelectItem value="accepted">Accepted (discovered)</SelectItem>
-              <SelectItem value="dismissed">Dismissed (discovered)</SelectItem>
+              <SelectItem value="none">全部（不含已忽略）</SelectItem>
+              <SelectItem value="applied">已投递</SelectItem>
+              <SelectItem value="interview">面试中</SelectItem>
+              <SelectItem value="draft">草稿</SelectItem>
+              <SelectItem value="rejected">已拒绝</SelectItem>
+              <SelectItem value="PT">兼职</SelectItem>
+              <SelectItem value="accepted">已收录（发现的职位）</SelectItem>
+              <SelectItem value="dismissed">已忽略（发现的职位）</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -184,7 +184,7 @@ export function JobsToolbar({
         >
           <File className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Export
+            导出
           </span>
         </Button>
         <AddJob

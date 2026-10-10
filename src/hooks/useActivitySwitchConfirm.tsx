@@ -10,6 +10,7 @@ export function useActivitySwitchConfirm() {
   const { currentActivity, stopActivity, refreshCurrentActivity } =
     useActivity();
   const [pendingAction, setPendingAction] = useState<StartAction | null>(null);
+  const [dialogActivity, setDialogActivity] = useState<typeof currentActivity>(currentActivity);
 
   // The running activity is a per-user singleton, so another session may have
   // claimed it since this page last synced — a start that looked valid against
@@ -20,7 +21,10 @@ export function useActivitySwitchConfirm() {
       const started = await action();
       if (started !== false) return;
       const running = await refreshCurrentActivity();
-      if (running) setPendingAction(() => action);
+      if (running) {
+        setDialogActivity(running);
+        setPendingAction(() => action);
+      }
     },
     [refreshCurrentActivity],
   );
@@ -28,6 +32,7 @@ export function useActivitySwitchConfirm() {
   const requestStart = useCallback(
     (action: StartAction) => {
       if (currentActivity) {
+        setDialogActivity(currentActivity);
         setPendingAction(() => action);
       } else {
         runStart(action);
@@ -39,6 +44,7 @@ export function useActivitySwitchConfirm() {
   const confirmSwitch = useCallback(async () => {
     const action = pendingAction;
     setPendingAction(null);
+    setDialogActivity(undefined);
     if (!action) return;
     await stopActivity();
     await runStart(action);
@@ -50,13 +56,13 @@ export function useActivitySwitchConfirm() {
       open={pendingAction !== null}
       onOpenChange={(open) => !open && setPendingAction(null)}
       onDelete={confirmSwitch}
-      alertTitle="Stop current activity and start a new one?"
+      alertTitle="结束当前活动并开始新活动？"
       alertDescription={
-        currentActivity
-          ? `"${currentActivity.activityName}" is currently in progress. Stop it and start the new activity?`
+        dialogActivity
+          ? `“${dialogActivity.activityName}”正在进行中。是否结束并开始新活动？`
           : undefined
       }
-      actionLabel="Stop & Start"
+      actionLabel="结束并开始"
       actionVariant="default"
     />
   );

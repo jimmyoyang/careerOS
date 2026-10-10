@@ -86,7 +86,7 @@ function DocumentTable({
     if (!doc.id) return;
     const { success, message } = await setDefaultResume(doc.id);
     if (success) {
-      toastSuccess(`"${doc.title}" is now your default resume.`);
+      toastSuccess(`已将“${doc.title}”设为默认简历。`);
       reloadDocuments();
     } else {
       toastError(message);
@@ -96,7 +96,7 @@ function DocumentTable({
   const onSetDefault = (doc: ProfileDocument) => {
     if (!doc.id) return;
     if (!hasMinResumeSections(doc.sectionCount)) {
-      warnInsufficientResumeSections("setting this resume as default");
+      warnInsufficientResumeSections("将这份简历设为默认");
       return;
     }
     // Confirm whenever a different resume already holds the default. Decided by
@@ -113,7 +113,7 @@ function DocumentTable({
   const onCopyResume = (doc: ProfileDocument) => {
     if (!doc.id) return;
     if (!hasMinResumeSections(doc.sectionCount)) {
-      warnInsufficientResumeSections("creating a copy");
+      warnInsufficientResumeSections("创建副本");
       return;
     }
     copyResume(doc);
@@ -122,8 +122,8 @@ function DocumentTable({
   const deleteDocument = async (doc: ProfileDocument) => {
     if (!doc.id) return;
     if (doc.jobCount > 0) {
-      const label = doc.type === "resume" ? "resume" : "cover letter";
-      return toastError(`Number of jobs using ${label} must be 0!`);
+      const label = doc.type === "resume" ? "简历" : "求职信";
+      return toastError(`请先解除所有职位与这份${label}的关联，再删除。`);
     }
 
     const { success, message } =
@@ -132,8 +132,8 @@ function DocumentTable({
         : await deleteCoverLetterById(doc.id);
 
     if (success) {
-      const label = doc.type === "resume" ? "Resume" : "Cover letter";
-      toastSuccess(`${label} has been deleted successfully`);
+      const label = doc.type === "resume" ? "简历" : "求职信";
+      toastSuccess(`${label}已删除`);
       reloadDocuments();
     } else {
       toastError(message);
@@ -145,16 +145,16 @@ function DocumentTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead className="whitespace-nowrap">Type</TableHead>
-            <TableHead className="whitespace-nowrap">Created</TableHead>
+            <TableHead>标题</TableHead>
+            <TableHead className="whitespace-nowrap">类型</TableHead>
+            <TableHead className="whitespace-nowrap">创建时间</TableHead>
             <TableHead className="hidden md:table-cell whitespace-nowrap">
-              Updated
+              更新时间
             </TableHead>
-            <TableHead>Jobs</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>关联职位</TableHead>
+            <TableHead>操作</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -175,7 +175,7 @@ function DocumentTable({
                       ) : null}
                       {doc.isDefault ? (
                         <Badge className="ml-2 border-transparent bg-green-600 text-white hover:bg-green-600/90">
-                          Default
+                          默认
                         </Badge>
                       ) : null}
                     </Link>
@@ -190,15 +190,15 @@ function DocumentTable({
                 </TableCell>
                 <TableCell className="whitespace-nowrap">
                   <StatusBadge
-                    label={isResume ? "Resume" : "Cover Letter"}
+                    label={isResume ? "简历" : "求职信"}
                     color={DOCUMENT_TYPE_BADGE_COLORS[doc.type]}
                   />
                 </TableCell>
                 <TableCell className="whitespace-nowrap">
-                  {doc.createdAt && format(doc.createdAt, "PP")}
+                  {doc.createdAt && format(doc.createdAt, "yyyy年M月d日")}
                 </TableCell>
                 <TableCell className="hidden md:table-cell whitespace-nowrap">
-                  {doc.updatedAt && format(doc.updatedAt, "PP")}
+                  {doc.updatedAt && format(doc.updatedAt, "yyyy年M月d日")}
                 </TableCell>
                 <TableCell>{doc.jobCount}</TableCell>
                 <TableCell>
@@ -211,11 +211,11 @@ function DocumentTable({
                         data-testid="document-actions-menu-btn"
                       >
                         <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">打开操作菜单</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>操作</DropdownMenuLabel>
                       {isResume ? (
                         <>
                           <DropdownMenuItem
@@ -223,12 +223,12 @@ function DocumentTable({
                             onClick={() => editResume(doc)}
                           >
                             <Pencil className="mr-2 h-4 w-4" />
-                            Edit Resume Title
+                            编辑简历标题
                           </DropdownMenuItem>
                           <Link href={`/dashboard/profile/resume/${doc.id}`}>
                             <DropdownMenuItem className="cursor-pointer">
                               <FilePenLine className="mr-2 h-4 w-4" />
-                              View/Edit Resume
+                              查看或编辑简历
                             </DropdownMenuItem>
                           </Link>
                           <DropdownMenuItem
@@ -237,7 +237,7 @@ function DocumentTable({
                             data-testid="copy-resume-menu-item"
                           >
                             <Copy className="mr-2 h-4 w-4" />
-                            Create a copy
+                            创建副本
                           </DropdownMenuItem>
                           {!doc.isDefault && (
                             <DropdownMenuItem
@@ -245,7 +245,7 @@ function DocumentTable({
                               onClick={() => onSetDefault(doc)}
                             >
                               <Star className="mr-2 h-4 w-4" />
-                              Set as default
+                              设为默认
                             </DropdownMenuItem>
                           )}
                         </>
@@ -256,7 +256,7 @@ function DocumentTable({
                             onClick={() => editCoverLetter(doc)}
                           >
                             <Pencil className="mr-2 h-4 w-4" />
-                            Edit Cover Letter
+                            编辑求职信
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="cursor-pointer"
@@ -264,7 +264,7 @@ function DocumentTable({
                             data-testid="export-cover-letter-menu-item"
                           >
                             <FileDown className="mr-2 h-4 w-4" />
-                            Export to PDF
+                            导出 PDF
                           </DropdownMenuItem>
                         </>
                       )}
@@ -273,7 +273,7 @@ function DocumentTable({
                         onClick={() => onDeleteDocument(doc)}
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        删除
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -285,29 +285,29 @@ function DocumentTable({
       </Table>
       <DeleteAlertDialog
         pageTitle={
-          documentToDelete?.type === "cover-letter" ? "cover letter" : "resume"
+          documentToDelete?.type === "cover-letter" ? "求职信" : "简历"
         }
         open={alertOpen}
         onOpenChange={setAlertOpen}
         onDelete={() => deleteDocument(documentToDelete!)}
         alertDescription={
           documentToDelete?.isDefault
-            ? "This is your default resume. Deleting it will leave you without a default until you set another. This action cannot be undone."
+            ? "这是当前默认简历。删除后，需要重新设置默认简历。此操作无法撤销。"
             : undefined
         }
       />
       <DeleteAlertDialog
-        pageTitle="resume"
+        pageTitle="简历"
         open={setDefaultConfirmOpen}
         onOpenChange={setSetDefaultConfirmOpen}
         onDelete={() => performSetDefault(documentToSetDefault!)}
-        alertTitle="Change default resume?"
+        alertTitle="更换默认简历？"
         alertDescription={
           currentDefault
-            ? `This will make "${documentToSetDefault?.title}" your default resume, replacing "${currentDefault.title}".`
-            : `This will make "${documentToSetDefault?.title}" your default resume, replacing your current default.`
+            ? `将把“${documentToSetDefault?.title}”设为默认简历，替换“${currentDefault.title}”。`
+            : `将把“${documentToSetDefault?.title}”设为默认简历，替换当前默认简历。`
         }
-        actionLabel="Set as default"
+        actionLabel="设为默认"
         actionVariant="default"
       />
     </>

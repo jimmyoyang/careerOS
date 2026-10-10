@@ -27,24 +27,24 @@ async function createCompany(
   options?: { websiteUrl?: string; industry?: string },
 ) {
   await page.getByTestId("add-company-btn").click();
-  await expect(page.getByText("Add Company")).toBeVisible();
+  await expect(page.getByText("添加公司")).toBeVisible();
 
-  await page.getByLabel("Company Name").fill(companyName);
+  await page.getByLabel("公司名称").fill(companyName);
   if (options?.websiteUrl) {
-    await page.getByLabel("Website", { exact: true }).fill(options.websiteUrl);
+    await page.getByLabel("网站", { exact: true }).fill(options.websiteUrl);
   }
   if (options?.industry) {
-    await page.getByLabel("Industry", { exact: true }).fill(options.industry);
+    await page.getByLabel("行业", { exact: true }).fill(options.industry);
   }
-  await page.getByRole("button", { name: /save/i }).click();
+  await page.getByRole("button", { name: /保存/i }).click();
   cleanup.company(companyName);
 
   // Wait for the dialog to fully close before touching the search box —
   // filling it while the dialog is still closing is a no-op (the input
   // isn't interactable yet), leaving the search term empty.
-  await expect(page.getByText("Add Company")).not.toBeVisible();
+  await expect(page.getByText("添加公司")).not.toBeVisible();
 
-  const searchInput = page.getByPlaceholder("Search companies...");
+  const searchInput = page.getByPlaceholder("搜索公司…");
   await searchInput.fill(companyName);
   await expect(
     page.getByRole("cell", { name: companyName, exact: true }),
@@ -67,7 +67,7 @@ test.describe("Admin Companies search", () => {
     await createCompany(page, companyA, cleanup);
     await createCompany(page, companyB, cleanup);
 
-    const searchInput = page.getByPlaceholder("Search companies...");
+    const searchInput = page.getByPlaceholder("搜索公司…");
     await searchInput.fill(companyA);
 
     await expect(
@@ -105,7 +105,7 @@ test.describe("Admin Companies search", () => {
     await navigateToCompanies(page);
     await createCompany(page, companyName, cleanup);
 
-    const searchInput = page.getByPlaceholder("Search companies...");
+    const searchInput = page.getByPlaceholder("搜索公司…");
     await searchInput.fill(uniqueName("no-such-company"));
 
     await expect(
@@ -120,14 +120,14 @@ test.describe("Admin Companies search", () => {
 // header + one row means the filtered response has rendered.
 async function searchCompanyRow(page: Page, name: string) {
   await navigateToCompanies(page);
-  await page.getByPlaceholder("Search companies...").fill(name);
+  await page.getByPlaceholder("搜索公司…").fill(name);
   await expect(page.getByRole("row")).toHaveCount(2);
   return page.getByRole("row").filter({ hasText: name });
 }
 
 async function openRowMenuItem(page: Page, name: string, item: string) {
   const row = await searchCompanyRow(page, name);
-  await row.getByRole("button", { name: "Toggle menu" }).click();
+  await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
   await page.getByRole("menuitem", { name: item }).click();
 }
 
@@ -163,18 +163,18 @@ test.describe("Admin Companies", () => {
 
     await navigateToCompanies(page);
     await createCompany(page, companyName, cleanup);
-    await openRowMenuItem(page, companyName, "Edit Company");
+    await openRowMenuItem(page, companyName, "编辑公司");
 
     const dialog = page.getByRole("dialog");
     await expect(
-      dialog.getByRole("heading", { name: "Edit Company" }),
+      dialog.getByRole("heading", { name: "编辑公司" }),
     ).toBeVisible();
-    await expect(dialog.getByLabel("Company Name")).toHaveValue(companyName);
-    await dialog.getByLabel("Company Name").fill(renamed);
-    await dialog.getByLabel("Industry", { exact: true }).fill(industry);
+    await expect(dialog.getByLabel("公司名称")).toHaveValue(companyName);
+    await dialog.getByLabel("公司名称").fill(renamed);
+    await dialog.getByLabel("行业", { exact: true }).fill(industry);
     // Cleanup matches on the stored value, which the rename replaces
     cleanup.company(renamed);
-    await dialog.getByRole("button", { name: "Save" }).click();
+    await dialog.getByRole("button", { name: "保存" }).click();
     await expect(dialog).not.toBeVisible();
 
     await expect(
@@ -197,13 +197,13 @@ test.describe("Admin Companies", () => {
 
     await navigateToCompanies(page);
     await createCompany(page, companyName, cleanup);
-    await openRowMenuItem(page, companyName, "Delete");
+    await openRowMenuItem(page, companyName, "删除");
 
     const alert = page.getByRole("alertdialog");
     await expect(alert).toContainText(
-      "Are you sure you want to delete this company?",
+      "确定删除此公司吗？",
     );
-    await alert.getByRole("button", { name: "Delete" }).click();
+    await alert.getByRole("button", { name: "删除" }).click();
     await expect(alert).not.toBeVisible();
 
     await expect(
@@ -220,11 +220,11 @@ test.describe("Admin Companies", () => {
 
     await createNewJob(page, jobText, cleanup, { company: companyName });
     await navigateToCompanies(page);
-    await openRowMenuItem(page, companyName, "Delete");
+    await openRowMenuItem(page, companyName, "删除");
 
     const alert = page.getByRole("alertdialog");
-    await expect(alert).toContainText("Associated jobs exist!");
-    await expect(alert).toContainText("1 associated job");
-    await expect(alert.getByRole("button", { name: "Delete" })).toHaveCount(0);
+    await expect(alert).toContainText("存在关联职位！");
+    await expect(alert).toContainText("关联了 1 个职位");
+    await expect(alert.getByRole("button", { name: "删除" })).toHaveCount(0);
   });
 });

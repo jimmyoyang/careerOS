@@ -31,7 +31,7 @@ export const generateMockActivitiesAction = async (): Promise<any> => {
     // Check if dev mode is enabled
     if (process.env.NODE_ENV !== "development") {
       throw new Error(
-        "Mock data generation is only available in development mode",
+        "仅开发模式支持生成测试数据",
       );
     }
 
@@ -83,7 +83,7 @@ export const generateMockActivitiesAction = async (): Promise<any> => {
         const typeId = typeMap.get(typeValue);
 
         if (!typeId) {
-          throw new Error(`Activity type not found for ${typeValue}`);
+          throw new Error(`找不到活动类型：${typeValue}`);
         }
 
         return prisma.activity.create({
@@ -102,11 +102,11 @@ export const generateMockActivitiesAction = async (): Promise<any> => {
 
     return {
       success: true,
-      message: `Generated ${createdActivities.length} mock activities`,
+      message: `已生成 ${createdActivities.length} 条测试活动`,
       data: createdActivities,
     };
   } catch (error) {
-    const msg = "Failed to generate mock activities";
+    const msg = "生成测试活动失败";
     return handleError(error, msg);
   }
 };
@@ -118,7 +118,7 @@ export const clearMockActivitiesAction = async (): Promise<any> => {
     // Check if dev mode is enabled
     if (process.env.NODE_ENV !== "development") {
       throw new Error(
-        "Mock data clearing is only available in development mode",
+        "仅开发模式支持清空测试数据",
       );
     }
 
@@ -143,11 +143,11 @@ export const clearMockActivitiesAction = async (): Promise<any> => {
 
     return {
       success: true,
-      message: `Deleted ${deleteResult.count} mock activities`,
+      message: `已删除 ${deleteResult.count} 条测试活动`,
       deletedCount: deleteResult.count,
     };
   } catch (error) {
-    const msg = "Failed to clear mock activities";
+    const msg = "清空测试活动失败";
     return handleError(error, msg);
   }
 };
@@ -158,7 +158,7 @@ export const generateMockProfileDataAction = async (): Promise<any> => {
 
     if (process.env.NODE_ENV !== "development") {
       throw new Error(
-        "Mock data generation is only available in development mode",
+        "仅开发模式支持生成测试数据",
       );
     }
 
@@ -334,10 +334,10 @@ export const generateMockProfileDataAction = async (): Promise<any> => {
 
     return {
       success: true,
-      message: `Generated ${created} resumes (${skipped} already existed). Created ${mockCompanies.length} companies, ${mockLocations.length} locations, ${mockJobTitles.length} job titles.`,
+      message: `已生成 ${created} 份简历（另有 ${skipped} 份已存在），创建 ${mockCompanies.length} 家公司、${mockLocations.length} 个地点和 ${mockJobTitles.length} 个职位名称。`,
     };
   } catch (error) {
-    return handleError(error, "Failed to generate mock profile data");
+    return handleError(error, "生成测试资料失败");
   }
 };
 
@@ -347,7 +347,7 @@ export const clearMockProfileDataAction = async (): Promise<any> => {
 
     if (process.env.NODE_ENV !== "development") {
       throw new Error(
-        "Mock data clearing is only available in development mode",
+        "仅开发模式支持清空测试数据",
       );
     }
 
@@ -433,10 +433,10 @@ export const clearMockProfileDataAction = async (): Promise<any> => {
 
     return {
       success: true,
-      message: `Deleted ${resumeIds.length} resumes, ${companiesCount} companies, ${locationsCount} locations, ${titlesCount} job titles.`,
+      message: `已删除 ${resumeIds.length} 份简历、${companiesCount} 家公司、${locationsCount} 个地点和 ${titlesCount} 个职位名称。`,
     };
   } catch (error) {
-    return handleError(error, "Failed to clear mock profile data");
+    return handleError(error, "清空测试资料失败");
   }
 };
 
@@ -459,7 +459,7 @@ export const generateMockJobsAction = async (): Promise<any> => {
 
     if (process.env.NODE_ENV !== "development") {
       throw new Error(
-        "Mock data generation is only available in development mode",
+        "仅开发模式支持生成测试数据",
       );
     }
 
@@ -471,7 +471,7 @@ export const generateMockJobsAction = async (): Promise<any> => {
       return {
         success: false,
         message:
-          "Please generate mock profile data first (companies, locations, job titles, and resumes are required).",
+          "请先生成测试资料（需要公司、地点、职位名称和简历）。",
       };
     }
 
@@ -509,11 +509,11 @@ export const generateMockJobsAction = async (): Promise<any> => {
       ]);
 
     if (statuses.length === 0) {
-      return { success: false, message: "No job statuses found in database." };
+      return { success: false, message: "数据库中没有职位状态。" };
     }
 
     if (jobSources.length === 0) {
-      return { success: false, message: "No job sources found. Please add at least one job source first." };
+      return { success: false, message: "没有职位来源，请先添加至少一个职位来源。" };
     }
 
     const statusMap = new Map(statuses.map((s) => [s.value, s.id]));
@@ -585,10 +585,10 @@ export const generateMockJobsAction = async (): Promise<any> => {
 
     return {
       success: true,
-      message: `Generated ${count} mock jobs across the last 30 days.`,
+      message: `已在最近 30 天生成 ${count} 个测试职位。`,
     };
   } catch (error) {
-    return handleError(error, "Failed to generate mock jobs");
+    return handleError(error, "生成测试职位失败");
   }
 };
 
@@ -598,7 +598,7 @@ export const clearMockJobsAction = async (): Promise<any> => {
 
     if (process.env.NODE_ENV !== "development") {
       throw new Error(
-        "Mock data clearing is only available in development mode",
+        "仅开发模式支持清空测试数据",
       );
     }
 
@@ -614,7 +614,7 @@ export const clearMockJobsAction = async (): Promise<any> => {
     const jobIds = mockJobs.map((j) => j.id);
 
     if (jobIds.length === 0) {
-      return { success: true, message: "No mock jobs found to delete." };
+      return { success: true, message: "没有可删除的测试职位。" };
     }
 
     // Delete related records first (FK constraints)
@@ -636,9 +636,9 @@ export const clearMockJobsAction = async (): Promise<any> => {
 
     return {
       success: true,
-      message: `Deleted ${deleteResult.count} mock jobs.`,
+      message: `已删除 ${deleteResult.count} 个测试职位。`,
     };
   } catch (error) {
-    return handleError(error, "Failed to clear mock jobs");
+    return handleError(error, "清空测试职位失败");
   }
 };

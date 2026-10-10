@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useEffect, useState, useTransition } from "react";
 import { X, ChevronsUpDown, CirclePlus, Loader } from "lucide-react";
 import {
@@ -37,8 +39,8 @@ export function TagInput({
   selectedTagIds,
   onChange,
   max = APP_CONSTANTS.MAX_JOB_TAGS,
-  placeholder = "Search or add a skill...",
-  noun = "skills",
+  placeholder = "搜索或添加技能…",
+  noun = "技能",
   onTagCreated,
 }: TagInputProps) {
   const [open, setOpen] = useState(false);
@@ -97,7 +99,7 @@ export function TagInput({
     startTransition(async () => {
       const result = await createTag(label);
       if (!result?.success) {
-        toastError(result?.message ?? "Failed to create skill tag.");
+        toastError(result?.message ?? "创建技能标签失败。");
         return;
       }
       const newTag: Tag = result.data;
@@ -134,20 +136,20 @@ export function TagInput({
             disabled={isMaxReached}
             type="button"
           >
-            {isMaxReached ? `Max ${max} ${noun} reached` : placeholder}
+            {isMaxReached ? `已达到 ${max} 个${zhLabel(noun)}的上限` : placeholder}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
           <Command shouldFilter={false}>
             <CommandInput
-              placeholder="Type a skill..."
+              placeholder="输入技能…"
               value={inputValue}
               onValueChange={setInputValue}
             />
             <CommandList>
               {filteredOptions.length === 0 && !inputValue && (
-                <CommandEmpty>No skills found.</CommandEmpty>
+                <CommandEmpty>未找到技能。</CommandEmpty>
               )}
               {filteredOptions.length > 0 && (
                 <CommandGroup>
@@ -173,7 +175,7 @@ export function TagInput({
                     ) : (
                       <CirclePlus className="mr-2 h-4 w-4" />
                     )}
-                    Create &quot;{inputValue.trim()}&quot;
+                    创建“{inputValue.trim()}”
                   </CommandItem>
                 </CommandGroup>
               )}
@@ -191,7 +193,7 @@ export function TagInput({
                 type="button"
                 onClick={() => removeTagById(tag.id)}
                 className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5"
-                aria-label={`Remove ${tag.label}`}
+                aria-label={`移除${tag.label}`}
               >
                 <X className="h-3 w-3" />
               </button>

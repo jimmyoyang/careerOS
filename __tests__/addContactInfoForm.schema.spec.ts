@@ -57,21 +57,24 @@ describe("AddContactInfoFormSchema", () => {
   });
 
   describe("name and headline", () => {
-    it("rejects a first name shorter than 2 characters", () => {
-      expect(errorFor({ ...valid, firstName: "A" }, "firstName")).toBe(
-        "First name must be at least 2 characters.",
+    it("accepts single-character Chinese names", () => {
+      expect(AddContactInfoFormSchema.parse({ ...valid, firstName: "伟", lastName: "张" })).toMatchObject({ firstName: "伟", lastName: "张" });
+    });
+    it("rejects an empty first name", () => {
+      expect(errorFor({ ...valid, firstName: "" }, "firstName")).toBe(
+        "请填写名。",
       );
     });
 
-    it("rejects a last name shorter than 2 characters", () => {
-      expect(errorFor({ ...valid, lastName: "L" }, "lastName")).toBe(
-        "Last name must be at least 2 characters.",
+    it("rejects a blank last name", () => {
+      expect(errorFor({ ...valid, lastName: "  " }, "lastName")).toBe(
+        "请填写姓。",
       );
     });
 
     it("rejects a headline shorter than 2 characters", () => {
       expect(errorFor({ ...valid, headline: "E" }, "headline")).toBe(
-        "Headline must be at least 2 characters.",
+        "职业简介至少需要 2 个字符。",
       );
     });
 
@@ -86,7 +89,7 @@ describe("AddContactInfoFormSchema", () => {
   describe("email", () => {
     it("rejects a malformed address", () => {
       expect(errorFor({ ...valid, email: "not-an-email" }, "email")).toBe(
-        "Please enter a valid email!",
+        "请输入有效的邮箱地址。",
       );
     });
 
@@ -117,13 +120,13 @@ describe("AddContactInfoFormSchema", () => {
   describe("link URLs", () => {
     it("rejects a first link without a scheme", () => {
       expect(errorFor({ ...valid, url1: "linkedin.com/in/ada" }, "url1")).toBe(
-        "URL must start with http:// or https://",
+        "链接必须以 http:// 或 https:// 开头。",
       );
     });
 
     it("rejects a second link without a scheme", () => {
       expect(errorFor({ ...valid, url2: "github.com/ada" }, "url2")).toBe(
-        "URL must start with http:// or https://",
+        "链接必须以 http:// 或 https:// 开头。",
       );
     });
 

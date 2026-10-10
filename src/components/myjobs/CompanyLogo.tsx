@@ -13,7 +13,7 @@ export function CompanyLogo({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      alt="Company logo"
+      alt="公司标志"
       className={cn("rounded-md object-cover", className)}
       src={logoUrl || "/images/jobsync-logo.svg"}
       onError={(e) => {

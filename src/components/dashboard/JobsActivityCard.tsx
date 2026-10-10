@@ -1,4 +1,5 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
 
 import { RefObject, useMemo, useRef } from "react";
 import { Pie, PieSvgProps } from "@nivo/pie";
@@ -110,7 +111,7 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="text-lg text-green-600 min-w-0 truncate">
-            Jobs &amp; Activity
+            职位与活动
           </CardTitle>
           <div
             className="flex shrink-0 rounded-md border text-xs"
@@ -118,7 +119,7 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
           >
             {data.map((item, index) => (
               <button
-                key={item.label}
+                key={zhLabel(item.label)}
                 onClick={() => selectTab(index)}
                 className={cn(
                   "px-2 py-1 transition-colors",
@@ -129,7 +130,7 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
                     : "hover:bg-muted",
                 )}
               >
-                {item.label}
+                {zhLabel(item.label)}
               </button>
             ))}
           </div>
@@ -141,7 +142,7 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
             <div className="flex h-full w-full items-center justify-center">
               <div className="h-[132px] w-[132px] rounded-full border-[18px] border-muted" />
               <p className="absolute inset-x-0 bottom-0 text-center text-sm text-muted-foreground">
-                No activities recorded
+                暂无活动记录
               </p>
             </div>
           ) : (
@@ -196,10 +197,10 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    <strong>{datum.data.label}</strong> — {datum.value}h
+                    <strong>{zhLabel(String(datum.data.label))}</strong> — {datum.value}小时
                     {datum.data.breakdown?.map((activity: TopActivityType) => (
                       <div key={activity.label}>
-                        {activity.label} — {activity.hours}h
+                        {zhLabel(activity.label)} — {activity.hours}小时
                       </div>
                     ))}
                   </div>
@@ -217,7 +218,7 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
                 roomyTotal ? "text-xl" : "text-base",
               )}
             >
-              {totalHours}h
+              {totalHours}小时
             </span>
             <span
               className={cn(
@@ -225,7 +226,7 @@ export default function JobsActivityCard({ data }: JobsActivityCardProps) {
                 roomyTotal ? "text-sm" : "text-xs",
               )}
             >
-              {jobsApplied} {jobsApplied === 1 ? "job" : "jobs"}
+              {jobsApplied} 个职位
             </span>
             {jobsTrend !== 0 && roomyTotal && (
               <span

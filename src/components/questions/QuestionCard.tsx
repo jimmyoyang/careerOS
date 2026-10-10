@@ -58,7 +58,7 @@ export function QuestionCard({
                 onEdit(question);
               }}
               data-testid="question-edit-btn"
-              aria-label="Edit question"
+              aria-label="编辑题目"
             >
               <Pencil className="h-4 w-4" />
             </Button>
@@ -71,7 +71,7 @@ export function QuestionCard({
                 setShowDeleteDialog(true);
               }}
               data-testid="question-delete-btn"
-              aria-label="Delete question"
+              aria-label="删除题目"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -101,7 +101,7 @@ export function QuestionCard({
         {question.createdVia && (
           <div className="mt-2">
             <Badge variant="outline" className="text-xs text-muted-foreground">
-              via {question.createdVia}
+              来自 {question.createdVia}
             </Badge>
           </div>
         )}
@@ -114,7 +114,7 @@ export function QuestionCard({
               setExpanded(!expanded);
             }}
           >
-            {expanded ? "Show less" : "Show more"}
+            {expanded ? "收起" : "展开"}
           </button>
         )}
       </div>
@@ -122,19 +122,18 @@ export function QuestionCard({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Question</AlertDialogTitle>
+            <AlertDialogTitle>删除题目</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this question? This action cannot
-              be undone.
+              确定删除这道题目吗？此操作无法撤销。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => onDelete(question.id)}
               className="bg-destructive-bg text-destructive-foreground hover:bg-destructive-bg/90"
             >
-              Delete
+              删除
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

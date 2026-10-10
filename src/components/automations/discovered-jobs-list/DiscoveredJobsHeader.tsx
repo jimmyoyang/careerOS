@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ListFilter, Trash2 } from "lucide-react";
@@ -44,27 +46,27 @@ export function DiscoveredJobsHeader({
     <CardHeader>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1.5">
-          <CardTitle>Discovered Jobs</CardTitle>
+          <CardTitle>发现的岗位</CardTitle>
           {totalJobs > 0 && (
-            <RecordsCount count={loadedCount} total={totalJobs} label="jobs" />
+            <RecordsCount count={loadedCount} total={totalJobs} label="个岗位" />
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {showClear && (
             <Button variant="outline" size="sm" onClick={onClear}>
               <Trash2 className="h-4 w-4 mr-1.5" />
-              Clear
+              清空
             </Button>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <ListFilter className="h-4 w-4 mr-1.5" />
-                Status
+                状态
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
+              <DropdownMenuLabel>按状态筛选</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {DISCOVERY_STATUSES.map((status) => (
                 <DropdownMenuCheckboxItem
@@ -75,7 +77,7 @@ export function DiscoveredJobsHeader({
                     toggleStatusFilter(status.value, checked)
                   }
                 >
-                  {status.label}
+                  {zhLabel(status.label)}
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuContent>

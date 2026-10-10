@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -50,16 +52,16 @@ function ActivityTypesTable({
 
     if (activityCount > 0 || taskCount > 0) {
       const links = [
-        activityCount > 0 ? `${activityCount} activity(ies)` : "",
-        taskCount > 0 ? `${taskCount} task(s)` : "",
+        activityCount > 0 ? `${activityCount} 项活动` : "",
+        taskCount > 0 ? `${taskCount} 项任务` : "",
       ]
         .filter(Boolean)
-        .join(" and ");
+        .join("和");
 
       setAlert({
         openState: true,
-        title: "Activity type is in use!",
-        description: `This activity type is linked to ${links} and cannot be deleted.`,
+        title: "活动类型正在使用中！",
+        description: `该活动类型关联了${links}，无法删除。`,
         deleteAction: false,
       });
     } else {
@@ -75,7 +77,7 @@ function ActivityTypesTable({
     if (!id) return;
     const { success, message } = await deleteActivityTypeById(id);
     if (success) {
-      toastSuccess("Activity type has been deleted successfully");
+      toastSuccess("活动类型已删除");
       reloadActivityTypes();
     } else {
       toastError(message);
@@ -92,18 +94,18 @@ function ActivityTypesTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Label</TableHead>
-            <TableHead className="hidden sm:table-cell">Value</TableHead>
-            <TableHead># Activities</TableHead>
-            <TableHead># Tasks</TableHead>
-            <TableHead>Total Hours</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>名称</TableHead>
+            <TableHead className="hidden sm:table-cell">标识值</TableHead>
+            <TableHead>活动数量</TableHead>
+            <TableHead>任务数量</TableHead>
+            <TableHead>总时长</TableHead>
+            <TableHead>操作</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {activityTypes.map((at) => (
             <TableRow key={at.id}>
-              <TableCell className="font-medium">{at.label}</TableCell>
+              <TableCell className="font-medium">{zhLabel(at.label)}</TableCell>
               <TableCell className="font-medium hidden sm:table-cell">
                 {at.value}
               </TableCell>
@@ -114,24 +116,24 @@ function ActivityTypesTable({
                 {at._count?.Tasks ?? 0}
               </TableCell>
               <TableCell className="font-medium">
-                {formatHours(at.totalDuration)} hrs
+                {formatHours(at.totalDuration)} 小时
               </TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button aria-haspopup="true" size="icon" variant="ghost">
                       <MoreVertical className="h-4 w-4" />
-                      <span className="sr-only">Toggle menu</span>
+                      <span className="sr-only">打开菜单</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>操作</DropdownMenuLabel>
                     <DropdownMenuItem
                       className="text-red-600 cursor-pointer"
                       onClick={() => onDelete(at)}
                     >
                       <Trash className="mr-2 h-4 w-4" />
-                      Delete
+                      删除
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -141,7 +143,7 @@ function ActivityTypesTable({
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="activity type"
+        pageTitle="活动类型"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteType(alert.itemId)}

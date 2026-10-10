@@ -150,7 +150,7 @@ export function RadialChartComponent({
           </tspan>
         </text>
         <text x={cx} y={cy + 8} textAnchor="middle" dominantBaseline="middle">
-          <tspan className="fill-muted-foreground text-sm">Score</tspan>
+          <tspan className="fill-muted-foreground text-sm">评分</tspan>
         </text>
       </svg>
     </div>

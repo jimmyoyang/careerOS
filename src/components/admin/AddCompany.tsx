@@ -46,7 +46,7 @@ function AddCompany({
 }: AddCompanyProps) {
   const [isPending, startTransition] = useTransition();
 
-  const pageTitle = editCompany ? "Edit Company" : "Add Company";
+  const pageTitle = editCompany ? "编辑公司" : "添加公司";
 
   const form = useForm<z.infer<typeof AddCompanyFormSchema>>({
     resolver: zodResolver(AddCompanyFormSchema),
@@ -96,7 +96,7 @@ function AddCompany({
         ? await updateCompany(data)
         : await addCompany(data);
       toastActionResult(res, {
-        success: `Company has been ${editCompany ? "updated" : "created"} successfully`,
+        success: `公司已${editCompany ? "更新" : "创建"}`,
         onSuccess: () => {
           reset();
           setDialogOpen(false);
@@ -118,7 +118,7 @@ function AddCompany({
         >
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            New Company
+            新建公司
           </span>
         </Button>
       )}
@@ -128,8 +128,7 @@ function AddCompany({
             <DialogTitle>{pageTitle}</DialogTitle>
             {editCompany && (
               <DialogDescription className="text-orange-600 dark:text-orange-500">
-                Caution: Editing name of the company will affect all the
-                related job records including your resume.
+                注意：修改公司名称会影响所有相关职位记录，包括简历中的记录。
               </DialogDescription>
             )}
           </DialogHeader>
@@ -145,7 +144,7 @@ function AddCompany({
                   name="company"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Company Name</FormLabel>
+                      <FormLabel>公司名称</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -162,7 +161,7 @@ function AddCompany({
                   name="logoUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Company Logo URL</FormLabel>
+                      <FormLabel>公司标志链接</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -177,7 +176,7 @@ function AddCompany({
                 name="websiteUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Website</FormLabel>
+                    <FormLabel>网站</FormLabel>
                     <FormControl>
                       <Input placeholder="https://example.com" {...field} />
                     </FormControl>
@@ -192,7 +191,7 @@ function AddCompany({
                 name="careersUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Careers Page</FormLabel>
+                    <FormLabel>招聘页面</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="https://example.com/careers"
@@ -211,9 +210,9 @@ function AddCompany({
                   name="industry"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Industry</FormLabel>
+                      <FormLabel>行业</FormLabel>
                       <FormControl>
-                        <Input placeholder="Financial Services" {...field} />
+                        <Input placeholder="金融服务" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -232,11 +231,11 @@ function AddCompany({
                       className="mt-2 md:mt-0 w-full"
                       onClick={closeDialog}
                     >
-                      Cancel
+                      取消
                     </Button>
                   </div>
                   <Button type="submit" disabled={!formState.isDirty}>
-                    Save
+                    保存
                     {isPending && (
                       <Loader className="h-4 w-4 shrink-0 spinner" />
                     )}

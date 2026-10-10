@@ -20,7 +20,7 @@ async function pick(
   await scope.getByLabel(label, { exact: true }).click();
   const input = page.getByPlaceholder(placeholder);
   await input.fill(value);
-  const createOption = page.getByText(`Create: ${value}`);
+  const createOption = page.getByText(`创建： ${value}`);
   const existingOption = page.getByRole("option", { name: value, exact: true });
   await expect(createOption.or(existingOption).first()).toBeVisible();
   if (await existingOption.isVisible()) {
@@ -43,7 +43,7 @@ function contactRow(page: Page, name: string) {
 }
 
 async function searchContacts(page: Page, term: string) {
-  await page.getByPlaceholder("Search contacts...").fill(term);
+  await page.getByPlaceholder("搜索联系人…").fill(term);
 }
 
 // Creates a contact from the Library Contacts tab. Company and role are
@@ -57,25 +57,25 @@ async function createContact(
 ) {
   await page.getByTestId("add-contact-btn").click();
   const dialog = page.getByRole("dialog");
-  await expect(dialog.getByRole("heading", { name: "Add Contact" })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "添加联系人" })).toBeVisible();
 
-  await dialog.getByLabel("Name", { exact: true }).fill(name);
+  await dialog.getByLabel("姓名", { exact: true }).fill(name);
   if (options?.title) {
-    await dialog.getByLabel("Title", { exact: true }).fill(options.title);
+    await dialog.getByLabel("职位名称", { exact: true }).fill(options.title);
   }
   if (options?.email) {
-    await dialog.getByLabel("Email", { exact: true }).fill(options.email);
+    await dialog.getByLabel("邮箱", { exact: true }).fill(options.email);
   }
   if (options?.company) {
-    await pick(page, dialog, "Company", "Create or Search company", options.company);
+    await pick(page, dialog, "公司", "创建或搜索公司", options.company);
     cleanup.company(options.company);
   }
   if (options?.role) {
-    await pick(page, dialog, "Role", "Create or Search role", options.role);
+    await pick(page, dialog, "角色", "创建或搜索角色", options.role);
     cleanup.contactRole(options.role);
   }
 
-  await dialog.getByRole("button", { name: "Save" }).click();
+  await dialog.getByRole("button", { name: "保存" }).click();
   cleanup.contact(name);
   await expect(dialog).not.toBeVisible();
 }
@@ -94,11 +94,11 @@ async function linkContactToJob(
   roleName: string,
 ) {
   await openJobContactsTab(page, jobId);
-  await page.getByRole("button", { name: "Add Contact" }).click();
-  await pick(page, page, "Contact", "Search contact", contactName);
-  await pick(page, page, "Role", "Create or Search role", roleName);
+  await page.getByRole("button", { name: "添加联系人" }).click();
+  await pick(page, page, "联系人", "搜索联系人", contactName);
+  await pick(page, page, "角色", "创建或搜索角色", roleName);
   cleanup.contactRole(roleName);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await page.getByRole("button", { name: "保存", exact: true }).click();
 
   const link = page.getByRole("listitem").filter({ hasText: contactName });
   await expect(link).toBeVisible();
@@ -123,7 +123,7 @@ test.describe("Contacts Library", () => {
     await expect(row).toContainText(company);
     await expect(row).toContainText(role);
 
-    await page.getByRole("button", { name: `Expand ${name}` }).click();
+    await page.getByRole("button", { name: `展开 ${name}` }).click();
     await expect(page.getByRole("link", { name: email })).toBeVisible();
   });
 
@@ -135,20 +135,20 @@ test.describe("Contacts Library", () => {
     await searchContacts(page, name);
 
     await contactRow(page, name)
-      .getByRole("button", { name: "Toggle menu" })
+      .getByRole("button", { name: /打开(?:操作)?菜单/ })
       .click();
-    await page.getByRole("menuitem", { name: "Edit Contact" }).click();
+    await page.getByRole("menuitem", { name: "编辑联系人" }).click();
 
     const dialog = page.getByRole("dialog");
-    await expect(dialog.getByRole("heading", { name: "Edit Contact" })).toBeVisible();
-    await expect(dialog.getByLabel("Name", { exact: true })).toHaveValue(name);
-    await expect(dialog.getByLabel("Title", { exact: true })).toHaveValue(
+    await expect(dialog.getByRole("heading", { name: "编辑联系人" })).toBeVisible();
+    await expect(dialog.getByLabel("姓名", { exact: true })).toHaveValue(name);
+    await expect(dialog.getByLabel("职位名称", { exact: true })).toHaveValue(
       "Recruiter",
     );
     await dialog
-      .getByLabel("Title", { exact: true })
+      .getByLabel("职位名称", { exact: true })
       .fill("Engineering Manager");
-    await dialog.getByRole("button", { name: "Save" }).click();
+    await dialog.getByRole("button", { name: "保存" }).click();
     await expect(dialog).not.toBeVisible();
 
     await expect(contactRow(page, name)).toContainText("Engineering Manager");
@@ -171,7 +171,7 @@ test.describe("Contacts Library", () => {
     await expect(contactRow(page, withRole)).toBeVisible();
     await expect(contactRow(page, withoutRole)).toBeVisible();
 
-    await page.getByLabel("Filter by role").click();
+    await page.getByLabel("按角色筛选").click();
     await page.getByRole("option", { name: role, exact: true }).click();
 
     await expect(contactRow(page, withRole)).toBeVisible();
@@ -195,17 +195,17 @@ test.describe("Contacts Library", () => {
     await searchContacts(page, name);
     const row = contactRow(page, name);
     await expect(row).toBeVisible();
-    await row.getByRole("button", { name: "Toggle menu" }).click();
-    await page.getByRole("menuitem", { name: "Delete" }).click();
+    await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
+    await page.getByRole("menuitem", { name: "删除" }).click();
 
     const alert = page.getByRole("alertdialog");
-    await expect(alert).toContainText("Delete this contact?");
-    await expect(alert).toContainText("linked to 1 job");
-    await alert.getByRole("button", { name: "Delete" }).click();
+    await expect(alert).toContainText("删除这个联系人？");
+    await expect(alert).toContainText("关联了 1 个职位");
+    await alert.getByRole("button", { name: "删除" }).click();
     await expect(row).not.toBeVisible();
 
     await openJobContactsTab(page, jobId);
-    await expect(page.getByText("No contacts on this job")).toBeVisible();
+    await expect(page.getByText("该职位暂无联系人")).toBeVisible();
   });
 
   test("refuses to delete a role a contact holds", async ({
@@ -219,15 +219,15 @@ test.describe("Contacts Library", () => {
     await createContact(page, cleanup, name, { role });
 
     await page.goto("/dashboard/admin?tab=roles");
-    await page.getByPlaceholder("Search roles...").fill(role);
+    await page.getByPlaceholder("搜索角色…").fill(role);
     const row = page.getByRole("row").filter({ hasText: role });
-    await row.getByRole("button", { name: "Toggle menu" }).click();
-    await page.getByRole("menuitem", { name: "Delete" }).click();
+    await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
+    await page.getByRole("menuitem", { name: "删除" }).click();
 
     const alert = page.getByRole("alertdialog");
-    await expect(alert).toContainText("Associated contacts exist!");
-    await expect(alert).toContainText("set on 1 contact");
-    await expect(alert.getByRole("button", { name: "Delete" })).toHaveCount(0);
+    await expect(alert).toContainText("存在关联联系人！");
+    await expect(alert).toContainText("有 1 位联系人使用该角色");
+    await expect(alert.getByRole("button", { name: "删除" })).toHaveCount(0);
   });
 });
 
@@ -245,12 +245,12 @@ test.describe("Job Contacts tab", () => {
     await createContact(page, cleanup, name);
     await linkContactToJob(page, cleanup, jobId, name, role);
 
-    await page.getByRole("button", { name: `Remove ${name}` }).click();
+    await page.getByRole("button", { name: `移除${name}` }).click();
     await page
       .getByRole("alertdialog")
-      .getByRole("button", { name: "Delete" })
+      .getByRole("button", { name: "删除" })
       .click();
-    await expect(page.getByText("No contacts on this job")).toBeVisible();
+    await expect(page.getByText("该职位暂无联系人")).toBeVisible();
 
     await navigateToContacts(page);
     await searchContacts(page, name);
@@ -267,26 +267,26 @@ test.describe("Job Contacts tab", () => {
 
     const jobId = await createNewJob(page, jobText, cleanup);
     await openJobContactsTab(page, jobId);
-    await page.getByRole("button", { name: "Add Contact" }).click();
+    await page.getByRole("button", { name: "添加联系人" }).click();
 
     // The picker has no create path; what's typed carries into the dialog
-    await page.getByLabel("Contact", { exact: true }).click();
-    await page.getByPlaceholder("Search contact").fill(name);
+    await page.getByLabel("联系人", { exact: true }).click();
+    await page.getByPlaceholder("搜索联系人").fill(name);
     await page.keyboard.press("Escape");
-    await page.getByRole("button", { name: "New contact" }).click();
+    await page.getByRole("button", { name: "新建联系人" }).click();
 
     const dialog = page.getByRole("dialog");
-    await expect(dialog.getByLabel("Name", { exact: true })).toHaveValue(name);
-    await dialog.getByRole("button", { name: "Save" }).click();
+    await expect(dialog.getByLabel("姓名", { exact: true })).toHaveValue(name);
+    await dialog.getByRole("button", { name: "保存" }).click();
     cleanup.contact(name);
     await expect(dialog).not.toBeVisible();
-    await expect(page.getByLabel("Contact", { exact: true })).toContainText(
+    await expect(page.getByLabel("联系人", { exact: true })).toContainText(
       name,
     );
 
-    await pick(page, page, "Role", "Create or Search role", role);
+    await pick(page, page, "角色", "创建或搜索角色", role);
     cleanup.contactRole(role);
-    await page.getByRole("button", { name: "Save", exact: true }).click();
+    await page.getByRole("button", { name: "保存", exact: true }).click();
 
     const link = page.getByRole("listitem").filter({ hasText: name });
     await expect(link).toContainText(role);
@@ -303,29 +303,29 @@ test.describe("Company Contacts tab", () => {
 
     await page.goto("/dashboard/admin");
     await page.getByTestId("add-company-btn").click();
-    await page.getByLabel("Company Name").fill(company);
-    await page.getByRole("button", { name: /save/i }).click();
+    await page.getByLabel("公司名称").fill(company);
+    await page.getByRole("button", { name: /保存/i }).click();
     cleanup.company(company);
     await expect(page.getByRole("dialog")).not.toBeVisible();
 
-    await page.getByPlaceholder("Search companies...").fill(company);
+    await page.getByPlaceholder("搜索公司…").fill(company);
     await page.getByRole("link", { name: company, exact: true }).click();
     await expect(page).toHaveURL(/\/dashboard\/admin\/companies\//);
 
-    await page.getByRole("tab", { name: "Contacts" }).click();
-    await expect(page.getByText("No contacts at this company yet")).toBeVisible();
-    await page.getByRole("button", { name: "Add Contact" }).click();
+    await page.getByRole("tab", { name: "联系人" }).click();
+    await expect(page.getByText("该公司暂无联系人")).toBeVisible();
+    await page.getByRole("button", { name: "添加联系人" }).click();
 
     const dialog = page.getByRole("dialog");
-    await expect(dialog.getByLabel("Company", { exact: true })).toContainText(
+    await expect(dialog.getByLabel("公司", { exact: true })).toContainText(
       company,
     );
-    await dialog.getByLabel("Name", { exact: true }).fill(name);
-    await dialog.getByRole("button", { name: "Save" }).click();
+    await dialog.getByLabel("姓名", { exact: true }).fill(name);
+    await dialog.getByRole("button", { name: "保存" }).click();
     cleanup.contact(name);
     await expect(dialog).not.toBeVisible();
 
-    await expect(page.getByText("Works here")).toBeVisible();
+    await expect(page.getByText("在此任职")).toBeVisible();
     await expect(page.getByRole("row").filter({ hasText: name })).toBeVisible();
   });
 });

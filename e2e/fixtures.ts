@@ -10,9 +10,9 @@ export function uniqueName(base: string): string {
 export async function login(page: Page) {
   await page.getByPlaceholder("id@example.com").click();
   await page.getByPlaceholder("id@example.com").fill("admin@example.com");
-  await page.getByRole("textbox", { name: "Password" }).click();
-  await page.getByRole("textbox", { name: "Password" }).fill("password123");
-  await page.getByRole("button", { name: "Login" }).click();
+  await page.getByRole("textbox", { name: "密码" }).click();
+  await page.getByRole("textbox", { name: "密码" }).fill("password123");
+  await page.locator("form").getByRole("button", { name: "登录", exact: true }).click();
 }
 
 // Fills a "search or create" combobox and picks the entry. Unique names mean
@@ -28,7 +28,7 @@ export async function selectOrCreate(
   const input = page.getByPlaceholder(placeholder);
   await input.click();
   await input.fill(value);
-  const createOption = page.getByText(`Create: ${value}`);
+  const createOption = page.getByText(`创建： ${value}`);
   const existingOption = page.getByRole("option", { name: value, exact: true });
   // Deterministic wait for the filtered list instead of a fixed timeout.
   await expect(createOption.or(existingOption).first()).toBeVisible();
@@ -58,7 +58,7 @@ export async function selectOrCreateWithEnter(
   const input = page.getByPlaceholder(placeholder);
   await input.click();
   await input.fill(value);
-  const createOption = page.getByText(`Create: ${value}`);
+  const createOption = page.getByText(`创建： ${value}`);
   const existingOption = page.getByRole("option", { name: value, exact: true });
   await expect(createOption.or(existingOption).first()).toBeVisible();
   await input.press("Enter");
@@ -87,13 +87,13 @@ export async function createNewJob(
   // "Add Job") when starting from /dashboard, or the myjobs page's own inline
   // trigger (labeled "New Job", from AddJob.tsx) when already on
   // /dashboard/myjobs — createNewJob is called from both contexts.
-  await page.getByRole("button", { name: /^(New |Add )?Job$/ }).click();
+  await page.getByRole("button", { name: /^(新建|添加)?职位$/ }).click();
   await expect(page).toHaveURL(/\/dashboard\/myjobs/);
   // Dashboard's "Job" button auto-opens the dialog via ?add-job=true.
   await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
   if (!options?.skipUrl) {
     await page
-      .getByPlaceholder("Copy and paste job link here")
+      .getByPlaceholder("将职位链接粘贴到这里")
       .fill("www.google.com");
   }
 
@@ -101,20 +101,20 @@ export async function createNewJob(
   // saves it via its own server action), so a failure before the job is saved
   // still tears the item down.
   const pick = options?.useEnterKey ? selectOrCreateWithEnter : selectOrCreate;
-  await pick(page, "Job Title", "Create or Search title", jobText);
+  await pick(page, "职位名称", "创建或搜索职位", jobText);
   cleanup.title(jobText);
-  await pick(page, "Company", "Create or Search company", companyText);
+  await pick(page, "公司", "创建或搜索公司", companyText);
   cleanup.company(companyText);
-  await pick(page, "Job Location", "Create or Search location", locationText);
+  await pick(page, "工作地点", "创建或搜索地点", locationText);
   cleanup.location(locationText);
 
-  await page.getByRole("dialog").getByText("Part-time", { exact: true }).click();
-  await page.getByLabel("Job Source").click();
+  await page.getByRole("dialog").getByText("兼职", { exact: true }).click();
+  await page.getByLabel("职位来源").click();
   await page.getByRole("option", { name: "Indeed" }).click();
-  await expect(page.getByLabel("Job Source")).toContainText("Indeed");
-  await page.getByLabel("Job Description").locator("div").click();
+  await expect(page.getByLabel("职位来源")).toContainText("Indeed");
+  await page.getByLabel("职位描述").locator("div").click();
   await page
-    .getByLabel("Job Description")
+    .getByLabel("职位描述")
     .locator("div")
     .fill("test description");
   if (options?.beforeSave) {

@@ -26,7 +26,7 @@ describe("AddCompany Component", () => {
       />,
     );
     expect(
-      screen.getByRole("button", { name: /new company/i }),
+      screen.getByRole("button", { name: /新建公司/i }),
     ).toBeInTheDocument();
   });
 
@@ -41,7 +41,7 @@ describe("AddCompany Component", () => {
       />,
     );
     expect(
-      screen.queryByRole("button", { name: /new company/i }),
+      screen.queryByRole("button", { name: /新建公司/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -55,7 +55,7 @@ describe("AddCompany Component", () => {
       />,
     );
     const addCompanyButton = screen.getByRole("button", {
-      name: /new company/i,
+      name: /新建公司/i,
     });
     fireEvent.click(addCompanyButton);
 
@@ -84,10 +84,10 @@ describe("AddCompany Component", () => {
     const addCompanyButton = await screen.findByTestId("add-company-btn");
     fireEvent.click(addCompanyButton);
 
-    const dialog = await screen.findByText(/edit company/i);
+    const dialog = await screen.findByText(/编辑公司/i);
     expect(dialog).toBeInTheDocument();
-    expect(screen.getByLabelText(/company name/i)).toHaveValue("Test Company");
-    expect(screen.getByLabelText(/company logo url/i)).toHaveValue(
+    expect(screen.getByLabelText(/公司名称/i)).toHaveValue("Test Company");
+    expect(screen.getByLabelText(/公司标志链接/i)).toHaveValue(
       "http://example.com/logo.png",
     );
   });
@@ -102,9 +102,9 @@ describe("AddCompany Component", () => {
       />,
     );
 
-    expect(await screen.findByLabelText(/website/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/careers page/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/industry/i)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/网站/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/招聘页面/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/行业/i)).toBeInTheDocument();
   });
 
   it("should call addCompany function when submitting the form for new company", async () => {
@@ -120,15 +120,15 @@ describe("AddCompany Component", () => {
     const addCompanyButton = await screen.findByTestId("add-company-btn");
     fireEvent.click(addCompanyButton);
 
-    const companyNameInput = screen.getByLabelText(/company name/i);
+    const companyNameInput = screen.getByLabelText(/公司名称/i);
     fireEvent.change(companyNameInput, {
       target: { value: "New Test Company" },
     });
-    const companyLogoUrlInput = screen.getByLabelText(/company logo url/i);
+    const companyLogoUrlInput = screen.getByLabelText(/公司标志链接/i);
     fireEvent.change(companyLogoUrlInput, {
       target: { value: "http://example.com/new-logo.png" },
     });
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     fireEvent.click(saveButton);
 
     await waitFor(() => {
@@ -166,17 +166,17 @@ describe("AddCompany Component", () => {
 
     fireEvent.click(addCompanyButton);
 
-    const companyNameInput = screen.getByLabelText(/company name/i);
+    const companyNameInput = screen.getByLabelText(/公司名称/i);
     fireEvent.change(companyNameInput, {
       target: { value: "Edited Test Company" },
     });
 
-    const companyLogoUrlInput = screen.getByLabelText(/company logo url/i);
+    const companyLogoUrlInput = screen.getByLabelText(/公司标志链接/i);
     fireEvent.change(companyLogoUrlInput, {
       target: { value: "http://example.com/edited-logo.png" },
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     fireEvent.click(saveButton);
 
     await waitFor(() => {

@@ -36,15 +36,15 @@ function AdminTabsContainer() {
       onValueChange={(e) => onTabChange(e)}
     >
       <TabsList className="w-full justify-start overflow-x-auto">
-        <TabsTrigger value="companies">Companies</TabsTrigger>
-        <TabsTrigger value="job-titles">Job Titles</TabsTrigger>
-        <TabsTrigger value="locations">Locations</TabsTrigger>
-        <TabsTrigger value="sources">Sources</TabsTrigger>
-        <TabsTrigger value="skills">Skills</TabsTrigger>
-        <TabsTrigger value="activity-types">Activity Types</TabsTrigger>
-        <TabsTrigger value="contacts">Contacts</TabsTrigger>
-        <TabsTrigger value="roles">Roles</TabsTrigger>
-        <TabsTrigger value="stages">Stages</TabsTrigger>
+        <TabsTrigger value="companies">公司</TabsTrigger>
+        <TabsTrigger value="job-titles">职位名称</TabsTrigger>
+        <TabsTrigger value="locations">地点</TabsTrigger>
+        <TabsTrigger value="sources">来源</TabsTrigger>
+        <TabsTrigger value="skills">技能</TabsTrigger>
+        <TabsTrigger value="activity-types">活动类型</TabsTrigger>
+        <TabsTrigger value="contacts">联系人</TabsTrigger>
+        <TabsTrigger value="roles">角色</TabsTrigger>
+        <TabsTrigger value="stages">阶段</TabsTrigger>
       </TabsList>
       <TabsContent value="companies">
         <CompaniesContainer />

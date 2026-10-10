@@ -22,9 +22,9 @@ export default function JobsAppliedCard() {
   return (
     <Card className="sm:col-span-2 min-w-0 flex flex-col">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-green-600">Dashboard</CardTitle>
+        <CardTitle className="text-lg text-green-600">工作台</CardTitle>
         <CardDescription className="max-w-lg text-balance leading-relaxed">
-          Create new jobs, automations, tasks, activities, questions, and contacts.
+          添加职位、自动任务、待办事项、活动、题目和联系人。
         </CardDescription>
       </CardHeader>
       <CardFooter className="mt-auto grid grid-cols-2 gap-2">
@@ -34,7 +34,7 @@ export default function JobsAppliedCard() {
           onClick={() => router.push("/dashboard/myjobs?add-job=true")}
         >
           <BriefcaseBusiness className="h-3.5 w-3.5 mr-1 shrink-0" />
-          <span className="min-w-0 truncate">Add Job</span>
+          <span className="min-w-0 truncate">添加职位</span>
         </Button>
         <Button
           variant="outline"
@@ -44,7 +44,7 @@ export default function JobsAppliedCard() {
           }
         >
           <Zap className="h-3.5 w-3.5 mr-1 shrink-0" />
-          <span className="min-w-0 truncate">Add Automation</span>
+          <span className="min-w-0 truncate">添加自动任务</span>
         </Button>
         <Button
           variant="outline"
@@ -52,7 +52,7 @@ export default function JobsAppliedCard() {
           onClick={() => router.push("/dashboard/tasks?add-task=true")}
         >
           <SquareCheckBig className="h-3.5 w-3.5 mr-1 shrink-0" />
-          <span className="min-w-0 truncate">Add Task</span>
+          <span className="min-w-0 truncate">添加待办</span>
         </Button>
         <Button
           variant="outline"
@@ -62,7 +62,7 @@ export default function JobsAppliedCard() {
           }
         >
           <BookOpen className="h-3.5 w-3.5 mr-1 shrink-0" />
-          <span className="min-w-0 truncate">Add Question</span>
+          <span className="min-w-0 truncate">添加题目</span>
         </Button>
         <Button
           variant="outline"
@@ -72,7 +72,7 @@ export default function JobsAppliedCard() {
           }
         >
           <CalendarClock className="h-3.5 w-3.5 mr-1 shrink-0" />
-          <span className="min-w-0 truncate">Add Activity</span>
+          <span className="min-w-0 truncate">添加活动</span>
         </Button>
         <AddContactShortcut />
       </CardFooter>

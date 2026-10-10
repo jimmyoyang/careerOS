@@ -1,10 +1,12 @@
+
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { format } from "date-fns";
 import { TERMINAL_STAGE_STATUSES } from "@/lib/constants";
 import type { JobStage, JobStageTypeRef } from "@/models/jobStage.model";
 
 // An undated stage renders an em dash, never a fabricated date or a blank.
 export function formatStageDate(occurredAt: Date | null): string {
-  return occurredAt ? format(occurredAt, "MMM d") : "—";
+  return occurredAt ? format(occurredAt, "M月d日") : "—";
 }
 
 // "Scheduled for" only while the stage is still ahead (the artboard's wording,
@@ -14,19 +16,19 @@ export function formatStageDateTime(
   occurredAt: Date | null,
   durationMins: number | null,
 ): string {
-  if (!occurredAt) return "No date set";
-  const base = format(occurredAt, "MMM d, yyyy · h:mm a");
-  const withDuration = durationMins ? `${base} · ${durationMins} min` : base;
+  if (!occurredAt) return "未设置日期";
+  const base = format(occurredAt, "yyyy年M月d日 · HH:mm");
+  const withDuration = durationMins ? `${base} · ${durationMins} 分钟` : base;
   return occurredAt.getTime() > Date.now()
-    ? `Scheduled for ${withDuration}`
+    ? `已安排在 ${withDuration}`
     : withDuration;
 }
 
 // The subtitle both stage dialogs put under their title.
 export function stageHeading(stage: JobStage): string {
-  const label = stage.StageType?.label ?? "Stage";
+  const label = zhLabel(stage.StageType?.label ?? "阶段");
   return stage.occurredAt
-    ? `${label} · ${format(stage.occurredAt, "MMM d, yyyy")}`
+    ? `${label} · ${format(stage.occurredAt, "yyyy年M月d日")}`
     : label;
 }
 

@@ -41,10 +41,10 @@ function ContactsTable({
       openState: true,
       deleteAction: true,
       itemId: contact.id,
-      title: jobs > 0 ? "Delete this contact?" : undefined,
+      title: jobs > 0 ? "删除这个联系人？" : undefined,
       description:
         jobs > 0
-          ? `${contact.name} is linked to ${jobs} job${jobs === 1 ? "" : "s"}. Deleting the contact removes those links. This cannot be undone.`
+          ? `${contact.name}关联了 ${jobs} 个职位。删除联系人将移除这些关联，此操作无法撤销。`
           : undefined,
     });
   };
@@ -53,7 +53,7 @@ function ContactsTable({
     if (contactId) {
       const { success, message } = await deleteContactById(contactId);
       if (success) {
-        toastSuccess("Contact has been deleted successfully");
+        toastSuccess("联系人已删除");
         reloadContacts();
       } else {
         toastError(message);
@@ -67,16 +67,16 @@ function ContactsTable({
         <TableHeader>
           <TableRow>
             <TableHead className="w-8">
-              <span className="sr-only">Expand</span>
+              <span className="sr-only">展开</span>
             </TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="hidden sm:table-cell">Title</TableHead>
-            {!hideCompanyColumn && <TableHead>Company</TableHead>}
-            <TableHead>Roles</TableHead>
-            <TableHead>Jobs</TableHead>
-            <TableHead>Last contacted</TableHead>
+            <TableHead>名称</TableHead>
+            <TableHead className="hidden sm:table-cell">标题</TableHead>
+            {!hideCompanyColumn && <TableHead>公司</TableHead>}
+            <TableHead>角色</TableHead>
+            <TableHead>职位</TableHead>
+            <TableHead>最近联系</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -99,7 +99,7 @@ function ContactsTable({
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="contact"
+        pageTitle="联系人"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteContact(alert.itemId)}

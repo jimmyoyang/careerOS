@@ -12,7 +12,7 @@ export function QuestionList({ questions, onEdit, onDelete }: QuestionListProps)
   if (questions.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
-        No questions found. Create your first question to get started.
+        暂无题目，创建第一道题目即可开始。
       </div>
     );
   }

@@ -22,9 +22,9 @@ export function CoverLetterTab({
     return (
       <JobTabEmptyState
         icon={FileText}
-        title="No cover letter yet"
-        description="Generate one from your resume and this posting. You can edit and export it afterwards from Profile."
-        actionLabel="Generate Cover Letter"
+        title="暂无求职信"
+        description="根据简历和职位信息生成求职信，之后可在个人资料中编辑和导出。"
+        actionLabel="生成求职信"
         onAction={onGenerate}
         actionDisabled={!!blockedReason}
         actionTitle={blockedReason}
@@ -40,7 +40,7 @@ export function CoverLetterTab({
         <span className="text-xs text-muted-foreground">
           {letter.title}
           {generatedAt &&
-            ` · Generated ${format(new Date(generatedAt), "PP")}`}
+            ` · 生成于 ${format(new Date(generatedAt), "yyyy年M月d日")}`}
         </span>
         <Button
           variant="outline"
@@ -51,7 +51,7 @@ export function CoverLetterTab({
           title={blockedReason}
         >
           <Sparkles className="h-4 w-4 mr-2" />
-          Regenerate
+          重新生成
         </Button>
       </div>
       <TipTapContentViewer content={letter.content} />

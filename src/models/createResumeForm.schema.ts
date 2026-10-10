@@ -6,16 +6,16 @@ export const CreateResumeFormSchema = z.object({
   createdBy: z.string().optional(),
   title: z
     .string()
-    .min(1, "Resume title is required.")
-    .max(100, "Title must be less than 100 characters"),
+    .min(1, "请填写简历标题。")
+    .max(100, "标题必须少于 100 个字符。"),
   profileId: z.string().optional(),
   file: z
     .instanceof(File)
     .refine((file) => (APP_CONSTANTS.RESUME_ALLOWED_MIME_TYPES as readonly string[]).includes(file.type), {
-      message: "Only PDF and Word documents are allowed.",
+      message: "仅支持 PDF 和 Word 文档。",
     })
     .refine((file) => file.size <= APP_CONSTANTS.MAX_RESUME_FILE_SIZE_BYTES, {
-      message: "File size must be less than 5MB",
+      message: "文件大小必须小于 5 MB。",
     })
     .optional(),
   fileId: z.string().optional(),

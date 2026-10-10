@@ -29,18 +29,18 @@ describe("ReviewDetails", () => {
 
   it("renders the compact score summary and metadata line", () => {
     render(<ReviewDetails reviewData={reviewData} />);
-    expect(screen.getByText("Impact")).toBeInTheDocument();
+    expect(screen.getByText("成果影响力")).toBeInTheDocument();
     expect(screen.getByText("80")).toBeInTheDocument();
-    expect(screen.getByText("Clarity")).toBeInTheDocument();
+    expect(screen.getByText("表达清晰度")).toBeInTheDocument();
     expect(screen.getByText("82")).toBeInTheDocument();
     expect(screen.getByText("ATS")).toBeInTheDocument();
     expect(screen.getByText("78")).toBeInTheDocument();
     const date = format(
       new Date(reviewData.reviewedAt!),
-      "MMM d, yyyy 'at' h:mm a",
+      "yyyy年M月d日 HH:mm",
     );
-    expect(screen.getByText(`Reviewed on ${date}`)).toBeInTheDocument();
-    expect(screen.getByText("using openai / gpt-4o")).toBeInTheDocument();
+    expect(screen.getByText(`评估时间 ${date}`)).toBeInTheDocument();
+    expect(screen.getByText("使用 openai / gpt-4o")).toBeInTheDocument();
   });
 
   it("shows a 'via <agent>' badge for an MCP-sourced review instead of the provider text", () => {
@@ -49,22 +49,22 @@ describe("ReviewDetails", () => {
         reviewData={{ ...reviewData, provider: "mcp", model: "my-agent-token" }}
       />,
     );
-    expect(screen.getByText(/via my-agent-token/)).toBeInTheDocument();
-    expect(screen.queryByText(/using/)).not.toBeInTheDocument();
+    expect(screen.getByText(/通过 my-agent-token/)).toBeInTheDocument();
+    expect(screen.queryByText(/使用/)).not.toBeInTheDocument();
   });
 
   it("hides the full markdown body by default", () => {
     render(<ReviewDetails reviewData={reviewData} />);
     expect(screen.queryByTestId("tiptap-content")).not.toBeInTheDocument();
-    expect(screen.getByText("Show full review")).toBeInTheDocument();
+    expect(screen.getByText("查看完整评估")).toBeInTheDocument();
   });
 
   it("expands to reveal the full markdown body when the toggle is clicked", () => {
     render(<ReviewDetails reviewData={reviewData} />);
-    fireEvent.click(screen.getByText("Show full review"));
+    fireEvent.click(screen.getByText("查看完整评估"));
     expect(screen.getByTestId("tiptap-content")).toHaveTextContent(
       "Great resume overall",
     );
-    expect(screen.getByText("Hide full review")).toBeInTheDocument();
+    expect(screen.getByText("收起完整评估")).toBeInTheDocument();
   });
 });

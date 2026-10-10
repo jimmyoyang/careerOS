@@ -47,7 +47,7 @@ describe("JobTitlesContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search job titles..."),
+          screen.getByPlaceholderText("搜索职位名称…"),
         ).toBeInTheDocument();
       });
     });
@@ -64,7 +64,7 @@ describe("JobTitlesContainer Search Functionality", () => {
         expect(getJobTitleList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search job titles...");
+      const searchInput = screen.getByPlaceholderText("搜索职位名称…");
 
       await act(async () => {
         await user.type(searchInput, "P");
@@ -93,7 +93,7 @@ describe("JobTitlesContainer Search Functionality", () => {
         expect(getJobTitleList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search job titles...");
+      const searchInput = screen.getByPlaceholderText("搜索职位名称…");
 
       await act(async () => {
         await user.type(searchInput, "Product");
@@ -144,7 +144,7 @@ describe("JobTitlesContainer Search Functionality", () => {
         expect(screen.getByText("Product Manager")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search job titles...");
+      const searchInput = screen.getByPlaceholderText("搜索职位名称…");
       await act(async () => {
         await user.type(searchInput, "Product");
       });
@@ -182,7 +182,7 @@ describe("JobTitlesContainer Search Functionality", () => {
         expect(screen.getByText("Software Engineer")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search job titles...");
+      const searchInput = screen.getByPlaceholderText("搜索职位名称…");
       await act(async () => {
         await user.type(searchInput, "Engineer");
       });

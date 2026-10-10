@@ -33,8 +33,8 @@ describe("ActivityCalendar", () => {
   it("defaults to the most recent year and shows its data", () => {
     render(<ActivityCalendar years={years} dataByYear={dataByYear} />);
 
-    expect(screen.getByText("Activity Calendar")).toBeInTheDocument();
-    expect(screen.getByLabelText("Select year")).toHaveTextContent("2026");
+    expect(screen.getByText("活动日历")).toBeInTheDocument();
+    expect(screen.getByLabelText("选择年份")).toHaveTextContent("2026");
     expect(screen.getByTestId("day-2026-06-15")).toBeInTheDocument();
     expect(screen.queryByTestId("day-2025-03-01")).not.toBeInTheDocument();
   });
@@ -42,7 +42,7 @@ describe("ActivityCalendar", () => {
   it("lists every year as a select option", async () => {
     render(<ActivityCalendar years={years} dataByYear={dataByYear} />);
 
-    await user.click(screen.getByLabelText("Select year"));
+    await user.click(screen.getByLabelText("选择年份"));
 
     expect(screen.getByRole("option", { name: "2025" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "2026" })).toBeInTheDocument();
@@ -51,10 +51,10 @@ describe("ActivityCalendar", () => {
   it("switches the calendar data when a different year is selected", async () => {
     render(<ActivityCalendar years={years} dataByYear={dataByYear} />);
 
-    await user.click(screen.getByLabelText("Select year"));
+    await user.click(screen.getByLabelText("选择年份"));
     await user.click(screen.getByRole("option", { name: "2025" }));
 
-    expect(screen.getByLabelText("Select year")).toHaveTextContent("2025");
+    expect(screen.getByLabelText("选择年份")).toHaveTextContent("2025");
     expect(screen.getByTestId("day-2025-03-01")).toBeInTheDocument();
     expect(screen.queryByTestId("day-2026-06-15")).not.toBeInTheDocument();
   });
@@ -73,16 +73,16 @@ describe("ActivityCalendar", () => {
     );
 
     expect(screen.getByTestId("day-2026-01-01")).toHaveTextContent(
-      "1 job applied",
+      "已投递 1 个职位",
     );
     expect(screen.getByTestId("day-2026-01-01")).toHaveTextContent(
-      "1 hr activity",
+      "活动时长 1 小时",
     );
     expect(screen.getByTestId("day-2026-01-02")).toHaveTextContent(
-      "2 jobs applied",
+      "已投递 2 个职位",
     );
     expect(screen.getByTestId("day-2026-01-02")).toHaveTextContent(
-      "2.5 hrs activity",
+      "活动时长 2.5 小时",
     );
   });
 });

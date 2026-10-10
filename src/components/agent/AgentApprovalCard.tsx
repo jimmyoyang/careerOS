@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useEffect, useRef, useState } from "react";
 import { getToolName, type ToolUIPart } from "ai";
 import {
@@ -38,7 +40,7 @@ function AddJobBody({
   pastedText?: string;
 }) {
   const description = pastedText ?? text(input.jobDescription);
-  const source = pastedText ? "pasted verbatim" : "model-supplied";
+  const source = pastedText ? "按原文粘贴" : "模型提取";
   const completeness = description
     ? classifyDescriptionCompleteness(description)
     : undefined;
@@ -46,20 +48,20 @@ function AddJobBody({
 
   return (
     <div>
-      <Row label="Company" value={text(input.company)} />
-      <Row label="Job title" value={text(input.jobTitle)} />
-      <Row label="Location" value={text(input.location)} />
-      <Row label="Source" value={text(input.source)} />
-      <Row label="URL" value={text(input.jobUrl)} />
-      <Row label="Salary" value={text(input.salaryRange)} />
-      <Row label="Tags" value={tags} />
+      <Row label="公司" value={text(input.company)} />
+      <Row label="职位" value={text(input.jobTitle)} />
+      <Row label="地点" value={text(input.location)} />
+      <Row label="来源" value={text(input.source)} />
+      <Row label="链接" value={text(input.jobUrl)} />
+      <Row label="薪资" value={text(input.salaryRange)} />
+      <Row label="标签" value={tags} />
       {description ? (
         <div className="mt-2 rounded-sm border bg-muted/20 p-2">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>
-              Description · {source} · {description.length} chars
+              描述 · {source} · {description.length} 字符
             </span>
-            {completeness && <Badge variant="outline">{completeness}</Badge>}
+            {completeness && <Badge variant="outline">{zhLabel(completeness)}</Badge>}
           </div>
           {/* Collapsed to ~200 chars: this is verbatim third-party content
               the model did not author, so it is the least interesting thing
@@ -70,7 +72,7 @@ function AddJobBody({
         </div>
       ) : (
         <p className="mt-2 text-xs text-muted-foreground">
-          No description — the assistant will ask for one.
+          暂无描述，助手会请您补充。
         </p>
       )}
     </div>
@@ -120,14 +122,14 @@ export function AgentApprovalCard({
       className="rounded-sm p-3 outline-hidden"
     >
       <div className="flex items-center gap-2">
-        <Badge variant="secondary">Needs approval</Badge>
-        <span className="text-sm font-semibold">{toolName}</span>
+        <Badge variant="secondary">需要确认</Badge>
+        <span className="text-sm font-semibold">{zhLabel(toolName)}</span>
       </div>
 
       {body}
 
       {part.state === "approval-responded" && (
-        <p className="text-xs text-muted-foreground">Waiting…</p>
+        <p className="text-xs text-muted-foreground">等待中…</p>
       )}
 
       <ConfirmationRequest>
@@ -136,7 +138,7 @@ export function AgentApprovalCard({
             <Textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="What was wrong? (optional)"
+              placeholder="哪里有问题？（选填）"
               rows={2}
             />
             <div className="flex gap-2">
@@ -146,7 +148,7 @@ export function AgentApprovalCard({
                   onRespond({ id: approvalId, approved: false, reason })
                 }
               >
-                Send
+                发送
               </ConfirmationAction>
               <ConfirmationAction
                 variant="ghost"
@@ -154,7 +156,7 @@ export function AgentApprovalCard({
                   approvalId && onRespond({ id: approvalId, approved: false })
                 }
               >
-                Skip
+                跳过
               </ConfirmationAction>
             </div>
           </div>
@@ -168,12 +170,12 @@ export function AgentApprovalCard({
               approvalId && onRespond({ id: approvalId, approved: true })
             }
           >
-            Confirm
+            确认
           </ConfirmationAction>
           {/* Client-side and always available — it must not depend on a
               server round-trip succeeding. */}
           <ConfirmationAction variant="outline" onClick={() => setDeclining(true)}>
-            Cancel
+            取消
           </ConfirmationAction>
         </ConfirmationActions>
       )}

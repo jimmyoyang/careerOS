@@ -281,7 +281,7 @@ describe("JobDetails – match data display", () => {
     onTab("match");
     render(<JobDetails {...baseProps} job={makeJob()} />);
 
-    expect(screen.getByText(/no match analysis yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/暂无匹配分析/i)).toBeInTheDocument();
     expect(screen.queryByTestId("match-details")).not.toBeInTheDocument();
   });
 
@@ -318,8 +318,8 @@ describe("JobDetails – match data display", () => {
     );
 
     expect(screen.queryByTestId("circular-score")).not.toBeInTheDocument();
-    expect(screen.getByText("Not matched")).toBeInTheDocument();
-    expect(screen.getByText(/no match analysis yet/i)).toBeInTheDocument();
+    expect(screen.getByText("尚未匹配")).toBeInTheDocument();
+    expect(screen.getByText(/暂无匹配分析/i)).toBeInTheDocument();
     expect(screen.queryByTestId("match-details")).not.toBeInTheDocument();
   });
 });
@@ -329,8 +329,8 @@ describe("JobDetails – match data display", () => {
 // every stage add, edit and delete, and seeded Edit Job with the old status.
 describe("JobDetails – status from the current stage", () => {
   const statusBadge = () =>
-    within(screen.getByText("Status").parentElement!).getAllByText(
-      /Applied|Interview/,
+    within(screen.getByText("状态").parentElement!).getAllByText(
+      /已投递|面试中/,
     )[0];
 
   it("shows the current stage's status, not the one on the job prop", () => {
@@ -341,13 +341,13 @@ describe("JobDetails – status from the current stage", () => {
       />,
     );
 
-    expect(statusBadge()).toHaveTextContent("Interview");
+    expect(statusBadge()).toHaveTextContent("面试中");
   });
 
   it("keeps the job's own status when the job has no stages", () => {
     render(<JobDetails {...baseProps} job={makeJob({ stages: [] })} />);
 
-    expect(statusBadge()).toHaveTextContent("Applied");
+    expect(statusBadge()).toHaveTextContent("已投递");
   });
 });
 
@@ -362,12 +362,12 @@ describe("JobDetails – tabs", () => {
   it("renders all six tabs regardless of what the job has", () => {
     render(<JobDetails {...baseProps} job={makeJob()} />);
 
-    expect(screen.getByRole("tab", { name: /description/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /ai match/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /timeline/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /cover letter/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /notes/i })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Contacts" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /描述/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /AI 匹配/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /进展记录/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /求职信/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /笔记/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "联系人" })).toBeInTheDocument();
   });
 
   it("renders a Timeline tab right after Description, with a stage count", () => {
@@ -376,18 +376,18 @@ describe("JobDetails – tabs", () => {
     );
 
     const tabs = screen.getAllByRole("tab").map((t) => t.textContent);
-    const descriptionAt = tabs.findIndex((t) => t?.startsWith("Description"));
-    const timelineAt = tabs.findIndex((t) => t?.startsWith("Timeline"));
+    const descriptionAt = tabs.findIndex((t) => t?.startsWith("描述"));
+    const timelineAt = tabs.findIndex((t) => t?.startsWith("进展记录"));
 
     expect(timelineAt).toBe(descriptionAt + 1);
-    expect(screen.getByRole("tab", { name: /Timeline/ })).toHaveTextContent("2");
+    expect(screen.getByRole("tab", { name: /进展记录/ })).toHaveTextContent("2");
   });
 
   it("shows an empty state for a job with no stages, keeping its status visible", () => {
     onTab("timeline");
     render(<JobDetails {...baseProps} job={makeJob({ stages: [] })} />);
 
-    expect(screen.getByText(/No stages recorded/i)).toBeInTheDocument();
+    expect(screen.getByText(/暂无阶段记录/i)).toBeInTheDocument();
     expect(screen.getByTestId("timeline-add-stage-btn")).toBeInTheDocument();
   });
 
@@ -397,19 +397,19 @@ describe("JobDetails – tabs", () => {
     render(<JobDetails {...baseProps} job={makeJob()} />);
 
     await userEvent.click(screen.getByTestId("job-details-actions-menu-btn"));
-    expect(screen.queryByRole("menuitem", { name: /Change status/ })).toBeNull();
+    expect(screen.queryByRole("menuitem", { name: /更改状态/ })).toBeNull();
     await userEvent.keyboard("{Escape}");
 
     await userEvent.click(screen.getByTestId("update-status-menu-btn"));
     expect(
-      screen.getByRole("menuitem", { name: /Change status/ }),
+      screen.getByRole("menuitem", { name: /更改状态/ }),
     ).toBeInTheDocument();
   });
 
   it("opens on the Description tab", () => {
     render(<JobDetails {...baseProps} job={makeJob()} />);
 
-    expect(screen.getByRole("tab", { name: /description/i })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: /描述/i })).toHaveAttribute(
       "data-state",
       "active",
     );
@@ -418,7 +418,7 @@ describe("JobDetails – tabs", () => {
   it("puts the picked tab in the URL so a refresh lands on it", async () => {
     render(<JobDetails {...baseProps} job={makeJob()} />);
 
-    await userEvent.click(screen.getByRole("tab", { name: /ai match/i }));
+    await userEvent.click(screen.getByRole("tab", { name: /AI 匹配/i }));
     expect(router.replace).toHaveBeenCalledWith("?tab=match", { scroll: false });
   });
 
@@ -437,7 +437,7 @@ describe("JobDetails – tabs", () => {
     onTab("letter");
     render(<JobDetails {...baseProps} job={makeJob()} />);
 
-    expect(screen.getByText(/no cover letter yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/暂无求职信/i)).toBeInTheDocument();
   });
 
   it("renders the linked letter on the Cover Letter tab", () => {
@@ -459,7 +459,7 @@ describe("JobDetails – tabs", () => {
     expect(
       screen.getByText("Frontend Developer – Acme Corp", { exact: false }),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/no cover letter yet/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/暂无求职信/i)).not.toBeInTheDocument();
   });
 });
 
@@ -473,12 +473,12 @@ describe("JobDetails – AI Match", () => {
   it("opens the chat and asks for a match when AI Match is clicked", async () => {
     chat.approvalPending = false;
     render(<JobDetails job={makeJob()} {...baseProps} />);
-    await userEvent.click(screen.getByRole("button", { name: /ai match/i }));
+    await userEvent.click(screen.getByRole("button", { name: /AI 匹配/i }));
     await act(async () => {});
     expect(chat.open).toHaveBeenCalled();
     expect(chat.clear).toHaveBeenCalled();
     const sent = chat.sendMessage.mock.calls[0][0];
-    expect(sent.parts[0].text).toMatch(/match/i);
+    expect(sent.parts[0].text).toMatch(/匹配/i);
   });
 
   // The panel opens first so a failed clear cannot leave the button dead, and
@@ -487,7 +487,7 @@ describe("JobDetails – AI Match", () => {
     chat.approvalPending = false;
     chat.clear.mockRejectedValueOnce(new Error("offline"));
     render(<JobDetails job={makeJob()} {...baseProps} />);
-    await userEvent.click(screen.getByRole("button", { name: /ai match/i }));
+    await userEvent.click(screen.getByRole("button", { name: /AI 匹配/i }));
     await act(async () => {});
     expect(chat.open).toHaveBeenCalled();
     expect(chat.sendMessage).toHaveBeenCalled();
@@ -496,9 +496,9 @@ describe("JobDetails – AI Match", () => {
   it("asks before clearing a conversation with a pending approval", async () => {
     chat.approvalPending = true;
     render(<JobDetails job={makeJob()} {...baseProps} />);
-    await userEvent.click(screen.getByRole("button", { name: /ai match/i }));
+    await userEvent.click(screen.getByRole("button", { name: /AI 匹配/i }));
     expect(
-      screen.getByText(/clear the assistant conversation/i),
+      screen.getByText(/清空助手对话/i),
     ).toBeInTheDocument();
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -544,7 +544,7 @@ describe("JobDetails cover letter action", () => {
     expect(chat.open).toHaveBeenCalled();
     await waitFor(() => expect(chat.sendMessage).toHaveBeenCalled());
     const sent = chat.sendMessage.mock.calls[0][0];
-    expect(sent.parts[0].text).toMatch(/cover letter/i);
+    expect(sent.parts[0].text).toMatch(/求职信/i);
     expect(sent.parts[0].text).toContain("Frontend Developer");
     expect(sent.parts[0].text).toContain("Acme Corp");
   });
@@ -556,7 +556,7 @@ describe("JobDetails cover letter action", () => {
     );
     await userEvent.click(screen.getByTestId("generate-cover-letter-btn"));
     expect(
-      screen.getByText(/clear the assistant conversation/i),
+      screen.getByText(/清空助手对话/i),
     ).toBeInTheDocument();
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -571,7 +571,7 @@ describe("JobDetails cover letter action", () => {
       />,
     );
     expect(screen.getByTestId("generate-cover-letter-btn")).toHaveTextContent(
-      /regenerate/i,
+      /重新生成/i,
     );
   });
 });
@@ -591,7 +591,7 @@ describe("JobDetails – auto-match from the jobs list", () => {
 
     expect(chat.open).toHaveBeenCalled();
     const sent = chat.sendMessage.mock.calls[0][0];
-    expect(sent.parts[0].text).toMatch(/match/i);
+    expect(sent.parts[0].text).toMatch(/匹配/i);
     expect(router.replace).toHaveBeenCalledWith("?tab=match", { scroll: false });
   });
 
@@ -622,7 +622,7 @@ describe("JobDetails – auto-match from the jobs list", () => {
     await act(async () => {});
 
     expect(
-      screen.getByText(/clear the assistant conversation/i),
+      screen.getByText(/清空助手对话/i),
     ).toBeInTheDocument();
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -649,6 +649,6 @@ describe("JobDetails – company link", () => {
 
     expect(
       screen.getByRole("link", { name: "Acme Corp" }).parentElement,
-    ).toHaveTextContent("Acme Corp · Remote · Full-time");
+    ).toHaveTextContent("Acme Corp · Remote · 全职");
   });
 });

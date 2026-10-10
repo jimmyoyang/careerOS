@@ -1,3 +1,4 @@
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import type { JobBoard, LeverHost } from "@/models/automation.model";
 import { CoverLetter, Resume } from "./profile.model";
 import type { JobContactLink } from "./contact.model";
@@ -184,18 +185,18 @@ export function matchEnumEntry(
 
 export function getWorkplaceTypeLabel(
   code?: string | null,
-  fallback: string = "Not specified",
+  fallback: string = "未指定",
 ): string {
   if (!code) return fallback;
-  return (WORKPLACE_TYPES as Record<string, string>)[code] ?? fallback;
+  return zhLabel((WORKPLACE_TYPES as Record<string, string>)[code] ?? fallback);
 }
 
 export function getJobTypeLabel(
   code?: string | null,
-  fallback: string = "Not specified",
+  fallback: string = "未指定",
 ): string {
   if (!code) return fallback;
-  return (JOB_TYPES as Record<string, string>)[code] ?? fallback;
+  return zhLabel((JOB_TYPES as Record<string, string>)[code] ?? fallback);
 }
 
 export type DescriptionCompleteness = "title-only" | "partial" | "full";

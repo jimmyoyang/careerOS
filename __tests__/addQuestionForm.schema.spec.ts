@@ -70,6 +70,10 @@ describe("AddQuestionFormSchema", () => {
     });
   });
 
+  it.each(["TBD", "待填写"])("accepts the unanswered placeholder %s without rewriting it", (answer) => {
+    expect(AddQuestionFormSchema.parse({ question: "请介绍你负责过的项目", answer }).answer).toBe(answer);
+  });
+
   describe("invalid data", () => {
     it("should reject question shorter than 5 characters", () => {
       const data = { question: "ab", answer: "1234567890" };

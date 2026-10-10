@@ -79,13 +79,13 @@ describe("AtsSearchStep batch add", () => {
         onChange={onChange}
       />,
     );
-    await user.click(screen.getByRole("button", { name: /search companies/i }));
+    await user.click(screen.getByRole("button", { name: /搜索公司/i }));
     return onChange;
   };
 
   const clickAddAll = async () => {
     await user.click(
-      await screen.findByRole("button", { name: /add all watched/i }),
+      await screen.findByRole("button", { name: /添加全部已关注公司/i }),
     );
   };
 
@@ -134,6 +134,6 @@ describe("AtsSearchStep batch add", () => {
 
     await clickAddAll();
 
-    expect(toastInfo).toHaveBeenCalledWith(expect.stringMatching(/2 skipped/i));
+    expect(toastInfo).toHaveBeenCalledWith(expect.stringMatching(/2 家因达到/i));
   });
 });

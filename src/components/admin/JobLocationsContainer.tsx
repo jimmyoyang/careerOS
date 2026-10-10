@@ -61,9 +61,9 @@ function JobLocationsContainer() {
         <Card x-chunk="dashboard-06-chunk-0">
           <ResponsiveCardHeader>
             <div className="flex items-baseline gap-2">
-              <CardTitle>Job Locations</CardTitle>
+              <CardTitle>工作地点</CardTitle>
               {!initialLoading && totalJobLocations > 0 && (
-                <RecordsCount count={locations.length} total={totalJobLocations} label="job locations" />
+                <RecordsCount count={locations.length} total={totalJobLocations} label="工作地点" />
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">

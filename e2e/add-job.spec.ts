@@ -1,4 +1,5 @@
 import { addDays, format } from "date-fns";
+import { zhCN } from "date-fns/locale";
 import { test, expect, createNewJob, uniqueName } from "./fixtures";
 
 test.describe("Add New Job", () => {
@@ -15,27 +16,27 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
     await expect(
-      page.getByPlaceholder("Copy and paste job link here"),
+      page.getByPlaceholder("将职位链接粘贴到这里"),
     ).toHaveValue("www.google.com");
-    await expect(page.getByLabel("Job Title")).toContainText(jobText);
-    await expect(page.getByLabel("Company")).toContainText(
+    await expect(page.getByLabel("职位名称")).toContainText(jobText);
+    await expect(page.getByLabel("公司")).toContainText(
       `company ${jobText.replace(/\s+/g, "-")}`,
     );
-    await expect(page.getByLabel("Job Location")).toContainText(
+    await expect(page.getByLabel("工作地点")).toContainText(
       `location ${jobText.replace(/\s+/g, "-")}`,
     );
-    await expect(page.getByLabel("Job Source")).toContainText("Indeed");
-    await expect(page.getByLabel("Select Job Status")).toContainText("Draft");
+    await expect(page.getByLabel("职位来源")).toContainText("Indeed");
+    await expect(page.getByLabel("选择职位状态")).toContainText("草稿");
     await expect(
-      page.getByLabel("Job Description").getByRole("paragraph"),
+      page.getByLabel("职位描述").getByRole("paragraph"),
     ).toContainText("test description");
     await page.getByText("test description").click();
     await page
-      .getByLabel("Job Description")
+      .getByLabel("职位描述")
       .locator("div")
       .fill("test description edited");
     await page.getByTestId("save-job-btn").click();
@@ -53,10 +54,10 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Delete Job" })
+      .getByRole("button", { name: "删除职位" })
       .first()
       .click();
-    await page.getByRole("button", { name: "Delete" }).click();
+    await page.getByRole("button", { name: "删除" }).click();
 
     await expect(page.getByRole("row", { name: jobText })).not.toBeVisible();
   });
@@ -68,11 +69,11 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
     await expect(
-      page.getByPlaceholder("Copy and paste job link here"),
+      page.getByPlaceholder("将职位链接粘贴到这里"),
     ).toHaveValue("");
   });
 
@@ -83,20 +84,20 @@ test.describe("Add New Job", () => {
     const jobText = uniqueName("developer test title applied");
     await createNewJob(page, jobText, cleanup, {
       beforeSave: async (page) => {
-        await page.getByLabel("Select Job Status").click();
-        await page.getByRole("option", { name: "Applied", exact: true }).click();
+        await page.getByLabel("选择职位状态").click();
+        await page.getByRole("option", { name: "已投递", exact: true }).click();
       },
     });
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
-    await expect(page.getByLabel("Select Job Status")).toContainText("Applied");
-    await expect(page.getByLabel("Date Applied")).toContainText(
-      format(new Date(), "PP"),
+    await expect(page.getByLabel("选择职位状态")).toContainText("已投递");
+    await expect(page.getByLabel("投递日期")).toContainText(
+      format(new Date(), "PPP", { locale: zhCN }),
     );
   });
 
@@ -108,13 +109,13 @@ test.describe("Add New Job", () => {
     const salary = "$185k - $210k";
     await createNewJob(page, jobText, cleanup, {
       beforeSave: async (page) => {
-        await page.getByLabel("Salary Range").click();
-        const input = page.getByPlaceholder("Create or Search Salary Range");
+        await page.getByLabel("薪资范围").click();
+        const input = page.getByPlaceholder("创建或搜索薪资范围");
         await input.fill(salary);
         // Same target as the shared selectOrCreate helper: CommandEmpty splits
         // "Create: " and the typed text across two <p>s, so match the wrapper
         // by text rather than by an option role it does not have.
-        await page.getByText(`Create: ${salary}`).click();
+        await page.getByText(`创建： ${salary}`).click();
         await expect(input).not.toBeVisible({ timeout: 15000 });
       },
     });
@@ -122,10 +123,10 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
-    await expect(page.getByLabel("Salary Range")).toContainText(salary);
+    await expect(page.getByLabel("薪资范围")).toContainText(salary);
   });
 
   test("should persist selected workplace type after saving", async ({
@@ -135,17 +136,17 @@ test.describe("Add New Job", () => {
     const jobText = uniqueName("developer test title workplace");
     await createNewJob(page, jobText, cleanup, {
       beforeSave: async (page) => {
-        await page.getByRole("radio", { name: "Remote" }).click();
+        await page.getByRole("radio", { name: "远程" }).click();
       },
     });
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
-    await expect(page.getByRole("radio", { name: "Remote" })).toBeChecked();
+    await expect(page.getByRole("radio", { name: "远程" })).toBeChecked();
   });
 
   test("should persist selected due date after saving", async ({
@@ -153,22 +154,22 @@ test.describe("Add New Job", () => {
     cleanup,
   }) => {
     const jobText = uniqueName("developer test title due date");
-    const expectedDueDate = format(addDays(new Date(), 7), "PP");
+    const expectedDueDate = format(addDays(new Date(), 7), "PPP", { locale: zhCN });
     await createNewJob(page, jobText, cleanup, {
       beforeSave: async (page) => {
-        await page.getByLabel("Due Date").click();
-        await page.getByText("Select Preset").click();
-        await page.getByRole("option", { name: "In a week" }).click();
+        await page.getByLabel("截止日期").click();
+        await page.getByText("选择快捷日期").click();
+        await page.getByRole("option", { name: "一周后" }).click();
       },
     });
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
-    await expect(page.getByLabel("Due Date")).toContainText(expectedDueDate);
+    await expect(page.getByLabel("截止日期")).toContainText(expectedDueDate);
   });
 
   test("should add and persist a note on an existing job", async ({
@@ -181,19 +182,19 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
     await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
 
-    await page.getByRole("button", { name: "New Note" }).click();
+    await page.getByRole("button", { name: "新建笔记" }).click();
     const noteContainer = page
-      .getByText("Add Note", { exact: true })
+      .getByText("添加笔记", { exact: true })
       .locator("..");
     await noteContainer
       .locator('[contenteditable="true"]')
       .fill("test note content");
-    await noteContainer.getByRole("button", { name: "Save" }).click();
+    await noteContainer.getByRole("button", { name: "保存" }).click();
 
     await expect(page.getByText("test note content")).toBeVisible();
   });
@@ -202,15 +203,15 @@ test.describe("Add New Job", () => {
     page,
   }) => {
     // No cleanup needed: submission fails validation, so nothing is created.
-    await page.getByRole("button", { name: "Add Job", exact: true }).click();
+    await page.getByRole("button", { name: "添加职位", exact: true }).click();
     await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
 
     await page.getByTestId("save-job-btn").click();
 
-    await expect(page.getByText("Job title is required.")).toBeVisible();
-    await expect(page.getByText("Company name is required.")).toBeVisible();
-    await expect(page.getByText("Location is required.")).toBeVisible();
-    await expect(page.getByText("Source is required.")).toBeVisible();
+    await expect(page.getByText("请填写职位名称。")).toBeVisible();
+    await expect(page.getByText("请填写公司名称。")).toBeVisible();
+    await expect(page.getByText("请填写地点。")).toBeVisible();
+    await expect(page.getByText("请选择来源。")).toBeVisible();
   });
 
   test("should change job status from the jobs table actions menu", async ({
@@ -228,15 +229,15 @@ test.describe("Add New Job", () => {
       .click();
     // Radix submenus open on hover; clicking the subtrigger can toggle it
     // shut mid-open, so hover to open then wait for the item.
-    await page.getByRole("menuitem", { name: "Change status" }).hover();
-    const interviewItem = page.getByRole("menuitem", { name: "Interview" });
+    await page.getByRole("menuitem", { name: "更改状态" }).hover();
+    const interviewItem = page.getByRole("menuitem", { name: "面试中" });
     await expect(interviewItem).toBeVisible();
     await interviewItem.click();
 
     // Assert on the persistent status cell rather than the toast, which
     // auto-dismisses after 5s and can vanish before the poll under load.
     await expect(
-      page.getByRole("row", { name: jobText }).getByText("Interview"),
+      page.getByRole("row", { name: jobText }).getByText("面试中"),
     ).toBeVisible();
   });
 
@@ -276,7 +277,7 @@ test.describe("Add New Job", () => {
     await createNewJob(page, jobText, cleanup);
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
-    const searchInput = page.getByPlaceholder("Search jobs...");
+    const searchInput = page.getByPlaceholder("搜索职位…");
     await searchInput.fill(jobText);
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
@@ -290,11 +291,11 @@ test.describe("Add New Job", () => {
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
     await page.getByTestId("job-filter-select").click();
-    await page.getByRole("option", { name: "Rejected", exact: true }).click();
+    await page.getByRole("option", { name: "未通过", exact: true }).click();
     await expect(page.getByRole("row", { name: jobText })).not.toBeVisible();
 
     await page.getByTestId("job-filter-select").click();
-    await page.getByRole("option", { name: "Draft", exact: true }).click();
+    await page.getByRole("option", { name: "草稿", exact: true }).click();
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
   });
 
@@ -311,7 +312,7 @@ test.describe("Add New Job", () => {
       .getByTestId("job-actions-menu-btn")
       .first()
       .click();
-    await page.getByRole("menuitem", { name: "View Details" }).click();
+    await page.getByRole("menuitem", { name: "查看详情" }).click();
 
     await expect(page).toHaveURL(new RegExp(`/dashboard/myjobs/${jobId}$`));
     await expect(page.getByText(jobText).first()).toBeVisible();
@@ -328,12 +329,12 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
-    await expect(page.getByLabel("Job Title")).toContainText(jobText);
-    await expect(page.getByLabel("Company")).toContainText(`company ${suffix}`);
-    await expect(page.getByLabel("Job Location")).toContainText(
+    await expect(page.getByLabel("职位名称")).toContainText(jobText);
+    await expect(page.getByLabel("公司")).toContainText(`company ${suffix}`);
+    await expect(page.getByLabel("工作地点")).toContainText(
       `location ${suffix}`,
     );
   });
@@ -370,18 +371,18 @@ test.describe("Add New Job", () => {
     page,
   }) => {
     // No cleanup needed: nothing should be created by this test.
-    await page.getByRole("button", { name: "Add Job", exact: true }).click();
+    await page.getByRole("button", { name: "添加职位", exact: true }).click();
     await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
 
-    await page.getByLabel("Job Title").click();
-    const input = page.getByPlaceholder("Create or Search title");
+    await page.getByLabel("职位名称").click();
+    const input = page.getByPlaceholder("创建或搜索职位");
     await input.click();
     await input.press("Enter");
 
     // The popover stays open and the dialog must not submit.
     await expect(input).toBeVisible();
     await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
-    await expect(page.getByText("Job title is required.")).not.toBeVisible();
+    await expect(page.getByText("请填写职位名称。")).not.toBeVisible();
   });
 
   test("should add and persist a skill tag on a job", async ({
@@ -395,10 +396,10 @@ test.describe("Add New Job", () => {
     await createNewJob(page, jobText, cleanup, {
       beforeSave: async (page) => {
         await page
-          .getByRole("combobox", { name: "Search or add a skill..." })
+          .getByRole("combobox", { name: "搜索或添加技能…" })
           .click();
-        await page.getByPlaceholder("Type a skill...").fill(tagText);
-        await page.getByText(`Create "${tagText}"`).click();
+        await page.getByPlaceholder("输入技能…").fill(tagText);
+        await page.getByText(`创建“${tagText}”`).click();
         // Wait for the create server action to resolve and the field to
         // update (the badge only renders once the tag id lands in form
         // state) before letting createNewJob click Save.
@@ -409,7 +410,7 @@ test.describe("Add New Job", () => {
 
     await page
       .getByRole("row", { name: jobText })
-      .getByRole("button", { name: "Edit Job" })
+      .getByRole("button", { name: "编辑职位" })
       .first()
       .click();
     await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();

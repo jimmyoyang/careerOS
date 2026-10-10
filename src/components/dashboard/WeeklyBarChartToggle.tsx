@@ -1,4 +1,5 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
 
 import { useState, useEffect, useMemo } from "react";
 import { useTheme } from "next-themes";
@@ -104,11 +105,11 @@ export default function WeeklyBarChartToggle({
         <div className="flex items-center justify-between gap-2 mb-1 mt-3">
           <div className="flex items-baseline gap-2 min-w-0">
             <CardTitle className="text-lg text-green-600 truncate">
-              Weekly {current.label}
+              本周 {zhLabel(current.label)}
             </CardTitle>
             {totalHours !== null && (
               <span className="text-sm text-muted-foreground whitespace-nowrap">
-                {totalHours.toFixed(1)} hrs
+                {totalHours.toFixed(1)} 小时
               </span>
             )}
           </div>
@@ -129,7 +130,7 @@ export default function WeeklyBarChartToggle({
                     : "hover:bg-muted",
                 )}
               >
-                {chart.label}
+                {zhLabel(chart.label)}
               </button>
             ))}
           </div>
@@ -226,7 +227,7 @@ export default function WeeklyBarChartToggle({
                     marginRight: 6,
                   }}
                 />
-                {current.tooltipLabel
+                {zhLabel(current.tooltipLabel
                   ? current.tooltipLabel(String(id))
                   : String(id) === "value"
                     ? current.axisLeftLegend
@@ -238,7 +239,7 @@ export default function WeeklyBarChartToggle({
                       ? otherBucketLabel(
                           current.keys.filter((key) => key !== OTHER_SLICE_ID),
                         )
-                      : String(id)}
+                      : String(id))}
                 :{" "}
                 <strong>
                   {current.label === "Activities"
@@ -250,7 +251,7 @@ export default function WeeklyBarChartToggle({
                   (data as any).otherBreakdown.map(
                     (activity: { label: string; hours: number }) => (
                       <div key={activity.label}>
-                        {activity.label} – {activity.hours}h
+                        {zhLabel(activity.label)} – {activity.hours}小时
                       </div>
                     ),
                   )}

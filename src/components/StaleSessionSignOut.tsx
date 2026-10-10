@@ -17,7 +17,7 @@ function StaleSessionSignOut({
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-muted/40">
       <p className="text-sm text-muted-foreground">
-        Your session is no longer valid. Signing you out&hellip;
+        登录状态已失效，正在退出……
       </p>
     </div>
   );

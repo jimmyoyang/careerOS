@@ -1,5 +1,6 @@
 "use client";
 
+import { zhCN } from "date-fns/locale";
 import { addDays, addYears, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -63,7 +64,7 @@ export function DatePicker({
             disabled={!isEnabled}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {field.value ? format(field.value, "PP") : <span>Pick a date</span>}
+            {field.value ? format(field.value, "PPP", { locale: zhCN }) : <span>选择日期</span>}
           </Button>
         </FormControl>
       </PopoverTrigger>
@@ -76,13 +77,13 @@ export function DatePicker({
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select Preset" />
+              <SelectValue placeholder="选择快捷日期" />
             </SelectTrigger>
             <SelectContent position="popper">
-              <SelectItem value="0">Today</SelectItem>
-              <SelectItem value="1">Tomorrow</SelectItem>
-              <SelectItem value="3">In 3 days</SelectItem>
-              <SelectItem value="7">In a week</SelectItem>
+              <SelectItem value="0">今天</SelectItem>
+              <SelectItem value="1">明天</SelectItem>
+              <SelectItem value="3">3 天后</SelectItem>
+              <SelectItem value="7">一周后</SelectItem>
             </SelectContent>
           </Select>
         )}

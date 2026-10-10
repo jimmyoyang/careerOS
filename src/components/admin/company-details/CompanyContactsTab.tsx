@@ -70,14 +70,14 @@ export function CompanyContactsTab({
         <div className="flex justify-end">
           <Button variant="outline" size="sm" className="h-7 gap-1" onClick={onAdd}>
             <PlusCircle className="h-3.5 w-3.5" />
-            Add Contact
+            添加联系人
           </Button>
         </div>
       )}
 
       {currentContacts.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-sm font-medium text-muted-foreground">Works here</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">在此任职</h3>
           <ContactsTable
             contacts={currentContacts}
             reloadContacts={reload}
@@ -90,7 +90,7 @@ export function CompanyContactsTab({
       {formerContacts.length > 0 && (
         <section className="space-y-2">
           <h3 className="text-sm font-medium text-muted-foreground">
-            Worked with you here
+            曾与你共事
           </h3>
           <ContactsTable
             contacts={formerContacts}
@@ -103,9 +103,9 @@ export function CompanyContactsTab({
       {!hasAny && (
         <JobTabEmptyState
           icon={Users}
-          title="No contacts at this company yet"
-          description="Add the recruiters, hiring managers and colleagues you know here."
-          actionLabel="Add Contact"
+          title="该公司暂无联系人"
+          description="添加你认识的招聘人员、招聘经理和同事。"
+          actionLabel="添加联系人"
           onAction={onAdd}
         />
       )}

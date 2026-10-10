@@ -148,11 +148,11 @@ export function useAutomationRun({
       // (e.g. switching tabs) doesn't re-init its badge to "Running".
       setRunKey(0);
       if (latest.status === "cancelled") {
-        toastError(`Saved ${latest.jobsSaved} new jobs`, "Run cancelled");
+        toastError(`已保存 ${latest.jobsSaved} 个新岗位`, "运行已取消");
       } else {
         toastSuccess(
-          `Saved ${latest.jobsSaved} new jobs`,
-          "Automation run complete",
+          `已保存 ${latest.jobsSaved} 个新岗位`,
+          "自动化运行完成",
         );
       }
       loadData();
@@ -196,7 +196,7 @@ export function useAutomationRun({
           setRunKey(0);
           setLogData((prev) => ({ ...prev, isRunning: false }));
         }
-        toastError(data.message || "Failed to start run");
+        toastError(data.message || "启动运行失败");
       }
       // On success the run is running in the background; the watcher effect
       // above handles completion.
@@ -204,7 +204,7 @@ export function useAutomationRun({
       setRunNowLoading(false);
       setRunKey(0);
       setLogData((prev) => ({ ...prev, isRunning: false }));
-      toastError("Failed to start run");
+      toastError("启动运行失败");
     }
   };
 

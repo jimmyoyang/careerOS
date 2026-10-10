@@ -82,7 +82,7 @@ describe("InterviewsContainer", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Google Meet")).toBeInTheDocument();
     // occurredAt is in the future relative to nothing stored, so it derives
-    expect(screen.getByText("Scheduled")).toBeInTheDocument();
+    expect(screen.getByText("已安排")).toBeInTheDocument();
   });
 
   it("expands one row at a time", async () => {
@@ -94,14 +94,14 @@ describe("InterviewsContainer", () => {
     await screen.findAllByText("Senior Full Stack Developer");
 
     const [first, second] = screen.getAllByRole("button", {
-      name: /Expand Senior Full Stack Developer/,
+      name: /展开 Senior Full Stack Developer/,
     });
     await userEvent.click(first!);
-    expect(await screen.findByText(/Prep questions/)).toBeInTheDocument();
+    expect(await screen.findByText(/准备题目/)).toBeInTheDocument();
 
     await userEvent.click(second!);
     await waitFor(() =>
-      expect(screen.getAllByText(/Prep questions/)).toHaveLength(1),
+      expect(screen.getAllByText(/准备题目/)).toHaveLength(1),
     );
   });
 
@@ -109,6 +109,6 @@ describe("InterviewsContainer", () => {
     (getInterviewList as any).mockResolvedValue({ data: [], total: 0 });
     render(<InterviewsContainer {...props} />);
 
-    expect(await screen.findByText(/No interviews yet/)).toBeInTheDocument();
+    expect(await screen.findByText(/暂无面试/)).toBeInTheDocument();
   });
 });

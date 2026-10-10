@@ -42,7 +42,8 @@ export default defineConfig({
       provider: "v8",
       reportsDirectory: "coverage",
     },
-    exclude: ["e2e/**", "**/node_modules/**"],
+    // These two files use node:test and run through npm run phone:test.
+    exclude: ["e2e/**", "**/node_modules/**", "scripts/phone-bridge.test.mjs", "services/phone-bridge/bridge.test.mjs"],
     server: {
       deps: {
         inline: [/@prisma/, /next-auth/, /@auth/, /@next/, /jose/],

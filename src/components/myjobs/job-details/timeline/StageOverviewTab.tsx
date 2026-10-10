@@ -1,4 +1,5 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { Clock, MapPin, Monitor } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,7 @@ function StageFact({
       </span>
       <p className="mt-1.5 flex items-center gap-2 text-sm">
         <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-        {value ?? <span className="text-muted-foreground">Not set</span>}
+        {value ?? <span className="text-muted-foreground">未设置</span>}
       </p>
     </div>
   );
@@ -43,24 +44,24 @@ export function StageOverviewTab({ stage, onChanged }: StageOverviewTabProps) {
     <div className="space-y-4">
       <div>
         <span className="text-[11px] font-bold tracking-wide text-muted-foreground">
-          OUTCOME
+          结果
         </span>
         <p className="mt-1.5 text-sm">
           {outcomeLabel ? (
-            <Badge variant="secondary">{outcomeLabel}</Badge>
+            <Badge variant="secondary">{zhLabel(outcomeLabel)}</Badge>
           ) : (
-            <span className="text-muted-foreground">Not recorded</span>
+            <span className="text-muted-foreground">未记录</span>
           )}
         </p>
       </div>
 
       {isInterviewStage(stage) && (
         <div className="grid gap-4 @lg/timeline:grid-cols-3">
-          <StageFact label="LOCATION" value={stage.location} icon={MapPin} />
-          <StageFact label="FORMAT" value={stage.format} icon={Monitor} />
+          <StageFact label="地点" value={stage.location} icon={MapPin} />
+          <StageFact label="形式" value={stage.format} icon={Monitor} />
           <StageFact
-            label="DURATION"
-            value={stage.durationMins ? `${stage.durationMins} min` : null}
+            label="时长"
+            value={stage.durationMins ? `${stage.durationMins} 分钟` : null}
             icon={Clock}
           />
         </div>

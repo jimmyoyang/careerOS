@@ -40,7 +40,7 @@ export default function AddContactShortcut() {
         onClick={() => openDialog(true)}
       >
         <Users className="h-3.5 w-3.5 mr-1 shrink-0" />
-        <span className="min-w-0 truncate">Add Contact</span>
+        <span className="min-w-0 truncate">添加联系人</span>
       </Button>
       <AddContact
         hideTrigger

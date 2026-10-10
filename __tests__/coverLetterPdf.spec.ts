@@ -27,7 +27,7 @@ const { pdf, toBlob, registerHyphenationCallback, htmlToPdfNodes } = vi.hoisted(
 // letter.styles.ts still returns a plain object tree.
 vi.mock("@react-pdf/renderer", () => ({
   pdf,
-  Font: { registerHyphenationCallback },
+  Font: { registerHyphenationCallback, register: vi.fn() },
   StyleSheet: { create: (sheet: unknown) => sheet },
   Document: () => null,
   Page: () => null,
@@ -69,7 +69,7 @@ describe("generateCoverLetterPdfBlob — filename", () => {
       title: "Software Engineer - Google",
       content: "<p>Hi</p>",
     });
-    expect(filename).toBe("Software Engineer - Google_cover_letter.pdf");
+    expect(filename).toBe("Software Engineer - Google_求职信.pdf");
   });
 
   it("strips path and control characters from the title", async () => {
@@ -77,7 +77,7 @@ describe("generateCoverLetterPdfBlob — filename", () => {
       title: "Dev/Ops: \x00report\x1f",
       content: "<p>Hi</p>",
     });
-    expect(filename).toBe("DevOps report_cover_letter.pdf");
+    expect(filename).toBe("DevOps report_求职信.pdf");
   });
 
   it("falls back to 'Untitled' when the title sanitizes to nothing", async () => {
@@ -85,7 +85,7 @@ describe("generateCoverLetterPdfBlob — filename", () => {
       title: '///:*?"<>|',
       content: "<p>Hi</p>",
     });
-    expect(filename).toBe("Untitled_cover_letter.pdf");
+    expect(filename).toBe("未命名_求职信.pdf");
   });
 });
 
@@ -102,7 +102,7 @@ describe("generateCoverLetterPdfBlob — document props", () => {
 
   it("formats today's date as a business-letter date", async () => {
     await generate({ title: "Letter", content: "<p>Hi</p>" });
-    expect(pdf.mock.calls[0][0].props.dateLabel).toBe("August 21, 2026");
+    expect(pdf.mock.calls[0][0].props.dateLabel).toBe("2026年8月21日");
   });
 
   it("titles the document from the letter title", async () => {

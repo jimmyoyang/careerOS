@@ -48,22 +48,22 @@ describe("ContactRolesContainer", () => {
     render(<ContactRolesContainer />);
 
     await waitFor(() =>
-      expect(screen.getByText("Recruiter")).toBeInTheDocument(),
+      expect(screen.getByText("招聘人员")).toBeInTheDocument(),
     );
-    expect(screen.getByText("Reference")).toBeInTheDocument();
+    expect(screen.getByText("推荐证明人")).toBeInTheDocument();
   });
 
   it("blocks deleting a role that is in use, without calling the action", async () => {
     render(<ContactRolesContainer />);
     await waitFor(() =>
-      expect(screen.getByText("Recruiter")).toBeInTheDocument(),
+      expect(screen.getByText("招聘人员")).toBeInTheDocument(),
     );
 
-    await user.click(screen.getAllByRole("button", { name: /toggle menu/i })[0]);
-    await user.click(await screen.findByText("Delete"));
+    await user.click(screen.getAllByRole("button", { name: /打开菜单/i })[0]);
+    await user.click(await screen.findByText("删除"));
 
     expect(
-      await screen.findByText(/Associated contacts exist/i),
+      await screen.findByText(/存在关联联系人/i),
     ).toBeInTheDocument();
     expect(deleteContactRoleById).not.toHaveBeenCalled();
   });
@@ -75,12 +75,12 @@ describe("ContactRolesContainer", () => {
     });
     render(<ContactRolesContainer />);
     await waitFor(() =>
-      expect(screen.getByText("Reference")).toBeInTheDocument(),
+      expect(screen.getByText("推荐证明人")).toBeInTheDocument(),
     );
 
-    await user.click(screen.getAllByRole("button", { name: /toggle menu/i })[1]);
-    await user.click(await screen.findByText("Delete"));
-    await user.click(await screen.findByRole("button", { name: "Delete" }));
+    await user.click(screen.getAllByRole("button", { name: /打开菜单/i })[1]);
+    await user.click(await screen.findByText("删除"));
+    await user.click(await screen.findByRole("button", { name: "删除" }));
 
     await waitFor(() =>
       expect(toastError).toHaveBeenCalledWith("Role cannot be deleted"),
@@ -90,10 +90,10 @@ describe("ContactRolesContainer", () => {
   it("searches roles by label", async () => {
     render(<ContactRolesContainer />);
     await waitFor(() =>
-      expect(screen.getByText("Recruiter")).toBeInTheDocument(),
+      expect(screen.getByText("招聘人员")).toBeInTheDocument(),
     );
 
-    await user.type(screen.getByPlaceholderText("Search roles..."), "rec");
+    await user.type(screen.getByPlaceholderText("搜索角色…"), "rec");
 
     await waitFor(() =>
       expect(getContactRoleList).toHaveBeenCalledWith(

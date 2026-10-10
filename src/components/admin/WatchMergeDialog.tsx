@@ -32,16 +32,15 @@ export function WatchMergeDialog({ pending, onConfirm, onCancel }: Props) {
     <AlertDialog open={!!pending} onOpenChange={(o) => !o && onCancel()}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Link this board?</AlertDialogTitle>
+          <AlertDialogTitle>关联这个招聘平台？</AlertDialogTitle>
           <AlertDialogDescription>
-            You already track <strong>{pending?.existing.label}</strong>. Link
-            its {pending && PROVIDER_META[pending.provider].label} board{" "}
-            <code>{pending?.board.token}</code> to that company?
+            你已经在跟踪 <strong>{pending?.existing.label}</strong>。要将它的 {pending && PROVIDER_META[pending.provider].label} 招聘平台{" "}
+            <code>{pending?.board.token}</code> 关联到该公司吗？
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Link board</AlertDialogAction>
+          <AlertDialogCancel onClick={onCancel}>取消</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm}>关联招聘平台</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

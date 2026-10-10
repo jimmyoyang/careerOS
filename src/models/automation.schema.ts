@@ -70,12 +70,12 @@ export const SourceConfigSchema = z.object({
 
 export const CreateAutomationSchema = z
   .object({
-    name: z.string().min(1, "Name is required").max(100),
+    name: z.string().min(1, "请填写名称。").max(100),
     jobBoard: JobBoardSchema,
     keywords: z.string().max(200).optional(),
     location: z.string().max(100).optional(),
     sourceConfig: SourceConfigSchema.optional(),
-    resumeId: z.string().uuid("Invalid resume"),
+    resumeId: z.string().uuid("简历无效。"),
     matchThreshold: z.number().min(0).max(100),
     scheduleHour: z.number().min(0).max(23),
   })
@@ -85,7 +85,7 @@ export const CreateAutomationSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["sourceConfig", data.jobBoard, "companies"],
-        message: "Select at least one company",
+        message: "请至少选择一家公司。",
       });
     }
   });
@@ -97,7 +97,7 @@ export const UpdateAutomationSchema = z
     keywords: z.string().max(200).optional(),
     location: z.string().max(100).optional(),
     sourceConfig: SourceConfigSchema.optional(),
-    resumeId: z.string().uuid("Invalid resume").optional(),
+    resumeId: z.string().uuid("简历无效。").optional(),
     matchThreshold: z.number().min(0).max(100).optional(),
     scheduleHour: z.number().min(0).max(23).optional(),
   })
@@ -108,7 +108,7 @@ export const UpdateAutomationSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["sourceConfig", data.jobBoard, "companies"],
-        message: "Select at least one company",
+        message: "请至少选择一家公司。",
       });
     }
   });

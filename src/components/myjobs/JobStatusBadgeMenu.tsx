@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,14 +35,14 @@ export function JobStatusBadgeMenu({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              aria-label={`Change status, currently ${job.Status?.label ?? ""}`}
+              aria-label={`更改状态，当前为${zhLabel(job.Status?.label ?? "")}`}
               className="cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <JobStatusBadge job={job} className={className} />
             </button>
           </DropdownMenuTrigger>
         </TooltipTrigger>
-        <TooltipContent>Click to change status</TooltipContent>
+        <TooltipContent>点击更改状态</TooltipContent>
       </Tooltip>
       <DropdownMenuContent align="start" className="p-0">
         <JobStatusMenuItems

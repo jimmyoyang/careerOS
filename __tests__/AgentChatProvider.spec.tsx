@@ -71,7 +71,7 @@ function Probe() {
       >
         sendMessage
       </button>
-      <button onClick={() => c.seedExchange("Add a job posting", "canned")}>
+      <button onClick={() => c.seedExchange("添加招聘信息", "canned")}>
         seedExchange
       </button>
       <button onClick={c.clearQueued}>clearQueued</button>
@@ -143,7 +143,7 @@ describe("AgentChatProvider", () => {
     expect(next).toHaveLength(3);
     expect(next[1]).toMatchObject({
       role: "user",
-      parts: [{ type: "text", text: "Add a job posting" }],
+      parts: [{ type: "text", text: "添加招聘信息" }],
     });
     expect(next[2]).toMatchObject({
       role: "assistant",
@@ -357,7 +357,7 @@ describe("AgentChatProvider", () => {
   it("preflights Ollama on open and reports a failure", async () => {
     (checkOllamaConnection as any).mockResolvedValue({
       isConnected: false,
-      error: "Ollama is not reachable.",
+      error: "无法连接到 Ollama。",
     });
     setup();
     await act(async () => {

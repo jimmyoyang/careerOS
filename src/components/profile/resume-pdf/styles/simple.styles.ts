@@ -1,3 +1,4 @@
+import { withCjkFallback } from "@/components/pdf-export/cjk-font";
 import { StyleSheet } from "@react-pdf/renderer";
 import { HtmlStyleSet } from "@/components/pdf-export/types";
 import type { ResumeExportSettings } from "@/models/resumeExport.model";
@@ -5,10 +6,11 @@ import { resumeStyleTokens } from "./tokens";
 
 export function buildSimpleStyles(settings: ResumeExportSettings) {
   const t = resumeStyleTokens(settings);
+  const font = withCjkFallback(t.font);
 
   const styles = StyleSheet.create({
     page: {
-      fontFamily: t.font.regular,
+      fontFamily: font.regular,
       fontSize: t.fontSize,
       paddingTop: t.marginVertical,
       paddingBottom: t.marginVertical,
@@ -18,7 +20,7 @@ export function buildSimpleStyles(settings: ResumeExportSettings) {
     },
     heading: {
       fontSize: t.pt(20),
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       marginBottom: 8,
     },
     subheading: {
@@ -32,7 +34,7 @@ export function buildSimpleStyles(settings: ResumeExportSettings) {
     },
     sectionTitle: {
       fontSize: t.fontSize,
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       textTransform: "uppercase",
       letterSpacing: 0.8,
       marginBottom: 3,
@@ -43,12 +45,12 @@ export function buildSimpleStyles(settings: ResumeExportSettings) {
       borderBottomColor: "#000000",
       marginBottom: 6,
     },
-    bold: { fontFamily: t.font.bold },
-    italic: { fontFamily: t.font.italic },
-    boldItalic: { fontFamily: t.font.boldItalic },
+    bold: { fontFamily: font.bold },
+    italic: { fontFamily: font.italic },
+    boldItalic: { fontFamily: font.boldItalic },
     bodyText: { fontSize: t.fontSize, marginBottom: 2 },
     entryTitle: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.fontSize,
       marginBottom: 1,
     },
@@ -64,7 +66,7 @@ export function buildSimpleStyles(settings: ResumeExportSettings) {
     bullet: { width: t.pt(14), fontSize: t.fontSize },
     listText: { flex: 1, fontSize: t.fontSize },
     h2text: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.pt(13),
       marginBottom: 3,
       marginTop: 4,
@@ -74,7 +76,7 @@ export function buildSimpleStyles(settings: ResumeExportSettings) {
       marginBottom: 3,
     },
     skillCat: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.pt(10),
       width: t.pt(110),
       flexShrink: 0,

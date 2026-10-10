@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import CreateResume from "./CreateResume";
 import CreateCoverLetter from "./CreateCoverLetter";
 import CopyResumeDialog from "./CopyResumeDialog";
@@ -198,9 +199,9 @@ const ProfileContainer = () => {
     <Card>
       <ResponsiveCardHeader>
         <div className="flex items-baseline gap-2">
-          <CardTitle>Profile</CardTitle>
+          <CardTitle>简历中心</CardTitle>
           {!loading && totalDocuments > 0 && (
-            <RecordsCount count={documents.length} total={totalDocuments} label="documents" />
+            <RecordsCount count={documents.length} total={totalDocuments} label="份简历/材料" />
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
@@ -209,7 +210,7 @@ const ProfileContainer = () => {
               <Button size="sm" variant="outline" className="h-8 gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  New
+                  新建
                 </span>
                 <ChevronDown className="h-3.5 w-3.5" />
               </Button>
@@ -219,13 +220,13 @@ const ProfileContainer = () => {
                 className="cursor-pointer"
                 onClick={createResume}
               >
-                Add New Resume
+                新建简历
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={createCoverLetter}
               >
-                Add New Cover Letter
+                新建求职信
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -258,7 +259,18 @@ const ProfileContainer = () => {
         </div>
       </ResponsiveCardHeader>
       <CardContent>
+        <div className="mb-5 space-y-2 rounded-lg bg-muted/50 p-4 text-sm">
+          <p className="font-medium">一份基础简历，多个申请版本</p>
+          <p className="leading-6 text-muted-foreground">新建简历时可导入 PDF / DOCX；进入简历后核对联系方式和经历，补全至少两个内容模块，再设为默认或导出 PDF。可以复制版本，为不同平台和职位准备材料。</p>
+          <Link href="/dashboard/search" className="inline-block font-medium text-primary hover:underline">查找职位并匹配简历 →</Link>
+        </div>
         {loading && <Loading />}
+        {!loading && totalDocuments === 0 && (
+          <div className="space-y-3 py-8 text-center">
+            <p className="font-medium">还没有简历或申请材料</p>
+            <Button onClick={createResume}>创建或导入简历</Button>
+          </div>
+        )}
         {documents.length > 0 && (
           <>
             <DocumentTable
@@ -281,7 +293,7 @@ const ProfileContainer = () => {
               disabled={loading}
               className="btn btn-primary"
             >
-              {loading ? "Loading..." : "Load More"}
+              {loading ? "加载中…" : "加载更多"}
             </Button>
           </div>
         )}

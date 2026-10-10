@@ -33,8 +33,8 @@ export function useAutomationLifecycle(
     if (result.success) {
       toastSuccess(
         automation.status === "active"
-          ? "Automation paused"
-          : "Automation resumed",
+          ? "自动化已暂停"
+          : "自动化已恢复",
       );
       loadData();
     } else {
@@ -50,7 +50,7 @@ export function useAutomationLifecycle(
     setDeleteConfirmOpen(false);
 
     if (result.success) {
-      toastSuccess("Automation deleted");
+      toastSuccess("自动化已删除");
       router.push("/dashboard/automations");
     } else {
       toastError(result.message);

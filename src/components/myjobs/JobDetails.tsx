@@ -132,8 +132,8 @@ function JobDetails({
     }
   }, [job.matchData]);
 
-  const jobLabel = `${job.JobTitle?.label ?? "this job"}${
-    job.Company?.label ? ` at ${job.Company.label}` : ""
+  const jobLabel = `${job.JobTitle?.label ?? "该职位"}${
+    job.Company?.label ? `（${job.Company.label}）` : ""
   }`;
 
   // Panel first so a failed clear can never leave a button looking dead, and
@@ -158,9 +158,9 @@ function JobDetails({
     void startChat(text);
   };
 
-  const onMatch = () => requestChat(`Match my resume to ${jobLabel}`);
+  const onMatch = () => requestChat(`请分析我的简历与${jobLabel}的匹配程度`);
   const onCoverLetter = () =>
-    requestChat(`Write a cover letter for ${jobLabel}`);
+    requestChat(`请为${jobLabel}撰写求职信`);
 
   useAutoMatch(onMatch);
 
@@ -168,9 +168,9 @@ function JobDetails({
   // Regenerate all key on this one reason.
   const coverLetterBlockedReason =
     job.descriptionCompleteness === "title-only"
-      ? "Add a job description first"
+      ? "请先添加职位描述"
       : chatBusy
-        ? "The assistant is busy"
+        ? "助手正在处理其他请求"
         : undefined;
 
   const onEditJob = () => {
@@ -192,7 +192,7 @@ function JobDetails({
       await reloadStages();
       // applied/appliedDate may have changed too, and they come from the prop.
       router.refresh();
-      toastSuccess(`Job has been updated successfully`);
+      toastSuccess("职位已更新");
     } else {
       toastError(message);
     }
@@ -201,7 +201,7 @@ function JobDetails({
   const onDeleteJob = async () => {
     const { success, message } = await deleteJobById(job.id);
     if (success) {
-      toastSuccess(`Job has been deleted successfully`);
+      toastSuccess("职位已删除");
       router.push("/dashboard/myjobs");
     } else {
       toastError(message);
@@ -242,9 +242,9 @@ function JobDetails({
 
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
-            <TabsTrigger value="description">Description</TabsTrigger>
+            <TabsTrigger value="description">描述</TabsTrigger>
             <TabsTrigger value="timeline">
-              Timeline
+              进展记录
               {stages.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {stages.length}
@@ -252,10 +252,10 @@ function JobDetails({
               )}
             </TabsTrigger>
             <TabsTrigger value="career">CareerOS</TabsTrigger>
-            <TabsTrigger value="match">AI Match</TabsTrigger>
-            <TabsTrigger value="letter">Cover Letter</TabsTrigger>
+            <TabsTrigger value="match">AI 匹配</TabsTrigger>
+            <TabsTrigger value="letter">求职信</TabsTrigger>
             <TabsTrigger value="contacts">
-              Contacts
+              联系人
               {contactLinks.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {contactLinks.length}
@@ -263,7 +263,7 @@ function JobDetails({
               )}
             </TabsTrigger>
             <TabsTrigger value="notes">
-              Notes
+              笔记
               {notesCount > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {notesCount}
@@ -286,12 +286,12 @@ function JobDetails({
               ) : (
                 <JobTabEmptyState
                   icon={Sparkles}
-                  title="No match analysis yet"
-                  description="Run an AI match to see how your resume lines up with this posting, and where the gaps are."
-                  actionLabel="Match with AI"
+                  title="暂无匹配分析"
+                  description="运行 AI 匹配，了解简历与职位要求的匹配程度及差距。"
+                  actionLabel="使用 AI 匹配"
                   onAction={onMatch}
                   actionDisabled={chatBusy}
-                  actionTitle={chatBusy ? "The assistant is busy" : undefined}
+                  actionTitle={chatBusy ? "助手正在处理其他请求" : undefined}
                 />
               )}
             </Card>
@@ -389,7 +389,7 @@ function JobDetails({
         onAdded={() => void reloadStages()}
       />
       <DeleteAlertDialog
-        pageTitle="job"
+        pageTitle="职位"
         open={deleteAlertOpen}
         onOpenChange={setDeleteAlertOpen}
         onDelete={onDeleteJob}
@@ -401,16 +401,15 @@ function JobDetails({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Clear the assistant conversation?</AlertDialogTitle>
+            <AlertDialogTitle>清空助手对话？</AlertDialogTitle>
             <AlertDialogDescription>
-              A job is waiting for your approval in the assistant. Starting this
-              clears the conversation, and that job will not be saved.
+              助手中有一个职位等待你确认。继续操作会清空对话，该职位将不会保存。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction onClick={() => void startChat(pendingChatMessage)}>
-              Clear and continue
+              清空并继续
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -30,17 +30,17 @@ describe("CoverLetterSettingsPanel — structure", () => {
   it("has no Template row", () => {
     renderPanel();
     expect(
-      screen.queryByRole("combobox", { name: "Template" }),
+      screen.queryByRole("combobox", { name: "模板" }),
     ).not.toBeInTheDocument();
   });
 
   it("renders the two disclosure groups open", () => {
     renderPanel();
-    expect(screen.getByRole("button", { name: /Typography/ })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: /字体排版/ })).toHaveAttribute(
       "aria-expanded",
       "true",
     );
-    expect(screen.getByRole("button", { name: /Layout/ })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: /布局/ })).toHaveAttribute(
       "aria-expanded",
       "true",
     );
@@ -48,7 +48,7 @@ describe("CoverLetterSettingsPanel — structure", () => {
 
   it("renders one select and five steppers, prefixed cover-letter-export", () => {
     renderPanel();
-    expect(screen.getByRole("combobox", { name: "Font" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "字体" })).toBeInTheDocument();
     for (const field of [
       "fontSize",
       "lineHeight",
@@ -69,7 +69,7 @@ describe("CoverLetterSettingsPanel — emitting", () => {
   it("emits a whole settings object with only the changed field moved", async () => {
     const { onChange, user } = renderPanel();
     await user.click(
-      screen.getByRole("button", { name: "Increase Paragraph spacing" }),
+      screen.getByRole("button", { name: "增大段落间距" }),
     );
     expect(onChange).toHaveBeenCalledWith({
       ...defaultCoverLetterExportSettings,
@@ -80,7 +80,7 @@ describe("CoverLetterSettingsPanel — emitting", () => {
   it("clamps at the field's ceiling by disabling the button", () => {
     renderPanel({ paragraphSpacing: 24 });
     expect(
-      screen.getByRole("button", { name: "Increase Paragraph spacing" }),
+      screen.getByRole("button", { name: "增大段落间距" }),
     ).toBeDisabled();
   });
 });
@@ -88,13 +88,13 @@ describe("CoverLetterSettingsPanel — emitting", () => {
 describe("CoverLetterSettingsPanel — letterhead hint", () => {
   it("is hidden when the letterhead resolves", () => {
     renderPanel({}, { hasLetterhead: true });
-    expect(screen.queryByText(/No letterhead/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/尚无信头/)).not.toBeInTheDocument();
   });
 
   it("explains the missing letterhead and how to fix it", () => {
     renderPanel({}, { hasLetterhead: false });
-    expect(screen.getByText(/No letterhead/)).toBeInTheDocument();
-    expect(screen.getByText(/default resume/)).toBeInTheDocument();
+    expect(screen.getByText(/尚无信头/)).toBeInTheDocument();
+    expect(screen.getByText(/默认简历/)).toBeInTheDocument();
   });
 });
 
@@ -102,7 +102,7 @@ describe("CoverLetterSettingsPanel — reset", () => {
   it("renders no reset button without an onReset handler", () => {
     renderPanel();
     expect(
-      screen.queryByRole("button", { name: "Reset to defaults" }),
+      screen.queryByRole("button", { name: "恢复默认设置" }),
     ).not.toBeInTheDocument();
   });
 
@@ -117,7 +117,7 @@ describe("CoverLetterSettingsPanel — reset", () => {
       />,
     );
     expect(
-      screen.getByRole("button", { name: "Reset to defaults" }),
+      screen.getByRole("button", { name: "恢复默认设置" }),
     ).toBeDisabled();
   });
 });

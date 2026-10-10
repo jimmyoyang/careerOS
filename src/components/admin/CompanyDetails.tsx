@@ -28,12 +28,12 @@ type CompanyDetailsProps = {
 };
 
 function blockedDescription(total: number, dismissed: number) {
-  const jobs = `This company has ${total} associated job${total === 1 ? "" : "s"} (applied or not).`;
+  const jobs = `该公司关联了 ${total} 个职位（包括未投递的职位）。`;
   const hidden =
     dismissed > 0
-      ? ` ${dismissed} of them ${dismissed === 1 ? "was" : "were"} dismissed by automations; pick Dismissed (discovered) on the Jobs page to see them.`
+      ? `其中 ${dismissed} 个被自动化任务忽略，可在职位页面选择“已忽略（发现的职位）”查看。`
       : "";
-  return `${jobs}${hidden} Remove or reassign them before deleting this company.`;
+  return `${jobs}${hidden}请先删除这些职位或将其关联到其他公司，再删除该公司。`;
 }
 
 function CompanyDetails({ details }: CompanyDetailsProps) {
@@ -66,8 +66,8 @@ function CompanyDetails({ details }: CompanyDetailsProps) {
     if (res.success) {
       toastSuccess(
         next
-          ? `${details.label} added to your watchlist`
-          : `${details.label} removed from your watchlist. It stays in your Library.`,
+          ? `${details.label}已加入关注列表`
+          : `${details.label}已从关注列表移除，仍保留在公司库中。`,
       );
       router.refresh();
     } else {
@@ -90,7 +90,7 @@ function CompanyDetails({ details }: CompanyDetailsProps) {
       setAlert({
         openState: true,
         deleteAction: false,
-        title: "Associated jobs exist!",
+        title: "存在关联职位！",
         description: blockedDescription(total, dismissedJobsCount),
       });
     } else {
@@ -101,7 +101,7 @@ function CompanyDetails({ details }: CompanyDetailsProps) {
   const deleteCompany = async () => {
     const { success, message } = await deleteCompanyById(details.id);
     if (success) {
-      toastSuccess("Company has been deleted successfully");
+      toastSuccess("公司已删除");
       router.push(backHref);
     } else {
       toastError(message);
@@ -129,7 +129,7 @@ function CompanyDetails({ details }: CompanyDetailsProps) {
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             <TabsTrigger value="jobs">
-              Jobs
+              职位
               {jobs.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {jobs.length}
@@ -137,7 +137,7 @@ function CompanyDetails({ details }: CompanyDetailsProps) {
               )}
             </TabsTrigger>
             <TabsTrigger value="contacts">
-              Contacts
+              联系人
               {contactsCount > 0 && (
                 <Badge variant="secondary" className="ml-2">
                   {contactsCount}
@@ -170,7 +170,7 @@ function CompanyDetails({ details }: CompanyDetailsProps) {
         setDialogOpen={setEditOpen}
       />
       <DeleteAlertDialog
-        pageTitle="company"
+        pageTitle="公司"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={deleteCompany}

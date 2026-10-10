@@ -69,7 +69,7 @@ export function usePdfPreview<T extends object>(
       } catch (e) {
         if (runIdRef.current !== runId) return;
         setResult(null);
-        setError(e instanceof Error ? e : new Error("Preview failed"));
+        setError(e instanceof Error ? e : new Error("预览失败"));
       } finally {
         if (runIdRef.current === runId) setIsGenerating(false);
       }

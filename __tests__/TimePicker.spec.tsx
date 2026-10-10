@@ -54,7 +54,7 @@ async function openPicker(initialValue?: string) {
   const onChange = vi.fn();
   render(<Harness initialValue={initialValue} onChange={onChange} />);
   await user.click(
-    screen.getByRole("button", { name: initialValue === "" ? "Pick a time" : "09:05 AM" })
+    screen.getByRole("button", { name: initialValue === "" ? "选择时间" : "上午 09:05" })
   );
   return { onChange };
 }
@@ -64,7 +64,7 @@ describe("TimePicker", () => {
     render(<Harness />);
 
     expect(
-      screen.getByRole("button", { name: "09:05 AM" })
+      screen.getByRole("button", { name: "上午 09:05" })
     ).toBeInTheDocument();
   });
 
@@ -72,22 +72,22 @@ describe("TimePicker", () => {
     render(<Harness initialValue="" />);
 
     expect(
-      screen.getByRole("button", { name: "Pick a time" })
+      screen.getByRole("button", { name: "选择时间" })
     ).toBeInTheDocument();
   });
 
   it("marks the current parts as pressed when opened", async () => {
     await openPicker();
 
-    expect(column("Hour").getByRole("button", { name: "09" })).toHaveAttribute(
+    expect(column("小时").getByRole("button", { name: "09" })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
-    expect(column("Minute").getByRole("button", { name: "05" })).toHaveAttribute(
+    expect(column("分钟").getByRole("button", { name: "05" })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
-    expect(column("AM/PM").getByRole("button", { name: "AM" })).toHaveAttribute(
+    expect(column("时段").getByRole("button", { name: "上午" })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
@@ -96,7 +96,7 @@ describe("TimePicker", () => {
   it("keeps the minute and meridiem when the hour changes", async () => {
     const { onChange } = await openPicker();
 
-    await user.click(column("Hour").getByRole("button", { name: "11" }));
+    await user.click(column("小时").getByRole("button", { name: "11" }));
 
     expect(onChange).toHaveBeenCalledWith("11:05 AM");
   });
@@ -104,7 +104,7 @@ describe("TimePicker", () => {
   it("keeps the hour and meridiem when the minute changes", async () => {
     const { onChange } = await openPicker();
 
-    await user.click(column("Minute").getByRole("button", { name: "42" }));
+    await user.click(column("分钟").getByRole("button", { name: "42" }));
 
     expect(onChange).toHaveBeenCalledWith("09:42 AM");
   });
@@ -112,7 +112,7 @@ describe("TimePicker", () => {
   it("keeps the hour and minute when the meridiem changes", async () => {
     const { onChange } = await openPicker();
 
-    await user.click(column("AM/PM").getByRole("button", { name: "PM" }));
+    await user.click(column("时段").getByRole("button", { name: "下午" }));
 
     expect(onChange).toHaveBeenCalledWith("09:05 PM");
   });
@@ -120,7 +120,7 @@ describe("TimePicker", () => {
   it("emits a padded value the schema regex accepts", async () => {
     const { onChange } = await openPicker("");
 
-    await user.click(column("Hour").getByRole("button", { name: "03" }));
+    await user.click(column("小时").getByRole("button", { name: "03" }));
 
     // Unset parts fall back to 12:00 AM rather than emitting a partial string
     expect(onChange).toHaveBeenCalledWith("03:00 AM");
@@ -132,12 +132,12 @@ describe("TimePicker", () => {
   it("reflects the new value on the trigger", async () => {
     await openPicker();
 
-    await user.click(column("AM/PM").getByRole("button", { name: "PM" }));
+    await user.click(column("时段").getByRole("button", { name: "下午" }));
     // The popover is modal, so the trigger stays aria-hidden until it closes
     await user.keyboard("{Escape}");
 
     expect(
-      screen.getByRole("button", { name: "09:05 PM" })
+      screen.getByRole("button", { name: "下午 09:05" })
     ).toBeInTheDocument();
   });
 
@@ -145,10 +145,10 @@ describe("TimePicker", () => {
     const onChange = vi.fn();
     render(<Harness onChange={onChange} />);
 
-    await user.click(screen.getByRole("button", { name: "5 minutes later" }));
+    await user.click(screen.getByRole("button", { name: "推迟 5 分钟" }));
     expect(onChange).toHaveBeenLastCalledWith("09:10 AM");
 
-    await user.click(screen.getByRole("button", { name: "5 minutes earlier" }));
+    await user.click(screen.getByRole("button", { name: "提前 5 分钟" }));
     expect(onChange).toHaveBeenLastCalledWith("09:05 AM");
   });
 
@@ -156,7 +156,7 @@ describe("TimePicker", () => {
     const onChange = vi.fn();
     render(<Harness initialValue="11:58 PM" onChange={onChange} />);
 
-    await user.click(screen.getByRole("button", { name: "5 minutes later" }));
+    await user.click(screen.getByRole("button", { name: "推迟 5 分钟" }));
 
     expect(onChange).toHaveBeenLastCalledWith("12:03 AM");
   });
@@ -165,7 +165,7 @@ describe("TimePicker", () => {
     const onChange = vi.fn();
     render(<Harness initialValue="12:02 AM" onChange={onChange} />);
 
-    await user.click(screen.getByRole("button", { name: "5 minutes earlier" }));
+    await user.click(screen.getByRole("button", { name: "提前 5 分钟" }));
 
     expect(onChange).toHaveBeenLastCalledWith("11:57 PM");
   });
@@ -174,7 +174,7 @@ describe("TimePicker", () => {
     const onChange = vi.fn();
     render(<Harness initialValue="" onChange={onChange} />);
 
-    await user.click(screen.getByRole("button", { name: "5 minutes later" }));
+    await user.click(screen.getByRole("button", { name: "推迟 5 分钟" }));
 
     expect(onChange).toHaveBeenLastCalledWith("12:05 AM");
   });
@@ -184,7 +184,7 @@ describe("TimePicker", () => {
     render(<Harness />);
     expect(screen.getByTestId("touched")).toHaveTextContent("false");
 
-    await user.click(screen.getByRole("button", { name: "09:05 AM" }));
+    await user.click(screen.getByRole("button", { name: "上午 09:05" }));
 
     expect(screen.getByTestId("touched")).toHaveTextContent("true");
   });

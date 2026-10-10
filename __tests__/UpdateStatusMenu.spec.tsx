@@ -23,7 +23,7 @@ const base = {
 };
 
 const open = async () =>
-  userEvent.click(screen.getByRole("button", { name: /Update Status/ }));
+  userEvent.click(screen.getByRole("button", { name: /更新状态/ }));
 
 describe("UpdateStatusMenu", () => {
   // The old ⋮ submenu moved in here, so this menu is the single answer to
@@ -35,7 +35,7 @@ describe("UpdateStatusMenu", () => {
     await open();
 
     expect(
-      screen.getByRole("menuitem", { name: /Change status/ }),
+      screen.getByRole("menuitem", { name: /更改状态/ }),
     ).toBeInTheDocument();
   });
 
@@ -48,9 +48,9 @@ describe("UpdateStatusMenu", () => {
     );
     await open();
 
-    expect(screen.getByRole("menuitem", { name: /Add Stage/ })).not.toHaveAttribute("aria-disabled", "true");
-    expect(screen.getByRole("menuitem", { name: /Add Interviewers/ })).not.toHaveAttribute("aria-disabled", "true");
-    expect(screen.getByRole("menuitem", { name: /Add to Prep List/ })).not.toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("menuitem", { name: /^添加阶段$/ })).not.toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("menuitem", { name: /添加面试官/ })).not.toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("menuitem", { name: /添加到准备清单/ })).not.toHaveAttribute("aria-disabled", "true");
   });
 
   // Disabled with a visible reason, not hidden: a menu whose items come and
@@ -59,17 +59,17 @@ describe("UpdateStatusMenu", () => {
     render(<UpdateStatusMenu {...base} targetStage={stage("applied", "Applied")} />);
     await open();
 
-    expect(screen.getByRole("menuitem", { name: /Add Interviewers/ })).toHaveAttribute("aria-disabled", "true");
-    expect(screen.getByRole("menuitem", { name: /Add to Prep List/ })).toHaveAttribute("aria-disabled", "true");
-    expect(screen.getAllByText(/Applied is not an interview stage/).length).toBeGreaterThan(0);
+    expect(screen.getByRole("menuitem", { name: /添加面试官/ })).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("menuitem", { name: /添加到准备清单/ })).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getAllByText(/已投递不是面试阶段/).length).toBeGreaterThan(0);
   });
 
   it("keeps Add Stage enabled with no stage at all", async () => {
     render(<UpdateStatusMenu {...base} targetStage={null} />);
     await open();
 
-    expect(screen.getByRole("menuitem", { name: /Add Stage/ })).not.toHaveAttribute("aria-disabled", "true");
-    expect(screen.getByRole("menuitem", { name: /Add Interviewers/ })).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("menuitem", { name: /^添加阶段$/ })).not.toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("menuitem", { name: /添加面试官/ })).toHaveAttribute("aria-disabled", "true");
   });
 
   it("fires the handler for the item clicked", async () => {
@@ -82,7 +82,7 @@ describe("UpdateStatusMenu", () => {
       />,
     );
     await open();
-    await userEvent.click(screen.getByRole("menuitem", { name: /Add Stage/ }));
+    await userEvent.click(screen.getByRole("menuitem", { name: /^添加阶段$/ }));
 
     expect(onAddStage).toHaveBeenCalled();
   });

@@ -8,7 +8,7 @@ describe("AgentReviewScoreCard", () => {
         scores={{ overall: 78, impact: 72, clarity: 81, atsCompatibility: 69 }}
       />,
     );
-    expect(screen.getByText("Impact")).toBeInTheDocument();
+    expect(screen.getByText("成果影响力")).toBeInTheDocument();
     expect(screen.getByText("72")).toBeInTheDocument();
     expect(screen.getByText("81")).toBeInTheDocument();
     expect(screen.getByText("69")).toBeInTheDocument();

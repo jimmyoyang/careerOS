@@ -64,7 +64,7 @@ export function CompanyPicker({
     const skipped = onAddMany(watched);
     if (skipped > 0) {
       toastInfo(
-        `Added what fits — ${skipped} skipped at the ${APP_CONSTANTS.ATS_MAX_COMPANIES}-company limit.`,
+        `已添加可容纳的公司，另有 ${skipped} 家因达到 ${APP_CONSTANTS.ATS_MAX_COMPANIES}家公司上限而跳过。`,
       );
     }
   };
@@ -81,14 +81,14 @@ export function CompanyPicker({
     <div className="space-y-2">
       <Label className="flex items-center justify-between">
         <span>
-          {meta.label} Companies{" "}
+          {meta.label} 公司{" "}
           <span className="font-normal text-muted-foreground">
             ({companies.length}/{APP_CONSTANTS.ATS_MAX_COMPANIES})
           </span>
         </span>
         {totalCount !== null && totalCount > 0 && (
           <span className="text-xs font-normal text-muted-foreground">
-            {totalCount} available
+            {totalCount} 家可选
           </span>
         )}
       </Label>
@@ -105,8 +105,8 @@ export function CompanyPicker({
             disabled={atLimit}
           >
             {atLimit
-              ? `Max ${APP_CONSTANTS.ATS_MAX_COMPANIES} companies reached`
-              : `Search companies (e.g., ${meta.searchExample})`}
+              ? `已达到 ${APP_CONSTANTS.ATS_MAX_COMPANIES} 家公司上限`
+              : `搜索公司（例如： ${meta.searchExample}）`}
             {isSearching ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -120,7 +120,7 @@ export function CompanyPicker({
         >
           <Command shouldFilter={false}>
             <CommandInput
-              placeholder="Search or browse companies..."
+              placeholder="搜索或浏览公司…"
               value={query}
               onValueChange={handleQueryChange}
             />
@@ -129,7 +129,7 @@ export function CompanyPicker({
             {watched.length > 0 && (
               <div className="flex items-center justify-between border-b px-3 py-1.5">
                 <span className="text-xs text-muted-foreground">
-                  {watched.length} watched on this board
+                  {watched.length} 家已关注此平台的公司
                 </span>
                 <button
                   type="button"
@@ -137,7 +137,7 @@ export function CompanyPicker({
                   onClick={addAllWatched}
                   className="text-xs text-primary hover:underline disabled:opacity-50"
                 >
-                  Add all watched
+                  添加全部已关注公司
                 </button>
               </div>
             )}
@@ -145,16 +145,16 @@ export function CompanyPicker({
               {isSearching && results.length === 0 && (
                 <div className="flex items-center gap-2 p-3 text-sm text-muted-foreground">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Searching...
+                  正在搜索…
                 </div>
               )}
               {!isSearching && results.length === 0 && (
                 <CommandEmpty>
-                  No matches. Try &quot;Add by URL&quot; below.
+                  无匹配结果，请尝试在下方通过链接添加。
                 </CommandEmpty>
               )}
               {watched.length > 0 && (
-                <CommandGroup heading={`Watched (${watched.length})`}>
+                <CommandGroup heading={`已关注（${watched.length}）`}>
                   {watchedOnly.map((c) => {
                     const selected = companies.some(
                       (sel) => sel.token === c.token,
@@ -207,8 +207,8 @@ export function CompanyPicker({
                         href={companyBoardUrl(provider, c)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`Open ${c.name} job board`}
-                        title="Open job board"
+                        aria-label={`打开 ${c.name} 招聘页面`}
+                        title="打开招聘页面"
                         onClick={(e) => e.stopPropagation()}
                         onPointerDown={(e) => e.stopPropagation()}
                         className="ml-auto text-muted-foreground hover:text-foreground"
@@ -222,7 +222,7 @@ export function CompanyPicker({
               {isSearching && results.length > 0 && (
                 <div className="flex items-center justify-center gap-2 p-2 text-sm text-muted-foreground">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Loading more...
+                  正在加载更多…
                 </div>
               )}
             </CommandList>
@@ -250,8 +250,7 @@ export function CompanyPicker({
         onResolved={onAdd}
       />
       <p className="text-sm text-muted-foreground">
-        Select {meta.label} companies to monitor their job boards for new
-        openings.
+        选择使用 {meta.label} 的公司，监测其招聘页面上的新岗位。
       </p>
     </div>
   );

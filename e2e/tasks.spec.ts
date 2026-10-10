@@ -15,18 +15,18 @@ async function createTask(
 ) {
   await page.getByTestId("add-task-btn").click({ force: true });
   await expect(page.getByTestId("task-form-dialog-title")).toBeVisible();
-  const titleInput = page.getByPlaceholder("Enter task title");
+  const titleInput = page.getByPlaceholder("输入任务标题");
   await titleInput.waitFor({ state: "visible" });
   await titleInput.clear();
   await titleInput.fill(title);
   await titleInput.blur();
 
   if (options?.activityType) {
-    await page.getByText("Select activityType").click({ force: true });
+    await page.getByText("选择活动类型").click({ force: true });
     await page
-      .getByPlaceholder("Create or Search activityType")
+      .getByPlaceholder("创建或搜索活动类型")
       .fill(options.activityType);
-    const createOption = page.getByText(`Create: ${options.activityType}`);
+    const createOption = page.getByText(`创建： ${options.activityType}`);
     const existingOption = page.getByRole("option", {
       name: options.activityType,
       exact: true,
@@ -42,7 +42,7 @@ async function createTask(
     // closes once it resolves. Wait for that so the task saves with the type
     // committed (slow against the dev server under parallel load).
     await expect(
-      page.getByPlaceholder("Create or Search activityType"),
+      page.getByPlaceholder("创建或搜索活动类型"),
     ).not.toBeVisible({ timeout: 15000 });
     cleanup.activityType(options.activityType);
   }
@@ -62,8 +62,8 @@ async function deleteTask(page: Page, title: string) {
     .getByTestId("task-actions-menu-btn")
     .first()
     .click({ force: true });
-  await page.getByRole("menuitem", { name: "Delete" }).click({ force: true });
-  await page.getByRole("button", { name: "Delete" }).click({ force: true });
+  await page.getByRole("menuitem", { name: "删除" }).click({ force: true });
+  await page.getByRole("button", { name: "删除" }).click({ force: true });
 }
 
 test.describe("Tasks Management", () => {
@@ -94,14 +94,14 @@ test.describe("Tasks Management", () => {
       .first()
       .click({ force: true });
     await page
-      .getByRole("menuitem", { name: "Edit Task" })
+      .getByRole("menuitem", { name: "编辑任务" })
       .click({ force: true });
     await expect(page.getByTestId("task-form-dialog-title")).toBeVisible();
-    await expect(page.getByPlaceholder("Enter task title")).toHaveValue(
+    await expect(page.getByPlaceholder("输入任务标题")).toHaveValue(
       editTaskTitle,
     );
 
-    const titleInput = page.getByPlaceholder("Enter task title");
+    const titleInput = page.getByPlaceholder("输入任务标题");
     await titleInput.fill(updatedTitle);
     await titleInput.blur();
 
@@ -149,9 +149,9 @@ test.describe("Tasks Management", () => {
       .click({ force: true });
     // Radix submenus open on hover; clicking the subtrigger can toggle it
     // shut mid-open, so hover to open then wait for the item.
-    await page.getByRole("menuitem", { name: "Change Status" }).hover();
+    await page.getByRole("menuitem", { name: "更改状态" }).hover();
     const needsAttentionItem = page.getByRole("menuitem", {
-      name: "Needs Attention",
+      name: "需要关注",
     });
     await expect(needsAttentionItem).toBeVisible();
     await needsAttentionItem.click();
@@ -161,7 +161,7 @@ test.describe("Tasks Management", () => {
     await expect(
       page
         .getByRole("row", { name: new RegExp(statusTaskTitle, "i") })
-        .getByText("Needs Attention"),
+        .getByText("需要关注"),
     ).toBeVisible();
   });
 
@@ -169,22 +169,22 @@ test.describe("Tasks Management", () => {
     await navigateToTasks(page);
 
     await page
-      .getByRole("button", { name: "Status", exact: true })
+      .getByRole("button", { name: "状态", exact: true })
       .click({ force: true });
-    await expect(page.getByText("Filter by Status")).toBeVisible();
+    await expect(page.getByText("按状态筛选")).toBeVisible();
 
     const inProgressCheckbox = page.getByRole("menuitemcheckbox", {
-      name: "In Progress",
+      name: "进行中",
     });
     await expect(inProgressCheckbox).toBeChecked();
 
     const needsAttentionCheckbox = page.getByRole("menuitemcheckbox", {
-      name: "Needs Attention",
+      name: "需要关注",
     });
     await expect(needsAttentionCheckbox).toBeChecked();
 
     const completeCheckbox = page.getByRole("menuitemcheckbox", {
-      name: "Complete",
+      name: "已完成",
     });
     await expect(completeCheckbox).not.toBeChecked();
 
@@ -207,14 +207,14 @@ test.describe("Tasks Management", () => {
       .getByRole("row", { name: new RegExp(toggleTaskTitle, "i") })
       .first();
     const completeBtn = taskRow.getByRole("button", {
-      name: "Mark as complete",
+      name: "标记为已完成",
     });
     await completeBtn.click({ force: true });
 
     // The button's label flips on success; assert that instead of the toast,
     // which auto-dismisses after 5s and can vanish before the poll under load.
     await expect(
-      taskRow.getByRole("button", { name: "Mark as in progress" }),
+      taskRow.getByRole("button", { name: "标记为进行中" }),
     ).toBeVisible();
   });
 
@@ -226,7 +226,7 @@ test.describe("Tasks Management", () => {
       // Wait for the activities page to be fully loaded
       await page.getByTestId("add-activity-btn").waitFor({ state: "visible" });
       // Try to find and click the Stop button if it exists
-      const stopButton = page.getByRole("button", { name: "Stop" });
+      const stopButton = page.getByRole("button", { name: "结束活动" });
       try {
         await stopButton.waitFor({ state: "visible", timeout: 3000 });
         await stopButton.click({ force: true });
@@ -265,12 +265,12 @@ test.describe("Tasks Management", () => {
 
       await expect(page).toHaveURL(/\/dashboard\/tasks/);
       await expect(
-        page.getByRole("button", { name: "Stop" }),
+        page.getByRole("button", { name: "结束活动" }),
       ).toBeVisible({ timeout: 10000 });
 
       // Stop the running activity (the linked activity row is removed by the
       // cleanup fixture along with the task).
-      await page.getByRole("button", { name: "Stop" }).click({ force: true });
+      await page.getByRole("button", { name: "结束活动" }).click({ force: true });
     });
 
     test("should restart activity when task already has a linked activity", async ({
@@ -297,7 +297,7 @@ test.describe("Tasks Management", () => {
         .getByTestId("task-start-activity-btn")
         .click({ force: true });
       await expect(
-        page.getByRole("button", { name: "Stop" }),
+        page.getByRole("button", { name: "结束活动" }),
       ).toBeVisible({ timeout: 10000 });
 
       // Stop the activity so we can test restarting from the task. Wait for
@@ -306,8 +306,8 @@ test.describe("Tasks Management", () => {
       // click, and starting again while it's still in flight makes the app
       // (correctly) show the activity-switch confirm dialog instead of
       // restarting directly.
-      await page.getByRole("button", { name: "Stop" }).click({ force: true });
-      await expect(page.getByRole("button", { name: "Stop" })).not.toBeVisible();
+      await page.getByRole("button", { name: "结束活动" }).click({ force: true });
+      await expect(page.getByRole("button", { name: "结束活动" })).not.toBeVisible();
 
       // Go back to tasks
       await navigateToTasks(page);
@@ -326,11 +326,11 @@ test.describe("Tasks Management", () => {
         .getByTestId("task-start-activity-btn")
         .click({ force: true });
       await expect(
-        page.getByRole("button", { name: "Stop" }),
+        page.getByRole("button", { name: "结束活动" }),
       ).toBeVisible({ timeout: 10000 });
 
       // Stop the restarted activity to leave a clean state
-      await page.getByRole("button", { name: "Stop" }).click({ force: true });
+      await page.getByRole("button", { name: "结束活动" }).click({ force: true });
     });
 
     test("should not allow starting activity on completed task", async ({
@@ -353,27 +353,27 @@ test.describe("Tasks Management", () => {
         .getByRole("row", { name: new RegExp(completedTaskTitle, "i") })
         .first();
       await taskRow
-        .getByRole("button", { name: "Mark as complete" })
+        .getByRole("button", { name: "标记为已完成" })
         .click({ force: true });
       // Button label flips on success; assert that rather than the transient
       // toast so the following steps run against a committed status.
       await expect(
-        taskRow.getByRole("button", { name: "Mark as in progress" }),
+        taskRow.getByRole("button", { name: "标记为进行中" }),
       ).toBeVisible();
 
       // Add Complete status to filter to see completed tasks
       await page
-        .getByRole("button", { name: "Status", exact: true })
+        .getByRole("button", { name: "状态", exact: true })
         .click({ force: true });
       await page
-        .getByRole("menuitemcheckbox", { name: "Complete" })
+        .getByRole("menuitemcheckbox", { name: "已完成" })
         .click({ force: true });
       await page.keyboard.press("Escape");
 
       // Widening the filter refetches page 1 (25 rows, ordered priority desc),
       // so a default-priority task can land on a later page once completed
       // tasks join the list. Search by the unique title to pin it on screen.
-      await page.getByPlaceholder("Search tasks...").fill(completedTaskTitle);
+      await page.getByPlaceholder("搜索任务…").fill(completedTaskTitle);
 
       // Try to start activity via menu - should show error
       const completedTaskRow = page
@@ -384,7 +384,7 @@ test.describe("Tasks Management", () => {
         .getByTestId("task-actions-menu-btn")
         .click({ force: true });
       await page
-        .getByRole("menuitem", { name: "Start Activity" })
+        .getByRole("menuitem", { name: "开始活动" })
         .click({ force: true });
 
       await expect(

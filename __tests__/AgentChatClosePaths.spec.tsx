@@ -62,7 +62,7 @@ const setup = (initialMessages: any[] = []) =>
 
 const openPanel = async () => {
   await act(async () => {
-    await userEvent.click(screen.getByRole("button", { name: /open assistant/i }));
+    await userEvent.click(screen.getByRole("button", { name: /打开助手/ }));
   });
 };
 
@@ -105,7 +105,7 @@ describe("agent chat close paths", () => {
     setup();
     await openPanel();
     await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "Close chat" }));
+      await userEvent.click(screen.getByRole("button", { name: "关闭聊天" }));
     });
     expect(chat.stop).toHaveBeenCalled();
   });
@@ -133,7 +133,7 @@ describe("agent chat close paths", () => {
     await openPanel();
     await act(async () => {
       await userEvent.click(
-        screen.getByRole("button", { name: /close assistant/i }),
+        screen.getByRole("button", { name: /关闭助手/ }),
       );
     });
     expect(chat.stop).toHaveBeenCalled();
@@ -142,16 +142,16 @@ describe("agent chat close paths", () => {
   it("flags a pending approval on the trigger", () => {
     chat.messages = [approvalMessage];
     setup([approvalMessage]);
-    expect(screen.getByLabelText("Approval pending")).toBeInTheDocument();
+    expect(screen.getByLabelText("待确认")).toBeInTheDocument();
   });
 
   it("never advertises streaming on the trigger — nothing runs while closed", () => {
     chat.status = "streaming";
     setup();
-    expect(screen.queryByLabelText("Approval pending")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("待确认")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /open assistant/i }).textContent,
-    ).toBe("Chat AI");
+      screen.getByRole("button", { name: /打开助手/ }).textContent,
+    ).toBe("AI 助手");
   });
 
   // Closing is the only abort with no on-screen trace: the panel that would
@@ -160,18 +160,18 @@ describe("agent chat close paths", () => {
     setup();
     await openPanel();
     await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "Close chat" }));
+      await userEvent.click(screen.getByRole("button", { name: "关闭聊天" }));
     });
-    expect(vi.mocked(toastInfo).mock.calls[0]![0]).toMatch(/stopped/i);
+    expect(vi.mocked(toastInfo).mock.calls[0]![0]).toMatch(/生成已停止/);
   });
 
   it("toasts when Clear aborts a stream", async () => {
     setup();
     await openPanel();
     await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "Clear" }));
+      await userEvent.click(screen.getByRole("button", { name: "清空" }));
     });
-    expect(vi.mocked(toastInfo).mock.calls[0]![0]).toMatch(/cleared/i);
+    expect(vi.mocked(toastInfo).mock.calls[0]![0]).toMatch(/对话已清空/);
   });
 
   // Both toasts are gated on an actual abort — closing or clearing an idle
@@ -181,8 +181,8 @@ describe("agent chat close paths", () => {
     setup();
     await openPanel();
     await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "Clear" }));
-      await userEvent.click(screen.getByRole("button", { name: "Close chat" }));
+      await userEvent.click(screen.getByRole("button", { name: "清空" }));
+      await userEvent.click(screen.getByRole("button", { name: "关闭聊天" }));
     });
     expect(toastInfo).not.toHaveBeenCalled();
   });
@@ -195,7 +195,7 @@ describe("agent chat close paths", () => {
     setup([reviewRunningMessage]);
     await openPanel();
     await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "Close chat" }));
+      await userEvent.click(screen.getByRole("button", { name: "关闭聊天" }));
     });
     expect(chat.stop).toHaveBeenCalled();
   });

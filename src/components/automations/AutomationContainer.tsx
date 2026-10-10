@@ -39,7 +39,7 @@ export function AutomationContainer({ resumes }: AutomationContainerProps) {
     if (result.success && result.data) {
       setAutomations(result.data);
     } else {
-      toastError(result.message || "Failed to load automations");
+      toastError(result.message || "加载自动化失败");
     }
     setLoading(false);
   }, []);
@@ -82,14 +82,14 @@ export function AutomationContainer({ resumes }: AutomationContainerProps) {
     <>
       <Card>
         <ResponsiveCardHeader>
-          <CardTitle>Automations</CardTitle>
+          <CardTitle>自动化</CardTitle>
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" size="icon" onClick={loadAutomations}>
               <RefreshCw className="h-4 w-4" />
             </Button>
             <Button variant="outline" onClick={() => setWizardOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Create Automation
+              创建自动化
             </Button>
           </div>
         </ResponsiveCardHeader>

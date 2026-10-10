@@ -68,7 +68,7 @@ describe("CopyResumeDialog", () => {
 
   it("states that the attachment is not copied", async () => {
     renderDialog();
-    expect(screen.getByText(/attachment is not copied/i)).toBeInTheDocument();
+    expect(screen.getByText(/附件不会复制/i)).toBeInTheDocument();
   });
 
   it("submits the copy and notifies the parent on success", async () => {
@@ -80,7 +80,7 @@ describe("CopyResumeDialog", () => {
         "Backend Resume (Copy)",
       ),
     );
-    await user.click(screen.getByRole("button", { name: /create copy/i }));
+    await user.click(screen.getByRole("button", { name: /创建副本/i }));
 
     await waitFor(() =>
       expect(copyResume).toHaveBeenCalledWith(
@@ -91,7 +91,7 @@ describe("CopyResumeDialog", () => {
     await waitFor(() => expect(onCopied).toHaveBeenCalled());
     expect(setOpen).toHaveBeenCalledWith(false);
     expect(mockToastSuccess).toHaveBeenCalledWith(
-      'Copy created: "Backend Resume (Copy)"',
+      '已创建副本：“Backend Resume (Copy)”',
     );
   });
 
@@ -108,7 +108,7 @@ describe("CopyResumeDialog", () => {
         "Backend Resume (Copy)",
       ),
     );
-    await user.click(screen.getByRole("button", { name: /create copy/i }));
+    await user.click(screen.getByRole("button", { name: /创建副本/i }));
 
     await waitFor(() =>
       expect(mockToastError).toHaveBeenCalledWith("Failed to copy resume."),

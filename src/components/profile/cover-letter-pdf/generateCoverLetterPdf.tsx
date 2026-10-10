@@ -1,3 +1,4 @@
+import { pdfWordBreaks, registerCjkFont } from "@/components/pdf-export/cjk-font";
 import React from "react";
 import { format } from "date-fns";
 import { htmlToPdfNodes } from "@/components/pdf-export/html-to-pdf";
@@ -13,7 +14,8 @@ export async function generateCoverLetterPdfBlob(
   settings: CoverLetterExportSettings,
 ): Promise<{ blob: Blob; filename: string }> {
   const { pdf, Font } = await import("@react-pdf/renderer");
-  Font.registerHyphenationCallback((word) => [word]);
+  registerCjkFont(Font);
+  Font.registerHyphenationCallback(pdfWordBreaks);
 
   const { styles, htmlStyles } = buildLetterStyles(settings);
   // Parse on the main thread before entering react-pdf's rendering context.
@@ -22,9 +24,8 @@ export async function generateCoverLetterPdfBlob(
     htmlStyles,
   );
 
-  // Spelled-out month, the conventional business-letter form — deliberately
-  // not the app's "PP", whose abbreviated month reads as UI, not letterhead.
-  const dateLabel = format(new Date(), "MMMM d, yyyy");
+  // Use the same Chinese date format as the document editor.
+  const dateLabel = format(new Date(), "yyyy年M月d日");
 
   const { CoverLetterDocument } = await import("./CoverLetterTemplate");
   const document = (
@@ -40,6 +41,6 @@ export async function generateCoverLetterPdfBlob(
   const blob = await pdf(document as any).toBlob();
   // A letter has exactly one style, so the suffix names the document type
   // rather than a layout — it is what tells the two exports apart on disk.
-  const filename = `${sanitizeFilename(letter.title, "Untitled")}_cover_letter.pdf`;
+  const filename = `${sanitizeFilename(letter.title, "未命名")}_求职信.pdf`;
   return { blob, filename };
 }

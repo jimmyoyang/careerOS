@@ -24,7 +24,7 @@ export function StageInterviewersTab({
     startTransition(async () => {
       const res = await unlinkStageInterviewer(linkId);
       toastActionResult(res, {
-        success: "Interviewer unlinked from this stage",
+        success: "已解除面试官与该阶段的关联",
         onSuccess: onChanged,
       });
     });
@@ -34,7 +34,7 @@ export function StageInterviewersTab({
     <div>
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] font-bold tracking-wide text-muted-foreground">
-          INTERVIEWERS
+          面试官
         </span>
         <Button
           variant="outline"
@@ -43,13 +43,13 @@ export function StageInterviewersTab({
           onClick={onLinkInterviewers}
         >
           <UserPlus className="h-3 w-3" />
-          Add Interviewers
+          添加面试官
         </Button>
       </div>
 
       {stage.interviewers.length === 0 ? (
         <p className="mt-2.5 rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground">
-          No interviewers linked yet.
+          尚未关联面试官。
         </p>
       ) : (
         <ul className="mt-2.5 space-y-2">
@@ -74,7 +74,7 @@ export function StageInterviewersTab({
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 cursor-pointer"
-                aria-label={`Unlink ${link.Contact.name}`}
+                aria-label={`解除与${link.Contact.name}的关联`}
                 onClick={() => unlink(link.id)}
               >
                 <X className="h-3.5 w-3.5" />

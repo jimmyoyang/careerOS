@@ -148,12 +148,12 @@ describe("TasksPageClient Component", () => {
       );
 
       // Check if sidebar is rendered
-      expect(screen.getByText("Activity Types")).toBeInTheDocument();
+      expect(screen.getByText("活动类型")).toBeInTheDocument();
       expect(screen.getByText("Development")).toBeInTheDocument();
       expect(screen.getByText("Testing")).toBeInTheDocument();
 
       // Check if container is rendered
-      expect(screen.getByText("Tasks")).toBeInTheDocument();
+      expect(screen.getByText("任务")).toBeInTheDocument();
     });
 
     it("should display total task count in sidebar", () => {
@@ -192,7 +192,7 @@ describe("TasksPageClient Component", () => {
         />
       );
 
-      const allButton = screen.getByRole("button", { name: /All/i });
+      const allButton = screen.getByRole("button", { name: /全部/ });
       expect(allButton).toHaveClass("bg-accent");
     });
 
@@ -247,7 +247,7 @@ describe("TasksPageClient Component", () => {
       });
 
       // Then click on All
-      const allButton = screen.getByRole("button", { name: /All/i });
+      const allButton = screen.getByRole("button", { name: /全部/ });
       await user.click(allButton);
 
       await waitFor(() => {
@@ -298,8 +298,8 @@ describe("TasksPageClient Component", () => {
         />
       );
 
-      expect(screen.getByText("Activity Types")).toBeInTheDocument();
-      expect(screen.getByText("Tasks")).toBeInTheDocument();
+      expect(screen.getByText("活动类型")).toBeInTheDocument();
+      expect(screen.getByText("任务")).toBeInTheDocument();
     });
 
     it("should show 0 total tasks when no tasks exist", () => {
@@ -431,7 +431,7 @@ describe("TasksPageClient Component", () => {
       (getTasksList as any).mockClear();
 
       // Then click All
-      const allButton = screen.getByRole("button", { name: /All/i });
+      const allButton = screen.getByRole("button", { name: /全部/ });
       await user.click(allButton);
 
       await waitFor(() => {
@@ -635,7 +635,7 @@ describe("TasksPageClient Component", () => {
         />
       );
 
-      const allButton = screen.getByRole("button", { name: /All/i });
+      const allButton = screen.getByRole("button", { name: /全部/ });
       await user.click(allButton);
 
       await waitFor(() => {

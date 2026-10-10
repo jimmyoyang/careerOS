@@ -52,7 +52,7 @@ describe("AddActivityFormSchema", () => {
     });
 
     expect(errorFor(result, "activityType")).toBe(
-      "Activity type is required."
+      "请选择活动类型。"
     );
   });
 
@@ -77,7 +77,7 @@ describe("AddActivityFormSchema", () => {
     });
 
     expect(errorFor(result, "endTime")).toBe(
-      "End time must be after the start time"
+      "结束时间必须晚于开始时间。"
     );
   });
 
@@ -90,7 +90,7 @@ describe("AddActivityFormSchema", () => {
     });
 
     expect(errorFor(result, "endDate")).toBe(
-      "End date must be the same as or after the start date"
+      "结束日期不能早于开始日期。"
     );
   });
 
@@ -113,7 +113,7 @@ describe("AddActivityFormSchema", () => {
       endTime: "11:00 AM",
     });
 
-    expect(errorFor(result, "endTime")).toContain("cannot exceed 8 hours");
+    expect(errorFor(result, "endTime")).toContain("不能超过 8 小时");
   });
 
   it("rejects a duration shorter than the minimum", () => {
@@ -125,7 +125,7 @@ describe("AddActivityFormSchema", () => {
     });
 
     expect(errorFor(result, "endTime")).toBe(
-      "An activity must be at least 2 minutes long"
+      "活动时长至少需要 2 分钟"
     );
   });
 
@@ -138,7 +138,7 @@ describe("AddActivityFormSchema", () => {
     });
 
     expect(errorFor(result, "startTime")).toBe(
-      "Start date/time cannot be in the future"
+      "开始时间不能晚于当前时间。"
     );
   });
 });

@@ -78,7 +78,7 @@ describe("DiscoveredJobsList", () => {
     expect(screen.getByText("Backend Engineer")).toBeInTheDocument();
     expect(
       container.textContent?.replace(/\s+/g, " "),
-    ).toContain("Showing 1 to 2 of 5 jobs");
+    ).toContain("已显示 2 / 共 5 条");
   });
 
   it("does not render the load-more sentinel once every job is loaded", () => {
@@ -155,8 +155,8 @@ describe("DiscoveredJobsList", () => {
       acceptedCount: 0,
     });
 
-    expect(screen.getByText("No discovered jobs")).toBeInTheDocument();
-    expect(screen.queryByText("Status")).not.toBeInTheDocument();
+    expect(screen.getByText("暂无发现的岗位")).toBeInTheDocument();
+    expect(screen.queryByText("状态")).not.toBeInTheDocument();
   });
 
   it("keeps the status filter visible when the current filter matches no jobs but some exist", () => {
@@ -169,23 +169,23 @@ describe("DiscoveredJobsList", () => {
       statusFilter: ["new", "accepted"],
     });
 
-    expect(screen.getByText("No jobs match this filter")).toBeInTheDocument();
-    expect(screen.getByText("Status")).toBeInTheDocument();
+    expect(screen.getByText("没有符合筛选条件的岗位")).toBeInTheDocument();
+    expect(screen.getByText("状态")).toBeInTheDocument();
   });
 
   it("checks New and Accepted but not Dismissed by default", async () => {
     renderList({ statusFilter: ["new", "accepted"] });
 
-    await userEvent.click(screen.getByRole("button", { name: "Status" }));
+    await userEvent.click(screen.getByRole("button", { name: "状态" }));
 
     expect(
-      screen.getByRole("menuitemcheckbox", { name: "New" }),
+      screen.getByRole("menuitemcheckbox", { name: "新建" }),
     ).toHaveAttribute("aria-checked", "true");
     expect(
-      screen.getByRole("menuitemcheckbox", { name: "Accepted" }),
+      screen.getByRole("menuitemcheckbox", { name: "已收录" }),
     ).toHaveAttribute("aria-checked", "true");
     expect(
-      screen.getByRole("menuitemcheckbox", { name: "Dismissed" }),
+      screen.getByRole("menuitemcheckbox", { name: "已忽略" }),
     ).toHaveAttribute("aria-checked", "false");
   });
 
@@ -194,9 +194,9 @@ describe("DiscoveredJobsList", () => {
       statusFilter: ["new", "accepted"],
     });
 
-    await userEvent.click(screen.getByRole("button", { name: "Status" }));
+    await userEvent.click(screen.getByRole("button", { name: "状态" }));
     await userEvent.click(
-      screen.getByRole("menuitemcheckbox", { name: "Dismissed" }),
+      screen.getByRole("menuitemcheckbox", { name: "已忽略" }),
     );
 
     expect(onStatusFilterChange).toHaveBeenCalledWith([
@@ -211,9 +211,9 @@ describe("DiscoveredJobsList", () => {
       statusFilter: ["new", "accepted"],
     });
 
-    await userEvent.click(screen.getByRole("button", { name: "Status" }));
+    await userEvent.click(screen.getByRole("button", { name: "状态" }));
     await userEvent.click(
-      screen.getByRole("menuitemcheckbox", { name: "New" }),
+      screen.getByRole("menuitemcheckbox", { name: "新建" }),
     );
 
     expect(onStatusFilterChange).toHaveBeenCalledWith(["accepted"]);

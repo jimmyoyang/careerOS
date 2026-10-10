@@ -46,9 +46,9 @@ function ActivityTypesContainer() {
         <Card>
           <ResponsiveCardHeader>
             <div className="flex items-baseline gap-2">
-              <CardTitle>Activity Types / Projects</CardTitle>
+              <CardTitle>活动类型 / 项目</CardTitle>
               {!loading && totalActivityTypes > 0 && (
-                <RecordsCount count={activityTypes.length} total={totalActivityTypes} label="activity types" />
+                <RecordsCount count={activityTypes.length} total={totalActivityTypes} label="活动类型" />
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
@@ -74,7 +74,7 @@ function ActivityTypesContainer() {
                   disabled={loading}
                   className="btn btn-primary"
                 >
-                  {loading ? "Loading..." : "Load More"}
+                  {loading ? "加载中…" : "加载更多"}
                 </Button>
               </div>
             )}

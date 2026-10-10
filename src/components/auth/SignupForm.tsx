@@ -1,4 +1,5 @@
 "use client";
+import { zhMessage } from "@/lib/i18n/zh-CN";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -66,9 +67,9 @@ function SignupForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>姓名</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your Name" {...field} />
+                    <Input placeholder="请输入姓名" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -81,7 +82,7 @@ function SignupForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>邮箱</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -101,7 +102,7 @@ function SignupForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>密码</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
@@ -120,7 +121,7 @@ function SignupForm() {
                       className="absolute right-0 top-0 h-full px-3 text-muted-foreground"
                       onClick={() => setShowPassword((v) => !v)}
                       aria-label={
-                        showPassword ? "Hide password" : "Show password"
+                        showPassword ? "隐藏密码" : "显示密码"
                       }
                       tabIndex={-1}
                     >
@@ -137,7 +138,7 @@ function SignupForm() {
             />
           </div>
           <Button type="submit" disabled={isPending} className="w-full">
-            {isPending ? <Loading /> : "Create an account"}
+            {isPending ? <Loading /> : "注册账号"}
           </Button>
           <div
             className="flex h-8 items-end space-x-1"
@@ -145,7 +146,7 @@ function SignupForm() {
             aria-atomic="true"
           >
             {errorMessage && (
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{zhMessage(errorMessage)}</p>
             )}
           </div>
         </div>

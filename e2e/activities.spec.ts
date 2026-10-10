@@ -16,7 +16,7 @@ async function navigateToActivities(page: Page) {
 // Stops any activity left running by a previous test so start/stop assertions
 // begin from a clean state (mirrors the tasks-activity integration guard).
 async function stopRunningActivity(page: Page) {
-  const stopButton = page.getByRole("button", { name: "Stop" });
+  const stopButton = page.getByRole("button", { name: "结束活动" });
   if (await stopButton.isVisible().catch(() => false)) {
     await stopButton.click({ force: true });
     await expect(stopButton).not.toBeVisible({ timeout: 10000 });
@@ -34,22 +34,22 @@ async function createActivity(
   cleanup: CleanupRegistry,
 ) {
   await page.getByTestId("add-activity-btn").click();
-  await expect(page.getByText("Add New Activity")).toBeVisible();
+  await expect(page.getByText("添加活动")).toBeVisible();
 
   await page
-    .getByPlaceholder("Ex: Job Search, Learning skill, etc")
+    .getByPlaceholder("例如：找工作、学习技能等")
     .fill(activityName);
 
   await selectOrCreate(
     page,
-    "Activity Type",
-    "Create or Search activityType",
+    "活动类型",
+    "创建或搜索活动类型",
     activityType,
   );
   cleanup.activityType(activityType);
 
   await page.getByTestId("save-activity-btn").click();
-  await expect(page.getByText("Add New Activity")).not.toBeVisible({
+  await expect(page.getByText("添加活动")).not.toBeVisible({
     timeout: 10000,
   });
   cleanup.activity(activityName);
@@ -80,12 +80,12 @@ test.describe.serial("Activities Management", () => {
     ).toBeVisible({ timeout: 10000 });
 
     // A non-matching search hides the row; searching its name brings it back.
-    await page.getByPlaceholder("Search activities...").fill(uniqueName("zzz"));
+    await page.getByPlaceholder("搜索活动…").fill(uniqueName("zzz"));
     await expect(
       page.getByRole("row", { name: new RegExp(activityName, "i") }),
     ).not.toBeVisible({ timeout: 10000 });
 
-    await page.getByPlaceholder("Search activities...").fill(activityName);
+    await page.getByPlaceholder("搜索活动…").fill(activityName);
     await expect(
       page.getByRole("row", { name: new RegExp(activityName, "i") }).first(),
     ).toBeVisible({ timeout: 10000 });
@@ -101,17 +101,17 @@ test.describe.serial("Activities Management", () => {
       .first();
     await expect(row).toBeVisible({ timeout: 10000 });
 
-    await row.getByRole("button", { name: "Toggle menu" }).click();
+    await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
     await page
-      .getByRole("menuitem", { name: "Start Activity" })
+      .getByRole("menuitem", { name: "开始活动" })
       .click({ force: true });
 
     // Starting spawns a running activity; the global banner's Stop appears.
-    await expect(page.getByRole("button", { name: "Stop" })).toBeVisible({
+    await expect(page.getByRole("button", { name: "结束活动" })).toBeVisible({
       timeout: 10000,
     });
 
-    await page.getByRole("button", { name: "Stop" }).click({ force: true });
+    await page.getByRole("button", { name: "结束活动" }).click({ force: true });
   });
 
   test("should stop a running activity", async ({ page, cleanup }) => {
@@ -124,11 +124,11 @@ test.describe.serial("Activities Management", () => {
       .first();
     await expect(row).toBeVisible({ timeout: 10000 });
 
-    await row.getByRole("button", { name: "Toggle menu" }).click();
+    await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
     await page
-      .getByRole("menuitem", { name: "Start Activity" })
+      .getByRole("menuitem", { name: "开始活动" })
       .click({ force: true });
-    const stopButton = page.getByRole("button", { name: "Stop" });
+    const stopButton = page.getByRole("button", { name: "结束活动" });
     await expect(stopButton).toBeVisible({ timeout: 10000 });
 
     await stopButton.click({ force: true });
@@ -141,7 +141,7 @@ test.describe.serial("Activities Management", () => {
       .getByRole("row", { name: new RegExp(activityName, "i") })
       .first();
     await expect(stoppedRow).toBeVisible({ timeout: 10000 });
-    await expect(stoppedRow).toContainText(/min/);
+    await expect(stoppedRow).toContainText(/分钟/);
   });
 
   test("should pause and resume an activity with a break", async ({
@@ -157,38 +157,38 @@ test.describe.serial("Activities Management", () => {
       .first();
     await expect(row).toBeVisible({ timeout: 10000 });
 
-    await row.getByRole("button", { name: "Toggle menu" }).click();
+    await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
     await page
-      .getByRole("menuitem", { name: "Start Activity" })
+      .getByRole("menuitem", { name: "开始活动" })
       .click({ force: true });
 
     // Not getByRole({ name: "Stop" }) like the sibling tests: that is a
     // substring match, and the modal's Stop Activity button has the same
     // accessible name as the banner's. The aria-label attribute is the only
     // thing that distinguishes them, and only the banner sets it.
-    const stopButton = page.locator('button[aria-label="Stop Activity"]');
+    const stopButton = page.locator('button[aria-label="结束活动"]');
     await expect(stopButton).toBeVisible({ timeout: 10000 });
 
     // The banner button only opens the modal; the break starts on play.
-    await page.getByRole("button", { name: "Take a break" }).click();
+    await page.getByRole("button", { name: "休息一下" }).click();
     const breakDialog = page.getByRole("dialog");
     await expect(breakDialog).toBeVisible({ timeout: 10000 });
-    await expect(breakDialog.getByText("Break", { exact: true })).toBeVisible();
+    await expect(breakDialog.getByText("休息", { exact: true })).toBeVisible();
     await expect(breakDialog.getByText("15:00")).toBeVisible();
 
     await breakDialog
-      .getByRole("button", { name: "Start break", exact: true })
+      .getByRole("button", { name: "开始休息", exact: true })
       .click();
 
     // The centre control flipping to Resume proves the server opened the
     // break: the context only re-renders from the action's returned activity.
     const resumeButton = breakDialog.getByRole("button", {
-      name: "Resume activity",
+      name: "继续活动",
       exact: true,
     });
     await expect(resumeButton).toBeVisible({ timeout: 10000 });
     // A running break drops the close X — Resume and Stop are the only exits.
-    await expect(breakDialog.getByRole("button", { name: "Close" })).toHaveCount(
+    await expect(breakDialog.getByRole("button", { name: "关闭" })).toHaveCount(
       0,
     );
 
@@ -223,14 +223,14 @@ test.describe.serial("Activities Management", () => {
       .first();
     await expect(row).toBeVisible({ timeout: 10000 });
 
-    await row.getByRole("button", { name: "Toggle menu" }).click();
-    await page.getByRole("menuitem", { name: "Delete" }).click();
+    await row.getByRole("button", { name: /打开(?:操作)?菜单/ }).click();
+    await page.getByRole("menuitem", { name: "删除" }).click();
     await expect(page.getByRole("alertdialog")).toContainText(
-      "Are you sure you want to delete this activity?",
+      "确定删除此活动吗？",
     );
     await page
       .getByRole("alertdialog")
-      .getByRole("button", { name: "Delete" })
+      .getByRole("button", { name: "删除" })
       .click();
 
     await expect(

@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel, zhMessage } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -90,7 +92,7 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
     <Card>
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle>Automation Logs</CardTitle>
+          <CardTitle>自动化日志</CardTitle>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex flex-wrap gap-1">
               <Button
@@ -98,35 +100,35 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
                 variant={filter === "all" ? "default" : "outline"}
                 onClick={() => setFilter("all")}
               >
-                All
+                全部
               </Button>
               <Button
                 size="sm"
                 variant={filter === "info" ? "default" : "outline"}
                 onClick={() => setFilter("info")}
               >
-                Info
+                信息
               </Button>
               <Button
                 size="sm"
                 variant={filter === "success" ? "default" : "outline"}
                 onClick={() => setFilter("success")}
               >
-                Success
+                成功
               </Button>
               <Button
                 size="sm"
                 variant={filter === "warning" ? "default" : "outline"}
                 onClick={() => setFilter("warning")}
               >
-                Warning
+                警告
               </Button>
               <Button
                 size="sm"
                 variant={filter === "error" ? "default" : "outline"}
                 onClick={() => setFilter("error")}
               >
-                Error
+                错误
               </Button>
             </div>
             <Button
@@ -141,12 +143,12 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
         </div>
         {logData.startedAt && (
           <p className="text-sm text-muted-foreground">
-            Started: {format(new Date(logData.startedAt), "MMM d, h:mm:ss a")}
+            开始时间： {format(new Date(logData.startedAt), "M月d日 HH:mm:ss")}
             {logData.completedAt && (
               <>
                 {" "}
-                • Completed:{" "}
-                {format(new Date(logData.completedAt), "MMM d, h:mm:ss a")}
+                · 完成时间：{" "}
+                {format(new Date(logData.completedAt), "M月d日 HH:mm:ss")}
               </>
             )}
           </p>
@@ -158,8 +160,8 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
             <div className="flex items-center justify-center h-full text-muted-foreground">
               <p>
                 {logData.logs.length === 0
-                  ? "No logs yet. Run the automation to see logs."
-                  : "No logs match the selected filter."}
+                  ? "暂无日志，运行自动化后即可查看。"
+                  : "没有符合筛选条件的日志。"}
               </p>
             </div>
           ) : (
@@ -181,11 +183,11 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
                         variant={getLevelBadgeVariant(log.level)}
                         className="text-xs"
                       >
-                        {log.level}
+                        {zhLabel(log.level)}
                       </Badge>
                     </div>
                     <div className={getLevelColor(log.level)}>
-                      {log.message}
+                      {zhMessage(log.message)}
                     </div>
                     {log.metadata && Object.keys(log.metadata).length > 0 && (
                       <pre className="mt-1 text-xs text-muted-foreground overflow-x-auto">
@@ -203,14 +205,13 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
       <AlertDialog open={clearConfirmOpen} onOpenChange={setClearConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Clear logs?</AlertDialogTitle>
+            <AlertDialogTitle>清空日志？</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently remove all current logs. This action cannot
-              be undone.
+              这将永久删除当前所有日志，此操作无法撤销。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
               onClick={(e) => {
@@ -219,7 +220,7 @@ export function LogsTab({ logData, onClearLogs }: LogsTabProps) {
                 onClearLogs();
               }}
             >
-              Clear logs
+              清空日志
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import Link from "next/link";
 import { format } from "date-fns";
 import {
@@ -31,8 +33,8 @@ type ContactRowProps = {
 
 function overlapLabel(contact: Contact) {
   if (!contact.workedFrom) return null;
-  const to = contact.workedTo ? format(contact.workedTo, "MMM yyyy") : "present";
-  return `${format(contact.workedFrom, "MMM yyyy")} – ${to}`;
+  const to = contact.workedTo ? format(contact.workedTo, "yyyy年M月") : "至今";
+  return `${format(contact.workedFrom, "yyyy年M月")} – ${to}`;
 }
 
 function ContactRow({
@@ -65,7 +67,7 @@ function ContactRow({
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${contact.name}`}
+            aria-label={`${expanded ? "收起" : "展开"} ${contact.name}`}
           >
             {expanded ? (
               <ChevronDown className="h-4 w-4" />
@@ -91,7 +93,7 @@ function ContactRow({
                     id === contact.roleId ? "default" : "secondary"
                   }
                 >
-                  {label}
+                  {zhLabel(label)}
                 </Badge>
               ))}
             </span>
@@ -101,28 +103,28 @@ function ContactRow({
         </TableCell>
         <TableCell>{contact._count?.jobLinks ?? 0}</TableCell>
         <TableCell>
-          {contact.lastContactedAt ? format(contact.lastContactedAt, "PP") : "—"}
+          {contact.lastContactedAt ? format(contact.lastContactedAt, "yyyy年M月d日") : "—"}
         </TableCell>
         <TableCell>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button aria-haspopup="true" size="icon" variant="ghost">
                 <MoreVertical className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
+                <span className="sr-only">打开菜单</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>操作</DropdownMenuLabel>
               <DropdownMenuItem className="cursor-pointer" onClick={onEdit}>
                 <Pencil className="mr-2 h-4 w-4" />
-                Edit Contact
+                编辑联系人
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600 cursor-pointer"
                 onClick={onDelete}
               >
                 <Trash className="mr-2 h-4 w-4" />
-                Delete
+                删除
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -163,7 +165,7 @@ function ContactRow({
               {hasHistoryBlock && (
                 <div className="space-y-1">
                   <div className="font-medium text-muted-foreground">
-                    How you know them
+                    你们如何认识
                   </div>
                   {contact.relationship && <div>{contact.relationship}</div>}
                   {contact.WorkedAtCompany && (
@@ -187,10 +189,10 @@ function ContactRow({
                         href={`/dashboard/myjobs/${link.Job?.id}`}
                         className="text-primary underline-offset-4 hover:underline"
                       >
-                        {link.Job?.JobTitle.label} at {link.Job?.Company.label}
+                        {link.Job?.JobTitle.label} · {link.Job?.Company.label}
                       </Link>
                       {" — "}
-                      {link.Role.label}
+                      {zhLabel(link.Role.label)}
                     </li>
                   ))}
                 </ul>

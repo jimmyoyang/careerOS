@@ -1,3 +1,4 @@
+import { pdfWordBreaks, registerCjkFont } from "@/components/pdf-export/cjk-font";
 import React from "react";
 import { Resume, SectionType } from "@/models/profile.model";
 import { htmlToPdfNodes } from "@/components/pdf-export/html-to-pdf";
@@ -54,7 +55,8 @@ export async function generateResumePdfBlob(
   const layout = settings.template;
 
   const { pdf, Font } = await import("@react-pdf/renderer");
-  Font.registerHyphenationCallback((word) => [word]);
+  registerCjkFont(Font);
+  Font.registerHyphenationCallback(pdfWordBreaks);
 
   // Branch fully so each sheet narrows to its own template's prop type
   let document: React.ReactElement;
@@ -83,6 +85,6 @@ export async function generateResumePdfBlob(
   }
 
   const blob = await pdf(document as any).toBlob();
-  const filename = `${sanitizeFilename(resume.title, "resume")} - ${RESUME_LAYOUT_LABELS[layout]}.pdf`;
+  const filename = `${sanitizeFilename(resume.title, "简历")} - ${RESUME_LAYOUT_LABELS[layout]}.pdf`;
   return { blob, filename };
 }

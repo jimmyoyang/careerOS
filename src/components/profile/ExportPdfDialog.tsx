@@ -13,7 +13,7 @@ import { useResumeExportSettings } from "./resume-container/useResumeExportSetti
 import { useResumePdfPreview } from "./resume-container/useResumePdfPreview";
 
 const EMPTY_MESSAGE =
-  "Add your contact info and at least one section to preview.";
+  "添加联系方式和至少一个内容模块后即可预览。";
 
 type ExportPdfDialogProps = {
   open: boolean;
@@ -47,9 +47,9 @@ export function ExportPdfDialog({
     <PdfExportDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Export to PDF"
-      description="Adjust the settings and preview the file before exporting."
-      previewLabel="Resume preview"
+      title="导出 PDF"
+      description="调整设置并预览后再导出文件。"
+      previewLabel="简历预览"
       emptyMessage={EMPTY_MESSAGE}
       blob={blob}
       filename={filename}

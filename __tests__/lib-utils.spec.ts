@@ -68,40 +68,40 @@ describe("formatUrl", () => {
 
 describe("formatElapsedTime", () => {
   it("formats seconds only", () => {
-    expect(formatElapsedTime(30000)).toBe("0m 30s");
+    expect(formatElapsedTime(30000)).toBe("0 分 30 秒");
   });
 
   it("formats minutes and seconds", () => {
-    expect(formatElapsedTime(90000)).toBe("1m 30s");
+    expect(formatElapsedTime(90000)).toBe("1 分 30 秒");
   });
 
   it("formats hours, minutes, and seconds", () => {
-    expect(formatElapsedTime(3661000)).toBe("1h 1m 1s");
+    expect(formatElapsedTime(3661000)).toBe("1 小时 1 分 1 秒");
   });
 
   it("formats zero milliseconds", () => {
-    expect(formatElapsedTime(0)).toBe("0m 0s");
+    expect(formatElapsedTime(0)).toBe("0 分 0 秒");
   });
 
   it("omits hours when zero", () => {
-    expect(formatElapsedTime(60000)).toBe("1m 0s");
-    expect(formatElapsedTime(60000)).not.toContain("h");
+    expect(formatElapsedTime(60000)).toBe("1 分 0 秒");
+    expect(formatElapsedTime(60000)).not.toContain("小时");
   });
 
   it("includes hours when non-zero", () => {
-    expect(formatElapsedTime(3600000)).toBe("1h 0m 0s");
+    expect(formatElapsedTime(3600000)).toBe("1 小时 0 分 0 秒");
   });
 
   it("formats multiple hours correctly", () => {
-    expect(formatElapsedTime(7200000)).toBe("2h 0m 0s");
+    expect(formatElapsedTime(7200000)).toBe("2 小时 0 分 0 秒");
   });
 
   it("handles large durations (8 hours)", () => {
-    expect(formatElapsedTime(28800000)).toBe("8h 0m 0s");
+    expect(formatElapsedTime(28800000)).toBe("8 小时 0 分 0 秒");
   });
 
   it("floors partial seconds", () => {
-    expect(formatElapsedTime(1500)).toBe("0m 1s");
+    expect(formatElapsedTime(1500)).toBe("0 分 1 秒");
   });
 });
 
@@ -195,6 +195,12 @@ describe("getLast7Days", () => {
     expect(result).toHaveLength(7);
   });
 
+  it("uses Chinese dates by default without changing explicit grouping keys", () => {
+    const baseDate = new Date(2025, 0, 10);
+    expect(getLast7Days(undefined, baseDate)[6]).toBe("2025年1月10日");
+    expect(getLast7Days("yyyy-MM-dd", baseDate)[6]).toBe("2025-01-10");
+  });
+
   it("returns dates in chronological order using a base date", () => {
     const baseDate = new Date(2025, 0, 10);
     const result = getLast7Days("yyyy-MM-dd", baseDate);
@@ -238,7 +244,7 @@ describe("getLast7Days", () => {
   it("uses custom date format", () => {
     const baseDate = new Date(2025, 0, 10);
     const result = getLast7Days("MMM d", baseDate);
-    expect(result[6]).toBe("Jan 10");
+    expect(result[6]).toBe("1月 10");
   });
 });
 

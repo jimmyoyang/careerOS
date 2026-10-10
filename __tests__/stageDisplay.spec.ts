@@ -22,19 +22,19 @@ describe("formatStageDate", () => {
   });
 
   it("renders a short month and day", () => {
-    expect(formatStageDate(new Date(2026, 8, 24, 10, 0))).toBe("Sep 24");
+    expect(formatStageDate(new Date(2026, 8, 24, 10, 0))).toBe("9月24日");
   });
 });
 
 describe("formatStageDateTime", () => {
   it("says so plainly when there is no date", () => {
-    expect(formatStageDateTime(null, null)).toBe("No date set");
+    expect(formatStageDateTime(null, null)).toBe("未设置日期");
   });
 
   it("includes the duration only when there is one", () => {
     const past = new Date(2020, 8, 24, 10, 0);
-    expect(formatStageDateTime(past, 90)).toBe("Sep 24, 2020 · 10:00 AM · 90 min");
-    expect(formatStageDateTime(past, null)).toBe("Sep 24, 2020 · 10:00 AM");
+    expect(formatStageDateTime(past, 90)).toBe("2020年9月24日 · 10:00 · 90 分钟");
+    expect(formatStageDateTime(past, null)).toBe("2020年9月24日 · 10:00");
   });
 
   // The artboard's wording, kept only where it is true. A past stage that
@@ -42,10 +42,10 @@ describe("formatStageDateTime", () => {
   // prefix doubles as the at-a-glance upcoming/done signal.
   it('prefixes "Scheduled for" only when the stage is still ahead', () => {
     const future = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    expect(formatStageDateTime(future, 90)).toMatch(/^Scheduled for /);
+    expect(formatStageDateTime(future, 90)).toMatch(/^已安排在 /);
 
     const past = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    expect(formatStageDateTime(past, 90)).not.toMatch(/^Scheduled for /);
+    expect(formatStageDateTime(past, 90)).not.toMatch(/^已安排在 /);
   });
 });
 

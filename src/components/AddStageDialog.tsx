@@ -1,4 +1,5 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -131,7 +132,7 @@ export function AddStageDialog({
         ? await updateJobStage({ ...values, id: stage.id })
         : await addJobStage(values);
       toastActionResult(res, {
-        success: `Stage has been ${stage ? "updated" : "added"} successfully`,
+        success: `阶段已${stage ? "更新" : "添加"}`,
         onSuccess: () => {
           onSaved();
           onOpenChange(false);
@@ -144,7 +145,7 @@ export function AddStageDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{stage ? "Edit Stage" : "Add Stage"}</DialogTitle>
+          <DialogTitle>{stage ? "编辑阶段" : "添加阶段"}</DialogTitle>
           <DialogDescription>{jobLabel}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -154,7 +155,7 @@ export function AddStageDialog({
               name="stageTypeId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>STAGE</FormLabel>
+                  <FormLabel>阶段</FormLabel>
                   <div data-testid="stage-type-select">
                     <Combobox
                       options={stageTypes}
@@ -173,10 +174,10 @@ export function AddStageDialog({
               name="customLabel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>OR ENTER A CUSTOM STAGE NAME</FormLabel>
+                  <FormLabel>或填写自定义阶段名称</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. Panel Interview, Reference Check…"
+                      placeholder="例如：群面、背景调查……"
                       {...field}
                     />
                   </FormControl>
@@ -191,8 +192,9 @@ export function AddStageDialog({
                 name="customStatusId"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>PARENT STATUS</FormLabel>
+                    <FormLabel>对应状态</FormLabel>
                     <SelectFormCtrl
+                      translateOptions
                       label="status"
                       options={jobStatuses}
                       field={field}
@@ -209,7 +211,7 @@ export function AddStageDialog({
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>DATE</FormLabel>
+                    <FormLabel>日期</FormLabel>
                     <DatePicker
                       field={field}
                       presets={false}
@@ -227,7 +229,7 @@ export function AddStageDialog({
                 name="time"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>TIME</FormLabel>
+                    <FormLabel>时间</FormLabel>
                     <TimePicker field={field} fullWidth />
                     <FormMessage />
                   </FormItem>
@@ -242,9 +244,9 @@ export function AddStageDialog({
                   name="format"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>FORMAT</FormLabel>
+                      <FormLabel>形式</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. Video, Phone" {...field} />
+                        <Input placeholder="例如：视频、电话" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -255,7 +257,7 @@ export function AddStageDialog({
                   name="durationMins"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>DURATION (MIN)</FormLabel>
+                      <FormLabel>时长（分钟）</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -278,10 +280,10 @@ export function AddStageDialog({
                     name="location"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>LOCATION</FormLabel>
+                        <FormLabel>地点</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="e.g. 200 King St W, or a meeting link"
+                            placeholder="填写面试地点或会议链接"
                             {...field}
                           />
                         </FormControl>
@@ -299,8 +301,9 @@ export function AddStageDialog({
                 name="outcome"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>OUTCOME</FormLabel>
+                    <FormLabel>结果</FormLabel>
                     <SelectFormCtrl
+                      translateOptions
                       label="outcome"
                       options={OUTCOME_OPTIONS}
                       field={{ ...field, value: field.value ?? "" }}
@@ -316,11 +319,11 @@ export function AddStageDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>NOTES (OPTIONAL)</FormLabel>
+                  <FormLabel>备注（选填）</FormLabel>
                   <FormControl>
                     <Textarea
                       className="min-h-20"
-                      placeholder="Add any context for this stage…"
+                      placeholder="添加此阶段的相关说明……"
                       {...field}
                     />
                   </FormControl>
@@ -342,12 +345,11 @@ export function AddStageDialog({
                       disabled={currentLocked}
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
-                    <span className="text-[13px]">Set as current stage</span>
+                    <span className="text-[13px]">设为当前阶段</span>
                   </label>
                   {currentLocked && (
                     <p className="text-xs text-muted-foreground">
-                      This is the current stage — tick the box on another stage
-                      to move it.
+                      这是当前阶段。如需切换，请在其他阶段勾选此项。
                     </p>
                   )}
                 </FormItem>
@@ -360,10 +362,10 @@ export function AddStageDialog({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                取消
               </Button>
               <Button type="submit" disabled={isPending}>
-                {stage ? "Save Changes" : "Add Stage"}
+                {stage ? "保存修改" : "添加阶段"}
                 {isPending && <Loader className="h-4 w-4 shrink-0 spinner" />}
               </Button>
             </DialogFooter>

@@ -89,9 +89,9 @@ export function DiscoveredJobsList({
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium">No discovered jobs</h3>
+          <h3 className="text-lg font-medium">暂无发现的岗位</h3>
           <p className="text-muted-foreground text-center mt-2">
-            Jobs discovered by automations will appear here.
+            自动化发现的岗位会显示在这里。
           </p>
         </CardContent>
       </Card>
@@ -115,9 +115,9 @@ export function DiscoveredJobsList({
         {jobs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No jobs match this filter</h3>
+            <h3 className="text-lg font-medium">没有符合筛选条件的岗位</h3>
             <p className="text-muted-foreground mt-2">
-              Try selecting a different status above.
+              请尝试在上方选择其他状态。
             </p>
           </div>
         ) : (
@@ -125,14 +125,14 @@ export function DiscoveredJobsList({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Job</TableHead>
-                  <TableHead>Company</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead className="text-center">Pre-rank</TableHead>
-                  <TableHead className="text-center">Match</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Discovered</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>岗位</TableHead>
+                  <TableHead>公司</TableHead>
+                  <TableHead>地点</TableHead>
+                  <TableHead className="text-center">预排序</TableHead>
+                  <TableHead className="text-center">匹配度</TableHead>
+                  <TableHead>状态</TableHead>
+                  <TableHead>发现时间</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -68,7 +68,7 @@ function QuestionsContainer({
         setTotalQuestions(result.total);
         setPage(pageNum);
       } else {
-        toastError(result?.message || "Failed to load questions.");
+        toastError(result?.message || "加载题目失败。");
       }
       setLoading(false);
     },
@@ -83,7 +83,7 @@ function QuestionsContainer({
   const onDeleteQuestion = async (questionId: string) => {
     const result = await deleteQuestion(questionId);
     toastActionResult(result, {
-      success: "Question has been deleted successfully",
+      success: "题目已删除",
       onSuccess: () => reloadQuestions(),
     });
   };
@@ -163,12 +163,12 @@ function QuestionsContainer({
       <Card className="h-full">
         <ResponsiveCardHeader>
           <div className="flex items-baseline gap-2">
-            <CardTitle>Questions</CardTitle>
+            <CardTitle>题库</CardTitle>
             {!loading && totalQuestions > 0 && (
               <RecordsCount
                 count={questions.length}
                 total={totalQuestions}
-                label="questions"
+                label="题目"
               />
             )}
           </div>
@@ -176,7 +176,7 @@ function QuestionsContainer({
             <SearchInput
               value={searchTerm}
               onChange={setSearchTerm}
-              placeholder="Search questions..."
+              placeholder="搜索题目…"
             />
             <Button
               size="sm"
@@ -186,7 +186,7 @@ function QuestionsContainer({
             >
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                New Question
+                新建题目
               </span>
             </Button>
           </div>
@@ -195,9 +195,9 @@ function QuestionsContainer({
           {stageId && (
             <div className="mb-4 flex items-center justify-between gap-2 rounded-md border bg-muted/50 px-3 py-2 text-sm">
               <span>
-                Prep questions for{" "}
+                准备题目：{" "}
                 <span className="font-medium">
-                  {stageLabel ?? "an interview round"}
+                  {stageLabel ?? "面试轮次"}
                 </span>
               </span>
               <Button
@@ -205,7 +205,7 @@ function QuestionsContainer({
                 size="icon"
                 className="h-6 w-6 shrink-0"
                 onClick={clearStageFilter}
-                aria-label="Show all questions"
+                aria-label="显示全部题目"
               >
                 <X className="h-3.5 w-3.5" />
               </Button>
@@ -231,7 +231,7 @@ function QuestionsContainer({
                 }
                 disabled={loading}
               >
-                Load More
+                加载更多
               </Button>
             </div>
           )}

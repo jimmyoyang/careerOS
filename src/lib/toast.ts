@@ -1,21 +1,22 @@
+import { zhMessage } from "@/lib/i18n/zh-CN";
 import { toast } from "sonner";
 import type { ActionResult } from "@/models/action.model";
 
 export function toastSuccess(message: string, title?: string) {
-  if (title) toast.success(title, { description: message });
-  else toast.success(message);
+  if (title) toast.success(zhMessage(title), { description: zhMessage(message) });
+  else toast.success(zhMessage(message));
 }
 
 export function toastError(message?: string, title?: string) {
   const text = message ?? "Something went wrong. Please try again.";
-  if (title) toast.error(title, { description: text });
-  else toast.error(text);
+  if (title) toast.error(zhMessage(title), { description: zhMessage(text) });
+  else toast.error(zhMessage(text));
 }
 
 // For outcomes that are neither: a deliberate interruption is not an error.
 export function toastInfo(message: string, title?: string) {
-  if (title) toast.info(title, { description: message });
-  else toast.info(message);
+  if (title) toast.info(zhMessage(title), { description: zhMessage(message) });
+  else toast.info(zhMessage(message));
 }
 
 // Collapses the repeated success/error branch into one call.

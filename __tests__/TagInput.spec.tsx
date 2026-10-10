@@ -74,8 +74,8 @@ const MOCK_TAGS: Tag[] = [
 // Badge labels in render order, read off each chip's remove button.
 function selectedLabels(): string[] {
   return screen
-    .getAllByRole("button", { name: /^Remove / })
-    .map((btn) => btn.getAttribute("aria-label")!.replace(/^Remove /, ""));
+    .getAllByRole("button", { name: /^移除/ })
+    .map((btn) => btn.getAttribute("aria-label")!.replace(/^移除/, ""));
 }
 
 describe("TagInput Component", () => {
@@ -88,7 +88,7 @@ describe("TagInput Component", () => {
   it("renders the trigger button with default placeholder text", () => {
     render(<ControlledTagInput availableTags={MOCK_TAGS} />);
     expect(screen.getByRole("combobox")).toBeInTheDocument();
-    expect(screen.getByText("Search or add a skill...")).toBeInTheDocument();
+    expect(screen.getByText("搜索或添加技能…")).toBeInTheDocument();
   });
 
   it("opens the dropdown and shows available tags when the trigger is clicked", async () => {
@@ -157,17 +157,17 @@ describe("TagInput Component", () => {
     );
 
     const removeReactBtn = screen.getByRole("button", {
-      name: /remove react/i,
+      name: /移除React/i,
     });
     await user.click(removeReactBtn);
 
     await waitFor(() => {
       expect(
-        screen.queryByRole("button", { name: /remove react/i }),
+        screen.queryByRole("button", { name: /移除React/i }),
       ).not.toBeInTheDocument();
       // TypeScript badge should still be present
       expect(
-        screen.getByRole("button", { name: /remove typescript/i }),
+        screen.getByRole("button", { name: /移除TypeScript/i }),
       ).toBeInTheDocument();
     });
   });
@@ -226,15 +226,15 @@ describe("TagInput Component", () => {
 
     // Initially empty pool -> no chip
     expect(
-      screen.queryByRole("button", { name: /remove react/i }),
+      screen.queryByRole("button", { name: /移除React/i }),
     ).not.toBeInTheDocument();
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /remove react/i }),
+        screen.getByRole("button", { name: /移除React/i }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("button", { name: /remove node.js/i }),
+        screen.getByRole("button", { name: /移除Node.js/i }),
       ).toBeInTheDocument();
     });
   });
@@ -248,13 +248,13 @@ describe("TagInput Component", () => {
     );
 
     expect(
-      screen.getByRole("button", { name: /remove react/i }),
+      screen.getByRole("button", { name: /移除React/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /remove node.js/i }),
+      screen.getByRole("button", { name: /移除Node.js/i }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /remove typescript/i }),
+      screen.queryByRole("button", { name: /移除TypeScript/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -262,10 +262,10 @@ describe("TagInput Component", () => {
     render(<ControlledTagInput availableTags={MOCK_TAGS} />);
 
     await user.click(screen.getByRole("combobox"));
-    await user.type(screen.getByPlaceholderText("Type a skill..."), "GraphQL");
+    await user.type(screen.getByPlaceholderText("输入技能…"), "GraphQL");
 
     await waitFor(() => {
-      expect(screen.getByText(/Create "GraphQL"/i)).toBeInTheDocument();
+      expect(screen.getByText(/创建“GraphQL”/i)).toBeInTheDocument();
     });
   });
 
@@ -273,7 +273,7 @@ describe("TagInput Component", () => {
     render(<ControlledTagInput availableTags={MOCK_TAGS} />);
 
     await user.click(screen.getByRole("combobox"));
-    await user.type(screen.getByPlaceholderText("Type a skill..."), "react");
+    await user.type(screen.getByPlaceholderText("输入技能…"), "react");
 
     await waitFor(() => {
       expect(screen.queryByText(/Create "react"/i)).not.toBeInTheDocument();
@@ -292,8 +292,8 @@ describe("TagInput Component", () => {
     render(<ControlledTagInput availableTags={MOCK_TAGS} />);
 
     await user.click(screen.getByRole("combobox"));
-    await user.type(screen.getByPlaceholderText("Type a skill..."), "GraphQL");
-    await user.click(await screen.findByText(/Create "GraphQL"/i));
+    await user.type(screen.getByPlaceholderText("输入技能…"), "GraphQL");
+    await user.click(await screen.findByText(/创建“GraphQL”/i));
 
     await waitFor(() => {
       expect(createTag).toHaveBeenCalledWith("GraphQL");
@@ -314,8 +314,8 @@ describe("TagInput Component", () => {
     render(<ControlledTagInput availableTags={MOCK_TAGS} />);
 
     await user.click(screen.getByRole("combobox"));
-    await user.type(screen.getByPlaceholderText("Type a skill..."), "GraphQL");
-    await user.click(await screen.findByText(/Create "GraphQL"/i));
+    await user.type(screen.getByPlaceholderText("输入技能…"), "GraphQL");
+    await user.click(await screen.findByText(/创建“GraphQL”/i));
 
     await waitFor(() => {
       expect(createTag).toHaveBeenCalledWith("GraphQL");
@@ -341,6 +341,6 @@ describe("TagInput Component", () => {
 
     const trigger = screen.getByRole("combobox");
     expect(trigger).toBeDisabled();
-    expect(screen.getByText("Max 10 skills reached")).toBeInTheDocument();
+    expect(screen.getByText("已达到 10 个技能的上限")).toBeInTheDocument();
   });
 });

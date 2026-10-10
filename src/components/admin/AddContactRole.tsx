@@ -27,9 +27,9 @@ import { createContactRole } from "@/actions/contactRole.actions";
 
 const AddContactRoleFormSchema = z.object({
   label: z
-    .string({ error: "Role name is required." })
-    .min(1, { message: "Role name cannot be empty." })
-    .max(60, { message: "Role name must be 60 characters or fewer." }),
+    .string({ error: "请输入角色名称。" })
+    .min(1, { message: "角色名称不能为空。" })
+    .max(60, { message: "角色名称不能超过 60 个字符。" }),
 });
 
 type AddContactRoleProps = {
@@ -56,7 +56,7 @@ function AddContactRole({ reloadRoles }: AddContactRoleProps) {
     startTransition(async () => {
       const res = await createContactRole(values.label);
       toastActionResult(res, {
-        success: "Role has been added successfully.",
+        success: "角色已添加。",
         onSuccess: () => {
           setDialogOpen(false);
           reset();
@@ -76,16 +76,15 @@ function AddContactRole({ reloadRoles }: AddContactRoleProps) {
       >
         <PlusCircle className="h-3.5 w-3.5" />
         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-          New Role
+          新建角色
         </span>
       </Button>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Contact Role</DialogTitle>
+            <DialogTitle>添加联系人角色</DialogTitle>
             <DialogDescription>
-              Roles describe what a person was to you on one job — recruiter,
-              interviewer, reference.
+              角色说明联系人在某个职位申请中的身份，例如招聘人员、面试官或推荐人。
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -95,9 +94,9 @@ function AddContactRole({ reloadRoles }: AddContactRoleProps) {
                 name="label"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role Name</FormLabel>
+                    <FormLabel>角色名称</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Panel Lead, Referrer" {...field} />
+                      <Input placeholder="例如：面试组长、内推人" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -109,10 +108,10 @@ function AddContactRole({ reloadRoles }: AddContactRoleProps) {
                   variant="outline"
                   onClick={() => setDialogOpen(false)}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit" disabled={isPending}>
-                  Save
+                  保存
                   {isPending && (
                     <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />
                   )}

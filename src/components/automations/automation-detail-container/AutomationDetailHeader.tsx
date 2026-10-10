@@ -59,8 +59,7 @@ export function AutomationDetailHeader({
           {retired && (
             <p className="flex items-center gap-2 text-amber-600 text-sm">
               <AlertTriangle className="h-4 w-4 shrink-0" />
-              The {automation.jobBoard} job board was removed and no longer
-              runs. Delete this automation.
+              此 {automation.jobBoard} 招聘平台已移除，无法继续运行。请删除此自动化。
             </p>
           )}
           {(automation.keywords || automation.location) && (
@@ -79,7 +78,7 @@ export function AutomationDetailHeader({
         {!retired && (
           <Button variant="outline" onClick={onEdit}>
             <Pencil className="h-4 w-4 mr-2" />
-            Edit
+            编辑
           </Button>
         )}
         <Button
@@ -88,7 +87,7 @@ export function AutomationDetailHeader({
           onClick={onDelete}
         >
           <Trash2 className="h-4 w-4 mr-2" />
-          Delete
+          删除
         </Button>
         {!retired && (
           <Button
@@ -103,7 +102,7 @@ export function AutomationDetailHeader({
             ) : (
               <Play className="h-4 w-4 mr-2" />
             )}
-            {automation.status === "active" ? "Pause" : "Resume"}
+            {automation.status === "active" ? "暂停" : "恢复"}
           </Button>
         )}
         {retired ? null : runActive ? (
@@ -113,7 +112,7 @@ export function AutomationDetailHeader({
             disabled={aborting}
           >
             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            {aborting ? "Aborting…" : "Abort Run"}
+            {aborting ? "正在中止…" : "中止运行"}
           </Button>
         ) : (
           <Button
@@ -124,12 +123,12 @@ export function AutomationDetailHeader({
             }
             title={
               jobsBusy
-                ? "Wait for the in-progress job analysis to finish"
+                ? "请等待正在进行的岗位分析完成"
                 : undefined
             }
           >
             <PlayCircle className="h-4 w-4 mr-2" />
-            Run Now
+            立即运行
           </Button>
         )}
       </div>

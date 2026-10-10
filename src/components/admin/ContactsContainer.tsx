@@ -61,12 +61,12 @@ function ContactsContainer() {
       <Card x-chunk="dashboard-06-chunk-0">
         <ResponsiveCardHeader>
           <div className="flex items-baseline gap-2">
-            <CardTitle>Contacts</CardTitle>
+            <CardTitle>联系人</CardTitle>
             {!list.initialLoading && list.total > 0 && (
               <RecordsCount
                 count={list.contacts.length}
                 total={list.total}
-                label="contacts"
+                label="联系人"
               />
             )}
           </div>
@@ -79,7 +79,7 @@ function ContactsContainer() {
             <SearchInput
               value={searchTerm}
               onChange={setSearchTerm}
-              placeholder="Search contacts..."
+              placeholder="搜索联系人…"
             />
             <AddContact
               editContact={editContact}

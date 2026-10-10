@@ -1,5 +1,7 @@
 "use client";
 
+import { zhMessage } from "@/lib/i18n/zh-CN";
+
 import { useCallback, useEffect, useState } from "react";
 import { XIcon } from "lucide-react";
 import type { TextUIPart, UIMessage } from "ai";
@@ -33,8 +35,8 @@ type ComposerPart = TextUIPart | AgentPastePart;
 function chipLabel(chip: AgentPastePartData): string {
   const chars = chip.chars.toLocaleString();
   return chip.truncated
-    ? `Pasted posting · ${chars} chars (truncated)`
-    : `Pasted posting · ${chars} chars`;
+    ? `已粘贴招聘信息 · ${chars} 字符（已截断）`
+    : `已粘贴招聘信息 · ${chars} 字符`;
 }
 
 // Synthesized at render time only. The wire format stays the custom data part:
@@ -145,10 +147,10 @@ export function AgentChatInput() {
       {error ? (
         <Alert variant="destructive" className="flex items-start gap-2">
           <AlertDescription className="flex-1">
-            {error.message}
+            {zhMessage(error.message)}
           </AlertDescription>
           <Button
-            aria-label="Dismiss error"
+            aria-label="关闭错误提示"
             className="size-6 shrink-0"
             onClick={clearError}
             size="icon"
@@ -165,13 +167,13 @@ export function AgentChatInput() {
           <div className="min-w-0 flex-1">
             <p className="text-xs text-muted-foreground">
               {approvalPending
-                ? "Queued — waiting on your approval above"
-                : "Queued — sends when the current reply finishes"}
+                ? "已排队，等待您确认上方请求"
+                : "已排队，将在当前回复完成后发送"}
             </p>
             <p className="truncate">{queuedText(queued.parts)}</p>
           </div>
           <Button
-            aria-label="Remove from queue"
+            aria-label="从队列移除"
             className="size-6 shrink-0"
             onClick={clearQueued}
             size="icon"
@@ -184,7 +186,7 @@ export function AgentChatInput() {
       ) : null}
 
       {preflight.checked && !preflight.ok && preflight.error ? (
-        <p className="text-xs text-destructive">{preflight.error}</p>
+        <p className="text-xs text-destructive">{zhMessage(preflight.error)}</p>
       ) : null}
 
       {/* No PromptInputBody: it wraps these in a display:contents div, and
@@ -201,7 +203,7 @@ export function AgentChatInput() {
                 {/* Not AttachmentRemove: it repeats its label in an sr-only
                     span, so the chip's wording would appear twice. */}
                 <Button
-                  aria-label="Remove pasted content"
+                  aria-label="移除粘贴内容"
                   className="size-5 shrink-0 rounded p-0 [&_svg]:size-2.5"
                   onClick={() => setChip(undefined)}
                   type="button"
@@ -220,14 +222,14 @@ export function AgentChatInput() {
           key={composerNonce}
           onChange={(event) => setText(event.currentTarget.value)}
           onPaste={onPaste}
-          placeholder="Ask or paste a job posting…"
+          placeholder="提问或粘贴招聘信息…"
         />
         <PromptInputFooter>
           <span className="text-xs text-muted-foreground">
-            {approvalPending && !queued ? "Waiting on your approval above" : ""}
+            {approvalPending && !queued ? "等待您确认上方请求" : ""}
           </span>
           <PromptInputSubmit
-            aria-label={isGenerating ? "Stop response" : "Send"}
+            aria-label={isGenerating ? "停止回复" : "发送"}
             disabled={!isGenerating && !canSend}
             className="[&_svg]:size-3.5"
             onStop={onStop}

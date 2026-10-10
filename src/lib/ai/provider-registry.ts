@@ -35,7 +35,7 @@ export const PROVIDER_REGISTRY: Record<string, ProviderRegistryEntry> = {
     keyConfig: {
       placeholder: "http://127.0.0.1:11434",
       inputType: "text",
-      description: "Base URL for your Ollama instance",
+      description: "Ollama 服务地址",
       sensitive: false,
     },
   },
@@ -56,7 +56,7 @@ export const PROVIDER_REGISTRY: Record<string, ProviderRegistryEntry> = {
     keyConfig: {
       placeholder: "sk-...",
       inputType: "password",
-      description: "Used for GPT models in resume review and job matching",
+      description: "用于 GPT 模型的简历评估与职位匹配",
       sensitive: true,
     },
   },
@@ -74,7 +74,7 @@ export const PROVIDER_REGISTRY: Record<string, ProviderRegistryEntry> = {
     keyConfig: {
       placeholder: "sk-...",
       inputType: "password",
-      description: "Used for DeepSeek models in resume review and job matching",
+      description: "用于 DeepSeek 模型的简历评估与职位匹配",
       sensitive: true,
     },
   },
@@ -92,7 +92,7 @@ export const PROVIDER_REGISTRY: Record<string, ProviderRegistryEntry> = {
     keyConfig: {
       placeholder: "sk-or-...",
       inputType: "password",
-      description: "Access 200+ models from multiple providers via OpenRouter",
+      description: "通过 OpenRouter 使用不同服务商的模型",
       sensitive: true,
     },
   },
@@ -111,7 +111,7 @@ export const PROVIDER_REGISTRY: Record<string, ProviderRegistryEntry> = {
     keyConfig: {
       placeholder: "AIza...",
       inputType: "password",
-      description: "Used for Gemini models in resume review and job matching",
+      description: "用于 Gemini 模型的简历评估与职位匹配",
       sensitive: true,
     },
   },

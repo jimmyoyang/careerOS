@@ -140,16 +140,16 @@ export function AutomationDetailContainer({
 
       <Tabs value={activeTab} onValueChange={handleTabChange}>
         <TabsList>
-          <TabsTrigger value="logs">Logs</TabsTrigger>
+          <TabsTrigger value="logs">日志</TabsTrigger>
           <TabsTrigger value="jobs">
-            Discovered Jobs
+            发现的岗位
             {newJobsCount > 0 && (
               <Badge variant="secondary" className="ml-2">
                 {newJobsCount}
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="history">Run History</TabsTrigger>
+          <TabsTrigger value="history">运行记录</TabsTrigger>
         </TabsList>
         <TabsContent value="logs" className="mt-4">
           <LogsTab logData={logData} onClearLogs={handleClearLogs} />

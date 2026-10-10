@@ -1,4 +1,5 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import Link from "next/link";
 import {
   Check,
@@ -66,7 +67,7 @@ function InterviewRow({
   const saveOutcome = async (value: string | null) => {
     const res = await setStageOutcome(interview.id, value);
     toastActionResult(res, {
-      success: "Outcome saved",
+      success: "结果已保存",
       onSuccess: () => onOutcomeSaved(),
     });
   };
@@ -79,7 +80,7 @@ function InterviewRow({
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${title}`}
+            aria-label={`${expanded ? "收起" : "展开"} ${title}`}
           >
             {expanded ? (
               <ChevronDown className="h-4 w-4" />
@@ -139,14 +140,14 @@ function InterviewRow({
             <DropdownMenuTrigger asChild>
               <Button aria-haspopup="true" size="icon" variant="ghost">
                 <MoreVertical className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
+                <span className="sr-only">打开菜单</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>操作</DropdownMenuLabel>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger className="cursor-pointer">
-                  Set outcome
+                  设置结果
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   {STAGE_OUTCOMES.map((option) => (
@@ -155,7 +156,7 @@ function InterviewRow({
                       className="cursor-pointer"
                       onClick={() => saveOutcome(option.value)}
                     >
-                      {option.label}
+                      {zhLabel(option.label)}
                     </DropdownMenuItem>
                   ))}
                   {interview.outcome && (
@@ -163,21 +164,21 @@ function InterviewRow({
                       className="cursor-pointer"
                       onClick={() => saveOutcome(null)}
                     >
-                      Clear outcome
+                      清除结果
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
               <DropdownMenuItem className="cursor-pointer" onClick={onEdit}>
                 <Pencil className="mr-2 h-4 w-4" />
-                Edit round
+                编辑轮次
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link
                   href={`/dashboard/myjobs/${interview.Job.id}?tab=timeline`}
                 >
                   <ExternalLink className="mr-2 h-4 w-4" />
-                  Open job timeline
+                  打开职位进展记录
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -191,12 +192,11 @@ function InterviewRow({
               <div className="space-y-4">
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Interviewers ({interview.interviewers.length})
+                    面试官（{interview.interviewers.length}）
                   </div>
                   {interview.interviewers.length === 0 ? (
                     <p className="mt-1 text-muted-foreground">
-                      Nobody linked yet — link interviewers on the job&apos;s
-                      Timeline tab.
+                      尚未关联面试官，可在职位的进展记录中添加。
                     </p>
                   ) : (
                     <ul className="mt-2 space-y-2">
@@ -227,7 +227,7 @@ function InterviewRow({
                 {interview.notes && (
                   <div>
                     <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      Notes
+                      笔记
                     </div>
                     <p className="mt-1 whitespace-pre-wrap text-muted-foreground">
                       {interview.notes}
@@ -238,20 +238,20 @@ function InterviewRow({
               <div>
                 <div className="flex items-baseline gap-3">
                   <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Prep questions ({prepSummary(interview.prepQuestions)})
+                    准备题目（{prepSummary(interview.prepQuestions)}）
                   </div>
                   {interview.prepQuestions.length > 0 && (
                     <Link
                       href={`/dashboard/questions?stage=${interview.id}`}
                       className="whitespace-nowrap text-xs text-primary underline-offset-4 hover:underline"
                     >
-                      View answers
+                      查看答案
                     </Link>
                   )}
                 </div>
                 {interview.prepQuestions.length === 0 ? (
                   <p className="mt-1 text-muted-foreground">
-                    No prep list yet — build one on the job&apos;s Timeline tab.
+                    暂无准备清单，可在职位的进展记录中创建。
                   </p>
                 ) : (
                   <ul className="mt-2 space-y-2">

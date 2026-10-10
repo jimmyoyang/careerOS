@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 
 import {
   Select,
@@ -35,14 +37,14 @@ export function InterviewFilters({
         value={stageTypeId ?? ALL}
         onValueChange={(v) => onRoundChange(v === ALL ? undefined : v)}
       >
-        <SelectTrigger aria-label="Filter by round" className="h-8 w-[180px]">
+        <SelectTrigger aria-label="按轮次筛选" className="h-8 w-[180px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={ALL}>All rounds</SelectItem>
+          <SelectItem value={ALL}>全部轮次</SelectItem>
           {rounds.map((round) => (
             <SelectItem key={round.id} value={round.id}>
-              {round.label}
+              {zhLabel(round.label)}
             </SelectItem>
           ))}
         </SelectContent>
@@ -51,11 +53,11 @@ export function InterviewFilters({
         value={companyId ?? ALL}
         onValueChange={(v) => onCompanyChange(v === ALL ? undefined : v)}
       >
-        <SelectTrigger aria-label="Filter by company" className="h-8 w-[180px]">
+        <SelectTrigger aria-label="按公司筛选" className="h-8 w-[180px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={ALL}>All companies</SelectItem>
+          <SelectItem value={ALL}>全部公司</SelectItem>
           {companies.map((company) => (
             <SelectItem key={company.id} value={company.id}>
               {company.label}

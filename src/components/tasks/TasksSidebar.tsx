@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -35,7 +37,7 @@ function TasksSidebar({
       <button
         onClick={() => setCollapsed((prev) => !prev)}
         className="absolute -right-3 top-4 z-10 flex items-center justify-center w-6 h-6 rounded-full border bg-background text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        aria-label={collapsed ? "展开侧边栏" : "收起侧边栏"}
       >
         {collapsed ? (
           <ChevronRight className="h-3.5 w-3.5" />
@@ -46,7 +48,7 @@ function TasksSidebar({
 
       {!collapsed && (
         <>
-          <h3 className="font-semibold mb-4 text-sm px-1">Activity Types</h3>
+          <h3 className="font-semibold mb-4 text-sm px-1">活动类型</h3>
           <ul className="space-y-1">
             <li>
               <button
@@ -59,7 +61,7 @@ function TasksSidebar({
                 )}
               >
                 <span className="flex justify-between items-center">
-                  <span>All</span>
+                  <span>全部</span>
                   <span className="text-muted-foreground text-xs">
                     {totalTasks}
                   </span>
@@ -80,7 +82,7 @@ function TasksSidebar({
                     )}
                   >
                     <span className="flex justify-between items-center">
-                      <span className="truncate">{type.label}</span>
+                      <span className="truncate">{zhLabel(type.label)}</span>
                       <span className="text-muted-foreground text-xs">
                         {type.taskCount}
                       </span>

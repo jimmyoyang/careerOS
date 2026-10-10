@@ -59,10 +59,10 @@ function CreateResume({
   const [selectedModel, setSelectedModel] = useState<AiModel>(defaultModel);
   const router = useRouter();
 
-  const pageTitle = resumeToEdit ? "Edit Resume Title" : "Create Resume";
+  const pageTitle = resumeToEdit ? "编辑简历标题" : "创建简历";
   const pageDescription = resumeToEdit
-    ? "Update the title of this resume."
-    : "Create a new resume for your profile.";
+    ? "更新这份简历的标题。"
+    : "在个人资料中创建一份简历。";
 
   const form = useForm<z.infer<typeof CreateResumeFormSchema>>({
     resolver: zodResolver(CreateResumeFormSchema),
@@ -179,7 +179,7 @@ function CreateResume({
       if (newResumeId) {
         setNewResumeId(newResumeId);
       }
-      toastSuccess(`Resume title has been ${resumeToEdit ? "updated" : "created"} successfully`);
+      toastSuccess(`简历标题已${resumeToEdit ? "更新" : "创建"}`);
     });
   };
 
@@ -207,11 +207,11 @@ function CreateResume({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Resume Title</FormLabel>
+                    <FormLabel>简历标题</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Ex: Full Stack Developer Angular, Java"
+                        placeholder="例如：全栈开发工程师（Angular、Java）"
                         data-testid="resume-title-input"
                       />
                     </FormControl>
@@ -234,7 +234,7 @@ function CreateResume({
                 name="file"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Upload Resume (Optional)</FormLabel>
+                    <FormLabel>上传简历（选填）</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
@@ -271,17 +271,17 @@ function CreateResume({
                 >
                   <span className="flex items-center gap-1">
                     <Sparkles className="h-3.5 w-3.5" />
-                    Auto-fill with AI
+                    使用 AI 自动填写
                   </span>
                   {!aiAvailable && (
                     <span className="text-muted-foreground text-xs block mt-0.5">
-                      AI unavailable —{" "}
+                      AI 暂不可用，{" "}
                       <Link
                         href="/dashboard/settings"
                         className="underline hover:text-foreground"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        Configure AI under Settings
+                        请前往设置配置 AI
                       </Link>
                     </span>
                   )}
@@ -297,10 +297,10 @@ function CreateResume({
                   className="mt-2 md:mt-0"
                   onClick={closeDialog}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit" disabled={!isValid || isPending}>
-                  Save
+                  保存
                   {isPending && (
                     <Loader className="h-4 w-4 shrink-0 animate-spin" />
                   )}

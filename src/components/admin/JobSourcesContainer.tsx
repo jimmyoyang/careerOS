@@ -47,9 +47,9 @@ function JobSourcesContainer() {
         <Card x-chunk="dashboard-06-chunk-0">
           <ResponsiveCardHeader>
             <div className="flex items-baseline gap-2">
-              <CardTitle>Job Sources</CardTitle>
+              <CardTitle>职位来源</CardTitle>
               {!loading && totalJobSources > 0 && (
-                <RecordsCount count={sources.length} total={totalJobSources} label="job sources" />
+                <RecordsCount count={sources.length} total={totalJobSources} label="职位来源" />
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
@@ -74,7 +74,7 @@ function JobSourcesContainer() {
                   disabled={loading}
                   className="btn btn-primary"
                 >
-                  {loading ? "Loading..." : "Load More"}
+                  {loading ? "加载中…" : "加载更多"}
                 </Button>
               </div>
             )}

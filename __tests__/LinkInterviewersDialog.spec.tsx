@@ -37,7 +37,7 @@ describe("LinkInterviewersDialog", () => {
     render(<LinkInterviewersDialog open stage={stage} onOpenChange={() => {}} onLinked={() => {}} />);
 
     expect(
-      await screen.findByText("Final / Onsite Interview · Sep 24, 2026"),
+      await screen.findByText("终面 / 现场面试 · 2026年9月24日"),
     ).toBeInTheDocument();
   });
 
@@ -46,8 +46,8 @@ describe("LinkInterviewersDialog", () => {
 
     expect(await screen.findByText("Priya Nair")).toBeInTheDocument();
     expect(screen.getByText("VP Engineering · Acme Corp")).toBeInTheDocument();
-    expect(screen.getByLabelText(/Priya Nair is already linked/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Add John Smith/ })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Priya Nair已关联/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /添加 John Smith/ })).toBeInTheDocument();
   });
 
   it("filters the list by the search box", async () => {
@@ -55,7 +55,7 @@ describe("LinkInterviewersDialog", () => {
     await screen.findByText("John Smith");
 
     await userEvent.type(
-      screen.getByPlaceholderText("Search contacts by name or company…"),
+      screen.getByPlaceholderText("按姓名或公司搜索联系人…"),
       "john",
     );
 
@@ -67,11 +67,11 @@ describe("LinkInterviewersDialog", () => {
     render(<LinkInterviewersDialog open stage={stage} onOpenChange={() => {}} onLinked={() => {}} />);
     await screen.findByText("John Smith");
 
-    await userEvent.click(screen.getByRole("button", { name: /Add John Smith/ }));
+    await userEvent.click(screen.getByRole("button", { name: /添加 John Smith/ }));
 
     expect(linkStageInterviewer).toHaveBeenCalledWith("st1", "c2");
     expect(
-      await screen.findByRole("button", { name: "Done — 1 interviewer linked" }),
+      await screen.findByRole("button", { name: "完成，已关联 1 位面试官" }),
     ).toBeInTheDocument();
   });
 });

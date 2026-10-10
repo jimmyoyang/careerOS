@@ -6,17 +6,17 @@ import {
 } from "@/components/developer/DeveloperContainer";
 
 export const metadata: Metadata = {
-  title: "Developer Options | JobSync",
-  description: "Developer tools and utilities for development mode",
+  title: "开发者选项 | CareerOS",
+  description: "开发模式下使用的工具",
 };
 
 export default function DeveloperPage() {
   return (
     <>
       <div className="col-span-3">
-        <h1 className="text-3xl font-bold tracking-tight">Developer Options</h1>
+        <h1 className="text-3xl font-bold tracking-tight">开发者选项</h1>
         <p className="text-muted-foreground mt-2">
-          Tools for development and testing. Only available in development mode.
+          开发与测试工具，仅在开发模式下可用。
         </p>
       </div>
       <div className="col-start-1 self-start">

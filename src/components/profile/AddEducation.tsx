@@ -46,10 +46,10 @@ function AddEducation({
   setDialogOpen,
   educationToEdit,
 }: AddEducationProps) {
-  const pageTitle = educationToEdit ? "Edit Education" : "Add Education";
+  const pageTitle = educationToEdit ? "编辑教育经历" : "添加教育经历";
   const pageDescription = educationToEdit
-    ? "Update this education entry on your resume."
-    : "Add an education entry to your resume.";
+    ? "更新简历中的这段教育经历。"
+    : "向简历添加教育经历。";
   const [isPending, startTransition] = useTransition();
   const [locations, setLocations] = useState<JobLocation[]>([]);
 
@@ -132,9 +132,9 @@ function AddEducation({
       } else {
         reset();
         setDialogOpen(false);
-        toastSuccess(`Education has been ${
-          educationToEdit ? "updated" : "added"
-        } successfully`);
+        toastSuccess(`教育经历已${
+          educationToEdit ? "更新" : "添加"
+        }`);
       }
     });
   };
@@ -162,9 +162,9 @@ function AddEducation({
                     name="sectionTitle"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Section Title</FormLabel>
+                        <FormLabel>模块标题</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Ex: Education" />
+                          <Input {...field} placeholder="例如：教育经历" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -182,9 +182,9 @@ function AddEducation({
                 name="institution"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>School</FormLabel>
+                    <FormLabel>学校</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Ex: Stanford" />
+                      <Input {...field} placeholder="例如：斯坦福大学" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,7 +199,7 @@ function AddEducation({
                 name="location"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>地点</FormLabel>
                     <FormControl>
                       <Combobox options={locations!} field={field} creatable />
                     </FormControl>
@@ -216,9 +216,9 @@ function AddEducation({
                 name="degree"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Degree</FormLabel>
+                    <FormLabel>学位</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Ex: Bachelor's" />
+                      <Input {...field} placeholder="例如：学士" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -232,9 +232,9 @@ function AddEducation({
                 name="fieldOfStudy"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Field of study</FormLabel>
+                    <FormLabel>专业</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Ex: Computer Science" />
+                      <Input {...field} placeholder="例如：计算机科学" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -249,7 +249,7 @@ function AddEducation({
                 name="startDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Start Date</FormLabel>
+                    <FormLabel>开始日期</FormLabel>
                     <DatePicker
                       field={field}
                       presets={false}
@@ -269,7 +269,7 @@ function AddEducation({
                 name="endDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>End Date</FormLabel>
+                    <FormLabel>结束日期</FormLabel>
                     <DatePicker
                       field={field}
                       presets={false}
@@ -297,7 +297,7 @@ function AddEducation({
                       }}
                     />
                     <FormLabel className="flex items-center ml-4 mb-2">
-                      {field.value ? "Degree Completed" : "Currently Studying"}
+                      {field.value ? "已毕业" : "在读"}
                     </FormLabel>
 
                     <FormMessage />
@@ -313,7 +313,7 @@ function AddEducation({
                 name="description"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>描述</FormLabel>
                     <FormControl>
                       <TiptapEditor field={field} />
                     </FormControl>

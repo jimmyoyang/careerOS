@@ -218,7 +218,7 @@ export function AddJob({
     startTransition(async () => {
       const result = editJob ? await updateJob(data) : await addJob(data);
       toastActionResult(result, {
-        success: `Job has been ${editJob ? "updated" : "created"} successfully`,
+        success: `职位已${editJob ? "更新" : "创建"}`,
         onSuccess: () => {
           saveToLocalStorage(
             APP_CONSTANTS.LAST_JOB_LOCATION_STORAGE_KEY,
@@ -236,10 +236,10 @@ export function AddJob({
     });
   }
 
-  const pageTitle = editJob ? "Edit Job" : "Add Job";
+  const pageTitle = editJob ? "编辑职位" : "添加职位";
   const pageDescription = editJob
-    ? "Update the details of this job application."
-    : "Track a new job application.";
+    ? "更新这条求职申请的详细信息。"
+    : "记录新的求职申请。";
 
   const addJobForm = () => {
     reset(newJobDefaultValues);
@@ -297,7 +297,7 @@ export function AddJob({
         >
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            New Job
+            新建职位
           </span>
         </Button>
       )}
@@ -322,7 +322,7 @@ export function AddJob({
                     name="title"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Job Title</FormLabel>
+                        <FormLabel>职位名称</FormLabel>
                         <FormControl>
                           <Combobox
                             options={jobTitles}
@@ -343,10 +343,10 @@ export function AddJob({
                     name="jobUrl"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Job URL</FormLabel>
+                        <FormLabel>职位链接</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Copy and paste job link here"
+                            placeholder="将职位链接粘贴到这里"
                             {...field}
                           />
                         </FormControl>
@@ -362,7 +362,7 @@ export function AddJob({
                     name="company"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Company</FormLabel>
+                        <FormLabel>公司</FormLabel>
                         <FormControl>
                           <Combobox
                             options={companies}
@@ -382,7 +382,7 @@ export function AddJob({
                     name="location"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Job Location</FormLabel>
+                        <FormLabel>工作地点</FormLabel>
                         <FormControl>
                           <Combobox
                             options={locations}
@@ -402,7 +402,7 @@ export function AddJob({
                     name="type"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="mb-2">Job Type</FormLabel>
+                        <FormLabel className="mb-2">职位类型</FormLabel>
                         <RadioGroup
                           name="type"
                           onValueChange={field.onChange}
@@ -435,7 +435,7 @@ export function AddJob({
                     name="workplaceType"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="mb-2">Workplace Type</FormLabel>
+                        <FormLabel className="mb-2">办公方式</FormLabel>
                         <RadioGroup
                           name="workplaceType"
                           onValueChange={field.onChange}
@@ -470,7 +470,7 @@ export function AddJob({
                     name="source"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Job Source</FormLabel>
+                        <FormLabel>职位来源</FormLabel>
                         <Combobox
                           options={jobSources}
                           field={field}
@@ -489,9 +489,10 @@ export function AddJob({
                     name="status"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Status</FormLabel>
+                        <FormLabel>状态</FormLabel>
                         <SelectFormCtrl
-                          label="Job Status"
+                          label="职位状态"
+                          translateOptions
                           options={jobStatuses}
                           field={{
                             ...field,
@@ -514,7 +515,7 @@ export function AddJob({
                     name="dateApplied"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Date Applied</FormLabel>
+                        <FormLabel>投递日期</FormLabel>
                         <DatePicker
                           field={{
                             ...field,
@@ -539,7 +540,7 @@ export function AddJob({
                     name="dueDate"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Due Date</FormLabel>
+                        <FormLabel>截止日期</FormLabel>
                         <DatePicker
                           field={field}
                           presets={true}
@@ -558,13 +559,13 @@ export function AddJob({
                     name="salaryRange"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Salary Range</FormLabel>
+                        <FormLabel>薪资范围</FormLabel>
                         <Combobox
                           options={SALARY_RANGES}
                           field={field}
                           creatable
                           freeText
-                          label="Salary Range"
+                          label="薪资范围"
                         />
                         <FormMessage />
                       </FormItem>
@@ -579,9 +580,9 @@ export function AddJob({
                     name="resume"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Resume</FormLabel>
+                        <FormLabel>简历</FormLabel>
                         <SelectFormCtrl
-                          label="Resume"
+                          label="简历"
                           options={resumes}
                           field={field}
                         />
@@ -590,7 +591,7 @@ export function AddJob({
                     )}
                   />
                   <Button variant="link" type="button" onClick={createResume}>
-                    Add New
+                    新增
                   </Button>
                   <CreateResume
                     resumeDialogOpen={resumeDialogOpen}
@@ -607,9 +608,9 @@ export function AddJob({
                     name="coverLetter"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Cover Letter</FormLabel>
+                        <FormLabel>求职信</FormLabel>
                         <SelectFormCtrl
-                          label="Cover Letter"
+                          label="求职信"
                           options={coverLetters}
                           field={field}
                         />
@@ -626,7 +627,7 @@ export function AddJob({
                     name="tags"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Add Skill</FormLabel>
+                        <FormLabel>添加技能</FormLabel>
                         <FormControl>
                           <TagInput
                             availableTags={availableTags}
@@ -648,7 +649,7 @@ export function AddJob({
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel id="job-description-label">
-                          Job Description
+                          职位描述
                         </FormLabel>
                         <FormControl>
                           <TiptapEditor field={field} />
@@ -670,11 +671,11 @@ export function AddJob({
                         className="mt-2 md:mt-0 w-full"
                         onClick={closeDialog}
                       >
-                        Cancel
+                        取消
                       </Button>
                     </div>
                     <Button type="submit" data-testid="save-job-btn">
-                      Save
+                      保存
                       {isPending && (
                         <Loader className="h-4 w-4 shrink-0 spinner" />
                       )}

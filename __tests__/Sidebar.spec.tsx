@@ -28,7 +28,7 @@ describe("NavLink - active state", () => {
     render(
       <TooltipProvider>
         <NavLink
-          label="Jobs"
+          label="职位管理"
           Icon={Briefcase}
           route={route}
           pathname={pathname}
@@ -68,7 +68,7 @@ describe("NavLink - label rendering", () => {
     render(
       <TooltipProvider>
         <NavLink
-          label="Jobs"
+          label="职位管理"
           Icon={Briefcase}
           route="/dashboard/myjobs"
           pathname="/dashboard"
@@ -80,7 +80,7 @@ describe("NavLink - label rendering", () => {
   it("shows a visible label when expanded", () => {
     renderNavLink(true);
 
-    expect(screen.getByText("Jobs")).not.toHaveClass("sr-only");
+    expect(screen.getByText("职位管理")).not.toHaveClass("sr-only");
   });
 
   // The icon sits in a fixed-width lead box, so the label can stay in
@@ -88,16 +88,16 @@ describe("NavLink - label rendering", () => {
   it("fades the label out visually when collapsed", () => {
     renderNavLink(false);
 
-    expect(screen.getByText("Jobs")).toHaveClass("opacity-0");
+    expect(screen.getByText("职位管理")).toHaveClass("opacity-0");
   });
 
   it("keeps an accessible name in both states", () => {
     const { unmount } = renderNavLink(false);
-    expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "职位管理" })).toBeInTheDocument();
     unmount();
 
     renderNavLink(true);
-    expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "职位管理" })).toBeInTheDocument();
   });
 });
 
@@ -110,11 +110,11 @@ describe("Sidebar", () => {
   it("renders a link for each nav item", () => {
     renderSidebar();
 
-    expect(screen.getByRole("link", { name: "Dashboard" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "工作台" })).toHaveAttribute(
       "href",
       "/dashboard"
     );
-    expect(screen.getByRole("link", { name: "Jobs" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "职位管理" })).toHaveAttribute(
       "href",
       "/dashboard/myjobs"
     );
@@ -126,11 +126,11 @@ describe("Sidebar", () => {
 
     expect(screen.getByText(testUser.email)).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "User menu" }));
+    await user.click(screen.getByRole("button", { name: "用户菜单" }));
 
     // Radix gives the menu item role="menuitem" rather than "link".
     expect(
-      await screen.findByRole("menuitem", { name: "Settings" })
+      await screen.findByRole("menuitem", { name: "设置" })
     ).toHaveAttribute("href", "/dashboard/settings");
   });
 
@@ -139,12 +139,12 @@ describe("Sidebar", () => {
 
     renderSidebar();
 
-    expect(screen.getByRole("link", { name: "Tasks" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "待办事项" })).toHaveAttribute(
       "aria-current",
       "page"
     );
     expect(
-      screen.getByRole("link", { name: "Dashboard" })
+      screen.getByRole("link", { name: "工作台" })
     ).not.toHaveAttribute("aria-current");
   });
 
@@ -155,9 +155,9 @@ describe("Sidebar", () => {
     // button inside the sidebar is the account menu trigger.
     const sidebar = within(screen.getByRole("complementary"));
     expect(
-      sidebar.queryByRole("button", { name: "Collapse sidebar" })
+      sidebar.queryByRole("button", { name: "收起侧栏" })
     ).toBeNull();
-    expect(sidebar.getByRole("button", { name: "User menu" })).toBeInTheDocument();
+    expect(sidebar.getByRole("button", { name: "用户菜单" })).toBeInTheDocument();
   });
 });
 
@@ -171,20 +171,20 @@ describe("SidebarToggle", () => {
     const user = userEvent.setup();
     renderSidebar();
 
-    const toggle = screen.getByRole("button", { name: "Collapse sidebar" });
+    const toggle = screen.getByRole("button", { name: "收起侧栏" });
     expect(toggle).toHaveAttribute("aria-expanded", "true");
 
     await user.click(toggle);
 
     const expandToggle = screen.getByRole("button", {
-      name: "Expand sidebar",
+      name: "展开侧栏",
     });
     expect(expandToggle).toHaveAttribute("aria-expanded", "false");
 
     await user.click(expandToggle);
 
     expect(
-      screen.getByRole("button", { name: "Collapse sidebar" })
+      screen.getByRole("button", { name: "收起侧栏" })
     ).toHaveAttribute("aria-expanded", "true");
   });
 
@@ -192,18 +192,18 @@ describe("SidebarToggle", () => {
     const user = userEvent.setup();
     renderSidebar();
 
-    expect(screen.getByText("Jobs")).not.toHaveClass("opacity-0");
+    expect(screen.getByText("职位管理")).not.toHaveClass("opacity-0");
 
-    await user.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    await user.click(screen.getByRole("button", { name: "收起侧栏" }));
 
-    expect(screen.getByText("Jobs")).toHaveClass("opacity-0");
+    expect(screen.getByText("职位管理")).toHaveClass("opacity-0");
   });
 
   it("persists the collapsed state as a cookie", async () => {
     const user = userEvent.setup();
     renderSidebar();
 
-    await user.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    await user.click(screen.getByRole("button", { name: "收起侧栏" }));
 
     expect(document.cookie).toContain(
       `${APP_CONSTANTS.SIDEBAR_STORAGE_KEY}=false`
@@ -213,7 +213,7 @@ describe("SidebarToggle", () => {
   it("points aria-controls at the sidebar element", () => {
     renderSidebar();
 
-    const toggle = screen.getByRole("button", { name: "Collapse sidebar" });
+    const toggle = screen.getByRole("button", { name: "收起侧栏" });
     const target = toggle.getAttribute("aria-controls");
 
     expect(document.getElementById(target!)).toBe(

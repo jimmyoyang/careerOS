@@ -162,7 +162,7 @@ describe("ActivitiesContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search activities...")
+          screen.getByPlaceholderText("搜索活动…")
         ).toBeInTheDocument();
       });
     });
@@ -178,11 +178,11 @@ describe("ActivitiesContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search activities...")
+          screen.getByPlaceholderText("搜索活动…")
         ).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
 
       await act(async () => {
         await user.type(searchInput, "TypeScript");
@@ -204,7 +204,7 @@ describe("ActivitiesContainer Search Functionality", () => {
         expect(getActivitiesList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
 
       await act(async () => {
         await user.type(searchInput, "T");
@@ -237,7 +237,7 @@ describe("ActivitiesContainer Search Functionality", () => {
         expect(getActivitiesList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
 
       await act(async () => {
         await user.type(searchInput, "Learning");
@@ -282,7 +282,7 @@ describe("ActivitiesContainer Search Functionality", () => {
         expect(getActivitiesList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
 
       // Type to trigger search
       await act(async () => {
@@ -336,7 +336,7 @@ describe("ActivitiesContainer Search Functionality", () => {
         expect(screen.getByText("Build Portfolio")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
       await act(async () => {
         await user.type(searchInput, "TypeScript");
       });
@@ -370,7 +370,7 @@ describe("ActivitiesContainer Search Functionality", () => {
         expect(screen.getByText("TypeScript Learning")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
       await act(async () => {
         await user.type(searchInput, "test");
       });
@@ -432,7 +432,7 @@ describe("ActivitiesContainer Search Functionality", () => {
       });
 
       // Type search
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
       await act(async () => {
         await user.type(searchInput, "Learning");
       });
@@ -479,7 +479,7 @@ describe("ActivitiesContainer Search Functionality", () => {
         expect(screen.getByText("TypeScript Learning")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
       await act(async () => {
         await user.type(searchInput, "test");
       });
@@ -506,12 +506,12 @@ describe("ActivitiesContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search activities...")
+          screen.getByPlaceholderText("搜索活动…")
         ).toBeInTheDocument();
       });
 
       // Search input should have the correct container structure
-      const searchInput = screen.getByPlaceholderText("Search activities...");
+      const searchInput = screen.getByPlaceholderText("搜索活动…");
       expect(searchInput).toHaveClass("pl-8");
     });
 
@@ -525,7 +525,7 @@ describe("ActivitiesContainer Search Functionality", () => {
       renderComponent();
 
       await waitFor(() => {
-        const searchInput = screen.getByPlaceholderText("Search activities...");
+        const searchInput = screen.getByPlaceholderText("搜索活动…");
         expect(searchInput).toHaveAttribute("type", "search");
       });
     });
@@ -555,7 +555,7 @@ describe("ActivitiesContainer Search Functionality", () => {
       });
 
       await act(async () => {
-        await user.click(screen.getAllByTitle("Start Activity")[0]);
+        await user.click(screen.getAllByTitle("开始活动")[0]);
       });
 
       await waitFor(() => {
@@ -592,12 +592,12 @@ describe("ActivitiesContainer Search Functionality", () => {
       });
 
       await act(async () => {
-        await user.click(screen.getAllByTitle("Start Activity")[0]);
+        await user.click(screen.getAllByTitle("开始活动")[0]);
       });
 
       expect(startActivityById).not.toHaveBeenCalled();
       expect(
-        await screen.findByText(/"Ongoing Task" is currently in progress/i)
+        await screen.findByText(/“Ongoing Task”正在进行中/i)
       ).toBeInTheDocument();
     });
 
@@ -636,11 +636,11 @@ describe("ActivitiesContainer Search Functionality", () => {
       });
 
       await act(async () => {
-        await user.click(screen.getAllByTitle("Start Activity")[0]);
+        await user.click(screen.getAllByTitle("开始活动")[0]);
       });
 
       const confirmButton = await screen.findByRole("button", {
-        name: "Stop & Start",
+        name: "结束并开始",
       });
 
       await act(async () => {

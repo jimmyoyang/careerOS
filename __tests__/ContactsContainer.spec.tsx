@@ -99,7 +99,7 @@ describe("ContactsContainer", () => {
     await waitFor(() => expect(screen.getByText("Dave Patel")).toBeInTheDocument());
     expect(screen.getByText("Engineering Manager")).toBeInTheDocument();
     expect(screen.getByText("Shopify")).toBeInTheDocument();
-    expect(screen.getByText("Reference")).toBeInTheDocument();
+    expect(screen.getByText("推荐证明人")).toBeInTheDocument();
   });
 
   it("keeps the rest of the record in the expanded row until it is opened", async () => {
@@ -108,7 +108,7 @@ describe("ContactsContainer", () => {
 
     expect(screen.queryByText("dave@shopify.com")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /expand dave patel/i }));
+    await user.click(screen.getByRole("button", { name: /展开 Dave Patel/i }));
 
     expect(await screen.findByText("dave@shopify.com")).toBeInTheDocument();
     expect(screen.getByText(/Happy to be a reference/)).toBeInTheDocument();
@@ -119,8 +119,8 @@ describe("ContactsContainer", () => {
     render(<ContactsContainer />);
     await waitFor(() => expect(getContactList).toHaveBeenCalled());
 
-    await user.click(screen.getByRole("combobox", { name: /filter by role/i }));
-    await user.click(await screen.findByText("Recruiter"));
+    await user.click(screen.getByRole("combobox", { name: /按角色筛选/i }));
+    await user.click(await screen.findByText("招聘人员"));
 
     await waitFor(() =>
       expect(getContactList).toHaveBeenLastCalledWith(1, expect.any(Number), undefined, "r1"),
@@ -131,10 +131,10 @@ describe("ContactsContainer", () => {
     render(<ContactsContainer />);
     await waitFor(() => expect(screen.getByText("Dave Patel")).toBeInTheDocument());
 
-    await user.click(screen.getByRole("button", { name: /toggle menu/i }));
-    await user.click(await screen.findByText("Delete"));
+    await user.click(screen.getByRole("button", { name: /打开菜单/i }));
+    await user.click(await screen.findByText("删除"));
 
-    expect(await screen.findByText(/1 job/i)).toBeInTheDocument();
+    expect(await screen.findByText(/1 个职位/i)).toBeInTheDocument();
     expect(deleteContactById).not.toHaveBeenCalled();
   });
 });

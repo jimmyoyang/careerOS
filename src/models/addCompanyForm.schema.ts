@@ -27,7 +27,7 @@ const httpUrlField = (label: string) =>
     .optional()
     .refine(
       (url) => !url || isValidHttpUrl(url),
-      `Please enter a full ${label} URL starting with https://`,
+      `请输入以 https:// 开头的完整 ${label} 链接`,
     );
 
 export const AddCompanyFormSchema = z.object({
@@ -35,7 +35,7 @@ export const AddCompanyFormSchema = z.object({
   createdBy: z.string().optional(),
   company: z
     .string({
-      error: "Company name is required.",
+      error: "请填写公司名称。",
     })
     .min(1),
   logoUrl: z

@@ -5,7 +5,7 @@ async function navigateToQuestions(page: Page) {
   await page.goto("/dashboard/questions");
   await page.waitForLoadState("networkidle");
   await page
-    .getByRole("button", { name: "New Question" })
+    .getByRole("button", { name: "新建题目" })
     .waitFor({ state: "visible" });
 }
 
@@ -16,16 +16,16 @@ async function createQuestion(
   cleanup: CleanupRegistry,
   options?: { tag?: string },
 ) {
-  await page.getByRole("button", { name: "New Question" }).click();
+  await page.getByRole("button", { name: "新建题目" }).click();
   await expect(page.getByTestId("question-form-dialog-title")).toBeVisible();
-  await page.getByPlaceholder("Enter interview question").fill(questionText);
+  await page.getByPlaceholder("输入面试题目").fill(questionText);
 
   if (options?.tag) {
     await page
-      .getByRole("combobox", { name: "Search or add a skill..." })
+      .getByRole("combobox", { name: "搜索或添加技能…" })
       .click();
-    await page.getByPlaceholder("Type a skill...").fill(options.tag);
-    await page.getByText(`Create "${options.tag}"`).click();
+    await page.getByPlaceholder("输入技能…").fill(options.tag);
+    await page.getByText(`创建“${options.tag}”`).click();
     // Wait for the create server action to resolve and the field to update
     // (the badge only renders once the tag id lands in form state).
     await expect(page.getByText(options.tag, { exact: true })).toBeVisible();
@@ -39,7 +39,7 @@ async function createQuestion(
   await answerEditor.click();
   await answerEditor.fill(answerText);
 
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
   await expect(
     page.getByTestId("question-form-dialog-title"),
   ).not.toBeVisible({ timeout: 10000 });
@@ -87,13 +87,13 @@ test.describe("Question Bank", () => {
       .click();
     await expect(page.getByTestId("question-form-dialog-title")).toBeVisible();
     await expect(
-      page.getByPlaceholder("Enter interview question"),
+      page.getByPlaceholder("输入面试题目"),
     ).toHaveValue(editQuestionText);
 
-    const questionInput = page.getByPlaceholder("Enter interview question");
+    const questionInput = page.getByPlaceholder("输入面试题目");
     await questionInput.fill(updatedQuestionText);
 
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "保存" }).click();
     await expect(
       page.getByTestId("question-form-dialog-title"),
     ).not.toBeVisible({ timeout: 10000 });
@@ -121,7 +121,7 @@ test.describe("Question Bank", () => {
       .click();
     await page
       .getByRole("alertdialog")
-      .getByRole("button", { name: "Delete" })
+      .getByRole("button", { name: "删除" })
       .click();
 
     await expect(
@@ -191,7 +191,7 @@ test.describe("Question Bank", () => {
       page.getByRole("heading", { name: untaggedQuestionText }),
     ).not.toBeVisible();
 
-    await page.getByRole("button", { name: "All" }).click();
+    await page.getByRole("button", { name: "全部" }).click();
     await expect(
       page.getByRole("heading", { name: untaggedQuestionText }),
     ).toBeVisible();
@@ -211,13 +211,13 @@ test.describe("Question Bank", () => {
     ).toBeVisible({ timeout: 10000 });
 
     await page
-      .getByPlaceholder("Search questions...")
+      .getByPlaceholder("搜索题目…")
       .fill(uniqueName("no match"));
     await expect(
       page.getByRole("heading", { name: searchableQuestionText }),
     ).not.toBeVisible();
 
-    await page.getByPlaceholder("Search questions...").fill(searchableQuestionText);
+    await page.getByPlaceholder("搜索题目…").fill(searchableQuestionText);
     await expect(
       page.getByRole("heading", { name: searchableQuestionText }),
     ).toBeVisible();

@@ -64,7 +64,7 @@ export function JobDetailsHeader({
   return (
     <div className="flex flex-col gap-4 @5xl/main:flex-row @5xl/main:items-center">
       <div className="flex flex-1 min-w-0 items-center gap-4">
-        <Button title="Go Back" variant="ghost" size="icon" onClick={onBack}>
+        <Button title="返回" variant="ghost" size="icon" onClick={onBack}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <CompanyLogo
@@ -93,12 +93,12 @@ export function JobDetailsHeader({
           variant="outline"
           className="cursor-pointer"
           disabled={chatBusy}
-          title={chatBusy ? "The assistant is busy" : undefined}
+          title={chatBusy ? "助手正在处理其他请求" : undefined}
           onClick={onMatch}
         >
           <Sparkles className="h-4 w-4 sm:mr-2" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            AI Match
+            AI 匹配
           </span>
         </Button>
         <Button
@@ -111,21 +111,21 @@ export function JobDetailsHeader({
         >
           <FileText className="h-4 w-4 sm:mr-2" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            {job.coverLetterId ? "Regenerate Letter" : "Cover Letter"}
+            {job.coverLetterId ? "重新生成求职信" : "求职信"}
           </span>
         </Button>
         <Button
-          title="Edit"
+          title="编辑"
           variant="outline"
           size="icon"
           onClick={onEdit}
           data-testid="job-details-edit-btn"
         >
           <Pencil className="h-4 w-4" />
-          <span className="sr-only">Edit</span>
+          <span className="sr-only">编辑</span>
         </Button>
         <Button
-          title="Delete"
+          title="删除"
           variant="outline"
           size="icon"
           className="text-destructive hover:text-destructive"
@@ -133,7 +133,7 @@ export function JobDetailsHeader({
           data-testid="job-details-delete-btn"
         >
           <Trash2 className="h-4 w-4" />
-          <span className="sr-only">Delete</span>
+          <span className="sr-only">删除</span>
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -144,19 +144,19 @@ export function JobDetailsHeader({
               data-testid="job-details-actions-menu-btn"
             >
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">Toggle menu</span>
+              <span className="sr-only">打开菜单</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[200px]">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>操作</DropdownMenuLabel>
             <DropdownMenuGroup>
               <DropdownMenuItem className="cursor-pointer" onClick={onEdit}>
                 <Pencil className="mr-2 h-4 w-4" />
-                Edit Job
+                编辑职位
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onClick={onAddNote}>
                 <StickyNote className="mr-2 h-4 w-4" />
-                Add a Note
+                添加笔记
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -164,7 +164,7 @@ export function JobDetailsHeader({
                 onClick={onDelete}
               >
                 <Trash className="mr-2 h-4 w-4" />
-                Delete
+                删除
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

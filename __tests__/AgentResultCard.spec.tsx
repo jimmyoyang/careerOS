@@ -48,7 +48,7 @@ describe("AgentResultCard", () => {
       expect.stringContaining("job-123"),
     );
     expect(screen.getByText(/6200|6,200/)).toBeInTheDocument();
-    expect(screen.getByText(/full/i)).toBeInTheDocument();
+    expect(screen.getByText(/完整/i)).toBeInTheDocument();
   });
 
   it("names entities it newly created, not ones it matched", () => {
@@ -64,8 +64,8 @@ describe("AgentResultCard", () => {
         })}
       />,
     );
-    expect(screen.getByText(/new/i).textContent).toContain("Acme");
-    expect(screen.getByText(/new/i).textContent).not.toContain("Engineer");
+    expect(screen.getByText(/新增/i).textContent).toContain("Acme");
+    expect(screen.getByText(/新增/i).textContent).not.toContain("Engineer");
   });
 
   it("reports a duplicate and says no second job was created", () => {
@@ -78,7 +78,7 @@ describe("AgentResultCard", () => {
         })}
       />,
     );
-    expect(screen.getByText(/no second job/i)).toBeInTheDocument();
+    expect(screen.getByText(/未重复创建岗位/i)).toBeInTheDocument();
     expect(screen.getByRole("link")).toHaveAttribute(
       "href",
       expect.stringContaining("job-9"),
@@ -120,7 +120,7 @@ describe("AgentResultCard", () => {
 
   it("renders a declined branch for output-denied", () => {
     render(<AgentResultCard part={resultPart(undefined, "output-denied")} />);
-    expect(screen.getByText(/cancel|declin/i)).toBeInTheDocument();
+    expect(screen.getByText(/取消/i)).toBeInTheDocument();
   });
 
   it("renders a failed branch for output-error", () => {
@@ -131,7 +131,7 @@ describe("AgentResultCard", () => {
         }
       />,
     );
-    expect(screen.getByText(/could not|failed/i)).toBeInTheDocument();
+    expect(screen.getByText(/未能完成/i)).toBeInTheDocument();
   });
 
   const getResumePart = (output: unknown) => ({
@@ -176,12 +176,12 @@ describe("AgentResultCard", () => {
         }
       />,
     );
-    expect(screen.getByLabelText("Select a resume")).toBeInTheDocument();
+    expect(screen.getByLabelText("选择简历")).toBeInTheDocument();
   });
 
   it("says so when there are no resumes rather than inventing one", () => {
     render(<AgentResultCard part={getResumePart({ status: "no_resumes" }) as any} />);
-    expect(screen.getByText(/don't have any resumes/i)).toBeInTheDocument();
+    expect(screen.getByText(/还没有简历/i)).toBeInTheDocument();
   });
 
   it("renders the score card and the review body from a review result", () => {
@@ -205,7 +205,7 @@ describe("AgentResultCard", () => {
         }
       />,
     );
-    expect(screen.getByText("Impact")).toBeInTheDocument();
+    expect(screen.getByText("成果影响力")).toBeInTheDocument();
     expect(screen.getByText("72")).toBeInTheDocument();
     expect(screen.queryByText(/could not be saved/i)).not.toBeInTheDocument();
   });
@@ -233,7 +233,7 @@ describe("AgentResultCard", () => {
         }
       />,
     );
-    expect(screen.getByText(/not saved/i)).toBeInTheDocument();
+    expect(screen.getByText(/未保存/i)).toBeInTheDocument();
     expect(screen.getByText(/database is locked/i)).toBeInTheDocument();
   });
 
@@ -255,8 +255,8 @@ describe("AgentResultCard", () => {
         }
       />,
     );
-    expect(screen.queryByText("Impact")).not.toBeInTheDocument();
-    expect(screen.getByText(/could not be generated/i)).toBeInTheDocument();
+    expect(screen.queryByText("成果影响力")).not.toBeInTheDocument();
+    expect(screen.getByText(/无法生成评估结果/i)).toBeInTheDocument();
   });
 
   it("renders the match score, recommendation and body from the tool output", () => {
@@ -269,19 +269,19 @@ describe("AgentResultCard", () => {
           company: "Northwind Cloud",
           resumeId: "r9",
           resumeTitle: "Senior Engineer Resume",
-          scores: { matchScore: 72, recommendation: "good match" },
+          scores: { matchScore: 72, recommendation: "较为匹配" },
           body: "## Summary\n\nStrong backend overlap.",
           saved: true,
         })}
       />,
     );
-    expect(screen.getByText(/good match/i)).toBeInTheDocument();
+    expect(screen.getByText(/较为匹配/i)).toBeInTheDocument();
     expect(screen.getByText(/Strong backend overlap/i)).toBeInTheDocument();
   });
 
   it("tells the user to open a job when there is none in context", () => {
     render(<AgentResultCard part={outputPart("match_job", { status: "no_job" })} />);
-    expect(screen.getByText(/open the job/i)).toBeInTheDocument();
+    expect(screen.getByText(/请先打开目标岗位/i)).toBeInTheDocument();
   });
 
   it("reports a match save failure instead of hiding it", () => {
@@ -294,7 +294,7 @@ describe("AgentResultCard", () => {
           company: "Northwind Cloud",
           resumeId: "r9",
           resumeTitle: "Senior Engineer Resume",
-          scores: { matchScore: 72, recommendation: "good match" },
+          scores: { matchScore: 72, recommendation: "较为匹配" },
           body: "## Summary",
           saved: false,
           saveError: "Database is locked.",
@@ -333,7 +333,7 @@ describe("AgentResultCard", () => {
         part={outputPart("generate_cover_letter", { status: "no_job" })}
       />,
     );
-    expect(screen.getByText(/open the job/i)).toBeInTheDocument();
+    expect(screen.getByText(/请先打开目标岗位/i)).toBeInTheDocument();
   });
 
   it("explains a title-only job instead of failing silently", () => {
@@ -345,7 +345,7 @@ describe("AgentResultCard", () => {
         })}
       />,
     );
-    expect(screen.getByText(/description/i)).toBeInTheDocument();
+    expect(screen.getByText(/描述/i)).toBeInTheDocument();
   });
 
   it("still shows the letter when the save failed", () => {

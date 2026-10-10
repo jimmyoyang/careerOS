@@ -7,42 +7,44 @@ export const AddContactInfoFormSchema = z.object({
   resumeId: z.string().optional(),
   firstName: z
     .string({
-      error: "First Name is required.",
+      error: "请填写名。",
     })
-    .min(2, {
-      message: "First name must be at least 2 characters.",
+    .trim()
+    .min(1, {
+      message: "请填写名。",
     }),
   lastName: z
     .string({
-      error: "Last Name is required.",
+      error: "请填写姓。",
     })
-    .min(2, {
-      message: "Last name must be at least 2 characters.",
+    .trim()
+    .min(1, {
+      message: "请填写姓。",
     }),
   headline: z
     .string({
-      error: "Headline is required.",
+      error: "请填写职业简介。",
     })
     .min(2, {
-      message: "Headline must be at least 2 characters.",
+      message: "职业简介至少需要 2 个字符。",
     }),
   email: z
     .string({
-      error: "Email is required!",
+      error: "请填写邮箱。",
     })
-    .email("Please enter a valid email!"),
+    .email("请输入有效的邮箱地址。"),
   phone: z.string({
-    error: "Phone is required!",
+    error: "请填写电话。",
   }),
   address: z.string().optional(),
   url1: z
     .string()
     .optional()
-    .refine((v) => !v || /^https?:\/\//i.test(v), "URL must start with http:// or https://"),
+    .refine((v) => !v || /^https?:\/\//i.test(v), "链接必须以 http:// 或 https:// 开头。"),
   url1Label: z.string().optional(),
   url2: z
     .string()
     .optional()
-    .refine((v) => !v || /^https?:\/\//i.test(v), "URL must start with http:// or https://"),
+    .refine((v) => !v || /^https?:\/\//i.test(v), "链接必须以 http:// 或 https:// 开头。"),
   url2Label: z.string().optional(),
 });

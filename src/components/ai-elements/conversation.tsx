@@ -42,8 +42,8 @@ export type ConversationEmptyStateProps = ComponentProps<"div"> & {
 
 export const ConversationEmptyState = ({
   className,
-  title = "No messages yet",
-  description = "Start a conversation to see messages here",
+  title = "暂无消息",
+  description = "开始对话后，消息会显示在这里",
   icon,
   children,
   ...props
@@ -88,6 +88,7 @@ export const ConversationScrollButton = ({
           "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full dark:bg-background dark:hover:bg-muted",
           className
         )}
+        aria-label="滚动到底部"
         onClick={handleScrollToBottom}
         size="icon"
         type="button"
@@ -117,7 +118,7 @@ export type ConversationDownloadProps = Omit<
 
 const defaultFormatMessage = (message: UIMessage): string => {
   const roleLabel =
-    message.role.charAt(0).toUpperCase() + message.role.slice(1);
+    ({ user: "用户", assistant: "助手", system: "系统" } as Record<string, string>)[message.role] ?? message.role;
   return `**${roleLabel}:** ${getMessageText(message)}`;
 };
 
@@ -156,6 +157,7 @@ export const ConversationDownload = ({
         "absolute top-4 right-4 rounded-full dark:bg-background dark:hover:bg-muted",
         className
       )}
+      aria-label="下载对话"
       onClick={handleDownload}
       size="icon"
       type="button"

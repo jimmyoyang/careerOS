@@ -107,11 +107,11 @@ describe("htmlToPdfNodes", () => {
 
 describe("RESUME_LAYOUT_LABELS", () => {
   it("maps 'simple' to 'Simple'", () => {
-    expect(RESUME_LAYOUT_LABELS["simple"]).toBe("Simple");
+    expect(RESUME_LAYOUT_LABELS["simple"]).toBe("简洁");
   });
 
   it("maps 'professional' to 'Professional'", () => {
-    expect(RESUME_LAYOUT_LABELS["professional"]).toBe("Professional");
+    expect(RESUME_LAYOUT_LABELS["professional"]).toBe("专业");
   });
 
   it("covers exactly the two expected layouts", () => {

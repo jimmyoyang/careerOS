@@ -6,17 +6,17 @@ import type { ProfessionalStyles } from "./styles/professional.styles";
 import { ResumeHtmlNodes } from "./generateResumePdf";
 
 function formatDate(date: Date | undefined | null): string {
-  if (!date) return "Present";
-  return format(new Date(date), "MMM yyyy");
+  if (!date) return "至今";
+  return format(new Date(date), "yyyy年M月");
 }
 
 function formatLocation(label: string | undefined): string {
-  return label && label !== "Not specified" ? label : "";
+  return label && label !== "未填写" && label !== "Not specified" ? label : "";
 }
 
 function yearRange(startDate: Date, endDate?: Date | null): string {
   const start = format(new Date(startDate), "yyyy");
-  const end = endDate ? format(new Date(endDate), "yyyy") : "Present";
+  const end = endDate ? format(new Date(endDate), "yyyy") : "至今";
   return `${start} – ${end}`;
 }
 

@@ -51,7 +51,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    expect(screen.getByText("Add Summary")).toBeInTheDocument();
+    expect(screen.getByText("添加个人简介")).toBeInTheDocument();
   });
 
   it("should render Edit Summary dialog when summaryToEdit is provided", () => {
@@ -74,7 +74,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    expect(screen.getByText("Edit Summary")).toBeInTheDocument();
+    expect(screen.getByText("编辑个人简介")).toBeInTheDocument();
   });
 
   it("should render all form fields correctly", () => {
@@ -86,11 +86,11 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    expect(screen.getByLabelText(/section title/i)).toBeInTheDocument();
-    expect(screen.getByText(/resume summary/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/模块标题/i)).toBeInTheDocument();
+    expect(screen.getByText("个人简介", { exact: true })).toBeInTheDocument();
     expect(screen.getByTestId("tiptap-editor")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /save/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /取消/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /保存/i })).toBeInTheDocument();
   });
 
   it("should populate form fields when editing a summary", () => {
@@ -113,7 +113,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     const contentEditor = screen.getByTestId("tiptap-editor");
 
     expect(sectionTitleInput).toHaveValue("Professional Summary");
@@ -131,7 +131,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const cancelButton = screen.getByRole("button", { name: /cancel/i });
+    const cancelButton = screen.getByRole("button", { name: /取消/i });
     await user.click(cancelButton);
 
     expect(mockSetDialogOpen).toHaveBeenCalledWith(false);
@@ -146,7 +146,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     expect(saveButton).toBeDisabled();
   });
 
@@ -164,7 +164,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     const contentEditor = screen.getByTestId("tiptap-editor");
 
     await user.clear(sectionTitleInput);
@@ -174,7 +174,7 @@ describe("AddResumeSummary Component", () => {
       target: { value: "Experienced professional with strong skills" },
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -213,11 +213,11 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     await user.clear(sectionTitleInput);
     await user.type(sectionTitleInput, "Updated Professional Summary");
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -247,7 +247,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     const contentEditor = screen.getByTestId("tiptap-editor");
 
     await user.clear(sectionTitleInput);
@@ -257,13 +257,13 @@ describe("AddResumeSummary Component", () => {
       target: { value: "Experienced professional with strong skills" },
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
       expect(mockSetDialogOpen).toHaveBeenCalledWith(false);
       expect(toastSuccess).toHaveBeenCalledWith(
-        "Summary has been created successfully"
+        "个人简介已添加"
       );
     });
   });
@@ -284,7 +284,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     const contentEditor = screen.getByTestId("tiptap-editor");
 
     await user.clear(sectionTitleInput);
@@ -294,7 +294,7 @@ describe("AddResumeSummary Component", () => {
       target: { value: "Experienced professional with strong skills" },
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -319,7 +319,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     const contentEditor = screen.getByTestId("tiptap-editor");
 
     await user.clear(sectionTitleInput);
@@ -329,12 +329,12 @@ describe("AddResumeSummary Component", () => {
       target: { value: "Experienced professional with strong skills" },
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     // Check if the loader icon is present
     const loader = screen
-      .getByText(/save/i)
+      .getByText(/保存/i)
       .parentElement?.querySelector(".spinner");
     expect(loader).toBeInTheDocument();
 
@@ -370,16 +370,16 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    const sectionTitleInput = screen.getByLabelText(/section title/i);
+    const sectionTitleInput = screen.getByLabelText(/模块标题/i);
     await user.clear(sectionTitleInput);
     await user.type(sectionTitleInput, "Updated Professional Summary");
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
       expect(toastSuccess).toHaveBeenCalledWith(
-        "Summary has been updated successfully"
+        "个人简介已更新"
       );
     });
   });
@@ -393,7 +393,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    expect(screen.queryByText("Add Summary")).not.toBeInTheDocument();
+    expect(screen.queryByText("添加个人简介")).not.toBeInTheDocument();
   });
 
   it("should handle dialog open state change", async () => {
@@ -405,7 +405,7 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    expect(screen.queryByText("Add Summary")).not.toBeInTheDocument();
+    expect(screen.queryByText("添加个人简介")).not.toBeInTheDocument();
 
     rerender(
       <AddResumeSummary
@@ -415,6 +415,6 @@ describe("AddResumeSummary Component", () => {
       />
     );
 
-    expect(screen.getByText("Add Summary")).toBeInTheDocument();
+    expect(screen.getByText("添加个人简介")).toBeInTheDocument();
   });
 });

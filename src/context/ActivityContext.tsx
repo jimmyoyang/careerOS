@@ -144,17 +144,17 @@ export function ActivityProvider({ children }: { children: ReactNode }) {
 
       if (discarded) {
         toastError(
-          `Activity not saved because duration was less than ${APP_CONSTANTS.ACTIVITY_MIN_DURATION_MINUTES} minutes`
+          `活动时长不足 ${APP_CONSTANTS.ACTIVITY_MIN_DURATION_MINUTES} 分钟，未保存`
         );
         return true;
       }
 
       toastSuccess(
         autoStop
-          ? `Activity auto-stopped after reaching maximum duration of ${
+          ? `活动已达到最长时限（${
               APP_CONSTANTS.ACTIVITY_MAX_DURATION_MINUTES / 60
-            } hours`
-          : "Activity stopped successfully"
+            } 小时），已自动结束`
+          : "活动已结束"
       );
       return true;
     },
@@ -177,7 +177,7 @@ export function ActivityProvider({ children }: { children: ReactNode }) {
 
       if (success && newActivity) {
         setCurrentActivity(newActivity as Activity);
-        toastSuccess("Activity started successfully");
+        toastSuccess("活动已开始");
         setIsLoading(false);
         return true;
       } else {

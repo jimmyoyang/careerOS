@@ -56,7 +56,7 @@ function TasksContainer({
   const onDeleteTask = async (taskId: string) => {
     const result = await deleteTaskById(taskId);
     toastActionResult(result, {
-      success: "Task has been deleted successfully",
+      success: "任务已删除",
       onSuccess: () => reloadTasks(),
     });
   };
@@ -80,7 +80,7 @@ function TasksContainer({
     requestStart(async () => {
       const result = await startActivityFromTask(taskId);
       toastActionResult(result, {
-        success: "Activity started from task",
+        success: "已从任务开始活动",
         onSuccess: () => refreshCurrentActivity(),
       });
       return result.success;
@@ -122,7 +122,7 @@ function TasksContainer({
           )}
           {!initialLoading && tasks.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
-              No tasks found. Create your first task to get started.
+              暂无任务，创建第一个任务即可开始。
             </div>
           )}
           {tasks.length < totalTasks && (

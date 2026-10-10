@@ -25,10 +25,10 @@ export function TargetingFields({ value, onChange }: TargetingFieldsProps) {
   return (
     <>
       <EntityStringChipInput
-        label="Target job titles"
-        placeholder="e.g., Frontend Engineer"
-        noun="job title"
-        description="Optional. Listings whose title matches rank higher."
+        label="目标职位"
+        placeholder="例如：前端工程师"
+        noun="职位"
+        description="选填。标题符合条件的岗位会排在更前面。"
         values={value.targetTitles ?? []}
         onChange={(next) => onChange({ ...value, targetTitles: next })}
         loadOptions={async () => {
@@ -42,10 +42,10 @@ export function TargetingFields({ value, onChange }: TargetingFieldsProps) {
       />
 
       <EntityStringChipInput
-        label="Keywords / skills"
-        placeholder="e.g., React"
-        noun="keyword"
-        description="Optional. Matched against title and description."
+        label="关键词 / 技能"
+        placeholder="例如：React"
+        noun="关键词"
+        description="选填。用于匹配岗位标题和描述。"
         values={value.keywords ?? []}
         onChange={(next) => onChange({ ...value, keywords: next })}
         loadOptions={async () => {
@@ -62,18 +62,16 @@ export function TargetingFields({ value, onChange }: TargetingFieldsProps) {
         <div className="flex items-start gap-2 rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-700 dark:text-amber-400">
           <TriangleAlert className="h-4 w-4 mt-0.5 shrink-0" />
           <span>
-            Add at least one target title or keyword. Without them there is
-            nothing to rank jobs against, so this automation will save no
-            listings.
+            请至少添加一个目标职位或关键词，否则无法对岗位排序，此自动化也不会保存任何岗位。
           </span>
         </div>
       )}
 
       <EntityStringChipInput
-        label="Locations"
-        placeholder="e.g., Calgary, Seattle"
-        noun="location"
-        description="Optional. Used only to filter results when the toggle below is on (not part of ranking)."
+        label="地点"
+        placeholder="例如：北京、上海"
+        noun="地点"
+        description="选填。仅在开启下方开关时用于筛选结果，不参与排序。"
         values={value.locations ?? []}
         onChange={(next) => onChange({ ...value, locations: next })}
         loadOptions={async () => {
@@ -88,10 +86,9 @@ export function TargetingFields({ value, onChange }: TargetingFieldsProps) {
 
       <div className="flex items-start justify-between gap-4 rounded-lg border p-3">
         <div className="space-y-1">
-          <Label>Only show jobs in these locations</Label>
+          <Label>仅显示这些地点的岗位</Label>
           <p className="text-sm text-muted-foreground">
-            When on, jobs matching none of your locations are dropped before
-            ranking. Remote roles always pass.
+            开启后，不符合任何所选地点的岗位会在排序前被排除。远程岗位始终保留。
           </p>
         </div>
         <Switch

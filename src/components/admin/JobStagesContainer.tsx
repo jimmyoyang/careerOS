@@ -74,12 +74,12 @@ function JobStagesContainer() {
       <Card x-chunk="dashboard-06-chunk-0">
         <ResponsiveCardHeader>
           <div className="flex items-baseline gap-2">
-            <CardTitle>Job Stages</CardTitle>
+            <CardTitle>求职阶段</CardTitle>
             {!loading && totalTypes > 0 && (
               <RecordsCount
                 count={types.length}
                 total={totalTypes}
-                label="stages"
+                label="阶段"
               />
             )}
           </div>
@@ -87,7 +87,7 @@ function JobStagesContainer() {
             <SearchInput
               value={searchTerm}
               onChange={setSearchTerm}
-              placeholder="Search stages..."
+              placeholder="搜索阶段…"
             />
             <Button
               size="sm"
@@ -97,7 +97,7 @@ function JobStagesContainer() {
             >
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                New Stage
+                新建阶段
               </span>
             </Button>
           </div>
@@ -120,7 +120,7 @@ function JobStagesContainer() {
                 disabled={loading}
                 className="btn btn-primary"
               >
-                {loading ? "Loading..." : "Load More"}
+                {loading ? "加载中…" : "加载更多"}
               </Button>
             </div>
           )}

@@ -1,10 +1,10 @@
 import { ActivityType } from "./activity.model";
 
 export const TASK_STATUSES = {
-  "in-progress": "In Progress",
-  "complete": "Complete",
-  "needs-attention": "Needs Attention",
-  "cancelled": "Cancelled",
+  "in-progress": "进行中",
+  "complete": "已完成",
+  "needs-attention": "需要关注",
+  "cancelled": "已取消",
 } as const;
 
 export type TaskStatus = keyof typeof TASK_STATUSES;

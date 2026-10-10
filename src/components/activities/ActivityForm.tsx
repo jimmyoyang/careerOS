@@ -141,7 +141,7 @@ const ActivityFormComponent = ({
       };
       const response = await createActivity(payload);
       toastActionResult(response, {
-        success: "Activity has been created successfully",
+        success: "活动已创建",
         onSuccess: () => {
           onClose();
           reloadActivities();
@@ -149,7 +149,7 @@ const ActivityFormComponent = ({
       });
     } catch (error) {
       console.error("Error parsing date and time:", error);
-      toastError("Failed to create activity.");
+      toastError("创建活动失败。");
     }
   };
   return (
@@ -165,11 +165,11 @@ const ActivityFormComponent = ({
             name="activityName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Activity Name</FormLabel>
+                <FormLabel>活动名称</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="Ex: Job Search, Learning skill, etc"
+                    placeholder="例如：找工作、学习技能等"
                   />
                 </FormControl>
                 <FormMessage>
@@ -191,7 +191,7 @@ const ActivityFormComponent = ({
             name="activityType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Activity Type</FormLabel>
+                <FormLabel>活动类型</FormLabel>
                 <FormControl>
                   <Combobox options={activityTypes} field={field} creatable />
                 </FormControl>
@@ -208,7 +208,7 @@ const ActivityFormComponent = ({
             name="startDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Start Date</FormLabel>
+                <FormLabel>开始日期</FormLabel>
                 <DatePicker field={field} presets={false} isEnabled={true} />
                 <FormMessage />
               </FormItem>
@@ -223,7 +223,7 @@ const ActivityFormComponent = ({
             name="startTime"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Start Time</FormLabel>
+                <FormLabel>开始时间</FormLabel>
                 <TimePicker field={field} />
                 <FormMessage>
                   {errors.startTime && (
@@ -244,7 +244,7 @@ const ActivityFormComponent = ({
             name="endDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>End Date</FormLabel>
+                <FormLabel>结束日期</FormLabel>
                 <DatePicker field={field} presets={false} isEnabled={true} />
                 <FormMessage />
               </FormItem>
@@ -260,18 +260,18 @@ const ActivityFormComponent = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  End Time
+                  结束时间
                   <span className="text-sm">
                     {duration && (
                       <span>
                         {" "}
-                        ({duration.hours > 0 ? `${duration.hours} h` : ""}
+                        ({duration.hours > 0 ? `${duration.hours} 小时` : ""}
                         {duration.minutes > 0
                           ? `${duration.hours > 0 ? " " : ""}${
                               duration.minutes
-                            } min`
+                            } 分钟`
                           : ""}
-                        {!duration.hours && !duration.minutes ? "0 mins" : ""})
+                        {!duration.hours && !duration.minutes ? "0 分钟" : ""})
                       </span>
                     )}
                   </span>
@@ -296,7 +296,7 @@ const ActivityFormComponent = ({
             name="description"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel id="job-description-label">Description</FormLabel>
+                <FormLabel id="job-description-label">描述</FormLabel>
                 <FormControl>
                   <TiptapEditor field={field} />
                 </FormControl>
@@ -315,11 +315,11 @@ const ActivityFormComponent = ({
                 className="mt-2 md:mt-0 w-full"
                 onClick={() => onClose()}
               >
-                Cancel
+                取消
               </Button>
             </div>
             <Button type="submit" data-testid="save-activity-btn">
-              Save
+              保存
               {/* {isPending && <Loader className="h-4 w-4 shrink-0 spinner" />} */}
             </Button>
           </DialogFooter>

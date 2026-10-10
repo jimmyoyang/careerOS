@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { HelpCircle, Plus, Tags, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,10 +43,10 @@ export function UpdateStatusMenu({
   // Disabled with a visible reason rather than hidden: an item that comes and
   // goes as you change tabs is harder to learn than one that greys out.
   const reason = !targetStage
-    ? "Add a stage first"
+    ? "请先添加阶段"
     : isInterviewStage(targetStage)
       ? null
-      : `${targetStage.StageType.label} is not an interview stage`;
+      : `${zhLabel(targetStage.StageType.label)}不是面试阶段`;
 
   const items: {
     key: string;
@@ -53,9 +55,9 @@ export function UpdateStatusMenu({
     onSelect: () => void;
     reason: string | null;
   }[] = [
-    { key: "add", label: "Add Stage", icon: Plus, onSelect: onAddStage, reason: null },
-    { key: "link", label: "Add Interviewers", icon: Users, onSelect: onLinkInterviewers, reason },
-    { key: "prep", label: "Add to Prep List", icon: HelpCircle, onSelect: onAddPrepQuestions, reason },
+    { key: "add", label: "添加阶段", icon: Plus, onSelect: onAddStage, reason: null },
+    { key: "link", label: "添加面试官", icon: Users, onSelect: onLinkInterviewers, reason },
+    { key: "prep", label: "添加到准备清单", icon: HelpCircle, onSelect: onAddPrepQuestions, reason },
   ];
 
   return (
@@ -68,19 +70,19 @@ export function UpdateStatusMenu({
         >
           <Tags className="h-4 w-4 sm:mr-2" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Update Status
+            更新状态
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>Update Status</DropdownMenuLabel>
+        <DropdownMenuLabel>更新状态</DropdownMenuLabel>
         <DropdownMenuGroup>
           {/* Moved out of the ⋮ menu: one control answers "where is this job
               now", instead of two with near-identical names. */}
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="cursor-pointer">
               <Tags className="mr-2 h-4 w-4" />
-              Change status
+              更改状态
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent className="p-0">

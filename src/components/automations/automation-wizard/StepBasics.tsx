@@ -31,12 +31,12 @@ export function StepBasics({
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Automation Name</FormLabel>
+            <FormLabel>自动化名称</FormLabel>
             <FormControl>
-              <Input placeholder="e.g., Full Stack Jobs Calgary" {...field} />
+              <Input placeholder="例如：上海全栈工程师岗位" {...field} />
             </FormControl>
             <FormDescription>
-              A descriptive name to identify this automation
+              使用便于识别的名称
             </FormDescription>
             <FormMessage />
           </FormItem>
@@ -47,23 +47,23 @@ export function StepBasics({
         name="jobBoard"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Job Board</FormLabel>
+            <FormLabel>招聘平台</FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a job board" />
+                  <SelectValue placeholder="选择招聘平台" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
                 <SelectItem value="greenhouse">
-                  Greenhouse (company boards)
+                  Greenhouse（公司招聘页）
                 </SelectItem>
-                <SelectItem value="lever">Lever (company boards)</SelectItem>
-                <SelectItem value="ashby">Ashby (company boards)</SelectItem>
+                <SelectItem value="lever">Lever（公司招聘页）</SelectItem>
+                <SelectItem value="ashby">Ashby（公司招聘页）</SelectItem>
               </SelectContent>
             </Select>
             <FormDescription>
-              Track specific companies&apos; job boards
+              跟踪指定公司的招聘页面
             </FormDescription>
             <FormMessage />
           </FormItem>

@@ -51,9 +51,9 @@ export function CompanyDetailsHeader({
         })
       : null;
   const links = [
-    { label: "Open website", href: company.websiteUrl ? formatUrl(company.websiteUrl) : null },
-    { label: "Open careers page", href: company.careersUrl ? formatUrl(company.careersUrl) : null },
-    { label: "Open job board", href: boardUrl },
+    { label: "打开网站", href: company.websiteUrl ? formatUrl(company.websiteUrl) : null },
+    { label: "打开招聘页面", href: company.careersUrl ? formatUrl(company.careersUrl) : null },
+    { label: "打开招聘平台", href: boardUrl },
   ].filter((link): link is { label: string; href: string } => !!link.href);
 
   return (
@@ -62,8 +62,8 @@ export function CompanyDetailsHeader({
         <Button
           variant="ghost"
           size="icon"
-          title="Go Back"
-          aria-label="Back to Companies"
+          title="返回"
+          aria-label="返回公司列表"
           onClick={onBack}
         >
           <ArrowLeft className="h-4 w-4" />
@@ -85,13 +85,13 @@ export function CompanyDetailsHeader({
             <Eye className="h-4 w-4 sm:mr-2" />
           )}
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            {company.watched ? "Unwatch" : "Watch"}
+            {company.watched ? "取消关注" : "关注"}
           </span>
         </Button>
         <Button variant="outline" className="cursor-pointer" onClick={onEdit}>
           <Pencil className="h-4 w-4 sm:mr-2" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Edit
+            编辑
           </span>
         </Button>
         <Button
@@ -101,7 +101,7 @@ export function CompanyDetailsHeader({
         >
           <Trash2 className="h-4 w-4 sm:mr-2" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Delete
+            删除
           </span>
         </Button>
         {links.length > 0 && (
@@ -109,11 +109,11 @@ export function CompanyDetailsHeader({
             <DropdownMenuTrigger asChild>
               <Button aria-haspopup="true" size="icon" variant="ghost">
                 <MoreVertical className="h-4 w-4" />
-                <span className="sr-only">More links</span>
+                <span className="sr-only">更多链接</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[200px]">
-              <DropdownMenuLabel>Links</DropdownMenuLabel>
+              <DropdownMenuLabel>链接</DropdownMenuLabel>
               {links.map((link) => (
                 <DropdownMenuItem key={link.label} className="cursor-pointer" asChild>
                   <a href={link.href} target="_blank" rel="noopener noreferrer">

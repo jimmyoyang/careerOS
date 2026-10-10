@@ -97,7 +97,7 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Add Education")).toBeInTheDocument();
+      expect(screen.getByText("添加教育经历")).toBeInTheDocument();
     });
   });
 
@@ -133,7 +133,7 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Edit Education")).toBeInTheDocument();
+      expect(screen.getByText("编辑教育经历")).toBeInTheDocument();
     });
   });
 
@@ -148,7 +148,7 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/section title/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/模块标题/i)).toBeInTheDocument();
     });
   });
 
@@ -163,10 +163,10 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Add Education")).toBeInTheDocument();
+      expect(screen.getByText("添加教育经历")).toBeInTheDocument();
     });
 
-    expect(screen.queryByLabelText(/section title/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/模块标题/i)).not.toBeInTheDocument();
   });
 
   it("should render all form fields correctly", async () => {
@@ -180,14 +180,14 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("School")).toBeInTheDocument();
+      expect(screen.getByText("学校")).toBeInTheDocument();
       expect(screen.getByTestId("combobox-location")).toBeInTheDocument();
-      expect(screen.getByText("Degree")).toBeInTheDocument();
-      expect(screen.getByText("Field of study")).toBeInTheDocument();
-      expect(screen.getByText("Start Date")).toBeInTheDocument();
-      expect(screen.getByText("End Date")).toBeInTheDocument();
-      expect(screen.getByText(/degree completed/i)).toBeInTheDocument();
-      expect(screen.getByText("Description")).toBeInTheDocument();
+      expect(screen.getByText("学位")).toBeInTheDocument();
+      expect(screen.getByText("专业")).toBeInTheDocument();
+      expect(screen.getByText("开始日期")).toBeInTheDocument();
+      expect(screen.getByText("结束日期")).toBeInTheDocument();
+      expect(screen.getByText(/已毕业/i)).toBeInTheDocument();
+      expect(screen.getByText("描述")).toBeInTheDocument();
     });
   });
 
@@ -224,17 +224,17 @@ describe("AddEducation Component", () => {
 
     await waitFor(() => {
       const institutionInput = screen.getByPlaceholderText(
-        "Ex: Stanford"
+        "例如：斯坦福大学"
       ) as HTMLInputElement;
       expect(institutionInput.value).toBe("Stanford University");
 
       const degreeInput = screen.getByPlaceholderText(
-        "Ex: Bachelor's"
+        "例如：学士"
       ) as HTMLInputElement;
       expect(degreeInput.value).toBe("Bachelor's");
 
       const fieldOfStudyInput = screen.getByPlaceholderText(
-        "Ex: Computer Science"
+        "例如：计算机科学"
       ) as HTMLInputElement;
       expect(fieldOfStudyInput.value).toBe("Computer Science");
     });
@@ -251,10 +251,10 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Add Education")).toBeInTheDocument();
+      expect(screen.getByText("添加教育经历")).toBeInTheDocument();
     });
 
-    const cancelButton = screen.getByRole("button", { name: /cancel/i });
+    const cancelButton = screen.getByRole("button", { name: /取消/i });
     await user.click(cancelButton);
 
     expect(mockSetDialogOpen).toHaveBeenCalledWith(false);
@@ -271,14 +271,14 @@ describe("AddEducation Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/degree completed/i)).toBeInTheDocument();
+      expect(screen.getByText(/已毕业/i)).toBeInTheDocument();
     });
 
     const degreeCompletedSwitch = screen.getByRole("switch");
     await user.click(degreeCompletedSwitch);
 
     await waitFor(() => {
-      expect(screen.getByText(/currently studying/i)).toBeInTheDocument();
+      expect(screen.getByText(/在读/i)).toBeInTheDocument();
     });
   });
 
@@ -306,16 +306,16 @@ describe("AddEducation Component", () => {
     });
 
     const institutionInput = screen.getByPlaceholderText(
-      "Ex: Stanford"
+      "例如：斯坦福大学"
     ) as HTMLInputElement;
     const locationSelect = screen.getByTestId(
       "combobox-location"
     ) as HTMLSelectElement;
     const degreeInput = screen.getByPlaceholderText(
-      "Ex: Bachelor's"
+      "例如：学士"
     ) as HTMLInputElement;
     const fieldOfStudyInput = screen.getByPlaceholderText(
-      "Ex: Computer Science"
+      "例如：计算机科学"
     ) as HTMLInputElement;
     const startDateInput = screen.getByTestId(
       "datepicker-startDate"
@@ -333,11 +333,11 @@ describe("AddEducation Component", () => {
 
     // Wait for form to be valid
     await waitFor(() => {
-      const saveButton = screen.getByRole("button", { name: /save/i });
+      const saveButton = screen.getByRole("button", { name: /保存/i });
       expect(saveButton).not.toBeDisabled();
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -392,24 +392,24 @@ describe("AddEducation Component", () => {
 
     await waitFor(() => {
       const institutionInput = screen.getByPlaceholderText(
-        "Ex: Stanford"
+        "例如：斯坦福大学"
       ) as HTMLInputElement;
       expect(institutionInput.value).toBe("Stanford University");
     });
 
     const degreeInput = screen.getByPlaceholderText(
-      "Ex: Bachelor's"
+      "例如：学士"
     ) as HTMLInputElement;
     await user.clear(degreeInput);
     await user.type(degreeInput, "Master's");
 
     // Wait for form to be valid
     await waitFor(() => {
-      const saveButton = screen.getByRole("button", { name: /save/i });
+      const saveButton = screen.getByRole("button", { name: /保存/i });
       expect(saveButton).not.toBeDisabled();
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -449,16 +449,16 @@ describe("AddEducation Component", () => {
     });
 
     const institutionInput = screen.getByPlaceholderText(
-      "Ex: Stanford"
+      "例如：斯坦福大学"
     ) as HTMLInputElement;
     const locationSelect = screen.getByTestId(
       "combobox-location"
     ) as HTMLSelectElement;
     const degreeInput = screen.getByPlaceholderText(
-      "Ex: Bachelor's"
+      "例如：学士"
     ) as HTMLInputElement;
     const fieldOfStudyInput = screen.getByPlaceholderText(
-      "Ex: Computer Science"
+      "例如：计算机科学"
     ) as HTMLInputElement;
     const startDateInput = screen.getByTestId(
       "datepicker-startDate"
@@ -472,17 +472,17 @@ describe("AddEducation Component", () => {
 
     // Wait for form to be valid
     await waitFor(() => {
-      const saveButton = screen.getByRole("button", { name: /save/i });
+      const saveButton = screen.getByRole("button", { name: /保存/i });
       expect(saveButton).not.toBeDisabled();
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
       expect(mockSetDialogOpen).toHaveBeenCalledWith(false);
       expect(toastSuccess).toHaveBeenCalledWith(
-        "Education has been added successfully"
+        "教育经历已添加"
       );
     });
   });
@@ -513,16 +513,16 @@ describe("AddEducation Component", () => {
     });
 
     const institutionInput = screen.getByPlaceholderText(
-      "Ex: Stanford"
+      "例如：斯坦福大学"
     ) as HTMLInputElement;
     const locationSelect = screen.getByTestId(
       "combobox-location"
     ) as HTMLSelectElement;
     const degreeInput = screen.getByPlaceholderText(
-      "Ex: Bachelor's"
+      "例如：学士"
     ) as HTMLInputElement;
     const fieldOfStudyInput = screen.getByPlaceholderText(
-      "Ex: Computer Science"
+      "例如：计算机科学"
     ) as HTMLInputElement;
     const startDateInput = screen.getByTestId(
       "datepicker-startDate"
@@ -536,11 +536,11 @@ describe("AddEducation Component", () => {
 
     // Wait for form to be valid
     await waitFor(() => {
-      const saveButton = screen.getByRole("button", { name: /save/i });
+      const saveButton = screen.getByRole("button", { name: /保存/i });
       expect(saveButton).not.toBeDisabled();
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
@@ -589,29 +589,29 @@ describe("AddEducation Component", () => {
 
     await waitFor(() => {
       const institutionInput = screen.getByPlaceholderText(
-        "Ex: Stanford"
+        "例如：斯坦福大学"
       ) as HTMLInputElement;
       expect(institutionInput.value).toBe("MIT");
     });
 
     const institutionInput = screen.getByPlaceholderText(
-      "Ex: Stanford"
+      "例如：斯坦福大学"
     ) as HTMLInputElement;
     await user.clear(institutionInput);
     await user.type(institutionInput, "MIT Updated");
 
     // Wait for form to be valid
     await waitFor(() => {
-      const saveButton = screen.getByRole("button", { name: /save/i });
+      const saveButton = screen.getByRole("button", { name: /保存/i });
       expect(saveButton).not.toBeDisabled();
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     await waitFor(() => {
       expect(toastSuccess).toHaveBeenCalledWith(
-        "Education has been updated successfully"
+        "教育经历已更新"
       );
     });
   });
@@ -626,7 +626,7 @@ describe("AddEducation Component", () => {
       />
     );
 
-    expect(screen.queryByText("Add Education")).not.toBeInTheDocument();
+    expect(screen.queryByText("添加教育经历")).not.toBeInTheDocument();
     expect(container.querySelector("form")).not.toBeInTheDocument();
   });
 
@@ -678,16 +678,16 @@ describe("AddEducation Component", () => {
     });
 
     const institutionInput = screen.getByPlaceholderText(
-      "Ex: Stanford"
+      "例如：斯坦福大学"
     ) as HTMLInputElement;
     const locationSelect = screen.getByTestId(
       "combobox-location"
     ) as HTMLSelectElement;
     const degreeInput = screen.getByPlaceholderText(
-      "Ex: Bachelor's"
+      "例如：学士"
     ) as HTMLInputElement;
     const fieldOfStudyInput = screen.getByPlaceholderText(
-      "Ex: Computer Science"
+      "例如：计算机科学"
     ) as HTMLInputElement;
     const startDateInput = screen.getByTestId(
       "datepicker-startDate"
@@ -701,16 +701,16 @@ describe("AddEducation Component", () => {
 
     // Wait for form to be valid
     await waitFor(() => {
-      const saveButton = screen.getByRole("button", { name: /save/i });
+      const saveButton = screen.getByRole("button", { name: /保存/i });
       expect(saveButton).not.toBeDisabled();
     });
 
-    const saveButton = screen.getByRole("button", { name: /save/i });
+    const saveButton = screen.getByRole("button", { name: /保存/i });
     await user.click(saveButton);
 
     // Check for loading spinner
     await waitFor(() => {
-      expect(screen.getByText("Save").closest("button")).toContainHTML(
+      expect(screen.getByText("保存").closest("button")).toContainHTML(
         "spinner"
       );
     });

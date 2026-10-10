@@ -9,16 +9,16 @@ export function AgentToolRunningCard({ part }: { part: ToolUIPart }) {
   const toolName = getToolName(part);
   const label =
     toolName === "add_job"
-      ? "Preparing to add a job…"
+      ? "正在准备添加岗位…"
       : toolName === "get_resume"
-        ? "Reading your resume…"
+        ? "正在读取简历…"
         : toolName === "review_resume"
-          ? "Reviewing your resume…"
+          ? "正在评估简历…"
           : toolName === "match_job"
-            ? "Matching your resume to this job…"
+            ? "正在分析简历与此岗位的匹配度…"
             : toolName === "generate_cover_letter"
-              ? "Writing your cover letter…"
-              : "Working…";
+              ? "正在撰写求职信…"
+              : "正在处理…";
 
   return <AgentStatusRow label={label} />;
 }

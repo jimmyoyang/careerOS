@@ -7,12 +7,12 @@ import { login } from "./fixtures";
 test("Signin page has title", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page).toHaveTitle("Sign In | JobSync");
+  await expect(page).toHaveTitle("登录 | CareerOS");
 
-  await expect(page.getByRole("heading", { name: "JobSync" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "CareerOS" })).toBeVisible();
 
   await expect(
-    page.getByRole("heading", { name: "Welcome back" }),
+    page.getByRole("heading", { name: "欢迎回来" }),
   ).toBeVisible();
 });
 
@@ -22,10 +22,10 @@ test("Signin and out from app", async ({ page, baseURL }) => {
 
   await expect(page).toHaveURL(baseURL + "/dashboard");
 
-  await page.getByRole("button", { name: "User menu" }).click();
-  await page.getByRole("button", { name: "Logout" }).click();
+  await page.getByRole("button", { name: "用户菜单" }).click();
+  await page.getByRole("button", { name: "退出登录" }).click();
 
   await expect(
-    page.getByRole("heading", { name: "Welcome back" }),
+    page.getByRole("heading", { name: "欢迎回来" }),
   ).toBeVisible();
 });

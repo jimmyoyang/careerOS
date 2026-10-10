@@ -14,39 +14,39 @@ const now = new Date("2026-09-21T12:00:00Z");
 describe("outcomeLabel", () => {
   it("prefers the stored outcome over anything derived", () => {
     expect(outcomeLabel(new Date("2026-09-30T10:00:00Z"), "failed", now)).toBe(
-      "Failed",
+      "失败",
     );
   });
 
   it("derives Scheduled for a round still ahead", () => {
     expect(outcomeLabel(new Date("2026-09-23T10:00:00Z"), null, now)).toBe(
-      "Scheduled",
+      "已安排",
     );
   });
 
   it("derives Awaiting outcome for a round already past", () => {
     expect(outcomeLabel(new Date("2026-09-12T10:00:00Z"), null, now)).toBe(
-      "Awaiting outcome",
+      "等待结果",
     );
   });
 
   it("derives Not scheduled for a round with no date", () => {
-    expect(outcomeLabel(null, null, now)).toBe("Not scheduled");
+    expect(outcomeLabel(null, null, now)).toBe("未安排");
   });
 
   it("ignores an outcome value that is not in the fixed set", () => {
-    expect(outcomeLabel(null, "ghosted", now)).toBe("Not scheduled");
+    expect(outcomeLabel(null, "ghosted", now)).toBe("未安排");
   });
 });
 
 describe("outcomeColor", () => {
   it("colours a bad ending red and a good one emerald", () => {
-    expect(outcomeColor("Failed")).toBe("red");
+    expect(outcomeColor("失败")).toBe("red");
     expect(outcomeColor("No-show")).toBe("red");
-    expect(outcomeColor("Passed")).toBe("emerald");
-    expect(outcomeColor("Scheduled")).toBe("blue");
-    expect(outcomeColor("Awaiting outcome")).toBe("amber");
-    expect(outcomeColor("Not scheduled")).toBe("slate");
+    expect(outcomeColor("已通过")).toBe("emerald");
+    expect(outcomeColor("已安排")).toBe("blue");
+    expect(outcomeColor("等待结果")).toBe("amber");
+    expect(outcomeColor("未安排")).toBe("slate");
   });
 
   it("falls back to slate for an unrecognised label", () => {
@@ -72,15 +72,15 @@ describe("formatText", () => {
   it("prefers the location, then the format, then a placeholder", () => {
     expect(formatText("Video", "Google Meet")).toBe("Google Meet");
     expect(formatText("Recruiter call", "")).toBe("Recruiter call");
-    expect(formatText(null, null)).toBe("Not set");
+    expect(formatText(null, null)).toBe("未设置");
   });
 });
 
 describe("durationLabel", () => {
   it("renders whole hours as hours and everything else as minutes", () => {
-    expect(durationLabel(180)).toBe("3h");
-    expect(durationLabel(90)).toBe("90m");
-    expect(durationLabel(30)).toBe("30m");
+    expect(durationLabel(180)).toBe("3 小时");
+    expect(durationLabel(90)).toBe("90 分钟");
+    expect(durationLabel(30)).toBe("30 分钟");
     expect(durationLabel(null)).toBeNull();
   });
 });
@@ -88,13 +88,13 @@ describe("durationLabel", () => {
 describe("whenParts", () => {
   it("splits a date into a day line and a time line", () => {
     expect(whenParts(new Date("2026-09-23T14:30:00"))).toEqual({
-      day: "Wed 23 Sep",
-      time: "2:30 PM",
+      day: "9月23日 星期三",
+      time: "14:30",
     });
   });
 
   it("says No date rather than inventing one", () => {
-    expect(whenParts(null)).toEqual({ day: "No date", time: null });
+    expect(whenParts(null)).toEqual({ day: "无日期", time: null });
   });
 });
 
@@ -110,11 +110,11 @@ describe("interviewerSummary", () => {
   it("counts three or more", () => {
     expect(
       interviewerSummary([person("A B"), person("C D"), person("E F")]),
-    ).toBe("3 interviewers");
+    ).toBe("3 位面试官");
   });
 
   it("says when nobody is linked", () => {
-    expect(interviewerSummary([])).toBe("None linked");
+    expect(interviewerSummary([])).toBe("未关联");
   });
 });
 

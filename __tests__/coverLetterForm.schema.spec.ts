@@ -45,7 +45,7 @@ describe("CoverLetterFormSchema", () => {
 
     it("should accept content at minimum length (10 characters)", () => {
       const data = {
-        title: "Title",
+        title: "职位名称",
         content: "A".repeat(10),
       };
       const result = CoverLetterFormSchema.parse(data);
@@ -68,7 +68,7 @@ describe("CoverLetterFormSchema", () => {
     });
 
     it("should reject content shorter than 10 characters", () => {
-      const data = { title: "Title", content: "Short" };
+      const data = { title: "职位名称", content: "Short" };
       expect(() => CoverLetterFormSchema.parse(data)).toThrow();
     });
 
@@ -78,7 +78,7 @@ describe("CoverLetterFormSchema", () => {
     });
 
     it("should reject missing content", () => {
-      const data = { title: "Title" };
+      const data = { title: "职位名称" };
       expect(() => CoverLetterFormSchema.parse(data)).toThrow();
     });
 

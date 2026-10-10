@@ -23,8 +23,8 @@ export function BoardCell({ company }: { company: Company }) {
         })}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Open ${company.label} job board`}
-        title="Open job board"
+        aria-label={`打开${company.label}的招聘平台`}
+        title="打开招聘平台"
         className="text-muted-foreground hover:text-foreground"
       >
         <ExternalLink className="h-3.5 w-3.5" />

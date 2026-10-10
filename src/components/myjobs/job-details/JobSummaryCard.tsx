@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ExternalLink, FileText, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { PlatformBadge } from "@/components/career/PlatformBadge";
 import { CircularScore } from "@/components/CircularScore";
 import { StatusBadge } from "@/components/StatusBadge";
 import { DownloadFileButton } from "@/components/profile/DownloadFileButton";
@@ -39,10 +40,10 @@ export function JobSummaryCard({
       <CardContent className="pt-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">Status</p>
+            <p className="text-sm text-muted-foreground">状态</p>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               {expired ? (
-                <StatusBadge label="Expired" color="amber" />
+                <StatusBadge label="已过期" color="amber" />
               ) : (
                 <StatusBadge
                   label={currentStatus?.label ?? ""}
@@ -52,7 +53,7 @@ export function JobSummaryCard({
             </div>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Job Type</p>
+            <p className="text-sm text-muted-foreground">职位类型</p>
             <p className="mt-1 font-medium">
               {getJobTypeLabel(job.jobType)}
               {job.workplaceType &&
@@ -60,25 +61,25 @@ export function JobSummaryCard({
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Salary Range</p>
+            <p className="text-sm text-muted-foreground">薪资范围</p>
             <p className="mt-1 font-medium">{job.salaryRange || "-"}</p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Source</p>
-            <p className="mt-1 font-medium">{job.JobSource?.label ?? "-"}</p>
+            <p className="text-sm text-muted-foreground">来源</p>
+            <div className="mt-1"><PlatformBadge source={job.JobSource?.value} label={job.JobSource?.label} /></div>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Applied</p>
+            <p className="text-sm text-muted-foreground">已投递</p>
             <p className="mt-1 font-medium">
               {job.appliedDate
-                ? format(new Date(job.appliedDate), "PP")
+                ? format(new Date(job.appliedDate), "yyyy年M月d日")
                 : job.applied
-                  ? "Yes, no date"
-                  : "Not applied"}
+                  ? "已投递，日期未记录"
+                  : "未投递"}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">AI Match</p>
+            <p className="text-sm text-muted-foreground">AI 匹配</p>
             {job.matchScore != null && matchData?.analyzed !== false ? (
               <div className="mt-1 flex flex-wrap items-center gap-2">
                 <CircularScore score={job.matchScore} size="sm" />
@@ -89,11 +90,11 @@ export function JobSummaryCard({
                 )}
               </div>
             ) : (
-              <p className="mt-1 font-medium">Not matched</p>
+              <p className="mt-1 font-medium">尚未匹配</p>
             )}
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Resume</p>
+            <p className="text-sm text-muted-foreground">简历</p>
             <div className="mt-1 font-medium">
               {job.Resume?.File?.filePath ? (
                 DownloadFileButton(
@@ -116,10 +117,10 @@ export function JobSummaryCard({
             </div>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Added</p>
+            <p className="text-sm text-muted-foreground">添加时间</p>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               <span className="font-medium">
-                {job.createdAt ? format(new Date(job.createdAt), "PP") : "-"}
+                {job.createdAt ? format(new Date(job.createdAt), "yyyy年M月d日") : "-"}
               </span>
               {job.createdVia && (
                 <Badge
@@ -127,7 +128,7 @@ export function JobSummaryCard({
                   className={cn("gap-1", BADGE_COLORS.violet)}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
-                  via {job.createdVia}
+                  来自 {job.createdVia}
                 </Badge>
               )}
             </div>

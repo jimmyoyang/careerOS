@@ -55,13 +55,13 @@ export function AutomationSearchConfig({
         ) : (
           <ChevronDown className="h-4 w-4 mr-1" />
         )}
-        {showSearchConfig ? "Show less" : "Show more"}
+        {showSearchConfig ? "收起" : "展开"}
       </Button>
 
       {showSearchConfig && (
         <div className="mt-4 pt-4 border-t grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="col-span-2 md:col-span-4">
-            <p className="text-sm text-muted-foreground">Companies</p>
+            <p className="text-sm text-muted-foreground">公司</p>
             {greenhouseConfig.companies?.length ? (
               <div className="mt-1 flex flex-wrap gap-1">
                 {greenhouseConfig.companies.map((c) => (
@@ -71,8 +71,8 @@ export function AutomationSearchConfig({
                       href={companyBoardUrl(jobBoard, c)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`Open ${c.name} job board`}
-                      title="Open job board"
+                      aria-label={`打开 ${c.name} 招聘页面`}
+                      title="打开招聘页面"
                       className="text-muted-foreground hover:text-foreground"
                     >
                       <ExternalLink className="h-3 w-3" />
@@ -85,45 +85,45 @@ export function AutomationSearchConfig({
             )}
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Target titles</p>
+            <p className="text-sm text-muted-foreground">目标职位</p>
             <p className="font-medium">
               {greenhouseConfig.targetTitles?.length
                 ? greenhouseConfig.targetTitles.join(", ")
-                : "Any"}
+                : "不限"}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Keywords</p>
+            <p className="text-sm text-muted-foreground">关键词</p>
             <p className="font-medium">
               {greenhouseConfig.keywords?.length
                 ? greenhouseConfig.keywords.join(", ")
-                : "None"}
+                : "无"}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Locations</p>
+            <p className="text-sm text-muted-foreground">地点</p>
             <p className="font-medium">
               {greenhouseConfig.locations?.length
                 ? `${greenhouseConfig.locations.join(", ")}${
-                    greenhouseConfig.strictLocation ? " (strict)" : ""
+                    greenhouseConfig.strictLocation ? "（严格匹配）" : ""
                   }`
-                : "Any location"}
+                : "不限地点"}
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">
-              Jobs analyzed per run
+              每次运行分析的岗位数
             </p>
             <p className="font-medium">
               {greenhouseConfig.topK ?? APP_CONSTANTS.MAX_JOBS_PER_RUN}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Extra listings</p>
+            <p className="text-sm text-muted-foreground">其他岗位</p>
             <p className="font-medium">
               {greenhouseConfig.saveUnanalyzed !== false
-                ? "Saved"
-                : "Not saved"}
+                ? "已保存"
+                : "未保存"}
             </p>
           </div>
         </div>

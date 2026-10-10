@@ -10,7 +10,5 @@ export const buildInsufficientSectionsMessage = (
   hint?: string,
 ): string => {
   const min = APP_CONSTANTS.MIN_RESUME_SECTIONS_FOR_SELECTION;
-  return `Add at least ${min} sections${
-    hint ? ` (${hint})` : ""
-  } before ${action}.`;
+  return `请先添加至少 ${min} 个内容模块${hint ? `（${hint}）` : ""}，再${action}。`;
 };

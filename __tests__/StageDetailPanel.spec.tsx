@@ -77,9 +77,9 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    expect(screen.getByRole("heading", { name: "Final / Onsite Interview" })).toBeInTheDocument();
-    expect(screen.getByText("CURRENT STAGE")).toBeInTheDocument();
-    expect(screen.getByText(/Sep 24, 2026 · 10:00 AM · 90 min/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "终面 / 现场面试" })).toBeInTheDocument();
+    expect(screen.getByText("当前阶段")).toBeInTheDocument();
+    expect(screen.getByText(/2026年9月24日 · 10:00 · 90 分钟/)).toBeInTheDocument();
   });
 
   // Overview is the landing tab, so format, location, duration and outcome are
@@ -89,11 +89,11 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    expect(screen.getByRole("tab", { name: "Overview" })).toHaveAttribute("data-state", "active");
+    expect(screen.getByRole("tab", { name: "概览" })).toHaveAttribute("data-state", "active");
     expect(screen.getByText("Acme HQ, Bldg 3")).toBeInTheDocument();
     expect(screen.getByText("On-site")).toBeInTheDocument();
-    expect(screen.getByText("90 min")).toBeInTheDocument();
-    expect(screen.getByText("Scheduled")).toBeInTheDocument();
+    expect(screen.getByText("90 分钟")).toBeInTheDocument();
+    expect(screen.getByText("已安排")).toBeInTheDocument();
     expect(screen.queryByText("Priya Nair")).toBeNull();
   });
 
@@ -102,7 +102,7 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    await userEvent.click(screen.getByRole("tab", { name: /^Interviewer/ }));
+    await userEvent.click(screen.getByRole("tab", { name: /^面试官/ }));
 
     expect(screen.getByText("Priya Nair")).toBeInTheDocument();
     expect(
@@ -117,11 +117,27 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    expect(screen.getByRole("tab", { name: /Prep List 1 of 2/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /准备清单 1 \/ 2/ })).toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole("tab", { name: /Prep List/ }));
+    await userEvent.click(screen.getByRole("tab", { name: /准备清单/ }));
 
     expect(screen.getByText("System Design")).toBeInTheDocument();
+  });
+
+  it.each(["<p>TBD</p>", "<p>待填写</p>"])("treats the %s default as an unanswered prep question", async (answer) => {
+    const stage = {
+      ...interviewStage,
+      prepQuestions: [{
+        ...interviewStage.prepQuestions[0],
+        Question: { ...interviewStage.prepQuestions[0].Question, answer },
+      }],
+    };
+    render(
+      <StageDetailPanel stage={stage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
+    );
+    await userEvent.click(screen.getByRole("tab", { name: /准备清单/ }));
+    expect(screen.getByText("暂无答案")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /显示.*的答案/ })).not.toBeInTheDocument();
   });
 
   it("drops the tab row on a non-interview stage and shows the overview alone", () => {
@@ -130,10 +146,10 @@ describe("StageDetailPanel", () => {
     );
 
     expect(screen.queryByRole("tablist")).toBeNull();
-    expect(screen.queryByText(/INTERVIEWERS/)).toBeNull();
-    expect(screen.queryByText(/PREP LIST/)).toBeNull();
+    expect(screen.queryByText(/面试官/)).toBeNull();
+    expect(screen.queryByText(/准备清单/)).toBeNull();
     // Notes are a live textarea, so this is a value, not page text.
-    expect(screen.getByLabelText("NOTES")).toHaveValue("Bring laptop");
+    expect(screen.getByLabelText("笔记")).toHaveValue("Bring laptop");
   });
 
   // Location, format and duration are interview-only in the Add Stage dialog,
@@ -143,11 +159,11 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={nonInterviewStage} isCurrent={false} onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    expect(screen.queryByText("LOCATION")).toBeNull();
-    expect(screen.queryByText("FORMAT")).toBeNull();
-    expect(screen.queryByText("DURATION")).toBeNull();
+    expect(screen.queryByText("地点")).toBeNull();
+    expect(screen.queryByText("形式")).toBeNull();
+    expect(screen.queryByText("时长")).toBeNull();
     expect(screen.queryByText(/90 min/)).toBeNull();
-    expect(screen.getByText("OUTCOME")).toBeInTheDocument();
+    expect(screen.getByText("结果")).toBeInTheDocument();
   });
 
   // Nothing remounts when another stage is selected, so the tab has to be
@@ -157,12 +173,12 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    await userEvent.click(screen.getByRole("tab", { name: /^Interviewer/ }));
+    await userEvent.click(screen.getByRole("tab", { name: /^面试官/ }));
     rerender(
       <StageDetailPanel stage={{ ...interviewStage, id: "st9" }} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    expect(screen.getByRole("tab", { name: "Overview" })).toHaveAttribute("data-state", "active");
+    expect(screen.getByRole("tab", { name: "概览" })).toHaveAttribute("data-state", "active");
   });
 
   it("marks a question asked inline, with no dialog and no save step", async () => {
@@ -170,7 +186,7 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    await userEvent.click(screen.getByRole("tab", { name: /Prep List/ }));
+    await userEvent.click(screen.getByRole("tab", { name: /准备清单/ }));
     await userEvent.click(
       screen.getByRole("checkbox", { name: /Tell me about a conflict with a teammate/ }),
     );
@@ -185,10 +201,10 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    expect(screen.queryByRole("button", { name: "Save Changes" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "保存更改" })).toBeNull();
 
-    await userEvent.type(screen.getByLabelText("NOTES"), " Ask about on-call.");
-    await userEvent.click(screen.getByRole("button", { name: "Save Changes" }));
+    await userEvent.type(screen.getByLabelText("笔记"), " Ask about on-call.");
+    await userEvent.click(screen.getByRole("button", { name: "保存更改" }));
 
     expect(setStageNotes).toHaveBeenCalledWith(
       "st1",
@@ -202,9 +218,9 @@ describe("StageDetailPanel", () => {
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Delete Final / Onsite Interview" }),
+      screen.getByRole("button", { name: "删除终面 / 现场面试" }),
     );
-    await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+    await userEvent.click(screen.getByRole("button", { name: "删除" }));
 
     expect(deleteJobStage).toHaveBeenCalledWith("st1");
   });
@@ -215,9 +231,9 @@ describe("StageDetailPanel", () => {
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Delete Final / Onsite Interview" }),
+      screen.getByRole("button", { name: "删除终面 / 现场面试" }),
     );
-    await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    await userEvent.click(screen.getByRole("button", { name: "取消" }));
 
     expect(deleteJobStage).not.toHaveBeenCalled();
   });
@@ -230,10 +246,10 @@ describe("StageDetailPanel", () => {
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Delete Final / Onsite Interview" }),
+      screen.getByRole("button", { name: "删除终面 / 现场面试" }),
     );
 
-    expect(screen.getByText(/the job's status follows that stage/)).toBeInTheDocument();
+    expect(screen.getByText(/职位状态也会随之更新/)).toBeInTheDocument();
   });
 
   it("uses the generic warning for a stage that is not current", async () => {
@@ -241,9 +257,9 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={nonInterviewStage} isCurrent={false} onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Delete Applied" }));
+    await userEvent.click(screen.getByRole("button", { name: "删除已投递" }));
 
-    expect(screen.getByText(/This action cannot be undone/)).toBeInTheDocument();
+    expect(screen.getByText(/此操作无法撤销/)).toBeInTheDocument();
   });
 
   it("reverts the draft on Cancel without calling the action", async () => {
@@ -251,10 +267,10 @@ describe("StageDetailPanel", () => {
       <StageDetailPanel stage={interviewStage} isCurrent onEdit={noop} onLinkInterviewers={noop} onAddPrepQuestions={noop} onChanged={noop} />,
     );
 
-    await userEvent.type(screen.getByLabelText("NOTES"), " scratch");
-    await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    await userEvent.type(screen.getByLabelText("笔记"), " scratch");
+    await userEvent.click(screen.getByRole("button", { name: "取消" }));
 
-    expect(screen.getByLabelText("NOTES")).toHaveValue("Bring laptop");
+    expect(screen.getByLabelText("笔记")).toHaveValue("Bring laptop");
     expect(setStageNotes).not.toHaveBeenCalled();
   });
 });

@@ -19,11 +19,10 @@ type StagePrepListProps = {
   onChanged: () => void;
 };
 
-// An untouched answer is still QuestionForm's "TBD" default, which the Tiptap
-// editor may have wrapped in markup by the time it is saved.
+// Recognize both the legacy and Chinese defaults, including editor markup.
 function hasAnswer(answer: string | null): boolean {
   const text = (answer ?? "").replace(/<[^>]*>/g, "").trim().toLowerCase();
-  return text.length > 0 && text !== "tbd";
+  return text.length > 0 && text !== "tbd" && text !== "待填写";
 }
 
 export function StagePrepList({
@@ -46,7 +45,7 @@ export function StagePrepList({
     startTransition(async () => {
       const res = await setPrepQuestionAsked(linkId, next);
       toastActionResult(res, {
-        success: next ? "Marked as asked" : "Marked as not asked",
+        success: next ? "已标记为问过" : "已标记为未问过",
         onSuccess: onChanged,
       });
       // Rolled back only on failure: on success the reload lands on the same
@@ -61,7 +60,7 @@ export function StagePrepList({
     startTransition(async () => {
       const res = await removeStagePrepQuestion(linkId);
       toastActionResult(res, {
-        success: "Question removed from the prep list",
+        success: "题目已从准备清单移除",
         onSuccess: onChanged,
       });
     });
@@ -82,7 +81,7 @@ export function StagePrepList({
     <div>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">
-          Check off a question once your interviewer actually asks it.
+          面试官实际问到题目后，勾选该题。
         </p>
         <div className="flex items-center gap-2">
           {answerable.length > 0 && (
@@ -98,7 +97,7 @@ export function StagePrepList({
                   allExpanded && "rotate-180",
                 )}
               />
-              {allExpanded ? "Collapse all" : "Expand all"}
+              {allExpanded ? "全部收起" : "全部展开"}
             </Button>
           )}
           <Button
@@ -108,14 +107,14 @@ export function StagePrepList({
             onClick={onAddPrepQuestions}
           >
             <Plus className="h-3 w-3" />
-            Add Questions
+            添加题目
           </Button>
         </div>
       </div>
 
       {total === 0 ? (
         <p className="mt-2.5 rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground">
-          No questions on this prep list yet.
+          准备清单暂无题目。
         </p>
       ) : (
         <ul className="mt-2.5 overflow-hidden rounded-lg border">
@@ -145,7 +144,7 @@ export function StagePrepList({
                   ))}
                   {!answered && (
                     <span className="text-[11px] italic text-muted-foreground">
-                      No answer yet
+                      暂无答案
                     </span>
                   )}
                 </span>
@@ -165,7 +164,7 @@ export function StagePrepList({
                     type="checkbox"
                     className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-emerald-600"
                     checked={isAsked}
-                    aria-label={`Mark ${row.Question.question} as asked`}
+                    aria-label={`将“${row.Question.question}”标记为已问过`}
                     onChange={(e) => toggle(row.id, e.target.checked)}
                   />
                   {/* The text expands the answer; only the checkbox marks asked. */}
@@ -183,7 +182,7 @@ export function StagePrepList({
                   )}
                   {isAsked && (
                     <span className="shrink-0 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
-                      Asked
+                      已问过
                     </span>
                   )}
                   {answered && (
@@ -192,7 +191,7 @@ export function StagePrepList({
                       size="icon"
                       className="h-7 w-7 shrink-0 cursor-pointer"
                       aria-expanded={isOpen}
-                      aria-label={`${isOpen ? "Hide" : "Show"} the answer to ${row.Question.question}`}
+                      aria-label={`${isOpen ? "隐藏" : "显示"}“${row.Question.question}”的答案`}
                       onClick={() => setOpen(row.id, !isOpen)}
                     >
                       <ChevronDown
@@ -207,7 +206,7 @@ export function StagePrepList({
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 shrink-0 cursor-pointer"
-                    aria-label={`Remove ${row.Question.question} from the prep list`}
+                    aria-label={`从准备清单移除“${row.Question.question}”`}
                     onClick={() => remove(row.id)}
                   >
                     <X className="h-3.5 w-3.5" />

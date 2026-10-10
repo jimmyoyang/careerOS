@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import { getLast7Days } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
+import { zhCN } from "date-fns/locale";
 import { OTHER_SLICE_ID } from "@/components/dashboard/jobsActivityChart";
 import { requireUser } from "../shared";
 import { getLocalDayRange, roundToTenth } from "./shared";
@@ -75,7 +76,7 @@ export const getActivityDataForPeriod = async (): Promise<{
     const data = last7Days.map((dateStr) => {
       const dayTotals: Record<string, number> = groupedData[dateStr] || {};
       const entry: Record<string, any> = {
-        day: format(parseISO(dateStr), "EEE, MMM d"),
+        day: format(parseISO(dateStr), "M月d日 EEE", { locale: zhCN }),
       };
       for (const label of topLabels) {
         if (dayTotals[label]) entry[label] = dayTotals[label];
@@ -139,7 +140,7 @@ export const getJobsActivityForPeriod = async (): Promise<any | undefined> => {
     const last7Days = getLast7Days("yyyy-MM-dd");
     // Map to ensure all dates are represented with a count of 0 if necessary
     const result = last7Days.map((dateStr) => ({
-      day: format(parseISO(dateStr), "EEE, MMM d"),
+      day: format(parseISO(dateStr), "M月d日 EEE", { locale: zhCN }),
       value: groupedPosts[dateStr] || 0,
     }));
 

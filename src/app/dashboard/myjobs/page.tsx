@@ -8,7 +8,7 @@ import { getAllJobLocations } from "@/actions/jobLocation.actions";
 import { getAllTags } from "@/actions/tag.actions";
 
 export const metadata: Metadata = {
-  title: "My Jobs | JobSync",
+  title: "职位跟踪 | CareerOS",
 };
 
 async function MyJobs() {

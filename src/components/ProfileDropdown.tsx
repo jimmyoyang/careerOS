@@ -36,7 +36,7 @@ export function ProfileDropdown({
 }: ProfileDropdownProps) {
   const [supportDialogOpen, setSupportDialogOpen] = useState(false);
   const version = useAppVersion();
-  const label = user?.email ?? "My Account";
+  const label = user?.email ?? "我的账号";
 
   return (
     <>
@@ -46,7 +46,7 @@ export function ProfileDropdown({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                aria-label="User menu"
+                aria-label="用户菜单"
                 className="navlink h-10 w-full text-muted-foreground hover:text-foreground"
               >
                 <span className="relative flex h-full w-14 shrink-0 items-center justify-center">
@@ -57,7 +57,7 @@ export function ProfileDropdown({
                         aria-hidden
                         className="absolute right-3 top-1 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background"
                       />
-                      <span className="sr-only">Update available</span>
+                      <span className="sr-only">有可用更新</span>
                     </>
                   )}
                 </span>
@@ -80,7 +80,7 @@ export function ProfileDropdown({
           <DropdownMenuItem asChild>
             <Link href="/dashboard/settings" className="cursor-pointer">
               <Settings className="w-5 mr-2" />
-              Settings
+              设置
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -88,7 +88,7 @@ export function ProfileDropdown({
             className="cursor-pointer"
           >
             <Info className="w-5 mr-2" />
-            Support
+            帮助与支持
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <a
@@ -98,7 +98,7 @@ export function ProfileDropdown({
               className="cursor-pointer"
             >
               <ExternalLink className="w-5 mr-2" />
-              Wiki
+              使用文档
             </a>
           </DropdownMenuItem>
           {version?.updateAvailable && (
@@ -107,7 +107,7 @@ export function ProfileDropdown({
               className="cursor-pointer text-primary focus:text-primary"
             >
               <ArrowUpCircle className="w-5 mr-2" />
-              Update available
+              有可用更新
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -115,7 +115,7 @@ export function ProfileDropdown({
             <form action={signOutAction}>
               <button type="submit" className="flex w-full items-center">
                 <PowerIcon className="w-5 mr-2" />
-                <div className="hidden md:block">Logout</div>
+                <div className="hidden md:block">退出登录</div>
               </button>
             </form>
           </DropdownMenuItem>

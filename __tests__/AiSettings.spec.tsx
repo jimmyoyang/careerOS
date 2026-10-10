@@ -26,8 +26,8 @@ beforeAll(() => {
   Element.prototype.scrollIntoView = () => {};
 });
 
-const modelTrigger = () => screen.getByLabelText("Select Model");
-const providerTrigger = () => screen.getByLabelText("Select AI provider");
+const modelTrigger = () => screen.getByLabelText("选择模型");
+const providerTrigger = () => screen.getByLabelText("选择 AI 服务商");
 
 async function pick(trigger: HTMLElement, optionName: string) {
   fireEvent.keyDown(trigger, { key: "Enter" });
@@ -66,7 +66,7 @@ describe("AiSettings model select", () => {
 
     mockModels(["deepseek-chat"]);
     await pick(providerTrigger(), "DeepSeek");
-    await waitFor(() => expect(modelTrigger().textContent).toBe("Select Model"));
+    await waitFor(() => expect(modelTrigger().textContent).toBe("选择模型"));
 
     // Picking a model is what used to leave Radix holding a stale value
     await pick(modelTrigger(), "deepseek-chat");
@@ -74,7 +74,7 @@ describe("AiSettings model select", () => {
 
     mockModels(["gpt-4o"]);
     await pick(providerTrigger(), "OpenAI");
-    await waitFor(() => expect(modelTrigger().textContent).toBe("Select Model"));
+    await waitFor(() => expect(modelTrigger().textContent).toBe("选择模型"));
   });
 
   it("shows a spinner while the model list loads", async () => {
@@ -89,10 +89,10 @@ describe("AiSettings model select", () => {
     await pick(providerTrigger(), "DeepSeek");
 
     await waitFor(() => expect(modelTrigger()).toBeDisabled());
-    expect(modelTrigger().textContent).toContain("Loading models...");
+    expect(modelTrigger().textContent).toContain("正在加载模型…");
     expect(modelTrigger().querySelector(".animate-spin")).toBeTruthy();
 
     release({ ok: true, json: async () => ({ data: [{ id: "deepseek-chat" }] }) });
-    await waitFor(() => expect(modelTrigger().textContent).toBe("Select Model"));
+    await waitFor(() => expect(modelTrigger().textContent).toBe("选择模型"));
   });
 });

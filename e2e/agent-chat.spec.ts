@@ -79,7 +79,7 @@ async function openChat(page: Page) {
     route.fulfill({ contentType: "application/json", body: "{}" }),
   );
   await page.goto("/dashboard/myjobs");
-  await page.getByRole("button", { name: "Open assistant" }).click();
+  await page.getByRole("button", { name: "打开助手" }).click();
   // A shared user can carry a transcript in from another run or a manual
   // pass, so start from Clear. Then reload: clear() calls setMessages([])
   // only after the server action resolves, and waiting on the HTTP response
@@ -91,17 +91,17 @@ async function openChat(page: Page) {
     page.waitForResponse(
       (res) => res.request().method() === "POST" && res.url().includes("/dashboard"),
     ),
-    page.getByRole("button", { name: "Clear" }).click(),
+    page.getByRole("button", { name: "清空" }).click(),
   ]);
   await page.reload();
-  await page.getByRole("button", { name: "Open assistant" }).click();
-  await expect(page.getByText(/I can add a job to your tracker/)).toBeVisible();
+  await page.getByRole("button", { name: "打开助手" }).click();
+  await expect(page.getByText(/我可以帮您添加要跟踪的岗位/)).toBeVisible();
 }
 
 async function send(page: Page, text: string) {
-  const box = page.getByRole("textbox", { name: /ask or paste/i });
+  const box = page.getByRole("textbox", { name: /提问或粘贴招聘信息/i });
   await box.fill(text);
-  await page.getByRole("button", { name: "Send" }).click();
+  await page.getByRole("button", { name: "发送" }).click();
 }
 
 test.describe("agent chat", () => {
@@ -112,14 +112,14 @@ test.describe("agent chat", () => {
 
     // Docked, not a takeover: the page behind is still clickable, and the
     // panel survives the navigation because the provider is in the layout.
-    await page.getByRole("link", { name: "Tasks" }).click();
+    await page.getByRole("link", { name: "待办事项" }).click();
     await expect(page).toHaveURL(/\/dashboard\/tasks/);
-    await expect(page.getByRole("button", { name: "Clear" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "清空" })).toBeVisible();
 
-    await page.getByRole("button", { name: "Close chat" }).click();
-    await expect(page.getByRole("button", { name: "Clear" })).toBeHidden();
+    await page.getByRole("button", { name: "关闭聊天" }).click();
+    await expect(page.getByRole("button", { name: "清空" })).toBeHidden();
     await expect(
-      page.getByRole("button", { name: "Open assistant" }),
+      page.getByRole("button", { name: "打开助手" }),
     ).toBeVisible();
   });
 
@@ -137,12 +137,12 @@ test.describe("agent chat", () => {
     await send(page, "hello there");
     await expect(page.getByText("I can add a job for you.")).toBeVisible();
 
-    await page.getByRole("link", { name: "Tasks" }).click();
+    await page.getByRole("link", { name: "待办事项" }).click();
     await expect(page).toHaveURL(/\/dashboard\/tasks/);
     await expect(page.getByText("I can add a job for you.")).toBeVisible();
 
-    await page.getByRole("button", { name: "Close chat" }).click();
-    await page.getByRole("button", { name: "Open assistant" }).click();
+    await page.getByRole("button", { name: "关闭聊天" }).click();
+    await page.getByRole("button", { name: "打开助手" }).click();
     await expect(page.getByText("hello there")).toBeVisible();
     await expect(page.getByText("I can add a job for you.")).toBeVisible();
   });
@@ -155,7 +155,7 @@ test.describe("agent chat", () => {
     const posting = `Staff Platform Engineer at Northwind. ${"Responsibilities include running the payments platform. ".repeat(
       40,
     )}`;
-    const box = page.getByRole("textbox", { name: /ask or paste/i });
+    const box = page.getByRole("textbox", { name: /提问或粘贴招聘信息/i });
     await box.click();
     await box.evaluate((el, text) => {
       const data = new DataTransfer();
@@ -169,10 +169,10 @@ test.describe("agent chat", () => {
       );
     }, posting);
 
-    await expect(page.getByText(/Pasted posting ·/)).toBeVisible();
+    await expect(page.getByText(/已粘贴招聘信息 ·/)).toBeVisible();
     await expect(box).toHaveValue("");
-    await page.getByRole("button", { name: "Remove pasted content" }).click();
-    await expect(page.getByText(/Pasted posting ·/)).toBeHidden();
+    await page.getByRole("button", { name: "移除粘贴内容" }).click();
+    await expect(page.getByText(/已粘贴招聘信息 ·/)).toBeHidden();
   });
 
   test("renders the approval card and creates nothing when it is cancelled", async ({
@@ -198,17 +198,17 @@ test.describe("agent chat", () => {
     await openChat(page);
     await send(page, "add the Northwind role");
 
-    await expect(page.getByText("Needs approval")).toBeVisible();
+    await expect(page.getByText("需要确认")).toBeVisible();
     await expect(page.getByText("Northwind Trading")).toBeVisible();
     await expect(page.getByText("Staff Platform Engineer")).toBeVisible();
     await expect(page.getByText("$190k – $220k")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Confirm" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "确认" })).toBeVisible();
 
-    await page.getByRole("button", { name: "Cancel" }).click();
-    await page.getByRole("button", { name: "Skip" }).click();
+    await page.getByRole("button", { name: "取消" }).click();
+    await page.getByRole("button", { name: "跳过" }).click();
 
-    await expect(page.getByText("Cancelled — nothing was saved.")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Confirm" })).toBeHidden();
+    await expect(page.getByText("已取消，未保存任何内容。")).toBeVisible();
+    await expect(page.getByRole("button", { name: "确认" })).toBeHidden();
 
     // Nothing reached the jobs list.
     await page.goto("/dashboard/myjobs");

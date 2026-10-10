@@ -47,7 +47,7 @@ function EducationCard({
               >
                 <Edit className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Edit
+                  编辑
                 </span>
               </Button>
             </CardHeader>
@@ -56,8 +56,8 @@ function EducationCard({
                 {degree}, {fieldOfStudy}
               </h3>
               <CardDescription>
-                {format(startDate, "MMM yyyy")} -{" "}
-                {endDate ? format(endDate, "MMM yyyy") : "Present"}
+                {format(startDate, "yyyy年M月")} -{" "}
+                {endDate ? format(endDate, "yyyy年M月") : "至今"}
                 <br />
                 {label}
               </CardDescription>

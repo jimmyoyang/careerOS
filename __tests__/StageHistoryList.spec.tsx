@@ -48,10 +48,10 @@ describe("StageHistoryList", () => {
   it("renders every stage with its date, then the unreached terminal step", () => {
     renderList();
 
-    expect(screen.getByText("New")).toBeInTheDocument();
-    expect(screen.getByText("Sep 1")).toBeInTheDocument();
-    expect(screen.getByText("Final / Onsite Interview")).toBeInTheDocument();
-    expect(screen.getByText("Offer")).toBeInTheDocument();
+    expect(screen.getByText("新建")).toBeInTheDocument();
+    expect(screen.getByText("9月1日")).toBeInTheDocument();
+    expect(screen.getByText("终面 / 现场面试")).toBeInTheDocument();
+    expect(screen.getByText("录用通知")).toBeInTheDocument();
     expect(screen.getByText("—")).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe("StageHistoryList", () => {
     renderList();
 
     expect(
-      screen.getByRole("button", { name: /Final \/ Onsite Interview/ }),
+      screen.getByRole("button", { name: /终面 \/ 现场面试/ }),
     ).toHaveAttribute("aria-current", "step");
   });
 
@@ -67,7 +67,7 @@ describe("StageHistoryList", () => {
     const onSelect = vi.fn();
     renderList({ onSelect });
 
-    await userEvent.click(screen.getByRole("button", { name: /Applied/ }));
+    await userEvent.click(screen.getByRole("button", { name: /已投递/ }));
 
     expect(onSelect).toHaveBeenCalledWith("b");
   });
@@ -75,7 +75,7 @@ describe("StageHistoryList", () => {
   it("renders the unreached terminal step as a non-interactive element", () => {
     renderList();
 
-    expect(screen.queryByRole("button", { name: /Offer/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: /录用通知/ })).toBeNull();
   });
 
   it("shows an em dash for an undated stage", () => {
