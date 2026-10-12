@@ -1,0 +1,24 @@
+// @vitest-environment node
+import { beforeEach,afterEach,expect,it,vi } from "vitest";
+import {RecruitingDataSchema} from "@/lib/recruiting/contracts";
+vi.mock("@/utils/user.utils",()=>({getCurrentUser:vi.fn()}));
+vi.mock("@/lib/bytedance/client",async actual=>({...await actual<typeof import("@/lib/bytedance/client")>(),listBytedanceJobs:vi.fn(),getBytedanceJob:vi.fn()}));
+vi.mock("@/lib/bytedance/import",()=>({importBytedanceJob:vi.fn()}));
+vi.mock("@/lib/recruiting/store",async actual=>({...await actual<typeof import("@/lib/recruiting/store")>(),getRecruitingProfile:vi.fn()}));
+vi.mock("@/lib/recruiting/bridge",()=>({getRecruitingDevices:vi.fn()}));
+import {getCurrentUser} from "@/utils/user.utils";
+import {getRecruitingProfile} from "@/lib/recruiting/store";
+import {getRecruitingDevices} from "@/lib/recruiting/bridge";
+import {listBytedanceJobs} from "@/lib/bytedance/client";
+import {importBytedanceJob} from "@/lib/bytedance/import";
+import * as actions from "@/actions/bytedance.actions";
+const profile=()=>({revision:4,data:RecruitingDataSchema.parse({phones:[{id:"byte-phone",number:"13800000002",deviceId:"byte-device"},{id:"hw-phone",number:"13900000001",deviceId:"hw-device"}],emails:[{id:"e",address:"byte@example.com"}],accounts:[{id:"b",platform:"bytedance",label:"字节校招",phoneId:"byte-phone",emailId:"e",confirmed:true},{id:"h",platform:"huawei",phoneId:"hw-phone",confirmed:true},{id:"bad",platform:"not-bytedance",phoneId:"hw-phone",confirmed:true}]})});
+beforeEach(()=>{vi.resetAllMocks();vi.mocked(getCurrentUser).mockResolvedValue({id:"owner"} as never);vi.mocked(getRecruitingProfile).mockResolvedValue(profile());});afterEach(()=>vi.unstubAllEnvs());
+it("requires authentication for every action before private or public work",async()=>{vi.mocked(getCurrentUser).mockResolvedValue(null);for(const call of [()=>actions.listBytedanceJobsAction({recruitmentType:"campus",keyword:"",page:1}),()=>actions.getBytedanceJobAction("123"),()=>actions.importBytedanceJobAction("123","12345678"),()=>actions.getBytedanceAccountsAction(),()=>actions.previewBytedanceLoginAction("b",4)])expect((await call()).ok).toBe(false);expect(getRecruitingProfile).not.toHaveBeenCalled();expect(listBytedanceJobs).not.toHaveBeenCalled();expect(importBytedanceJob).not.toHaveBeenCalled();});
+it("returns only exact ByteDance accounts owned by session with no private contact fields",async()=>{expect(await actions.getBytedanceAccountsAction()).toEqual({ok:true,data:{revision:4,accounts:[{id:"b",label:"字节校招",loginMethod:"sms",confirmed:true}]}});expect(getRecruitingProfile).toHaveBeenCalledWith("owner");});
+it("uses ByteDance's saved phone and matched device, never the Huawei phone",async()=>{vi.mocked(getRecruitingDevices).mockResolvedValue([{deviceId:"byte-device",deviceName:"字节测试手机",active:true},{deviceId:"hw-device",deviceName:"华为测试手机",active:true}]);const r=await actions.previewBytedanceLoginAction("b",4);expect(r.ok).toBe(true);if(r.ok){expect(r.data.binding.phone).toBe("+8613800000002");expect(r.data.binding.email).toBe("byte@example.com");expect(r.data.device?.deviceId).toBe("byte-device");}});
+it.each(["h","bad","foreign"])("rejects wrong platform or unknown account %s",async id=>{expect((await actions.previewBytedanceLoginAction(id,4)).ok).toBe(false);expect(getRecruitingDevices).not.toHaveBeenCalled();});
+it("rejects stale revisions, unconfirmed or unbound accounts",async()=>{expect((await actions.previewBytedanceLoginAction("b",3)).ok).toBe(false);const p=profile();p.data.accounts[0].confirmed=false;vi.mocked(getRecruitingProfile).mockResolvedValue(p);expect((await actions.previewBytedanceLoginAction("b",4)).ok).toBe(false);p.data.accounts[0].confirmed=true;p.data.accounts[0].phoneId="";expect((await actions.previewBytedanceLoginAction("b",4)).ok).toBe(false);});
+it.each(["email","username"] as const)("does not silently reinterpret %s login as SMS",async loginMethod=>{const p=profile();p.data.accounts[0].loginMethod=loginMethod;vi.mocked(getRecruitingProfile).mockResolvedValue(p);const r=await actions.previewBytedanceLoginAction("b",4);expect(r).toMatchObject({ok:false,error:expect.stringMatching(/手机/)});});
+it("preserves bound phone while warning about an unavailable bridge",async()=>{vi.mocked(getRecruitingDevices).mockRejectedValue(new Error("offline-secret"));const r=await actions.previewBytedanceLoginAction("b",4);expect(r.ok).toBe(true);if(r.ok){expect(r.data.binding.phone).toBe("+8613800000002");expect(r.data.warning).toMatch(/设备/);expect(r.data.warning).not.toContain("secret");}});
+it("honors disabled workspace",async()=>{vi.stubEnv("CAREER_ENABLED","false");expect((await actions.getBytedanceAccountsAction()).ok).toBe(false);expect(getRecruitingProfile).not.toHaveBeenCalled();});

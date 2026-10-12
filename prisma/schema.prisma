@@ -43,6 +43,7 @@ model User {
   careerMaterials CareerMaterial[]
   careerRuns CareerRun[]
   careerEvents CareerEvent[]
+  recruitingProfile RecruitingProfile?
   defaultResumeId String?
   defaultResume   Resume?          @relation("UserDefaultResume", fields: [defaultResumeId], references: [id], onDelete: SetNull)
 }
@@ -815,4 +816,14 @@ model CareerEvent {
 
   @@unique([userId, eventKey])
   @@index([userId, createdAt])
+}
+
+model RecruitingProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dataJson  String
+  revision  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

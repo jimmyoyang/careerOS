@@ -35,6 +35,7 @@ export type BackupModel =
   | "Activity"
   | "Question"
   | "AutomationRun"
+  | "RecruitingProfile"
   | "UserSettings"
   | "CareerEvidence"
   | "CareerJobContext"
@@ -230,6 +231,7 @@ export const MODEL_SPECS: Record<BackupModel, ModelSpec> = {
     scope: (userId) => ({ userId, kind: { not: "maintenance" } }),
   },
   CareerEvent: { delegate: "careerEvent", owner: "userId", fks: {}, scope: byUser },
+  RecruitingProfile: { delegate: "recruitingProfile", owner: "userId", fks: {}, scope: byUser },
   UserSettings: { delegate: "userSettings", owner: "userId", fks: {}, scope: byUser },
 };
 
@@ -269,6 +271,7 @@ export const INSERT_ORDER: BackupModel[] = [
   "Task",
   "Activity",
   "AutomationRun",
+  "RecruitingProfile",
   "UserSettings",
   "CareerEvidence",
   "CareerJobContext",
@@ -288,6 +291,7 @@ export const LOOKUP_MODELS: BackupModel[] = INSERT_ORDER.filter(
 // confirmation meaningful on a fresh instance. Profile is in the list because
 // reads use findFirst — a second profile is a silent coin flip, not an error.
 export const EMPTINESS_MODELS: BackupModel[] = [
+  "RecruitingProfile",
   "Profile",
   "Resume",
   "CoverLetter",

@@ -92,9 +92,9 @@ export async function readManifest(zip: JSZip): Promise<BackupManifest> {
   const found = (raw as { formatVersion?: unknown })?.formatVersion;
   const parsed = ManifestSchema.safeParse(raw);
   if (!parsed.success) {
-    if (found !== undefined && found !== 1 && found !== BACKUP_FORMAT_VERSION) {
+    if (found !== undefined && found !== 1 && found !== 2 && found !== BACKUP_FORMAT_VERSION) {
       throw new BackupError(
-        `This backup was made by a different version of JobSync. Expected format version 1 or ${BACKUP_FORMAT_VERSION}, found ${String(found)}.`,
+        `This backup was made by a different version of JobSync. Expected format version 1, 2 or ${BACKUP_FORMAT_VERSION}, found ${String(found)}.`,
       );
     }
     throw new BackupError("manifest.json is missing required fields.");

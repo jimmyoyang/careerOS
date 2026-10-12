@@ -9,6 +9,7 @@ vi.mock("@/lib/db", () => {
   const counted = () => ({ count: vi.fn().mockResolvedValue(0) });
   return {
     default: {
+      recruitingProfile: counted(),
       careerEvidence: counted(),
       careerJobContext: counted(),
       careerMaterial: counted(),
@@ -78,6 +79,13 @@ describe("preflightBackup", () => {
     );
     expect(result.targetIsEmpty).toBe(false);
     expect(result.targetCounts.Profile).toBe(1);
+  });
+
+  it("treats saved recruiting identities as content before a destructive restore", async () => {
+    mockDb.recruitingProfile.count.mockResolvedValueOnce(1);
+    const result = await preflightBackup(await zipWith(manifest()), "user-1", "owner@example.com");
+    expect(result.targetIsEmpty).toBe(false);
+    expect(result.targetCounts.RecruitingProfile).toBe(1);
   });
 
   it("refuses a backup with the wrong formatVersion", async () => {

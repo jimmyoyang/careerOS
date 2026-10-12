@@ -160,6 +160,7 @@ describe("emptiness models", () => {
       "Note",
       "Profile",
       "Question",
+      "RecruitingProfile",
       "Resume",
       "Task",
     ]);
