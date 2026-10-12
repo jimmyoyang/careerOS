@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { format, parse } from "date-fns";
+import { zhCN } from "date-fns/locale";
 import { NextApiRequest } from "next";
 import { twMerge } from "tailwind-merge";
 
@@ -99,7 +100,7 @@ export const formatElapsedTime = (ms: number) => {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  return `${hours > 0 ? `${hours}h ` : ""}${minutes}m ${seconds}s`;
+  return `${hours > 0 ? `${hours} 小时 ` : ""}${minutes} 分 ${seconds} 秒`;
 };
 
 export const calculatePercentageDifference = (
@@ -117,13 +118,13 @@ export const calculatePercentageDifference = (
   return Math.round(difference);
 };
 
-export const getLast7Days = (dateType = "PP", baseDate?: Date) => {
+export const getLast7Days = (dateType = "yyyy年M月d日", baseDate?: Date) => {
   const dates = [];
   const anchor = baseDate ? new Date(baseDate) : new Date();
   for (let i = 6; i >= 0; i--) {
     const date = new Date(anchor);
     date.setDate(anchor.getDate() - i);
-    dates.push(format(date, dateType));
+    dates.push(format(date, dateType, { locale: zhCN }));
   }
   return dates;
 };

@@ -25,11 +25,11 @@ const renderPanel = (patch: Partial<typeof defaultResumeExportSettings> = {}) =>
 describe("ExportSettingsPanel — structure", () => {
   it("pins Template above the two disclosure groups", () => {
     renderPanel();
-    expect(screen.getByRole("combobox", { name: "Template" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "模板" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Typography/ }),
+      screen.getByRole("button", { name: /字体排版/ }),
     ).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("button", { name: /Layout/ })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: /布局/ })).toHaveAttribute(
       "aria-expanded",
       "true",
     );
@@ -37,15 +37,15 @@ describe("ExportSettingsPanel — structure", () => {
 
   it("renders a select for each named setting and a stepper for each number", () => {
     renderPanel();
-    expect(screen.getByRole("combobox", { name: "Template" })).toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: "Font" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "模板" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "字体" })).toBeInTheDocument();
     for (const label of [
-      "Font size",
-      "Line height",
-      "Margin top/bottom",
-      "Margin left/right",
-      "Section spacing",
-      "Entry spacing",
+      "字号",
+      "行高",
+      "上下页边距",
+      "左右页边距",
+      "模块间距",
+      "条目间距",
     ]) {
       expect(screen.getByRole("spinbutton", { name: label })).toBeInTheDocument();
     }
@@ -53,27 +53,27 @@ describe("ExportSettingsPanel — structure", () => {
 
   it("shows the current value in every control", () => {
     renderPanel({ template: "professional", font: "times", fontSize: 12.5 });
-    expect(screen.getByRole("combobox", { name: "Template" })).toHaveTextContent(
-      "Professional",
+    expect(screen.getByRole("combobox", { name: "模板" })).toHaveTextContent(
+      "专业",
     );
-    expect(screen.getByRole("combobox", { name: "Font" })).toHaveTextContent(
+    expect(screen.getByRole("combobox", { name: "字体" })).toHaveTextContent(
       "Times",
     );
-    expect(screen.getByRole("spinbutton", { name: "Font size" })).toHaveValue(
+    expect(screen.getByRole("spinbutton", { name: "字号" })).toHaveValue(
       12.5,
     );
     expect(
-      screen.getByRole("spinbutton", { name: "Margin left/right" }),
+      screen.getByRole("spinbutton", { name: "左右页边距" }),
     ).toHaveValue(48);
   });
 
   it("gives each stepper its field's own bounds and step", () => {
     renderPanel();
-    const size = screen.getByRole("spinbutton", { name: "Font size" });
+    const size = screen.getByRole("spinbutton", { name: "字号" });
     expect(size).toHaveAttribute("min", "8");
     expect(size).toHaveAttribute("max", "16");
     expect(size).toHaveAttribute("step", "0.5");
-    const line = screen.getByRole("spinbutton", { name: "Line height" });
+    const line = screen.getByRole("spinbutton", { name: "行高" });
     expect(line).toHaveAttribute("step", "0.05");
   });
 });
@@ -82,28 +82,28 @@ describe("ExportSettingsPanel — disclosure", () => {
   it("hides a collapsed group's rows behind a value summary", async () => {
     const { user } = renderPanel();
 
-    await user.click(screen.getByRole("button", { name: /Layout/ }));
+    await user.click(screen.getByRole("button", { name: /布局/ }));
 
     expect(
-      screen.queryByRole("spinbutton", { name: "Section spacing" }),
+      screen.queryByRole("spinbutton", { name: "模块间距" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText("40 × 48 pt margins • 6/8 pt spacing"),
+      screen.getByText("40 × 48 磅页边距 • 6/8 磅间距"),
     ).toBeInTheDocument();
   });
 
   it("summarises Typography with all three of its values", async () => {
     const { user } = renderPanel({ font: "courier", fontSize: 9.5 });
 
-    await user.click(screen.getByRole("button", { name: /Typography/ }));
+    await user.click(screen.getByRole("button", { name: /字体排版/ }));
 
-    expect(screen.getByText("Courier • 9.5 pt • 1.4 line")).toBeInTheDocument();
+    expect(screen.getByText("Courier • 9.5 pt • 1.4 倍行距")).toBeInTheDocument();
   });
 
   it("does not show a summary while the group is open", () => {
     renderPanel();
     expect(
-      screen.queryByText(/40 × 48 pt margins/),
+      screen.queryByText(/40 × 48 磅页边距/),
     ).not.toBeInTheDocument();
   });
 });
@@ -112,7 +112,7 @@ describe("ExportSettingsPanel — stepper buttons", () => {
   it("steps a value up by its own step, emitting the whole object", async () => {
     const { onChange, user } = renderPanel();
 
-    await user.click(screen.getByRole("button", { name: "Increase Font size" }));
+    await user.click(screen.getByRole("button", { name: "增大字号" }));
 
     expect(onChange).toHaveBeenCalledWith({
       ...defaultResumeExportSettings,
@@ -124,7 +124,7 @@ describe("ExportSettingsPanel — stepper buttons", () => {
     const { onChange, user } = renderPanel();
 
     await user.click(
-      screen.getByRole("button", { name: "Decrease Margin left/right" }),
+      screen.getByRole("button", { name: "减小左右页边距" }),
     );
 
     expect(onChange).toHaveBeenCalledWith({
@@ -139,7 +139,7 @@ describe("ExportSettingsPanel — stepper buttons", () => {
     const { onChange, user } = renderPanel();
 
     await user.click(
-      screen.getByRole("button", { name: "Increase Line height" }),
+      screen.getByRole("button", { name: "增大行高" }),
     );
 
     expect(onChange).toHaveBeenCalledWith({
@@ -151,7 +151,7 @@ describe("ExportSettingsPanel — stepper buttons", () => {
   it("clamps rather than stepping past a bound", async () => {
     const { onChange, user } = renderPanel({ fontSize: 15.8 });
 
-    await user.click(screen.getByRole("button", { name: "Increase Font size" }));
+    await user.click(screen.getByRole("button", { name: "增大字号" }));
 
     expect(onChange).toHaveBeenCalledWith({
       ...defaultResumeExportSettings,
@@ -162,13 +162,13 @@ describe("ExportSettingsPanel — stepper buttons", () => {
   it("disables the button that would leave the range", () => {
     renderPanel({ fontSize: 16, sectionSpacing: 0 });
     expect(
-      screen.getByRole("button", { name: "Increase Font size" }),
+      screen.getByRole("button", { name: "增大字号" }),
     ).toBeDisabled();
     expect(
-      screen.getByRole("button", { name: "Decrease Font size" }),
+      screen.getByRole("button", { name: "减小字号" }),
     ).toBeEnabled();
     expect(
-      screen.getByRole("button", { name: "Decrease Section spacing" }),
+      screen.getByRole("button", { name: "减小模块间距" }),
     ).toBeDisabled();
   });
 
@@ -176,7 +176,7 @@ describe("ExportSettingsPanel — stepper buttons", () => {
     const { onChange, user } = renderPanel();
 
     await user.click(
-      screen.getByRole("button", { name: "Increase Entry spacing" }),
+      screen.getByRole("button", { name: "增大条目间距" }),
     );
 
     expect(Object.keys(onChange.mock.calls[0][0])).toEqual(
@@ -188,7 +188,7 @@ describe("ExportSettingsPanel — stepper buttons", () => {
 describe("ExportSettingsPanel — typing", () => {
   it("commits a typed value that is in range", async () => {
     const { onChange, user } = renderPanel();
-    const input = screen.getByRole("spinbutton", { name: "Section spacing" });
+    const input = screen.getByRole("spinbutton", { name: "模块间距" });
 
     await user.clear(input);
     await user.type(input, "18");
@@ -201,7 +201,7 @@ describe("ExportSettingsPanel — typing", () => {
 
   it("commits a value off the step grid without snapping it", async () => {
     const { onChange, user } = renderPanel();
-    const input = screen.getByRole("spinbutton", { name: "Font size" });
+    const input = screen.getByRole("spinbutton", { name: "字号" });
 
     await user.clear(input);
     await user.type(input, "11.3");
@@ -216,7 +216,7 @@ describe("ExportSettingsPanel — typing", () => {
   // commits on the way through. "400" would commit 40 as it was typed.
   it("does not commit a value outside the range, and reverts on blur", async () => {
     const { onChange, user } = renderPanel();
-    const input = screen.getByRole("spinbutton", { name: "Margin left/right" });
+    const input = screen.getByRole("spinbutton", { name: "左右页边距" });
 
     await user.clear(input);
     await user.type(input, "99");
@@ -229,7 +229,7 @@ describe("ExportSettingsPanel — typing", () => {
   it("does not commit an emptied field", async () => {
     const { onChange, user } = renderPanel();
 
-    await user.clear(screen.getByRole("spinbutton", { name: "Entry spacing" }));
+    await user.clear(screen.getByRole("spinbutton", { name: "条目间距" }));
 
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -239,8 +239,8 @@ describe("ExportSettingsPanel — selects", () => {
   it("emits the whole object when the template changes", async () => {
     const { onChange, user } = renderPanel();
 
-    await user.click(screen.getByRole("combobox", { name: "Template" }));
-    await user.click(screen.getByRole("option", { name: "Professional" }));
+    await user.click(screen.getByRole("combobox", { name: "模板" }));
+    await user.click(screen.getByRole("option", { name: "专业" }));
 
     expect(onChange).toHaveBeenCalledWith({
       ...defaultResumeExportSettings,
@@ -251,7 +251,7 @@ describe("ExportSettingsPanel — selects", () => {
   it("emits the whole object when the font changes", async () => {
     const { onChange, user } = renderPanel();
 
-    await user.click(screen.getByRole("combobox", { name: "Font" }));
+    await user.click(screen.getByRole("combobox", { name: "字体" }));
     await user.click(screen.getByRole("option", { name: "Courier" }));
 
     expect(onChange).toHaveBeenCalledWith({
@@ -265,7 +265,7 @@ describe("ExportSettingsPanel — reset", () => {
   it("renders no reset control when no handler is given", () => {
     renderPanel();
     expect(
-      screen.queryByRole("button", { name: "Reset to defaults" }),
+      screen.queryByRole("button", { name: "恢复默认设置" }),
     ).not.toBeInTheDocument();
   });
 
@@ -280,7 +280,7 @@ describe("ExportSettingsPanel — reset", () => {
       />,
     );
     expect(
-      screen.getByRole("button", { name: "Reset to defaults" }),
+      screen.getByRole("button", { name: "恢复默认设置" }),
     ).toBeDisabled();
   });
 
@@ -296,7 +296,7 @@ describe("ExportSettingsPanel — reset", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Reset to defaults" }));
+    await user.click(screen.getByRole("button", { name: "恢复默认设置" }));
 
     expect(onReset).toHaveBeenCalledTimes(1);
   });
@@ -311,7 +311,7 @@ describe("ExportSettingsPanel — reset", () => {
         isDefault={false}
       />,
     );
-    expect(screen.getByRole("spinbutton", { name: "Font size" })).toHaveValue(
+    expect(screen.getByRole("spinbutton", { name: "字号" })).toHaveValue(
       13,
     );
 
@@ -324,7 +324,7 @@ describe("ExportSettingsPanel — reset", () => {
       />,
     );
 
-    expect(screen.getByRole("spinbutton", { name: "Font size" })).toHaveValue(
+    expect(screen.getByRole("spinbutton", { name: "字号" })).toHaveValue(
       11,
     );
   });

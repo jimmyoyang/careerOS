@@ -29,6 +29,7 @@ import { TooltipProvider } from "../ui/tooltip";
 import { JobActionsMenu } from "./JobActionsMenu";
 import { MatchJobButton } from "./MatchJobButton";
 import { CompanyLogo } from "./CompanyLogo";
+import { PlatformBadge } from "@/components/career/PlatformBadge";
 
 type MyJobsTableProps = {
   jobs: JobResponse[];
@@ -65,29 +66,29 @@ function MyJobsTable({
         <TableHeader>
           <TableRow>
             <TableHead className="hidden w-[100px] sm:table-cell">
-              <span className="sr-only">Company Logo</span>
+              <span className="sr-only">公司标志</span>
             </TableHead>
             <SortableTableHead field="appliedDate" sort={sort} onSort={onSort} className="hidden md:table-cell">
-              Applied
+              已投递
             </SortableTableHead>
             <SortableTableHead field="title" sort={sort} onSort={onSort}>
-              Title
+              标题
             </SortableTableHead>
             <SortableTableHead field="company" sort={sort} onSort={onSort}>
-              Company
+              公司
             </SortableTableHead>
             <SortableTableHead field="location" sort={sort} onSort={onSort} className="hidden md:table-cell">
-              Location
+              地点
             </SortableTableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>状态</TableHead>
             <SortableTableHead field="matchScore" sort={sort} onSort={onSort} className="hidden md:table-cell text-center">
-              Match
+              匹配
             </SortableTableHead>
             <SortableTableHead field="source" sort={sort} onSort={onSort} className="hidden md:table-cell">
-              Source
+              来源
             </SortableTableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -102,7 +103,7 @@ function MyJobsTable({
                   />
                 </TableCell>
                 <TableCell className="hidden md:table-cell w-[120px] whitespace-nowrap">
-                  {job.appliedDate ? format(job.appliedDate, "PP") : "N/A"}
+                  {job.appliedDate ? format(job.appliedDate, "yyyy年M月d日") : "暂无"}
                 </TableCell>
                 <TableCell
                   className="font-medium cursor-pointer max-w-[120px] md:max-w-[220px]"
@@ -163,15 +164,15 @@ function MyJobsTable({
                   )}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {job.JobSource?.label}
+                  <PlatformBadge source={job.JobSource?.value} label={job.JobSource?.label} compact />
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
-                      title="Edit Job"
-                      aria-label="Edit Job"
+                      title="编辑职位"
+                      aria-label="编辑职位"
                       onClick={() => editJob(job.id)}
                     >
                       <Pencil className="h-4 w-4" />
@@ -179,8 +180,8 @@ function MyJobsTable({
                     <Button
                       variant="ghost"
                       size="icon"
-                      title="Delete Job"
-                      aria-label="Delete Job"
+                      title="删除职位"
+                      aria-label="删除职位"
                       className="text-destructive hover:text-destructive"
                       onClick={() => onDeleteJob(job.id)}
                     >
@@ -200,7 +201,7 @@ function MyJobsTable({
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="job"
+        pageTitle="职位"
         open={alertOpen}
         onOpenChange={setAlertOpen}
         onDelete={() => deleteJob(jobIdToDelete)}

@@ -12,46 +12,46 @@ async function createResumeForMatching(
   cleanup: CleanupRegistry,
 ) {
   await page.goto("/dashboard/profile");
-  await page.getByRole("button", { name: "New", exact: true }).click();
-  await page.getByRole("menuitem", { name: "Add New Resume" }).click();
-  await page.getByPlaceholder("Ex: Full Stack Developer").fill(title);
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "新建", exact: true }).click();
+  await page.getByRole("menuitem", { name: "新建简历" }).click();
+  await page.getByPlaceholder("例如：全栈开发工程师").fill(title);
+  await page.getByRole("button", { name: "保存" }).click();
   cleanup.resume(title);
 
   const row = page.getByRole("row", { name: new RegExp(title, "i") }).first();
   await expect(row).toBeVisible({ timeout: 20000 });
   await row.getByTestId("document-actions-menu-btn").click();
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await expect(page.getByRole("heading", { name: "Resume" })).toBeVisible();
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
 
   // Section 1: Summary
-  await page.getByRole("button", { name: "Add Section" }).click();
-  await page.getByRole("menuitem", { name: "Add Summary" }).click();
-  await page.getByLabel("Section Title").fill("Summary");
+  await page.getByRole("button", { name: "添加模块" }).click();
+  await page.getByRole("menuitem", { name: "添加个人简介" }).click();
+  await page.getByLabel("模块标题").fill("Summary");
   await page.locator(".tiptap").click();
   await page.locator(".tiptap").fill("Experienced full stack engineer.\n");
   await page
     .getByRole("dialog")
-    .getByRole("button", { name: "Save" })
+    .getByRole("button", { name: "保存" })
     .click();
   await expect(page.getByRole("heading", { name: "Summary" })).toBeVisible({
     timeout: 20000,
   });
 
   // Section 2: Certification
-  await page.getByRole("button", { name: "Add Section" }).click();
+  await page.getByRole("button", { name: "添加模块" }).click();
   await page
-    .getByRole("menuitem", { name: "Add Certification / License" })
+    .getByRole("menuitem", { name: "添加证书或执照" })
     .click();
   await page
-    .getByPlaceholder("Ex: AWS Certified Solutions Architect")
+    .getByPlaceholder("例如：AWS Certified Solutions Architect")
     .fill("AWS Solutions Architect");
   await page
-    .getByPlaceholder("Ex: Amazon Web Services")
+    .getByPlaceholder("例如：Amazon Web Services")
     .fill("Amazon Web Services");
   await page
     .getByRole("dialog")
-    .getByRole("button", { name: "Save" })
+    .getByRole("button", { name: "保存" })
     .click();
   await expect(page.getByText("AWS Solutions Architect")).toBeVisible({
     timeout: 20000,
@@ -81,38 +81,38 @@ async function createGreenhouseAutomation(
   hour: number = test.info().parallelIndex,
 ) {
   await page.goto("/dashboard/automations");
-  await page.getByRole("button", { name: "Create Automation" }).click();
+  await page.getByRole("button", { name: "创建自动化" }).click();
   const dialog = page.getByRole("dialog");
-  await expect(dialog.getByText("Step 1 of 6")).toBeVisible();
+  await expect(dialog.getByText("步骤 1 / 6")).toBeVisible();
 
   // Step 1: Basics (jobBoard defaults to greenhouse)
   await dialog
-    .getByPlaceholder("e.g., Full Stack Jobs Calgary")
+    .getByPlaceholder("例如：上海全栈工程师岗位")
     .fill(name);
   cleanup.automation(name);
-  await dialog.getByRole("button", { name: "Next" }).click();
+  await dialog.getByRole("button", { name: "下一步" }).click();
 
   // Step 2: Search — pick the first seeded company
-  await dialog.getByRole("button", { name: /Search companies/ }).click();
+  await dialog.getByRole("button", { name: /搜索公司/ }).click();
   await expect(page.getByRole("option").first()).toBeVisible();
   await page.getByRole("option").first().click();
   await page.keyboard.press("Escape");
-  await dialog.getByRole("button", { name: "Next" }).click();
+  await dialog.getByRole("button", { name: "下一步" }).click();
 
   // Step 3: Resume
   await dialog.getByRole("combobox").click();
   await page.getByRole("option", { name: resumeTitle }).click();
-  await dialog.getByRole("button", { name: "Next" }).click();
+  await dialog.getByRole("button", { name: "下一步" }).click();
 
   // Step 4: Matching (default threshold)
-  await dialog.getByRole("button", { name: "Next" }).click();
+  await dialog.getByRole("button", { name: "下一步" }).click();
 
   // Step 5: Schedule — worker-unique hour (see fn doc)
   await selectScheduleHour(page, dialog, hour);
-  await dialog.getByRole("button", { name: "Next" }).click();
+  await dialog.getByRole("button", { name: "下一步" }).click();
 
   // Step 6: Review -> submit
-  await submitWizard(page, dialog, /Create Automation/, name);
+  await submitWizard(page, dialog, /创建自动化/, name);
 }
 
 // Submits the wizard's final step and waits for the row to appear. The footer's
@@ -157,7 +157,7 @@ test.describe("Automations", () => {
 
     const card = automationCard(page, name);
     await expect(card.getByText("greenhouse", { exact: true })).toBeVisible();
-    await expect(card.getByText("active", { exact: true })).toBeVisible();
+    await expect(card.getByText("启用", { exact: true })).toBeVisible();
   });
 
   test("should block Next until required fields are filled", async ({
@@ -166,21 +166,21 @@ test.describe("Automations", () => {
     // No resume/automation is persisted: the wizard is opened and closed
     // without submitting, so this test needs no cleanup.
     await page.goto("/dashboard/automations");
-    await page.getByRole("button", { name: "Create Automation" }).click();
+    await page.getByRole("button", { name: "创建自动化" }).click();
     const dialog = page.getByRole("dialog");
-    const next = dialog.getByRole("button", { name: "Next" });
+    const next = dialog.getByRole("button", { name: "下一步" });
 
     // Step 1: Next disabled until the automation has a name.
     await expect(next).toBeDisabled();
     await dialog
-      .getByPlaceholder("e.g., Full Stack Jobs Calgary")
+      .getByPlaceholder("例如：上海全栈工程师岗位")
       .fill(uniqueName("Draft"));
     await expect(next).toBeEnabled();
     await next.click();
 
     // Step 2: Next disabled until at least one company is selected.
     await expect(next).toBeDisabled();
-    await dialog.getByRole("button", { name: /Search companies/ }).click();
+    await dialog.getByRole("button", { name: /搜索公司/ }).click();
     await expect(page.getByRole("option").first()).toBeVisible();
     await page.getByRole("option").first().click();
     await page.keyboard.press("Escape");
@@ -202,18 +202,18 @@ test.describe("Automations", () => {
     await page.getByRole("link", { name }).click();
     await expect(page).toHaveURL(/\/dashboard\/automations\/[a-f0-9-]+/);
     await expect(page.getByRole("heading", { name })).toBeVisible();
-    await expect(page.getByText("Job Board")).toBeVisible();
-    await expect(page.getByText("Match Threshold")).toBeVisible();
-    await expect(page.getByRole("tab", { name: "Logs" })).toBeVisible();
+    await expect(page.getByText("招聘平台")).toBeVisible();
+    await expect(page.getByText("匹配阈值")).toBeVisible();
+    await expect(page.getByRole("tab", { name: "日志" })).toBeVisible();
     await expect(
-      page.getByRole("tab", { name: /Discovered Jobs/ }),
+      page.getByRole("tab", { name: /发现的岗位/ }),
     ).toBeVisible();
-    await expect(page.getByRole("tab", { name: "Run History" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "运行记录" })).toBeVisible();
 
     // No run has executed, so the discovered-jobs tab shows the empty state.
-    await page.getByRole("tab", { name: /Discovered Jobs/ }).click();
+    await page.getByRole("tab", { name: /发现的岗位/ }).click();
     await expect(
-      page.getByRole("heading", { name: "No discovered jobs" }),
+      page.getByRole("heading", { name: "暂无发现的岗位" }),
     ).toBeVisible();
   });
 
@@ -228,12 +228,12 @@ test.describe("Automations", () => {
 
     const card = automationCard(page, name);
     await card.getByRole("button").click();
-    await page.getByRole("menuitem", { name: "Pause" }).click();
-    await expect(card.getByText("paused")).toBeVisible({ timeout: 20000 });
+    await page.getByRole("menuitem", { name: "暂停" }).click();
+    await expect(card.getByText("已暂停")).toBeVisible({ timeout: 20000 });
 
     await card.getByRole("button").click();
-    await page.getByRole("menuitem", { name: "Resume" }).click();
-    await expect(card.getByText("active")).toBeVisible({ timeout: 20000 });
+    await page.getByRole("menuitem", { name: "恢复" }).click();
+    await expect(card.getByText("启用")).toBeVisible({ timeout: 20000 });
   });
 
   test("should delete an automation from the list menu", async ({
@@ -247,13 +247,13 @@ test.describe("Automations", () => {
 
     const card = automationCard(page, name);
     await card.getByRole("button").click();
-    await page.getByRole("menuitem", { name: "Delete" }).click();
+    await page.getByRole("menuitem", { name: "删除" }).click();
     await expect(page.getByRole("alertdialog")).toContainText(
-      "Are you sure you want to delete this automation?",
+      "确定删除此自动化？",
     );
     await page
       .getByRole("alertdialog")
-      .getByRole("button", { name: "Delete" })
+      .getByRole("button", { name: "删除" })
       .click();
     await expect(page.getByRole("link", { name })).not.toBeVisible({
       timeout: 20000,
@@ -271,21 +271,21 @@ test.describe("Automations", () => {
 
     const card = automationCard(page, name);
     await card.getByRole("button").click();
-    await page.getByRole("menuitem", { name: "Edit" }).click();
+    await page.getByRole("menuitem", { name: "编辑" }).click();
     const dialog = page.getByRole("dialog");
     await expect(
-      dialog.getByRole("heading", { name: "Edit Automation" }),
+      dialog.getByRole("heading", { name: "编辑自动化" }),
     ).toBeVisible();
     await dialog
-      .getByPlaceholder("e.g., Full Stack Jobs Calgary")
+      .getByPlaceholder("例如：上海全栈工程师岗位")
       .fill(editedName);
 
     // Company and resume are already set from the original, so each step's Next
     // is enabled — step straight through to review.
     for (let i = 0; i < 5; i++) {
-      await dialog.getByRole("button", { name: "Next" }).click();
+      await dialog.getByRole("button", { name: "下一步" }).click();
     }
-    await submitWizard(page, dialog, /Update Automation/, editedName);
+    await submitWizard(page, dialog, /更新自动化/, editedName);
   });
 
   test("should mark in-use hours, block a duplicate schedule, and allow a free hour", async ({
@@ -307,25 +307,25 @@ test.describe("Automations", () => {
 
     // Open a second Create wizard and walk to the Schedule step.
     cleanup.automation(nameB);
-    await page.getByRole("button", { name: "Create Automation" }).click();
+    await page.getByRole("button", { name: "创建自动化" }).click();
     const dialog = page.getByRole("dialog");
     await dialog
-      .getByPlaceholder("e.g., Full Stack Jobs Calgary")
+      .getByPlaceholder("例如：上海全栈工程师岗位")
       .fill(nameB);
-    await dialog.getByRole("button", { name: "Next" }).click();
+    await dialog.getByRole("button", { name: "下一步" }).click();
 
-    await dialog.getByRole("button", { name: /Search companies/ }).click();
+    await dialog.getByRole("button", { name: /搜索公司/ }).click();
     await expect(page.getByRole("option").first()).toBeVisible();
     await page.getByRole("option").first().click();
     await page.keyboard.press("Escape");
-    await dialog.getByRole("button", { name: "Next" }).click();
+    await dialog.getByRole("button", { name: "下一步" }).click();
 
     await dialog.getByRole("combobox").click();
     await page.getByRole("option", { name: resumeTitle }).click();
-    await dialog.getByRole("button", { name: "Next" }).click();
+    await dialog.getByRole("button", { name: "下一步" }).click();
 
     // Matching -> Schedule
-    await dialog.getByRole("button", { name: "Next" }).click();
+    await dialog.getByRole("button", { name: "下一步" }).click();
 
     // hourA (taken by automation A) is flagged "In use" in the picker.
     await dialog.getByRole("combobox").click();
@@ -339,19 +339,19 @@ test.describe("Automations", () => {
     // Picking the taken hour and clicking Next surfaces the clash error and
     // keeps the wizard on the Schedule step.
     await page.getByRole("option").filter({ hasText: labelA }).click();
-    await dialog.getByRole("button", { name: "Next" }).click();
+    await dialog.getByRole("button", { name: "下一步" }).click();
     await expect(
-      dialog.getByText(/Another automation already runs at/),
+      dialog.getByText(/已有其他自动化在/),
     ).toBeVisible();
-    await expect(dialog.getByText("Step 5 of 6")).toBeVisible();
+    await expect(dialog.getByText("步骤 5 / 6")).toBeVisible();
 
     // Switching to a free hour clears the error and lets the wizard proceed.
     await selectScheduleHour(page, dialog, hourB);
     await expect(
-      dialog.getByText(/Another automation already runs at/),
+      dialog.getByText(/已有其他自动化在/),
     ).not.toBeVisible();
-    await dialog.getByRole("button", { name: "Next" }).click();
-    await expect(dialog.getByText("Step 6 of 6")).toBeVisible();
-    await submitWizard(page, dialog, /Create Automation/, nameB);
+    await dialog.getByRole("button", { name: "下一步" }).click();
+    await expect(dialog.getByText("步骤 6 / 6")).toBeVisible();
+    await submitWizard(page, dialog, /创建自动化/, nameB);
   });
 });

@@ -3,8 +3,8 @@ import type { NumericSetting, PdfFont } from "./pdfExport.model";
 export type ResumeLayout = "simple" | "professional";
 
 export const RESUME_LAYOUT_LABELS: Record<ResumeLayout, string> = {
-  simple: "Simple",
-  professional: "Professional",
+  simple: "简洁",
+  professional: "专业",
 };
 
 // The explicit list the resume's coercion iterates. Iterating the merged

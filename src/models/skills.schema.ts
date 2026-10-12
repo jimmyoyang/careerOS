@@ -5,16 +5,16 @@ const SkillCategorySchema = z.object({
   label: z.string().trim().max(60).optional(),
   tagIds: z
     .array(z.string())
-    .min(1, "Add at least one skill")
+    .min(1, "请至少添加一项技能")
     .max(APP_CONSTANTS.MAX_SKILLS_PER_CATEGORY),
 });
 
 export const AddSkillsFormSchema = z.object({
   resumeId: z.string(),
-  sectionTitle: z.string().trim().min(1, "Section title is required"),
+  sectionTitle: z.string().trim().min(1, "请填写模块标题"),
   categories: z
     .array(SkillCategorySchema)
-    .min(1, "Add at least one category")
+    .min(1, "请至少添加一个分类")
     .max(APP_CONSTANTS.MAX_SKILL_CATEGORIES),
 });
 

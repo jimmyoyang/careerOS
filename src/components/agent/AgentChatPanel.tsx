@@ -75,7 +75,7 @@ export function AgentChatPanel() {
 
         <div className="flex items-center gap-3 px-4 py-2.5 border-b bg-muted/20 shrink-0">
           <SheetTitle className="text-[11px] font-bold tracking-[0.15em] uppercase text-foreground leading-none shrink-0 m-0">
-            AI AGENT
+            AI 助手
           </SheetTitle>
           <span className="text-muted-foreground/30 text-xs select-none">
             ···
@@ -96,10 +96,10 @@ export function AgentChatPanel() {
             size="sm"
             variant="ghost"
           >
-            Clear
+            清空
           </Button>
           <Button
-            aria-label={isPanelExpanded ? "Restore panel" : "Expand panel"}
+            aria-label={isPanelExpanded ? "还原面板" : "展开面板"}
             className="h-6 w-6 shrink-0 rounded-sm opacity-70 hover:opacity-100 hidden lg:inline-flex"
             onClick={togglePanelExpand}
             size="icon"
@@ -108,7 +108,7 @@ export function AgentChatPanel() {
             <Scan className="h-3.5 w-3.5" />
           </Button>
           <Button
-            aria-label="Close chat"
+            aria-label="关闭聊天"
             className="h-6 w-6 shrink-0 rounded-sm opacity-70 hover:opacity-100"
             onClick={close}
             size="icon"

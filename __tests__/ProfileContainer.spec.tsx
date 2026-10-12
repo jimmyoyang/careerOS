@@ -48,23 +48,27 @@ describe("ProfileContainer Component", () => {
     vi.clearAllMocks();
   });
   it("should render the profile container component", () => {
-    expect(screen.getByText(/profile/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "简历中心" })).toBeInTheDocument();
+  });
+  it("opens resume creation directly from the empty state", async () => {
+    await userEvent.click(screen.getByRole("button", { name: "创建或导入简历" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
   it("should open the create resume dialog upon clicking create resume button", async () => {
     const user = userEvent.setup();
 
     const newButton = screen.getByRole("button", {
-      name: /new/i,
+      name: /新建/i,
     });
     await user.click(newButton);
 
-    const addResumeItem = await screen.findByText(/add new resume/i);
+    const addResumeItem = await screen.findByRole("menuitem", { name: "新建简历" });
     await user.click(addResumeItem);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: /create resume/i }),
+      screen.getByRole("heading", { level: 2, name: /创建简历/i }),
     ).toBeInTheDocument();
   });
 });

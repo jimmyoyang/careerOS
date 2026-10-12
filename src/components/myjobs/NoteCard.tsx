@@ -16,9 +16,9 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
     <div className="border rounded-lg p-4 space-y-2">
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
-          {format(new Date(note.createdAt), "PPp")}
+          {format(new Date(note.createdAt), "yyyy年M月d日 HH:mm")}
           {note.isEdited && (
-            <span className="ml-2 text-xs text-muted-foreground">(edited)</span>
+            <span className="ml-2 text-xs text-muted-foreground">（已编辑）</span>
           )}
         </div>
         <div className="flex gap-1">

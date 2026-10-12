@@ -18,7 +18,7 @@ export function AgentResultCard({ part }: { part: ToolUIPart }) {
   if (part.state === "output-denied") {
     return (
       <div className="rounded-sm border p-3 text-sm text-muted-foreground">
-        Cancelled — nothing was saved.
+        已取消，未保存任何内容。
       </div>
     );
   }
@@ -26,7 +26,7 @@ export function AgentResultCard({ part }: { part: ToolUIPart }) {
   if (part.state === "output-error") {
     return (
       <div className="rounded-sm border p-3 text-sm">
-        That could not be completed. Try asking again.
+        未能完成，请重新提问。
       </div>
     );
   }

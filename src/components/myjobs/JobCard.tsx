@@ -4,7 +4,6 @@ import {
   DollarSign,
   MapPin,
   Pencil,
-  PlusCircle,
   StickyNote,
   Trash,
 } from "lucide-react";
@@ -23,6 +22,7 @@ import { JobStatusBadge } from "./JobStatusBadge";
 import { JobActionsMenu } from "./JobActionsMenu";
 import { MatchJobButton } from "./MatchJobButton";
 import { CompanyLogo } from "./CompanyLogo";
+import { PlatformBadge } from "@/components/career/PlatformBadge";
 
 type JobCardProps = {
   job: JobResponse;
@@ -98,16 +98,13 @@ export function JobCard({
         <span className="flex items-center gap-1 whitespace-nowrap">
           <Calendar className="h-3.5 w-3.5 shrink-0" />
           {job.appliedDate
-            ? format(job.appliedDate, "PP")
+            ? format(job.appliedDate, "yyyy年M月d日")
             : job.applied
-              ? "Applied"
-              : "Not applied"}
+              ? "已投递"
+              : "未投递"}
         </span>
         {job.JobSource?.label && (
-          <span className="flex min-w-0 items-center gap-1">
-            <PlusCircle className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">{job.JobSource.label}</span>
-          </span>
+          <PlatformBadge source={job.JobSource.value} label={job.JobSource.label} compact />
         )}
         {job.salaryRange && (
           <span className="flex min-w-0 items-center gap-1">
@@ -133,8 +130,8 @@ export function JobCard({
           <Button
             variant="ghost"
             size="icon"
-            title="Edit Job"
-            aria-label="Edit Job"
+            title="编辑职位"
+            aria-label="编辑职位"
             onClick={() => editJob(job.id)}
           >
             <Pencil className="h-4 w-4" />
@@ -142,8 +139,8 @@ export function JobCard({
           <Button
             variant="ghost"
             size="icon"
-            title="Delete Job"
-            aria-label="Delete Job"
+            title="删除职位"
+            aria-label="删除职位"
             className="text-destructive hover:text-destructive"
             onClick={() => onDeleteJob(job.id)}
           >

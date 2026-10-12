@@ -26,7 +26,7 @@ export function StageNotes({ stage, onChanged }: StageNotesProps) {
   const save = () => {
     startTransition(async () => {
       const res = await setStageNotes(stage.id, draft);
-      toastActionResult(res, { success: "Note saved", onSuccess: onChanged });
+      toastActionResult(res, { success: "笔记已保存", onSuccess: onChanged });
     });
   };
 
@@ -36,13 +36,13 @@ export function StageNotes({ stage, onChanged }: StageNotesProps) {
         htmlFor={`stage-notes-${stage.id}`}
         className="text-[11px] font-bold tracking-wide text-muted-foreground"
       >
-        NOTES
+        笔记
       </label>
       <Textarea
         id={`stage-notes-${stage.id}`}
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
-        placeholder="What happened, what to prepare next time…"
+        placeholder="记录本次情况及下次需要准备的内容…"
         className="mt-2 min-h-18 resize-none text-sm"
       />
       {/* Only once there is something to save: the artboard shows the edit
@@ -55,7 +55,7 @@ export function StageNotes({ stage, onChanged }: StageNotesProps) {
             className="cursor-pointer"
             onClick={() => setDraft(stage.notes ?? "")}
           >
-            Cancel
+            取消
           </Button>
           <Button
             size="sm"
@@ -63,7 +63,7 @@ export function StageNotes({ stage, onChanged }: StageNotesProps) {
             disabled={saving}
             onClick={save}
           >
-            Save Changes
+            保存更改
           </Button>
         </div>
       )}

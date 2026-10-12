@@ -101,6 +101,17 @@ function Harness({
 
 type HarnessProps = Partial<React.ComponentProps<typeof Harness>>;
 
+const fieldPlaceholders: Record<string, string> = {
+  company: "公司",
+  title: "职位",
+  location: "地点",
+  source: "来源",
+  contactRole: "联系人角色",
+  activityType: "活动类型",
+  workedAtCompany: "共事公司",
+  salaryRange: "薪资范围",
+};
+
 async function openCombobox(props: HarnessProps = {}) {
   const user = userEvent.setup();
   const onChange = vi.fn();
@@ -109,7 +120,7 @@ async function openCombobox(props: HarnessProps = {}) {
   await user.click(screen.getByRole("combobox"));
   const label = props.name ?? "company";
   const input = screen.getByPlaceholderText(
-    new RegExp(`Search ${label}`, "i")
+    new RegExp(`搜索${fieldPlaceholders[label] ?? "选项"}`)
   ) as HTMLInputElement;
   return { user, onChange, input };
 }
@@ -150,7 +161,7 @@ describe("Combobox Enter key", () => {
 
       await waitFor(() => expect(onChange).toHaveBeenCalledWith("new-id"));
       await waitFor(() =>
-        expect(screen.queryByPlaceholderText(/Search company/i)).toBeNull()
+        expect(screen.queryByPlaceholderText(/搜索公司/)).toBeNull()
       );
     });
 
@@ -310,7 +321,7 @@ describe("Combobox Enter key", () => {
       await user.click(screen.getByText("eBay"));
 
       await waitFor(() =>
-        expect(screen.queryByPlaceholderText(/Search company/i)).toBeNull()
+        expect(screen.queryByPlaceholderText(/搜索公司/)).toBeNull()
       );
       expectNoCapitalize(screen.getByText("eBay"));
     });
@@ -347,7 +358,7 @@ describe("Combobox Enter key", () => {
 
       await user.click(screen.getByRole("combobox"));
       await user.type(
-        screen.getByPlaceholderText(/Search company/i),
+        screen.getByPlaceholderText(/搜索公司/),
         "Zebra{Enter}"
       );
 
@@ -466,7 +477,7 @@ describe("Combobox freeText", () => {
     );
 
     await user.click(screen.getByRole("combobox"));
-    const input = screen.getByPlaceholderText(/Search salaryRange/i);
+    const input = screen.getByPlaceholderText(/搜索薪资范围/);
     await user.type(input, "$190k - $220k{Enter}");
 
     await waitFor(() =>
@@ -494,7 +505,7 @@ describe("Combobox freeText", () => {
     render(<Harness onChange={onChange} options={companies} />);
 
     await user.click(screen.getByRole("combobox"));
-    const input = screen.getByPlaceholderText(/Search company/i);
+    const input = screen.getByPlaceholderText(/搜索公司/);
     await user.type(input, "Zebra{Enter}");
 
     // options.unshift doesn't survive the re-render, so the created entry has
@@ -512,11 +523,11 @@ describe("Combobox label", () => {
     );
 
     const trigger = screen.getByRole("combobox");
-    expect(trigger).toHaveTextContent("Select Salary Range");
+    expect(trigger).toHaveTextContent("选择薪资范围");
 
     await user.click(trigger);
     expect(
-      screen.getByPlaceholderText("Create or Search Salary Range")
+      screen.getByPlaceholderText("创建或搜索薪资范围")
     ).toBeInTheDocument();
   });
 
@@ -525,11 +536,11 @@ describe("Combobox label", () => {
     render(<Harness onChange={vi.fn()} />);
 
     const trigger = screen.getByRole("combobox");
-    expect(trigger).toHaveTextContent("Select company");
+    expect(trigger).toHaveTextContent("选择公司");
 
     await user.click(trigger);
     expect(
-      screen.getByPlaceholderText("Create or Search company")
+      screen.getByPlaceholderText("创建或搜索公司")
     ).toBeInTheDocument();
   });
 });
@@ -543,7 +554,7 @@ describe("Combobox onSearchChange", () => {
     );
 
     await user.click(screen.getByRole("combobox"));
-    await user.type(screen.getByPlaceholderText(/Search company/i), "Ada");
+    await user.type(screen.getByPlaceholderText(/搜索公司/), "Ada");
 
     await waitFor(() => expect(onSearchChange).toHaveBeenCalledWith("Ada"));
   });

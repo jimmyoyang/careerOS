@@ -30,13 +30,13 @@ export type NumericSettingSpec = {
 // One table: the stepper rows, the summaries and the storage validators all
 // read their bounds from here.
 export const PDF_NUMERIC_SETTINGS: Record<NumericSetting, NumericSettingSpec> = {
-  fontSize: { label: "Font size", min: 8, max: 16, step: 0.5, decimals: 1, unit: "pt" },
-  lineHeight: { label: "Line height", min: 1, max: 2, step: 0.05, decimals: 2, unit: "" },
-  marginVertical: { label: "Margin top/bottom", min: 18, max: 90, step: 2, decimals: 0, unit: "pt" },
-  marginHorizontal: { label: "Margin left/right", min: 18, max: 90, step: 2, decimals: 0, unit: "pt" },
-  sectionSpacing: { label: "Section spacing", min: 0, max: 32, step: 1, decimals: 0, unit: "pt" },
-  entrySpacing: { label: "Entry spacing", min: 0, max: 32, step: 1, decimals: 0, unit: "pt" },
-  paragraphSpacing: { label: "Paragraph spacing", min: 0, max: 24, step: 1, decimals: 0, unit: "pt" },
+  fontSize: { label: "字号", min: 8, max: 16, step: 0.5, decimals: 1, unit: "pt" },
+  lineHeight: { label: "行高", min: 1, max: 2, step: 0.05, decimals: 2, unit: "" },
+  marginVertical: { label: "上下页边距", min: 18, max: 90, step: 2, decimals: 0, unit: "pt" },
+  marginHorizontal: { label: "左右页边距", min: 18, max: 90, step: 2, decimals: 0, unit: "pt" },
+  sectionSpacing: { label: "模块间距", min: 0, max: 32, step: 1, decimals: 0, unit: "pt" },
+  entrySpacing: { label: "条目间距", min: 0, max: 32, step: 1, decimals: 0, unit: "pt" },
+  paragraphSpacing: { label: "段落间距", min: 0, max: 24, step: 1, decimals: 0, unit: "pt" },
 };
 
 // The shape styleTokens consumes — the settings both documents share.

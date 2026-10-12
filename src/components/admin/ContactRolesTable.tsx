@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import { Button } from "../ui/button";
 
@@ -41,14 +43,10 @@ function ContactRolesTable({ roles, reloadRoles }: ContactRolesTableProps) {
     if (links > 0 || holders > 0) {
       setAlert({
         openState: true,
-        title: "Associated contacts exist!",
+        title: "存在关联联系人！",
         description: links
-          ? `This role is used by ${links} contact link${
-              links === 1 ? "" : "s"
-            }. Remove those links before deleting the role.`
-          : `This role is set on ${holders} contact${
-              holders === 1 ? "" : "s"
-            }. Change their role before deleting it.`,
+          ? `该角色用于 ${links} 条联系人关联。请先移除这些关联，再删除该角色。`
+          : `有 ${holders} 位联系人使用该角色。请先更改他们的角色，再删除该角色。`,
         deleteAction: false,
       });
     } else {
@@ -60,7 +58,7 @@ function ContactRolesTable({ roles, reloadRoles }: ContactRolesTableProps) {
     if (roleId) {
       const { success, message } = await deleteContactRoleById(roleId);
       if (success) {
-        toastSuccess("Contact role has been deleted successfully");
+        toastSuccess("联系人角色已删除");
         reloadRoles();
       } else {
         toastError(message);
@@ -73,11 +71,11 @@ function ContactRolesTable({ roles, reloadRoles }: ContactRolesTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Role</TableHead>
-            <TableHead className="hidden sm:table-cell">Value</TableHead>
-            <TableHead>Contacts Linked</TableHead>
+            <TableHead>角色</TableHead>
+            <TableHead className="hidden sm:table-cell">标识值</TableHead>
+            <TableHead>关联联系人数</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -85,7 +83,7 @@ function ContactRolesTable({ roles, reloadRoles }: ContactRolesTableProps) {
           {roles.map((role: ContactRole) => {
             return (
               <TableRow key={role.id}>
-                <TableCell className="font-medium">{role.label}</TableCell>
+                <TableCell className="font-medium">{zhLabel(role.label)}</TableCell>
                 <TableCell className="font-medium hidden sm:table-cell">
                   {role.value}
                 </TableCell>
@@ -97,17 +95,17 @@ function ContactRolesTable({ roles, reloadRoles }: ContactRolesTableProps) {
                     <DropdownMenuTrigger asChild>
                       <Button aria-haspopup="true" size="icon" variant="ghost">
                         <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">打开菜单</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>操作</DropdownMenuLabel>
                       <DropdownMenuItem
                         className="text-red-600 cursor-pointer"
                         onClick={() => onDeleteRole(role)}
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        删除
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -118,7 +116,7 @@ function ContactRolesTable({ roles, reloadRoles }: ContactRolesTableProps) {
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="role"
+        pageTitle="角色"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteRole(alert.itemId!)}

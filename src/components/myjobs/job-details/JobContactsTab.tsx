@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useRef, useState } from "react";
 import { format } from "date-fns";
 import { PlusCircle, Trash, Users } from "lucide-react";
@@ -66,7 +68,7 @@ export function JobContactsTab({
     const res = await removeJobContact(removeTarget.id);
     setRemoveTarget(null);
     toastActionResult(res, {
-      success: "Contact has been unlinked from this job",
+      success: "已解除联系人与该职位的关联",
       onSuccess: reload,
     });
   };
@@ -82,7 +84,7 @@ export function JobContactsTab({
             onClick={openForm}
           >
             <PlusCircle className="h-3.5 w-3.5" />
-            Add Contact
+            添加联系人
           </Button>
         </div>
       )}
@@ -106,9 +108,9 @@ export function JobContactsTab({
       {links.length === 0 && !showForm && (
         <JobTabEmptyState
           icon={Users}
-          title="No contacts on this job"
-          description="Link the recruiter, the panel, or a reference you named for this application."
-          actionLabel="Add Contact"
+          title="该职位暂无联系人"
+          description="关联这次申请的招聘人员、面试官或推荐人。"
+          actionLabel="添加联系人"
           onAction={openForm}
         />
       )}
@@ -131,7 +133,7 @@ export function JobContactsTab({
                   {row.Contact.Company.label}
                 </span>
               )}
-              <Badge variant="secondary">{row.Role.label}</Badge>
+              <Badge variant="secondary">{zhLabel(row.Role.label)}</Badge>
               {row.Contact?.email && (
                 <a
                   href={`mailto:${row.Contact.email}`}
@@ -160,14 +162,14 @@ export function JobContactsTab({
               )}
               {row.Contact?.lastContactedAt && (
                 <span className="text-muted-foreground">
-                  Last contacted {format(row.Contact.lastContactedAt, "PP")}
+                  最近联系 {format(row.Contact.lastContactedAt, "yyyy年M月d日")}
                 </span>
               )}
               <Button
                 variant="ghost"
                 size="icon"
                 className="ml-auto cursor-pointer"
-                aria-label={`Remove ${row.Contact?.name}`}
+                aria-label={`移除${row.Contact?.name}`}
                 onClick={() => setRemoveTarget(row)}
               >
                 <Trash className="h-4 w-4 text-red-600" />
@@ -178,11 +180,11 @@ export function JobContactsTab({
       )}
 
       <DeleteAlertDialog
-        pageTitle="contact link"
+        pageTitle="联系人关联"
         open={!!removeTarget}
         onOpenChange={(open) => !open && setRemoveTarget(null)}
         onDelete={onRemove}
-        alertDescription="Removing this only unlinks the contact from this job. The contact itself is kept."
+        alertDescription="此操作仅解除联系人与该职位的关联，联系人仍会保留。"
       />
     </div>
   );

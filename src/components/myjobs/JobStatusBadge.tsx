@@ -19,13 +19,13 @@ export function JobStatusBadge({ job, className }: JobStatusBadgeProps) {
         variant="outline"
         className={cn("text-muted-foreground", className)}
       >
-        Dismissed
+        已忽略
       </Badge>
     );
   }
 
   if (job.dueDate && new Date() > job.dueDate && job.Status?.value === "draft") {
-    return <StatusBadge label="Expired" color="amber" className={className} />;
+    return <StatusBadge label="已过期" color="amber" className={className} />;
   }
 
   return (

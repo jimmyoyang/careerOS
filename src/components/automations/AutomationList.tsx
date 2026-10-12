@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
@@ -65,7 +67,7 @@ export function AutomationList({
     setLoadingAction(null);
 
     if (result.success) {
-      toastSuccess("Automation paused");
+      toastSuccess("自动化已暂停");
       onRefresh();
     } else {
       toastError(result.message);
@@ -78,7 +80,7 @@ export function AutomationList({
     setLoadingAction(null);
 
     if (result.success) {
-      toastSuccess("Automation resumed");
+      toastSuccess("自动化已恢复");
       onRefresh();
     } else {
       toastError(result.message);
@@ -94,7 +96,7 @@ export function AutomationList({
     setDeleteId(null);
 
     if (result.success) {
-      toastSuccess("Automation deleted");
+      toastSuccess("自动化已删除");
       onRefresh();
     } else {
       toastError(result.message);
@@ -106,10 +108,9 @@ export function AutomationList({
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <Zap className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium">No automations yet</h3>
+          <h3 className="text-lg font-medium">暂无自动化</h3>
           <p className="text-muted-foreground text-center mt-2">
-            Create your first automation to start discovering jobs
-            automatically.
+            创建第一个自动化，开始自动发现岗位。
           </p>
         </CardContent>
       </Card>
@@ -158,14 +159,14 @@ export function AutomationList({
                     {automation.jobBoard}
                   </Badge>
                   {retired ? (
-                    <Badge variant="destructive">Retired</Badge>
+                    <Badge variant="destructive">已停用</Badge>
                   ) : (
                     <Badge
                       variant={
                         automation.status === "active" ? "default" : "secondary"
                       }
                     >
-                      {automation.status}
+                      {zhLabel(automation.status)}
                     </Badge>
                   )}
                 </div>
@@ -174,8 +175,7 @@ export function AutomationList({
                   <div className="flex items-center gap-2 text-amber-600 text-sm">
                     <AlertTriangle className="h-4 w-4 shrink-0" />
                     <span>
-                      This job board was removed and no longer runs. Delete this
-                      automation.
+                      此招聘平台已移除，无法继续运行。请删除此自动化。
                     </span>
                   </div>
                 )}
@@ -183,7 +183,7 @@ export function AutomationList({
                 {!retired && resumeMissing && (
                   <div className="flex items-center gap-2 text-amber-600 text-sm">
                     <AlertTriangle className="h-4 w-4" />
-                    <span>Resume missing - select a new one</span>
+                    <span>简历缺失，请重新选择</span>
                   </div>
                 )}
 
@@ -197,47 +197,47 @@ export function AutomationList({
                       ))}
                       {atsCompanies.length > 3 && (
                         <Badge variant="secondary">
-                          +{atsCompanies.length - 3} more
+                          +{atsCompanies.length - 3} 家
                         </Badge>
                       )}
                     </div>
                     <div className="flex flex-wrap gap-x-6 gap-y-1">
                       <span>
                         <span className="font-medium text-foreground">
-                          Titles:
+                          目标职位：
                         </span>{" "}
-                        {atsTitles.length ? atsTitles.join(", ") : "Not set"}
+                        {atsTitles.length ? atsTitles.join(", ") : "未设置"}
                       </span>
                       <span>
                         <span className="font-medium text-foreground">
-                          Keywords:
+                          关键词：
                         </span>{" "}
-                        {atsKeywords.length ? atsKeywords.join(", ") : "Any"}
+                        {atsKeywords.length ? atsKeywords.join(", ") : "不限"}
                       </span>
                       <span>
                         <span className="font-medium text-foreground">
-                          Location:
+                          地点：
                         </span>{" "}
                         {atsLocations.length
                           ? atsLocations.join(", ")
-                          : "Any location"}
+                          : "不限地点"}
                       </span>
                       <span>
                         <span className="font-medium text-foreground">
-                          Analyzed/run:
+                          每次分析：
                         </span>{" "}
                         {atsTopK}
                       </span>
                       <span>
                         <span className="font-medium text-foreground">
-                          Extra listings:
+                          其他岗位：
                         </span>{" "}
-                        {atsSaveUnanalyzed ? "on" : "off"}
+                        {atsSaveUnanalyzed ? "开启" : "关闭"}
                       </span>
                       {automation.resume && (
                         <span>
                           <span className="font-medium text-foreground">
-                            Resume:
+                            简历：
                           </span>{" "}
                           {automation.resume.title}
                         </span>
@@ -250,29 +250,28 @@ export function AutomationList({
                   <div className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
                     <span>
-                      {automation.scheduleHour.toString().padStart(2, "0")}:00
-                      daily
+                      {automation.scheduleHour.toString().padStart(2, "0")}:00 每日运行
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <FileText className="h-4 w-4" />
-                    <span>{automation.matchThreshold}% threshold</span>
+                    <span>{automation.matchThreshold}% 匹配阈值</span>
                   </div>
                   {!retired &&
                     automation.nextRunAt &&
                     automation.status === "active" && (
                       <span className="text-xs">
-                        Next:{" "}
+                        下次运行：{" "}
                         {format(
                           new Date(automation.nextRunAt),
-                          "MMM d, h:mm a",
+                          "M月d日 HH:mm",
                         )}
                       </span>
                     )}
                   {automation.lastRunAt && (
                     <span className="text-xs">
-                      Last:{" "}
-                      {format(new Date(automation.lastRunAt), "MMM d, h:mm a")}
+                      最近运行：{" "}
+                      {format(new Date(automation.lastRunAt), "M月d日 HH:mm")}
                     </span>
                   )}
                 </div>
@@ -291,7 +290,7 @@ export function AutomationList({
                         onClick={() => handlePause(automation.id)}
                       >
                         <Pause className="h-4 w-4 mr-2" />
-                        Pause
+                        暂停
                       </DropdownMenuItem>
                     ) : (
                       <DropdownMenuItem
@@ -299,14 +298,14 @@ export function AutomationList({
                         disabled={resumeMissing}
                       >
                         <Play className="h-4 w-4 mr-2" />
-                        Resume
+                        恢复
                       </DropdownMenuItem>
                     ))}
                   {!retired && (
                     <>
                       <DropdownMenuItem onClick={() => onEdit(automation)}>
                         <Pencil className="h-4 w-4 mr-2" />
-                        Edit
+                        编辑
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
@@ -316,7 +315,7 @@ export function AutomationList({
                     onClick={() => setDeleteId(automation.id)}
                   >
                     <Trash2 className="h-4 w-4 mr-2" />
-                    Delete
+                    删除
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -328,21 +327,19 @@ export function AutomationList({
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Automation</AlertDialogTitle>
+            <AlertDialogTitle>删除自动化</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this automation? This action
-              cannot be undone. Discovered jobs will remain but lose their
-              automation reference.
+              确定删除此自动化？此操作无法撤销。已发现的岗位将保留，但会解除与此自动化的关联。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>取消</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isDeleting}
               className="bg-destructive-bg text-destructive-foreground hover:bg-destructive-bg/90"
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? "正在删除…" : "删除"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

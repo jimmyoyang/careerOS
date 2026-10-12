@@ -34,9 +34,9 @@ type AddPrepQuestionsDialogProps = {
 // which is what makes the artboard's instant search possible at all.
 const BANK_PAGE_SIZE = 200;
 
-// The question bank requires an answer; "TBD" is the app's own placeholder
+// The question bank requires an answer; use the Chinese placeholder
 // for one that has not been written yet (QuestionForm).
-const UNANSWERED = "TBD";
+const UNANSWERED = "待填写";
 
 export function AddPrepQuestionsDialog({
   open,
@@ -98,7 +98,7 @@ export function AddPrepQuestionsDialog({
         tagIds: newTagIds,
       });
       toastActionResult(res, {
-        success: "Question has been added to your bank",
+        success: "题目已添加到题库",
         onSuccess: () => {
           // Banked and selected in one click: the user asked for it here.
           setBank((prev) => [res.data, ...prev]);
@@ -117,7 +117,7 @@ export function AddPrepQuestionsDialog({
     startTransition(async () => {
       const res = await addStagePrepQuestions(stage.id, selected);
       toastActionResult(res, {
-        success: "Prep list has been updated successfully",
+        success: "准备清单已更新",
         onSuccess: () => {
           onAdded();
           onOpenChange(false);
@@ -128,30 +128,27 @@ export function AddPrepQuestionsDialog({
 
   const doneLabel =
     selected.length === 0
-      ? "Done"
-      : `Done — ${selected.length} question${
-          selected.length === 1 ? "" : "s"
-        } added to prep list`;
+      ? "完成"
+      : `完成，已将 ${selected.length} 道题目加入准备清单`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[760px] max-h-[800px] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Add Questions to Prep List</DialogTitle>
+          <DialogTitle>向准备清单添加题目</DialogTitle>
           <DialogDescription>{stageHeading(stage)}</DialogDescription>
         </DialogHeader>
 
         <div className="max-h-[60vh] space-y-4 overflow-y-auto p-1">
           <p className="text-[13px] text-muted-foreground">
-            Select questions you expect to be asked. After the interview, check
-            them off as &quot;asked&quot; from the Timeline tab.
+            选择你预计会被问到的题目。面试后，可在进展记录中勾选实际问过的题目。
           </p>
 
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="pl-9"
-              placeholder="Search question bank…"
+              placeholder="搜索题库…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -170,7 +167,7 @@ export function AddPrepQuestionsDialog({
                     <span className="truncate">{q.question}</span>
                     <button
                       type="button"
-                      aria-label={`Remove ${q.question}`}
+                      aria-label={`移除${q.question}`}
                       className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full hover:bg-primary/20"
                       onClick={() => toggle(id, false)}
                     >
@@ -185,7 +182,7 @@ export function AddPrepQuestionsDialog({
           <ul className="overflow-hidden rounded-lg border">
             {visible.length === 0 && (
               <li className="px-3.5 py-4 text-[13px] text-muted-foreground">
-                No questions match that search.
+                未找到符合搜索条件的题目。
               </li>
             )}
             {visible.map((q, index) => {
@@ -228,7 +225,7 @@ export function AddPrepQuestionsDialog({
                   </div>
                   {isLinked && (
                     <span className="shrink-0 text-[11px] text-muted-foreground">
-                      On prep list
+                      已在准备清单中
                     </span>
                   )}
                 </li>
@@ -237,15 +234,15 @@ export function AddPrepQuestionsDialog({
           </ul>
 
           <div className="space-y-3 rounded-lg border border-dashed p-3.5">
-            <p className="text-[13px] font-semibold">Add a new question</p>
+            <p className="text-[13px] font-semibold">添加新题目</p>
             <Input
-              placeholder="Type a new interview question…"
-              aria-label="New question"
+              placeholder="输入新的面试题目…"
+              aria-label="新建题目"
               value={newQuestion}
               onChange={(e) => setNewQuestion(e.target.value)}
             />
             <div className="space-y-1.5">
-              <p className="text-[13px] font-medium">Skill Tags</p>
+              <p className="text-[13px] font-medium">技能标签</p>
               <TagInput
                 availableTags={tags}
                 selectedTagIds={newTagIds}
@@ -259,14 +256,14 @@ export function AddPrepQuestionsDialog({
               disabled={isPending || !newQuestion.trim()}
               onClick={addQuestion}
             >
-              Add Question
+              添加题目
             </Button>
           </div>
         </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            取消
           </Button>
           <Button onClick={submit} disabled={isPending}>
             {doneLabel}

@@ -101,7 +101,7 @@ export function LinkInterviewersDialog({
     startTransition(async () => {
       const res = await linkStageInterviewer(stage.id, contactId);
       toastActionResult(res, {
-        success: "Interviewer has been linked successfully",
+        success: "面试官已关联",
         onSuccess: () => {
           setLinkedIds((prev) => [...prev, contactId]);
           setLinkedCount((n) => n + 1);
@@ -114,7 +114,7 @@ export function LinkInterviewersDialog({
     startTransition(async () => {
       const res = await createContact(contactPayload(newContact));
       toastActionResult(res, {
-        success: "Contact has been created successfully",
+        success: "联系人已创建",
         onSuccess: () => {
           const row: ContactRow = {
             id: res.data.id,
@@ -132,14 +132,14 @@ export function LinkInterviewersDialog({
 
   const doneLabel =
     linkedCount === 0
-      ? "Done"
-      : `Done — ${linkedCount} interviewer${linkedCount === 1 ? "" : "s"} linked`;
+      ? "完成"
+      : `完成，已关联 ${linkedCount} 位面试官`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[520px] max-h-[720px] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Add and Link Interviewers</DialogTitle>
+          <DialogTitle>添加并关联面试官</DialogTitle>
           <DialogDescription>{stageHeading(stage)}</DialogDescription>
         </DialogHeader>
 
@@ -148,7 +148,7 @@ export function LinkInterviewersDialog({
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="pl-9"
-              placeholder="Search contacts by name or company…"
+              placeholder="按姓名或公司搜索联系人…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -157,7 +157,7 @@ export function LinkInterviewersDialog({
           <ul className="overflow-hidden rounded-lg border">
             {visible.length === 0 && (
               <li className="px-3.5 py-4 text-[13px] text-muted-foreground">
-                No contacts match that search.
+                未找到符合搜索条件的联系人。
               </li>
             )}
             {visible.map((contact, index) => {
@@ -187,7 +187,7 @@ export function LinkInterviewersDialog({
                   </span>
                   {isLinked ? (
                     <span
-                      aria-label={`${contact.label} is already linked`}
+                      aria-label={`${contact.label}已关联`}
                       className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300"
                     >
                       <Check className="h-3.5 w-3.5" />
@@ -199,8 +199,8 @@ export function LinkInterviewersDialog({
                       disabled={isPending}
                       onClick={() => link(contact.id)}
                     >
-                      <span className="sr-only">Add {contact.label}</span>
-                      <span aria-hidden="true">Add</span>
+                      <span className="sr-only">添加 {contact.label}</span>
+                      <span aria-hidden="true">添加</span>
                     </Button>
                   )}
                 </li>
@@ -209,19 +209,19 @@ export function LinkInterviewersDialog({
           </ul>
 
           <div className="space-y-3 rounded-lg border border-dashed p-3.5">
-            <p className="text-[13px] font-semibold">Add a new contact</p>
+            <p className="text-[13px] font-semibold">添加新联系人</p>
             <div className="grid grid-cols-2 gap-3">
               <Input
-                placeholder="Full name"
-                aria-label="Full name"
+                placeholder="姓名"
+                aria-label="姓名"
                 value={newContact.name}
                 onChange={(e) =>
                   setNewContact((v) => ({ ...v, name: e.target.value }))
                 }
               />
               <Input
-                placeholder="Role / title"
-                aria-label="Role / title"
+                placeholder="角色 / 职位"
+                aria-label="角色 / 职位"
                 value={newContact.title}
                 onChange={(e) =>
                   setNewContact((v) => ({ ...v, title: e.target.value }))
@@ -230,8 +230,8 @@ export function LinkInterviewersDialog({
               <div className="col-span-2">
                 <Input
                   type="email"
-                  placeholder="Email"
-                  aria-label="Email"
+                  placeholder="电子邮箱"
+                  aria-label="电子邮箱"
                   value={newContact.email}
                   onChange={(e) =>
                     setNewContact((v) => ({ ...v, email: e.target.value }))
@@ -245,14 +245,14 @@ export function LinkInterviewersDialog({
               disabled={isPending || !newContact.name.trim()}
               onClick={addAndLink}
             >
-              Add Contact
+              添加联系人
             </Button>
           </div>
         </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            取消
           </Button>
           <Button onClick={() => onOpenChange(false)}>{doneLabel}</Button>
         </DialogFooter>

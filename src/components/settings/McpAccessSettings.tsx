@@ -51,11 +51,11 @@ function CopyButton({ text }: { text: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toastError("Couldn't copy to clipboard. Please copy the text manually.", "Copy failed");
+      toastError("无法复制到剪贴板，请手动复制文本。", "复制失败");
     }
   };
   return (
-    <Button variant="outline" size="sm" onClick={copy} className="shrink-0">
+    <Button aria-label={copied ? "已复制" : "复制"} variant="outline" size="sm" onClick={copy} className="shrink-0">
       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
     </Button>
   );
@@ -115,27 +115,27 @@ function TokenRevealDialog({
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Token Created — Save It Now</DialogTitle>
+          <DialogTitle>令牌已创建，请立即保存</DialogTitle>
           <DialogDescription>
-            This is the only time you can see the full token. Copy it before closing.
+            完整令牌仅显示这一次，请在关闭前复制保存。
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <div className="space-y-1">
-            <Label className="text-xs">Your token</Label>
+            <Label className="text-xs">您的令牌</Label>
             <div className="flex gap-2 items-center">
               <Input readOnly value={token} className="font-mono text-xs" />
               <CopyButton text={token} />
             </div>
           </div>
           <div className="space-y-3">
-            <p className="text-xs font-medium text-muted-foreground">Client config snippets</p>
+            <p className="text-xs font-medium text-muted-foreground">客户端配置示例</p>
             <CodeSnippet label="OpenClaw / Hermes (streamable-http)" code={ocSnippet} />
-            <CodeSnippet label="Claude Desktop (via mcp-remote)" code={claudeSnippet} />
+            <CodeSnippet label="Claude Desktop（通过 mcp-remote）" code={claudeSnippet} />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={onClose}>I saved my token</Button>
+          <Button onClick={onClose}>我已保存令牌</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -191,11 +191,11 @@ export default function McpAccessSettings() {
     const result = await revokeMcpToken(id);
     setRevoking(null);
     if (!result.success) {
-      toastError(result.message ?? "Failed to revoke");
+      toastError(result.message ?? "撤销失败");
       return;
     }
     setTokens((prev) => prev.filter((t) => t.id !== id));
-    toastSuccess("Token revoked");
+    toastSuccess("令牌已撤销");
   };
 
   return (
@@ -211,12 +211,12 @@ export default function McpAccessSettings() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium">MCP Endpoint</CardTitle>
-          <CardDescription>Connect AI agents to JobSync via the Model Context Protocol.</CardDescription>
+          <CardTitle className="text-lg font-medium">MCP 接口</CardTitle>
+          <CardDescription>通过模型上下文协议（MCP）将 AI 助手连接到 JobSync。</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Endpoint URL</Label>
+            <Label className="text-xs text-muted-foreground">接口地址</Label>
             <div className="flex gap-2 items-center">
               <Input readOnly value={mcpUrl} className="font-mono text-sm" />
               <CopyButton text={mcpUrl} />
@@ -228,21 +228,21 @@ export default function McpAccessSettings() {
       <Card>
         <CardHeader className="flex-row flex-wrap items-start justify-between gap-2">
           <div className="min-w-0">
-            <CardTitle className="text-lg font-medium">Personal Access Tokens</CardTitle>
-            <CardDescription>Tokens authenticate external agents to call MCP tools.</CardDescription>
+            <CardTitle className="text-lg font-medium">个人访问令牌</CardTitle>
+            <CardDescription>令牌用于验证外部 AI 助手调用 MCP 工具的权限。</CardDescription>
           </div>
           <Button size="sm" className="shrink-0" onClick={() => setShowGenerateDialog(true)} disabled={isLoading}>
             <Plus className="h-4 w-4 mr-1" />
-            Generate
+            生成
           </Button>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <div className="flex items-center gap-2 text-muted-foreground text-sm">
-              <Loader2 className="h-4 w-4 animate-spin" /> Loading tokens...
+              <Loader2 className="h-4 w-4 animate-spin" /> 正在加载令牌…
             </div>
           ) : tokens.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No MCP tokens yet. Generate one to get started.</p>
+            <p className="text-sm text-muted-foreground">暂无 MCP 令牌，请先生成一个。</p>
           ) : (
             <div className="space-y-3">
               {tokens.map((t) => (
@@ -251,9 +251,9 @@ export default function McpAccessSettings() {
                     <p className="font-medium text-sm truncate">{t.name}</p>
                     <p className="text-xs text-muted-foreground font-mono">{t.tokenPrefix}…</p>
                     <div className="flex flex-wrap gap-2 mt-1 text-xs text-muted-foreground">
-                      <span>Created {format(new Date(t.createdAt), "PP")}</span>
-                      <span>Expires {format(new Date(t.expiresAt), "PP")}</span>
-                      {t.lastUsedAt && <span>Last used {format(new Date(t.lastUsedAt), "PP")}</span>}
+                      <span>创建于 {format(new Date(t.createdAt), "yyyy年M月d日")}</span>
+                      <span>到期时间 {format(new Date(t.expiresAt), "yyyy年M月d日")}</span>
+                      {t.lastUsedAt && <span>最近使用 {format(new Date(t.lastUsedAt), "yyyy年M月d日")}</span>}
                     </div>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {t.scopes.map((s) => (
@@ -263,20 +263,20 @@ export default function McpAccessSettings() {
                   </div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="icon" disabled={revoking === t.id} title="Revoke token">
+                      <Button variant="ghost" size="icon" disabled={revoking === t.id} title="撤销令牌">
                         {revoking === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4 text-destructive" />}
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Revoke &ldquo;{t.name}&rdquo;?</AlertDialogTitle>
+                        <AlertDialogTitle>撤销“{t.name}”？</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Any agent using this token will immediately lose access. This cannot be undone.
+                          使用此令牌的 AI 助手将立即失去访问权限，此操作无法撤销。
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleRevoke(t.id)}>Revoke</AlertDialogAction>
+                        <AlertDialogCancel>取消</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => handleRevoke(t.id)}>撤销</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -290,23 +290,23 @@ export default function McpAccessSettings() {
       <Dialog open={showGenerateDialog} onOpenChange={setShowGenerateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Generate MCP Token</DialogTitle>
+            <DialogTitle>生成 MCP 令牌</DialogTitle>
             <DialogDescription>
-              Name this token after the client (e.g. ChatGPT, Hermes, Claude Desktop) &mdash; it&apos;s shown as the source on jobs this token creates.
+              请使用客户端名称（如 ChatGPT、Hermes、Claude Desktop）为令牌命名。通过此令牌创建的岗位会将该名称显示为来源。
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Token name</Label>
+              <Label>令牌名称</Label>
               <Input
-                placeholder="e.g. Claude Desktop"
+                placeholder="例如 Claude Desktop"
                 value={tokenName}
                 onChange={(e) => setTokenName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
               />
             </div>
             <div className="space-y-2">
-              <Label>Expires in</Label>
+              <Label>有效期</Label>
               <Select
                 value={String(expiryDays)}
                 onValueChange={(v) => setExpiryDays(Number(v) as 30 | 90 | 365)}
@@ -316,17 +316,17 @@ export default function McpAccessSettings() {
                 </SelectTrigger>
                 <SelectContent>
                   {APP_CONSTANTS.MCP_TOKEN_EXPIRY_PRESETS.map((d) => (
-                    <SelectItem key={d} value={String(d)}>{d} days</SelectItem>
+                    <SelectItem key={d} value={String(d)}>{d} 天</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowGenerateDialog(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowGenerateDialog(false)}>取消</Button>
             <Button onClick={handleGenerate} disabled={generating || !tokenName.trim()}>
               {generating && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              Generate
+              生成
             </Button>
           </DialogFooter>
         </DialogContent>

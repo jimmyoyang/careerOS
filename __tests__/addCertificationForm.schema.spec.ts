@@ -16,7 +16,7 @@ describe("AddCertificationFormSchema", () => {
         id: "cert-1",
         resumeId: "resume-1",
         sectionId: "section-1",
-        sectionTitle: "Certifications",
+        sectionTitle: "证书",
         title: "AWS Certified Solutions Architect",
         organization: "Amazon Web Services",
         issueDate,
@@ -35,7 +35,7 @@ describe("AddCertificationFormSchema", () => {
     it("should default sectionTitle to 'Certifications'", () => {
       const data = { title: "AWS SAA", organization: "Amazon" };
       const result = AddCertificationFormSchema.parse(data);
-      expect(result.sectionTitle).toBe("Certifications");
+      expect(result.sectionTitle).toBe("证书");
     });
 
     it("should default noExpiration to false", () => {

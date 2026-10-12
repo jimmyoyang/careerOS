@@ -8,12 +8,12 @@ import type { PendingCard } from "./pendingCards";
 
 function cardSectionLabel(type: ImportCardPayload["type"]): string {
   const map: Record<string, string> = {
-    contactInfo: "Contact Info",
-    summary: "Summary",
-    experience: "Experience",
-    education: "Education",
-    certification: "Certification",
-    skills: "Skills",
+    contactInfo: "联系方式",
+    summary: "个人简介",
+    experience: "工作经历",
+    education: "教育经历",
+    certification: "证书与资质",
+    skills: "技能",
   };
   return map[type] ?? type;
 }
@@ -37,11 +37,11 @@ function PendingCardDetail({ card }: { card: ImportCardPayload }) {
     const name = `${d.firstName ?? ""} ${d.lastName ?? ""}`.trim();
     return (
       <div className="space-y-1 mt-1">
-        {name && <DetailRow label="Name" value={name} />}
-        <DetailRow label="Headline" value={d.headline} />
-        <DetailRow label="Email" value={d.email} />
-        <DetailRow label="Phone" value={d.phone} />
-        <DetailRow label="Address" value={d.address} />
+        {name && <DetailRow label="姓名" value={name} />}
+        <DetailRow label="个人简介标题" value={d.headline} />
+        <DetailRow label="邮箱" value={d.email} />
+        <DetailRow label="电话" value={d.phone} />
+        <DetailRow label="地址" value={d.address} />
       </div>
     );
   }
@@ -59,10 +59,10 @@ function PendingCardDetail({ card }: { card: ImportCardPayload }) {
     const dates = [d.startDate, d.endDate].filter(Boolean).join(" – ");
     return (
       <div className="space-y-1 mt-1">
-        <DetailRow label="Title" value={d.jobTitle} />
-        <DetailRow label="Company" value={d.company} />
-        <DetailRow label="Location" value={d.location} />
-        {dates && <DetailRow label="Dates" value={dates} />}
+        <DetailRow label="标题" value={d.jobTitle} />
+        <DetailRow label="公司" value={d.company} />
+        <DetailRow label="地点" value={d.location} />
+        {dates && <DetailRow label="起止日期" value={dates} />}
         {typeof d.description === "string" && d.description && (
           <p className="text-xs text-foreground mt-1 whitespace-pre-wrap pl-[5.5rem]">
             {d.description}
@@ -77,11 +77,11 @@ function PendingCardDetail({ card }: { card: ImportCardPayload }) {
     const dates = [d.startDate, d.endDate].filter(Boolean).join(" – ");
     return (
       <div className="space-y-1 mt-1">
-        <DetailRow label="Institution" value={d.institution} />
-        <DetailRow label="Degree" value={d.degree} />
-        <DetailRow label="Field" value={d.fieldOfStudy} />
-        <DetailRow label="Location" value={d.location} />
-        {dates && <DetailRow label="Dates" value={dates} />}
+        <DetailRow label="学校" value={d.institution} />
+        <DetailRow label="学位" value={d.degree} />
+        <DetailRow label="专业" value={d.fieldOfStudy} />
+        <DetailRow label="地点" value={d.location} />
+        {dates && <DetailRow label="起止日期" value={dates} />}
         {typeof d.description === "string" && d.description && (
           <p className="text-xs text-foreground mt-1 whitespace-pre-wrap pl-[5.5rem]">
             {d.description}
@@ -95,11 +95,11 @@ function PendingCardDetail({ card }: { card: ImportCardPayload }) {
     const d = card.data;
     return (
       <div className="space-y-1 mt-1">
-        <DetailRow label="Title" value={d.title} />
-        <DetailRow label="Issuer" value={d.organization} />
-        <DetailRow label="Issued" value={d.issueDate} />
-        <DetailRow label="Expires" value={d.expirationDate} />
-        <DetailRow label="URL" value={d.credentialUrl} />
+        <DetailRow label="标题" value={d.title} />
+        <DetailRow label="颁发机构" value={d.organization} />
+        <DetailRow label="颁发日期" value={d.issueDate} />
+        <DetailRow label="到期日期" value={d.expirationDate} />
+        <DetailRow label="网址" value={d.credentialUrl} />
       </div>
     );
   }
@@ -174,7 +174,7 @@ export function PendingCardRow({
             ) : (
               <Check className="h-3 w-3" />
             )}
-            <span className="ml-1">Accept</span>
+            <span className="ml-1">采纳</span>
           </Button>
           <Button
             size="sm"

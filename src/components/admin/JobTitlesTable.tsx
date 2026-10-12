@@ -41,10 +41,8 @@ function JobTitlesTable({ jobTitles, reloadJobTitles }: JobTitlesTableProps) {
     if (totalJobs > 0) {
       setAlert({
         openState: true,
-        title: "Associated jobs exist!",
-        description: `This job title has ${totalJobs} associated job${
-          totalJobs === 1 ? "" : "s"
-        } (applied or not). Remove or reassign them before deleting this job title.`,
+        title: "存在关联职位！",
+        description: `该职位名称关联了 ${totalJobs} 个职位（包括未投递的职位）。请先删除或调整这些职位的关联，再删除该职位名称。`,
         deleteAction: false,
       });
     } else {
@@ -59,7 +57,7 @@ function JobTitlesTable({ jobTitles, reloadJobTitles }: JobTitlesTableProps) {
     if (titleId) {
       const { success, message } = await deleteJobTitleById(titleId);
       if (success) {
-        toastSuccess(`Job title has been deleted successfully`);
+        toastSuccess("职位名称已删除");
         reloadJobTitles();
       } else {
         toastError(message);
@@ -72,13 +70,13 @@ function JobTitlesTable({ jobTitles, reloadJobTitles }: JobTitlesTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Job Title</TableHead>
-            <TableHead className="hidden sm:table-cell">Value</TableHead>
-            <TableHead>Total Jobs</TableHead>
-            <TableHead>Jobs Applied</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>职位名称</TableHead>
+            <TableHead className="hidden sm:table-cell">标识值</TableHead>
+            <TableHead>职位总数</TableHead>
+            <TableHead>已投递职位</TableHead>
+            <TableHead>操作</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -119,18 +117,18 @@ function JobTitlesTable({ jobTitles, reloadJobTitles }: JobTitlesTableProps) {
                     <DropdownMenuTrigger asChild>
                       <Button aria-haspopup="true" size="icon" variant="ghost">
                         <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">打开菜单</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>操作</DropdownMenuLabel>
                       {title._count?.jobs ? (
                         <DropdownMenuItem className="cursor-pointer" asChild>
                           <Link
                             href={`/dashboard/myjobs?title=${encodeURIComponent(title.value)}&applied=true`}
                           >
                             <Briefcase className="mr-2 h-4 w-4" />
-                            View Jobs
+                            查看职位
                           </Link>
                         </DropdownMenuItem>
                       ) : null}
@@ -139,7 +137,7 @@ function JobTitlesTable({ jobTitles, reloadJobTitles }: JobTitlesTableProps) {
                         onClick={() => onDeleteJobTitle(title)}
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        删除
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -150,7 +148,7 @@ function JobTitlesTable({ jobTitles, reloadJobTitles }: JobTitlesTableProps) {
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="title"
+        pageTitle="职位名称"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteJobTitle(alert.itemId!)}

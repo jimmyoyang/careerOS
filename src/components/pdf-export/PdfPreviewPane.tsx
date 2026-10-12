@@ -37,7 +37,7 @@ function isRenderCancelled(error: unknown): boolean {
 }
 
 function pageLabel(count: number): string {
-  return `${count} ${count === 1 ? "page" : "pages"}`;
+  return `${count} 页`;
 }
 
 export function PdfPreviewPane({
@@ -223,17 +223,17 @@ export function PdfPreviewPane({
   const status = showEmpty
     ? emptyMessage
     : showError
-      ? "Preview unavailable"
+      ? "预览不可用"
       : isGenerating
-        ? "Generating preview…"
+        ? "正在生成预览…"
         : hasPages
-          ? `Preview ready, ${pageLabel(pageCount)}`
+          ? `预览已就绪，共 ${pageLabel(pageCount)}`
           : "";
 
   return (
     <div className={cn("flex min-h-0 flex-col gap-2", className)}>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-medium">Preview</span>
+        <span className="text-sm font-medium">预览</span>
         <div className="flex items-center gap-2">
           {hasPages && (
             <div className="flex items-center rounded-md border p-0.5">
@@ -241,19 +241,19 @@ export function PdfPreviewPane({
                 size="sm"
                 pressed={fitMode === "page"}
                 onPressedChange={() => onChangeFitMode("page")}
-                aria-label="Fit whole page"
+                aria-label="显示完整页面"
                 className="h-6 px-2 text-xs"
               >
-                Fit page
+                适应页面
               </Toggle>
               <Toggle
                 size="sm"
                 pressed={fitMode === "width"}
                 onPressedChange={() => onChangeFitMode("width")}
-                aria-label="Fit page width"
+                aria-label="适应页面宽度"
                 className="h-6 px-2 text-xs"
               >
-                Fit width
+                适应宽度
               </Toggle>
             </div>
           )}
@@ -286,7 +286,7 @@ export function PdfPreviewPane({
             {showEmpty ? (
               emptyMessage
             ) : showError ? (
-              "Preview unavailable"
+              "预览不可用"
             ) : (
               <Spinner className="size-6" />
             )}

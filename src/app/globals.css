@@ -225,3 +225,16 @@
 .rdp-dropdown_year > div {
   @apply hidden;
 }
+
+/* Career workspace surfaces. The red is intentionally scoped to this flow so
+   the existing admin and data-management screens keep their neutral theme. */
+.career-dashboard-hero,
+.career-search-hero {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.16), transparent 28%),
+    linear-gradient(120deg, #9f0825 0%, #cf0a2c 56%, #e53a54 100%);
+}
+
+.career-workspace-shell {
+  min-height: calc(100vh - 5rem);
+}

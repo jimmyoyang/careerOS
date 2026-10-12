@@ -45,12 +45,12 @@ describe("buildInsufficientSectionsMessage", () => {
       "e.g. Summary and Experience",
     );
 
-    expect(message).toContain("(e.g. Summary and Experience)");
+    expect(message).toContain("（e.g. Summary and Experience）");
   });
 
   it("omits the parentheses when no hint is provided", () => {
     const message = buildInsufficientSectionsMessage("running a review");
 
-    expect(message).not.toContain("(");
+    expect(message).not.toContain("（");
   });
 });

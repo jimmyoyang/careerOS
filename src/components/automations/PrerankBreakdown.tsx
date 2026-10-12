@@ -18,13 +18,13 @@ export function PrerankBreakdown({
   const rows = components
     ? [
         {
-          label: "Title",
+          label: "标题",
           weight: APP_CONSTANTS.ATS_TITLE_WEIGHT,
           score: components.titleScore,
           hits: components.titleHits,
         },
         {
-          label: "Keywords",
+          label: "关键词",
           weight: APP_CONSTANTS.ATS_SKILL_WEIGHT,
           score: components.keywordScore,
           hits: components.keywordHits,
@@ -35,15 +35,13 @@ export function PrerankBreakdown({
   return (
     <div className="rounded-md border border-dashed p-3 space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">Lexical pre-rank</span>
+        <span className="text-sm font-medium">关键词预排序</span>
         <span className="font-mono text-sm">
           {Math.round(prerankScore * 100)}%
         </span>
       </div>
       <p className="text-xs text-muted-foreground">
-        Internal relevance score used to pick which jobs get AI-analyzed. Each
-        hit is weighted by how rare the term is across the board. Not an AI match
-        — compare it against the % above to gauge pre-rank accuracy.
+        用于筛选需要 AI 分析的岗位的内部相关性分数。每次命中会根据词语在整个招聘平台中的稀有程度加权。此分数并非 AI 匹配度，可与上方百分比对照，判断预排序是否准确。
       </p>
       {rows.map((row) => (
         <div key={row.label} className="text-xs">
@@ -69,8 +67,8 @@ export function PrerankBreakdown({
       ))}
       {components && (
         <div className="text-xs text-muted-foreground">
-          Location:{" "}
-          {components.locScore > 0 ? "matches (gate only)" : "not scored"}
+          地点：{" "}
+          {components.locScore > 0 ? "符合条件（仅用于筛选）" : "未评分"}
         </div>
       )}
     </div>

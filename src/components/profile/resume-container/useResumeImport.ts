@@ -75,8 +75,8 @@ export function useResumeImport(resume: Resume) {
         if (cards.length === 0) {
           setImportMode(false);
           toastError(
-            "No structured data could be extracted from the document.",
-            "No sections found",
+            "未能从文档中提取结构化内容。",
+            "未找到内容模块",
           );
           return;
         }
@@ -90,7 +90,7 @@ export function useResumeImport(resume: Resume) {
         if (abortController.signal.aborted) return;
         setImportMode(false);
         toastError(
-          error instanceof Error ? error.message : "Failed to contact AI service.",
+          error instanceof Error ? error.message : "无法连接 AI 服务。",
         );
       } finally {
         if (importAbortRef.current === abortController) {
@@ -166,7 +166,7 @@ export function useResumeImport(resume: Resume) {
               setOllamaConnected(result.isConnected);
               if (!result.isConnected) {
                 setConnectionError(
-                  result.error || "Ollama is not reachable.",
+                  result.error || "无法连接 Ollama。",
                 );
               }
             });

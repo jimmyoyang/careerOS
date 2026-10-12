@@ -36,7 +36,7 @@ export const setDefaultResume = async (
       return {
         success: false,
         message: buildInsufficientSectionsMessage(
-          "setting this resume as default",
+          "设为默认简历",
         ),
       };
     }

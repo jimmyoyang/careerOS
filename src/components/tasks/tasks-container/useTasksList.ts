@@ -85,7 +85,7 @@ export function useTasksList({
     } else {
       setTasks(originalTasks);
     }
-    toastActionResult(result, { success: "Task status updated successfully" });
+    toastActionResult(result, { success: "任务状态已更新" });
   };
 
   useEffect(() => {

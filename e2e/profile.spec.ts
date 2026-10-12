@@ -12,17 +12,17 @@ async function createResume(
   title: string,
   cleanup: CleanupRegistry,
 ) {
-  await page.getByRole("button", { name: "New", exact: true }).click();
-  await page.getByRole("menuitem", { name: "Add New Resume" }).click();
-  await page.getByPlaceholder("Ex: Full Stack Developer").fill(title);
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "新建", exact: true }).click();
+  await page.getByRole("menuitem", { name: "新建简历" }).click();
+  await page.getByPlaceholder("例如：全栈开发工程师").fill(title);
+  await page.getByRole("button", { name: "保存" }).click();
   cleanup.resume(title);
 }
 
 test.describe("Profile page", () => {
   test("should create a new resume", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     // Reload-after-create/delete is a client fetch; under parallel e2e load
     // the dev server can take longer than the default 10s to reflect it.
@@ -42,7 +42,7 @@ test.describe("Profile page", () => {
     const editedTitle = uniqueName("Test Resume edited");
     // Register the edited title too, since it's what the row becomes on success.
     cleanup.resume(editedTitle);
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await expect(page).toHaveURL(baseURL + "/dashboard/profile");
     await createResume(page, resumeTitle, cleanup);
 
@@ -53,15 +53,15 @@ test.describe("Profile page", () => {
       .getByTestId("document-actions-menu-btn")
       .first()
       .click();
-    await page.getByRole("menuitem", { name: /Edit Resume Title/ }).click();
-    await page.getByPlaceholder("Ex: Full Stack Developer").fill(editedTitle);
-    await page.getByRole("dialog").getByRole("button", { name: "Save" }).click();
+    await page.getByRole("menuitem", { name: /编辑简历标题/ }).click();
+    await page.getByPlaceholder("例如：全栈开发工程师").fill(editedTitle);
+    await page.getByRole("dialog").getByRole("button", { name: "保存" }).click();
     await expect(page.locator("tbody")).toContainText(editedTitle);
   });
 
   test("should add resume contact info", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addContactInfo(page, resumeTitle, "John", "Doe");
     // Same reload-under-load headroom as the create/delete assertions above.
@@ -72,24 +72,24 @@ test.describe("Profile page", () => {
 
   test("should edit resume contact info", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addContactInfo(page, resumeTitle, "John", "Doe");
     await expect(
       page.getByRole("heading", { name: "John Doe" }),
     ).toBeVisible({ timeout: 20000 });
-    await page.getByRole("button", { name: "Edit" }).click();
+    await page.getByRole("button", { name: "编辑" }).click();
     await expect(
-      page.getByRole("heading", { name: "Edit Contact Info" }),
+      page.getByRole("heading", { name: "编辑联系方式" }),
     ).toBeVisible();
-    await page.getByLabel("First Name").fill("Jane");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByLabel("名").fill("Jane");
+    await page.getByRole("button", { name: "保存" }).click();
     await expect(page.getByRole("heading", { name: "Jane Doe" })).toBeVisible();
   });
 
   test("should add resume summary section", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addSummary(page, resumeTitle, "this is test summary");
     await expect(page.getByRole("heading", { name: "Summary" })).toBeVisible();
@@ -98,19 +98,19 @@ test.describe("Profile page", () => {
 
   test("should edit resume summary section", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addSummary(page, resumeTitle, "this is test summary");
     await expect(page.getByText("this is test summary")).toBeVisible();
-    await page.getByRole("button", { name: "Edit" }).click();
+    await page.getByRole("button", { name: "编辑" }).click();
     await expect(
-      page.getByRole("heading", { name: "Edit Summary" }),
+      page.getByRole("heading", { name: "编辑个人简介" }),
     ).toBeVisible();
     await page
       .getByRole("dialog")
       .locator(".tiptap")
       .fill("this is updated summary\n");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "保存" }).click();
     await expect(page.getByText("this is updated summary")).toBeVisible();
     await expect(page.getByText("this is test summary")).not.toBeVisible();
   });
@@ -121,7 +121,7 @@ test.describe("Profile page", () => {
   }) => {
     const resumeTitle = uniqueName("Test Resume");
     const jobText = uniqueName("Software Developer");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addExperience(page, resumeTitle, jobText, cleanup);
     await expect(
@@ -135,32 +135,32 @@ test.describe("Profile page", () => {
   }) => {
     const resumeTitle = uniqueName("Test Resume");
     const jobText = uniqueName("Software Developer");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addExperience(page, resumeTitle, jobText, cleanup);
     await expect(
       page.getByRole("heading", { name: jobText }).first(),
     ).toBeVisible();
     await page
-      .getByText(jobText + "Edit")
-      .getByRole("button", { name: "Edit" })
+      .getByText(jobText + "编辑")
+      .getByRole("button", { name: "编辑" })
       .click();
     await expect(
-      page.getByRole("heading", { name: "Edit Experience" }),
+      page.getByRole("heading", { name: "编辑工作经历" }),
     ).toBeVisible();
-    await page.getByText("Cancel").click();
-    await page.getByRole("button", { name: "Add Section" }).click();
-    await page.getByRole("menuitem", { name: "Add Experience" }).click();
+    await page.getByText("取消").click();
+    await page.getByRole("button", { name: "添加模块" }).click();
+    await page.getByRole("menuitem", { name: "添加工作经历" }).click();
     await expect(
-      page.getByRole("heading", { name: "Add Experience" }),
+      page.getByRole("heading", { name: "添加工作经历" }),
     ).toBeVisible();
-    await page.getByText("Cancel").click();
+    await page.getByText("取消").click();
   });
 
   test("should add resume education section", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
     const schoolText = uniqueName("test school");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addEducation(page, resumeTitle, schoolText, cleanup);
     await expect(
@@ -172,18 +172,18 @@ test.describe("Profile page", () => {
     const resumeTitle = uniqueName("Test Resume");
     const schoolText = uniqueName("test school");
     const editedSchoolText = uniqueName("edited school");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addEducation(page, resumeTitle, schoolText, cleanup);
     await expect(
       page.getByRole("heading", { name: schoolText }).first(),
     ).toBeVisible();
-    await page.getByRole("button", { name: "Edit" }).click();
+    await page.getByRole("button", { name: "编辑" }).click();
     await expect(
-      page.getByRole("heading", { name: "Edit Education" }),
+      page.getByRole("heading", { name: "编辑教育经历" }),
     ).toBeVisible();
-    await page.getByPlaceholder("Ex: Stanford").fill(editedSchoolText);
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByPlaceholder("例如：斯坦福大学").fill(editedSchoolText);
+    await page.getByRole("button", { name: "保存" }).click();
     await expect(
       page.getByRole("heading", { name: editedSchoolText }).first(),
     ).toBeVisible();
@@ -192,11 +192,11 @@ test.describe("Profile page", () => {
   test("should add resume skills section", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
     const skillText = uniqueName("Skill Test");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addSkill(page, resumeTitle, skillText, cleanup);
     await expect(
-      page.getByRole("heading", { name: "Core Skills" }),
+      page.getByRole("heading", { name: "核心技能" }),
     ).toBeVisible();
     await expect(page.getByText(skillText, { exact: true })).toBeVisible();
   });
@@ -204,17 +204,17 @@ test.describe("Profile page", () => {
   test("should delete resume skills section", async ({ page, cleanup }) => {
     const resumeTitle = uniqueName("Test Resume");
     const skillText = uniqueName("Skill Test");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addSkill(page, resumeTitle, skillText, cleanup);
     await expect(page.getByText(skillText, { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Delete" }).click();
+    await page.getByRole("button", { name: "删除" }).click();
     await expect(page.getByRole("alertdialog")).toContainText(
-      "Delete skills section?",
+      "删除技能模块？",
     );
     await page
       .getByRole("alertdialog")
-      .getByRole("button", { name: "Delete" })
+      .getByRole("button", { name: "删除" })
       .click();
     await expect(page.getByText(skillText, { exact: true })).not.toBeVisible();
   });
@@ -225,7 +225,7 @@ test.describe("Profile page", () => {
   }) => {
     const resumeTitle = uniqueName("Test Resume");
     const certTitle = uniqueName("AWS Certified Solutions Architect");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addCertification(page, resumeTitle, certTitle, cleanup);
     await expect(
@@ -238,18 +238,18 @@ test.describe("Profile page", () => {
     const resumeTitle = uniqueName("Test Resume");
     const certTitle = uniqueName("AWS Certified Solutions Architect");
     const editedOrg = uniqueName("Edited Org");
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "简历中心", exact: true }).click();
     await createResume(page, resumeTitle, cleanup);
     await addCertification(page, resumeTitle, certTitle, cleanup);
     await expect(
       page.getByRole("heading", { name: certTitle }).first(),
     ).toBeVisible();
-    await page.getByRole("button", { name: "Edit" }).click();
+    await page.getByRole("button", { name: "编辑" }).click();
     await expect(
-      page.getByRole("heading", { name: "Edit Certification / License" }),
+      page.getByRole("heading", { name: "编辑证书或执照" }),
     ).toBeVisible();
-    await page.getByLabel("Issuing Organization").fill(editedOrg);
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByLabel("颁发机构").fill(editedOrg);
+    await page.getByRole("button", { name: "保存" }).click();
     await expect(page.getByText(editedOrg)).toBeVisible();
   });
 });
@@ -265,25 +265,25 @@ async function addContactInfo(
     .first()
     .getByTestId("document-actions-menu-btn")
     .click();
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await page.getByRole("button", { name: "Add Section" }).click();
-  await page.getByRole("menuitem", { name: "Add Contact Info" }).click();
-  await page.getByLabel("First Name").waitFor({ state: "visible" });
-  await page.getByLabel("First Name").click();
-  await page.getByLabel("First Name").fill(firstName);
-  await page.getByLabel("Last Name").click();
-  await page.getByLabel("Last Name").fill(lastName);
-  await page.getByLabel("Headline").click();
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await page.getByRole("button", { name: "添加模块" }).click();
+  await page.getByRole("menuitem", { name: "添加联系方式" }).click();
+  await page.getByLabel("名").waitFor({ state: "visible" });
+  await page.getByLabel("名").click();
+  await page.getByLabel("名").fill(firstName);
+  await page.getByLabel("姓").click();
+  await page.getByLabel("姓").fill(lastName);
+  await page.getByLabel("个人简介标题").click();
   await page
-    .getByLabel("Headline")
+    .getByLabel("个人简介标题")
     .fill("Skill developer with testing skills");
-  await page.getByLabel("Email").click();
-  await page.getByLabel("Email").fill("admin@example.com");
-  await page.getByLabel("Phone").click();
-  await page.getByLabel("Phone").fill("123456789");
-  await page.getByLabel("Address").click();
-  await page.getByLabel("Address").fill("Calgary");
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByLabel("邮箱").click();
+  await page.getByLabel("邮箱").fill("admin@example.com");
+  await page.getByLabel("电话").click();
+  await page.getByLabel("电话").fill("123456789");
+  await page.getByLabel("地址").click();
+  await page.getByLabel("地址").fill("Calgary");
+  await page.getByRole("button", { name: "保存" }).click();
 }
 
 async function addSummary(page: Page, resumeTitle: string, summaryText: string) {
@@ -292,14 +292,14 @@ async function addSummary(page: Page, resumeTitle: string, summaryText: string) 
     .first()
     .getByTestId("document-actions-menu-btn")
     .click();
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await expect(page.getByRole("heading", { name: "Resume" })).toBeVisible();
-  await page.getByRole("button", { name: "Add Section" }).click();
-  await page.getByRole("menuitem", { name: "Add Summary" }).click();
-  await page.getByLabel("Section Title").fill("Summary");
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await page.getByRole("button", { name: "添加模块" }).click();
+  await page.getByRole("menuitem", { name: "添加个人简介" }).click();
+  await page.getByLabel("模块标题").fill("Summary");
   await page.locator(".tiptap").click();
   await page.locator(".tiptap").fill(summaryText + "\n");
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
 }
 
 async function addEducation(
@@ -314,38 +314,38 @@ async function addEducation(
     .first()
     .getByTestId("document-actions-menu-btn")
     .click({ force: true });
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await expect(page.getByRole("heading", { name: "Resume" })).toBeVisible();
-  await page.getByRole("button", { name: "Add Section" }).click();
-  await page.getByRole("menuitem", { name: "Add Education" }).click();
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await page.getByRole("button", { name: "添加模块" }).click();
+  await page.getByRole("menuitem", { name: "添加教育经历" }).click();
   // Wait for the dialog to open
   await page.waitForTimeout(500);
   // Only fill section title if it's visible (when creating new section)
-  const sectionTitleField = page.getByPlaceholder("Ex: Education");
+  const sectionTitleField = page.getByPlaceholder("例如：教育经历");
   if (await sectionTitleField.isVisible()) {
     await sectionTitleField.fill("Education");
   }
-  await page.getByPlaceholder("Ex: Stanford").click();
-  await page.getByPlaceholder("Ex: Stanford").fill(schoolText);
+  await page.getByPlaceholder("例如：斯坦福大学").click();
+  await page.getByPlaceholder("例如：斯坦福大学").fill(schoolText);
   await selectOrCreate(
     page,
-    "Location",
-    "Create or Search location",
+    "地点",
+    "创建或搜索地点",
     locationText,
   );
   cleanup.location(locationText);
-  await page.getByPlaceholder("Ex: Bachelor's").click();
-  await page.getByPlaceholder("Ex: Bachelor's").fill("degree text");
-  await page.getByPlaceholder("Ex: Computer Science").click();
-  await page.getByPlaceholder("Ex: Computer Science").fill("computer science");
-  await page.getByLabel("Start Date").click();
+  await page.getByPlaceholder("例如：学士").click();
+  await page.getByPlaceholder("例如：学士").fill("degree text");
+  await page.getByPlaceholder("例如：计算机科学").click();
+  await page.getByPlaceholder("例如：计算机科学").fill("computer science");
+  await page.getByLabel("开始日期").click();
   // Wait for calendar popover to open
   await page.waitForTimeout(1000);
   // Click on any available date in the calendar
   const startDateCell = page.getByRole("gridcell", { name: "15" }).first();
   await startDateCell.waitFor({ state: "visible", timeout: 5000 });
   await startDateCell.click();
-  await page.getByLabel("End Date").click();
+  await page.getByLabel("结束日期").click();
   // Wait for calendar popover to open
   await page.waitForTimeout(1000);
   // Click on any available date in the calendar
@@ -354,7 +354,7 @@ async function addEducation(
   await endDateCell.click();
   await page.locator("div:nth-child(2) > .tiptap").click();
   await page.locator("div:nth-child(2) > .tiptap").fill("test description");
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
 }
 
 async function addExperience(
@@ -370,30 +370,30 @@ async function addExperience(
     .first()
     .getByTestId("document-actions-menu-btn")
     .click();
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await expect(page.getByRole("heading", { name: "Resume" })).toBeVisible();
-  await page.getByRole("button", { name: "Add Section" }).click();
-  await page.getByRole("menuitem", { name: "Add Experience" }).click();
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await page.getByRole("button", { name: "添加模块" }).click();
+  await page.getByRole("menuitem", { name: "添加工作经历" }).click();
   // Wait for the dialog to open
   await page.waitForTimeout(500);
   // Only fill section title if it's visible (when creating new section)
-  const sectionTitleField = page.getByPlaceholder("Ex: Experience");
+  const sectionTitleField = page.getByPlaceholder("例如：工作经历");
   if (await sectionTitleField.isVisible()) {
     await sectionTitleField.fill("Experience");
     await sectionTitleField.press("Tab");
   }
-  await selectOrCreate(page, "Job Title", "Create or Search title", jobText);
+  await selectOrCreate(page, "职位名称", "创建或搜索职位", jobText);
   cleanup.title(jobText);
-  await selectOrCreate(page, "Company", "Create or Search company", companyText);
+  await selectOrCreate(page, "公司", "创建或搜索公司", companyText);
   cleanup.company(companyText);
   await selectOrCreate(
     page,
-    "Job Location",
-    "Create or Search location",
+    "工作地点",
+    "创建或搜索地点",
     locationText,
   );
   cleanup.location(locationText);
-  await page.getByLabel("Start Date").click();
+  await page.getByLabel("开始日期").click();
   // Wait for calendar popover to open
   await page.waitForTimeout(1000);
   // Click on any available date in the calendar
@@ -402,7 +402,7 @@ async function addExperience(
   await dateCell.click();
   await page.locator("div:nth-child(2) > .tiptap").click();
   await page.locator("div:nth-child(2) > .tiptap").fill("test description");
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
 }
 
 async function addSkill(
@@ -416,16 +416,16 @@ async function addSkill(
     .first()
     .getByTestId("document-actions-menu-btn")
     .click();
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await expect(page.getByRole("heading", { name: "Resume" })).toBeVisible();
-  await page.getByRole("button", { name: "Add Section" }).click();
-  await page.getByRole("menuitem", { name: "Add Skills" }).click();
-  await page.getByRole("combobox", { name: "Search or add a skill…" }).click();
-  await page.getByPlaceholder("Type a skill...").fill(skillText);
-  await page.getByText(`Create "${skillText}"`).click();
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await page.getByRole("button", { name: "添加模块" }).click();
+  await page.getByRole("menuitem", { name: "添加技能" }).click();
+  await page.getByRole("combobox", { name: "搜索或添加技能…" }).click();
+  await page.getByPlaceholder("输入技能…").fill(skillText);
+  await page.getByText(`创建“${skillText}”`).click();
   cleanup.tag(skillText);
   await expect(page.getByText(skillText, { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
 }
 
 async function addCertification(
@@ -439,39 +439,39 @@ async function addCertification(
     .first()
     .getByTestId("document-actions-menu-btn")
     .click();
-  await page.getByRole("link", { name: "View/Edit Resume" }).click();
-  await expect(page.getByRole("heading", { name: "Resume" })).toBeVisible();
-  await page.getByRole("button", { name: "Add Section" }).click();
+  await page.getByRole("link", { name: "查看或编辑简历" }).click();
+  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await page.getByRole("button", { name: "添加模块" }).click();
   await page
-    .getByRole("menuitem", { name: "Add Certification / License" })
+    .getByRole("menuitem", { name: "添加证书或执照" })
     .click();
   // Wait for the dialog to open
   await page.waitForTimeout(500);
   // Only fill section title if it's visible (when creating new section)
-  const sectionTitleField = page.getByPlaceholder("Ex: Certifications");
+  const sectionTitleField = page.getByPlaceholder("例如：证书与资质");
   if (await sectionTitleField.isVisible()) {
     await sectionTitleField.fill("Certifications");
   }
-  await page.getByLabel("Certification / License Name").fill(certTitle);
-  await page.getByLabel("Issuing Organization").fill("Amazon Web Services");
-  await page.getByLabel("Issue Date").click();
+  await page.getByLabel("证书或执照名称").fill(certTitle);
+  await page.getByLabel("颁发机构").fill("Amazon Web Services");
+  await page.getByLabel("颁发日期").click();
   // Wait for calendar popover to open
   await page.waitForTimeout(1000);
   const issueDateCell = page.getByRole("gridcell", { name: "10" }).first();
   await issueDateCell.waitFor({ state: "visible", timeout: 5000 });
   await issueDateCell.click();
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
 }
 
 async function deleteResume(page: Page, title: string) {
-  await page.getByRole("link", { name: "Profile" }).click();
+  await page.getByRole("link", { name: "简历中心", exact: true }).click();
   await page.waitForLoadState("networkidle");
   const row = page.getByRole("row", { name: new RegExp(title, "i") }).first();
   await row.waitFor({ state: "visible", timeout: 10000 });
   await row.getByTestId("document-actions-menu-btn").click({ force: true });
-  await page.getByRole("menuitem", { name: "Delete" }).click({ force: true });
+  await page.getByRole("menuitem", { name: "删除" }).click({ force: true });
   await expect(page.getByRole("alertdialog")).toContainText(
-    "Are you sure you want to delete this resume?",
+    "确定删除此简历吗？",
   );
-  await page.getByRole("button", { name: "Delete" }).click({ force: true });
+  await page.getByRole("button", { name: "删除" }).click({ force: true });
 }

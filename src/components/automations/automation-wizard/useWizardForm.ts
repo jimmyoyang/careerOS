@@ -82,19 +82,19 @@ export function useWizardForm({
       if (result.success) {
         toastSuccess(
           editAutomation
-            ? "Your automation has been updated successfully."
-            : "Your automation has been created and will run at the scheduled time.",
-          editAutomation ? "Automation updated" : "Automation created",
+            ? "自动化已更新。"
+            : "自动化已创建，将按计划运行。",
+          editAutomation ? "自动化已更新" : "自动化已创建",
         );
         form.reset();
         setStep(0);
         onOpenChange(false);
         onSuccess();
       } else {
-        toastError(result.message || "Something went wrong");
+        toastError(result.message || "出现错误");
       }
     } catch (error) {
-      toastError("Failed to save automation");
+      toastError("保存自动化失败");
     } finally {
       setIsSubmitting(false);
     }
@@ -131,11 +131,11 @@ export function useWizardForm({
   const nextStep = () => {
     if (step === 4 && takenHours.has(formValues.scheduleHour)) {
       form.setError("scheduleHour", {
-        message: `Another automation already runs at ${(
+        message: `已有其他自动化在 ${(
           formValues.scheduleHour ?? 8
         )
           .toString()
-          .padStart(2, "0")}:00. Please choose a different time.`,
+          .padStart(2, "0")}:00 运行，请选择其他时间。`,
       });
       return;
     }

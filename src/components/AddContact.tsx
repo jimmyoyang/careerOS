@@ -97,7 +97,7 @@ function AddContact({
 }: AddContactProps) {
   const [isPending, startTransition] = useTransition();
 
-  const pageTitle = editContact ? "Edit Contact" : "Add Contact";
+  const pageTitle = editContact ? "编辑联系人" : "添加联系人";
 
   const prefilled: ContactFormValues = {
     ...EMPTY_CONTACT,
@@ -186,7 +186,7 @@ function AddContact({
         : await createContact(values);
       const name = values.name.trim();
       toastActionResult(res, {
-        success: `Contact has been ${editContact ? "updated" : "created"} successfully`,
+        success: `联系人已${editContact ? "更新" : "创建"}`,
         onSuccess: () => {
           onSaved?.({ id: res.data.id, label: name, value: name.toLowerCase() });
           reset();
@@ -210,7 +210,7 @@ function AddContact({
         >
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            New Contact
+            新建联系人
           </span>
         </Button>
       )}
@@ -231,9 +231,9 @@ function AddContact({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>姓名</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Dana Whitfield" {...field} />
+                      <Input placeholder="例如：张晓明" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -245,9 +245,9 @@ function AddContact({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>职位名称</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Engineering Manager" {...field} />
+                      <Input placeholder="例如：研发经理" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -259,7 +259,7 @@ function AddContact({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>邮箱</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
@@ -277,7 +277,7 @@ function AddContact({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>电话</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. +1 416 555 0134" {...field} />
                     </FormControl>
@@ -292,7 +292,7 @@ function AddContact({
                   name="linkedinUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>LinkedIn URL</FormLabel>
+                      <FormLabel>LinkedIn 个人主页</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://www.linkedin.com/in/..."
@@ -305,14 +305,14 @@ function AddContact({
                 />
               </div>
 
-              <SectionHeading>Where they work</SectionHeading>
+              <SectionHeading>工作信息</SectionHeading>
 
               <FormField
                 control={form.control}
                 name="company"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Company</FormLabel>
+                    <FormLabel>公司</FormLabel>
                     <Combobox options={companies} field={field} creatable fullWidth />
                     <FormMessage />
                   </FormItem>
@@ -324,7 +324,7 @@ function AddContact({
                 name="location"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>地点</FormLabel>
                     <Combobox options={locations} field={field} creatable fullWidth />
                     <FormMessage />
                   </FormItem>
@@ -336,7 +336,7 @@ function AddContact({
                 name="contactRole"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>角色</FormLabel>
                     <Combobox
                       options={roles}
                       field={{
@@ -354,16 +354,16 @@ function AddContact({
 
               {isReference && (
                 <>
-                  <SectionHeading>How you know them</SectionHeading>
+                  <SectionHeading>联系背景</SectionHeading>
 
                   <FormField
                     control={form.control}
                     name="relationship"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Relationship</FormLabel>
+                        <FormLabel>关系</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. my manager, peer" {...field} />
+                          <Input placeholder="例如：我的经理、同事" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -375,7 +375,7 @@ function AddContact({
                     name="workedAtCompany"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Worked together at</FormLabel>
+                        <FormLabel>共事公司</FormLabel>
                         <Combobox
                           options={companies}
                           field={field}
@@ -395,7 +395,7 @@ function AddContact({
                     name="workedFrom"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>From</FormLabel>
+                        <FormLabel>开始日期</FormLabel>
                         <DatePicker
                           field={field}
                           presets={false}
@@ -413,7 +413,7 @@ function AddContact({
                     name="workedTo"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>To</FormLabel>
+                        <FormLabel>结束日期</FormLabel>
                         <DatePicker
                           field={field}
                           presets={false}
@@ -428,14 +428,14 @@ function AddContact({
                 </>
               )}
 
-              <SectionHeading>Follow-up</SectionHeading>
+              <SectionHeading>跟进</SectionHeading>
 
               <FormField
                 control={form.control}
                 name="lastContactedAt"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Last contacted</FormLabel>
+                    <FormLabel>上次联系</FormLabel>
                     <DatePicker
                       field={field}
                       presets={false}
@@ -455,11 +455,11 @@ function AddContact({
                   name="notes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Notes</FormLabel>
+                      <FormLabel>备注</FormLabel>
                       <FormControl>
                         <Textarea
                           className="min-h-24"
-                          placeholder="How you met, what to follow up on..."
+                          placeholder="认识的经过、需要跟进的事项……"
                           {...field}
                         />
                       </FormControl>

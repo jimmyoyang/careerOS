@@ -89,7 +89,7 @@ describe("CompaniesContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search companies..."),
+          screen.getByPlaceholderText("搜索公司…"),
         ).toBeInTheDocument();
       });
     });
@@ -104,11 +104,11 @@ describe("CompaniesContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search companies..."),
+          screen.getByPlaceholderText("搜索公司…"),
         ).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search companies...");
+      const searchInput = screen.getByPlaceholderText("搜索公司…");
 
       await act(async () => {
         await user.type(searchInput, "Amazon");
@@ -129,7 +129,7 @@ describe("CompaniesContainer Search Functionality", () => {
         expect(getCompanyList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search companies...");
+      const searchInput = screen.getByPlaceholderText("搜索公司…");
 
       await act(async () => {
         await user.type(searchInput, "A");
@@ -159,7 +159,7 @@ describe("CompaniesContainer Search Functionality", () => {
         expect(getCompanyList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search companies...");
+      const searchInput = screen.getByPlaceholderText("搜索公司…");
 
       await act(async () => {
         await user.type(searchInput, "Amazon");
@@ -218,7 +218,7 @@ describe("CompaniesContainer Search Functionality", () => {
         expect(getCompanyList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search companies...");
+      const searchInput = screen.getByPlaceholderText("搜索公司…");
 
       await act(async () => {
         await user.type(searchInput, "Amazon");
@@ -270,7 +270,7 @@ describe("CompaniesContainer Search Functionality", () => {
         expect(screen.getByText("Google")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search companies...");
+      const searchInput = screen.getByPlaceholderText("搜索公司…");
       await act(async () => {
         await user.type(searchInput, "Amazon");
       });
@@ -299,7 +299,7 @@ describe("CompaniesContainer Search Functionality", () => {
         expect(screen.getByText("Amazon")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search companies...");
+      const searchInput = screen.getByPlaceholderText("搜索公司…");
       await act(async () => {
         await user.type(searchInput, "Amazon");
       });
@@ -434,7 +434,7 @@ describe("CompaniesContainer Search Functionality", () => {
 
       await waitFor(() =>
         expect(
-          screen.getByRole("columnheader", { name: "Contacts" })
+          screen.getByRole("columnheader", { name: "联系人" })
         ).toBeInTheDocument()
       );
       const row = screen.getByRole("row", { name: /Amazon/ });
@@ -469,10 +469,10 @@ describe("CompaniesContainer Search Functionality", () => {
       render(<CompaniesContainer />);
 
       const row = await screen.findByRole("row", { name: /Amazon/ });
-      await user.click(within(row).getByRole("button", { name: /toggle menu/i }));
+      await user.click(within(row).getByRole("button", { name: /打开菜单/i }));
 
       const items = await screen.findAllByRole("menuitem");
-      expect(items[0]).toHaveTextContent("View details");
+      expect(items[0]).toHaveTextContent("查看详情");
       expect(items[0]).toHaveAttribute("href", "/dashboard/admin/companies/1");
     });
   });

@@ -21,7 +21,7 @@ test.describe("Admin Job Titles search", () => {
     await page.goto("/dashboard/admin?tab=job-titles");
     await page.waitForLoadState("networkidle");
 
-    const searchInput = page.getByPlaceholder("Search job titles...");
+    const searchInput = page.getByPlaceholder("搜索职位名称…");
     await expect(searchInput).toBeVisible();
     await searchInput.fill(titleA);
 

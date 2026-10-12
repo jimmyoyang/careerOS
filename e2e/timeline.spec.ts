@@ -7,7 +7,7 @@ import type { Page } from "@playwright/test";
 async function openStageDialogWith(page: Page, stageLabel: string) {
   await page.getByTestId("timeline-add-stage-btn").click();
   await page.getByTestId("stage-type-select").click();
-  const search = page.getByPlaceholder("Search stage");
+  const search = page.getByPlaceholder("搜索阶段");
   await search.fill(stageLabel);
   await page.getByRole("option", { name: stageLabel, exact: true }).click();
   await expect(search).not.toBeVisible();
@@ -21,22 +21,22 @@ test("adding an Offer stage moves the job's status on the Jobs list", async ({
   const jobId = await createNewJob(page, jobTitle, cleanup);
 
   await page.goto(`/dashboard/myjobs/${jobId}?tab=timeline`);
-  await openStageDialogWith(page, "Offer");
+  await openStageDialogWith(page, "录用通知");
 
   await expect(
-    page.getByRole("checkbox", { name: /Set as current stage/ }),
+    page.getByRole("checkbox", { name: /设为当前阶段/ }),
   ).toBeChecked();
-  await page.getByRole("button", { name: "Add Stage", exact: true }).click();
+  await page.getByRole("button", { name: "添加阶段", exact: true }).click();
 
   // The Stage History list reflects it without a reload.
-  await expect(page.getByRole("button", { name: /^Offer/ }).first()).toBeVisible();
-  await expect(page.getByRole("tab", { name: /Timeline/ })).toContainText("2");
+  await expect(page.getByRole("button", { name: /^录用通知/ }).first()).toBeVisible();
+  await expect(page.getByRole("tab", { name: /进展记录/ })).toContainText("2");
 
   // ...and the derived status reached the Jobs list.
   await page.goto("/dashboard/myjobs");
   const row = page.getByRole("row", { name: jobTitle }).first();
   await expect(row).toBeVisible();
-  await expect(row).toContainText("Offer");
+  await expect(row).toContainText("录用通知");
 });
 
 test("linking an interviewer to a stage puts them on the job's Contacts tab", async ({
@@ -50,30 +50,30 @@ test("linking an interviewer to a stage puts them on the job's Contacts tab", as
   await page.goto(`/dashboard/myjobs/${jobId}?tab=timeline`);
 
   // An interview stage first: the stage-scoped menu items gate on stage kind.
-  await openStageDialogWith(page, "Final / Onsite Interview");
-  await page.getByRole("button", { name: "Add Stage", exact: true }).click();
+  await openStageDialogWith(page, "终面 / 现场面试");
+  await page.getByRole("button", { name: "添加阶段", exact: true }).click();
 
   // Adding a stage does not move the selection, and the menu targets the
   // selected stage — so pick the new one before opening it.
   await page
-    .getByRole("button", { name: /^Final \/ Onsite Interview/ })
+    .getByRole("button", { name: /^终面 \/ 现场面试/ })
     .first()
     .click();
 
   await page.getByTestId("update-status-menu-btn").click();
-  await page.getByRole("menuitem", { name: "Add Interviewers" }).click();
+  await page.getByRole("menuitem", { name: "添加面试官" }).click();
 
-  await page.getByPlaceholder("Full name").fill(contactName);
+  await page.getByPlaceholder("姓名").fill(contactName);
   cleanup.contact(contactName);
-  await page.getByRole("button", { name: "Add Contact" }).click();
+  await page.getByRole("button", { name: "添加联系人" }).click();
   await expect(
-    page.getByLabel(new RegExp(`${contactName} is already linked`)),
+    page.getByLabel(new RegExp(`${contactName}已关联`)),
   ).toBeVisible();
-  await page.getByRole("button", { name: /^Done/ }).click();
+  await page.getByRole("button", { name: /^完成/ }).click();
 
   // The job's Contacts tab is the single roster of everyone involved. Loaded
   // fresh: JobContactsTab seeds its rows from the server prop on mount.
   await page.goto(`/dashboard/myjobs/${jobId}?tab=contacts`);
   await expect(page.getByText(contactName)).toBeVisible();
-  await expect(page.getByText("Interviewer")).toBeVisible();
+  await expect(page.getByText("面试官")).toBeVisible();
 });

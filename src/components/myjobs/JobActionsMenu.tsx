@@ -43,31 +43,31 @@ export function JobActionsMenu({
           data-testid="job-actions-menu-btn"
         >
           <MoreVertical className="h-4 w-4" />
-          <span className="sr-only">Toggle menu</span>
+          <span className="sr-only">打开菜单</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>操作</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={() => router.push(`/dashboard/myjobs/${job?.id}`)}
           >
             <ListCollapse className="mr-2 h-4 w-4" />
-            View Details
+            查看详情
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={() => onAddNote(job.id)}
           >
             <StickyNote className="mr-2 h-4 w-4" />
-            Add a Note
+            添加笔记
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <Tags className="mr-2 h-4 w-4" />
-              Change status
+              更改状态
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent className="p-0">

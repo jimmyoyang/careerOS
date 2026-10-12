@@ -45,7 +45,7 @@ function MyJobsGrid({
         ))}
       </div>
       <DeleteAlertDialog
-        pageTitle="job"
+        pageTitle="职位"
         open={alertOpen}
         onOpenChange={setAlertOpen}
         onDelete={() => deleteJob(jobIdToDelete)}

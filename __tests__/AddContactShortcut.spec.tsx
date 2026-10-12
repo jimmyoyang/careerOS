@@ -48,7 +48,7 @@ describe("AddContactShortcut", () => {
   it("keeps the dialog closed and fetches nothing until the button is clicked", () => {
     render(<AddContactShortcut />);
 
-    expect(screen.getByRole("button", { name: /add contact/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "添加联系人" })).toBeTruthy();
     expect(screen.queryByTestId("add-contact-dialog")).toBeNull();
     expect(getAllCompanies).not.toHaveBeenCalled();
   });
@@ -56,7 +56,7 @@ describe("AddContactShortcut", () => {
   it("opens the dialog and hands it the fetched picker options", async () => {
     render(<AddContactShortcut />);
 
-    await user.click(screen.getByRole("button", { name: /add contact/i }));
+    await user.click(screen.getByRole("button", { name: "添加联系人" }));
 
     expect(screen.getByTestId("add-contact-dialog")).toBeTruthy();
     await waitFor(() =>
@@ -67,10 +67,10 @@ describe("AddContactShortcut", () => {
   it("fetches the picker options only once across reopens", async () => {
     render(<AddContactShortcut />);
 
-    await user.click(screen.getByRole("button", { name: /add contact/i }));
+    await user.click(screen.getByRole("button", { name: "添加联系人" }));
     await waitFor(() => expect(getAllCompanies).toHaveBeenCalledTimes(1));
     await user.click(screen.getByRole("button", { name: /close/i }));
-    await user.click(screen.getByRole("button", { name: /add contact/i }));
+    await user.click(screen.getByRole("button", { name: "添加联系人" }));
 
     expect(getAllCompanies).toHaveBeenCalledTimes(1);
     expect(getAllJobLocations).toHaveBeenCalledTimes(1);

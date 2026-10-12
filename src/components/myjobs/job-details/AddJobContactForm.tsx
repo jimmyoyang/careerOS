@@ -19,8 +19,8 @@ import type { ContactRef, ContactRole } from "@/models/contact.model";
 import type { Company, JobLocation } from "@/models/job.model";
 
 const LinkContactSchema = z.object({
-  contact: z.string().min(1, "Pick a contact."),
-  contactRole: z.string().min(1, "Pick a role."),
+  contact: z.string().min(1, "请选择联系人。"),
+  contactRole: z.string().min(1, "请选择角色。"),
 });
 
 type LinkContactValues = z.infer<typeof LinkContactSchema>;
@@ -60,7 +60,7 @@ export function AddJobContactForm({
     startTransition(async () => {
       const res = await addJobContact(jobId, values.contact, values.contactRole);
       toastActionResult(res, {
-        success: "Contact has been linked to this job",
+        success: "联系人已关联到该职位",
         onSuccess: () => {
           form.reset();
           onLinked();
@@ -80,11 +80,11 @@ export function AddJobContactForm({
           name="contact"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Contact</FormLabel>
+              <FormLabel>联系人</FormLabel>
               <Combobox
                 options={contacts}
                 field={field}
-                label="contact"
+                label="联系人"
                 onSearchChange={setTypedName}
               />
               <FormMessage />
@@ -97,15 +97,15 @@ export function AddJobContactForm({
           name="contactRole"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Role</FormLabel>
-              <Combobox options={roles} field={field} creatable label="role" />
+              <FormLabel>角色</FormLabel>
+              <Combobox options={roles} field={field} creatable label="角色" />
               <FormMessage />
             </FormItem>
           )}
         />
 
         <Button type="submit" className="cursor-pointer" disabled={isPending}>
-          Save
+          保存
         </Button>
         <Button
           type="button"
@@ -113,7 +113,7 @@ export function AddJobContactForm({
           className="cursor-pointer"
           onClick={onCancel}
         >
-          Cancel
+          取消
         </Button>
         <Button
           type="button"
@@ -121,7 +121,7 @@ export function AddJobContactForm({
           className="cursor-pointer"
           onClick={() => setNewContactOpen(true)}
         >
-          New contact
+          新建联系人
         </Button>
       </form>
 

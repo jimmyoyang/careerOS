@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+import { zhCN } from "date-fns/locale";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,15 +33,15 @@ interface RecentCardToggleProps {
 function formatDuration(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return totalMinutes === 0 ? "0min" : `${hours}h ${minutes}min`;
+  return totalMinutes === 0 ? "0 分钟" : `${hours} 小时 ${minutes} 分钟`;
 }
 
 function groupJobsByDate(jobs: JobResponse[]) {
   const groups = new Map<string, JobResponse[]>();
   for (const job of jobs) {
     const key = job.appliedDate
-      ? format(job.appliedDate, "EEE MMMM d, yyyy")
-      : "No date";
+      ? format(job.appliedDate, "PPP EEEE", { locale: zhCN })
+      : "未设置日期";
     const existing = groups.get(key);
     if (existing) {
       existing.push(job);
@@ -54,8 +56,8 @@ function groupActivitiesByDate(activities: RecentActivity[]) {
   const groups = new Map<string, RecentActivity[]>();
   for (const activity of activities) {
     const key = activity.endTime
-      ? format(activity.endTime, "EEE MMMM d, yyyy")
-      : "In progress";
+      ? format(activity.endTime, "PPP EEEE", { locale: zhCN })
+      : "进行中";
     const existing = groups.get(key);
     if (existing) {
       existing.push(activity);
@@ -84,7 +86,7 @@ export default function RecentCardToggle({
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="text-lg text-green-600 min-w-0 truncate">
-            Recent {tabs[activeIndex]}
+            最近 {zhLabel(tabs[activeIndex])}
           </CardTitle>
           <div
             className="flex shrink-0 rounded-md border text-xs"
@@ -92,7 +94,7 @@ export default function RecentCardToggle({
           >
             {tabs.map((tab, index) => (
               <button
-                key={tab}
+                key={zhLabel(tab)}
                 onClick={() => selectTab(index)}
                 className={cn(
                   "px-2 py-1 transition-colors",
@@ -103,7 +105,7 @@ export default function RecentCardToggle({
                     : "hover:bg-muted",
                 )}
               >
-                {tab}
+                {zhLabel(tab)}
               </button>
             ))}
           </div>
@@ -121,7 +123,7 @@ export default function RecentCardToggle({
                     <Avatar className="hidden h-8 w-8 sm:flex">
                       <AvatarImage
                         src={job.Company?.logoUrl || "/images/jobsync-logo.svg"}
-                        alt="Avatar"
+                        alt="头像"
                       />
                       <AvatarFallback>JS</AvatarFallback>
                     </Avatar>
@@ -160,7 +162,7 @@ export default function RecentCardToggle({
                       className="relative flex items-center gap-2"
                     >
                       <Button
-                        title="Start Activity"
+                        title="开始活动"
                         data-testid="recent-activity-start-btn"
                         size="icon"
                         variant="ghost"
@@ -176,7 +178,7 @@ export default function RecentCardToggle({
                           {activity.activityName}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {activity.activityType?.label || "Unknown"}
+                          {activity.activityType?.label || "未知"}
                         </p>
                       </div>
                       <div className="ml-auto text-right shrink-0">

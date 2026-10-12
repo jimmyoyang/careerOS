@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { CirclePlay, MoreVertical, Trash } from "lucide-react";
 import {
   Table,
@@ -40,7 +42,7 @@ function ActivitiesTable({
   const calculateDuration = (totalMinutes: number) => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
-    return totalMinutes === 0 ? "0min" : `${hours}h ${minutes}min`;
+    return totalMinutes === 0 ? "0 分钟" : `${hours} 小时 ${minutes} 分钟`;
   };
 
   const onDeleteActivity = useMemo(
@@ -54,7 +56,7 @@ function ActivitiesTable({
   const deleteActivity = async () => {
     const { success, message } = await deleteActivityById(activityIdToDelete!);
     if (success) {
-      toastSuccess(`Activity has been deleted successfully`);
+      toastSuccess("活动已删除");
       reloadActivities();
     } else {
       toastError(message);
@@ -65,22 +67,22 @@ function ActivitiesTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="hidden md:table-cell">Date</TableHead>
-            <TableHead>Activity</TableHead>
+            <TableHead className="hidden md:table-cell">日期</TableHead>
+            <TableHead>活动</TableHead>
             <TableHead className="whitespace-nowrap">
-              Project
+              项目
               <br />
-              (Activity Type)
+              （活动类型）
             </TableHead>
             <TableHead className="hidden md:table-cell whitespace-nowrap">
-              Start Time
+              开始时间
             </TableHead>
             <TableHead className="hidden md:table-cell whitespace-nowrap">
-              End Time
+              结束时间
             </TableHead>
-            <TableHead>Duration</TableHead>
+            <TableHead>时长</TableHead>
             <TableHead>
-              <span>Actions</span>
+              <span>操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -93,20 +95,20 @@ function ActivitiesTable({
               >
                 <TableCell className="hidden md:table-cell w-[120px]">
                   {activity.startTime
-                    ? format(activity.startTime, "PP")
-                    : "N/A"}
+                    ? format(activity.startTime, "yyyy年M月d日")
+                    : "暂无"}
                 </TableCell>
                 <TableCell className="font-medium">
                   {activity.activityName}
                 </TableCell>
                 <TableCell className="font-medium">
-                  {(activity.activityType as ActivityType)?.label}
+                  {zhLabel((activity.activityType as ActivityType)?.label ?? "")}
                 </TableCell>
                 <TableCell className="hidden md:table-cell whitespace-nowrap">
-                  {format(activity.startTime, "p")}
+                  {format(activity.startTime, "HH:mm")}
                 </TableCell>
                 <TableCell className="hidden md:table-cell whitespace-nowrap">
-                  {format(activity.endTime!, "p")}
+                  {format(activity.endTime!, "HH:mm")}
                 </TableCell>
                 <TableCell>
                   {activity.startTime &&
@@ -123,31 +125,31 @@ function ActivitiesTable({
                           variant="ghost"
                         >
                           <MoreVertical className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
+                          <span className="sr-only">打开菜单</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-[200px]">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>操作</DropdownMenuLabel>
                         <DropdownMenuGroup>
                           <DropdownMenuItem
                             className="cursor-pointer text-green-600"
                             onClick={() => onStartActivity(activity.id!)}
                           >
                             <CirclePlay className="mr-2 h-4 w-4" />
-                            Start Activity
+                            开始活动
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="text-red-600 cursor-pointer"
                             onClick={() => onDeleteActivity(activity.id!)}
                           >
                             <Trash className="mr-2 h-4 w-4" />
-                            Delete
+                            删除
                           </DropdownMenuItem>
                         </DropdownMenuGroup>
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <Button
-                      title="Start Activity"
+                      title="开始活动"
                       aria-haspopup="true"
                       size="icon"
                       variant="ghost"
@@ -166,7 +168,7 @@ function ActivitiesTable({
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="activity"
+        pageTitle="活动"
         open={alertOpen}
         onOpenChange={setAlertOpen}
         onDelete={deleteActivity}

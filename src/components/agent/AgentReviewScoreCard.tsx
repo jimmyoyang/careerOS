@@ -14,8 +14,8 @@ export function AgentReviewScoreCard({
   size?: number;
 }) {
   const items = [
-    { label: "Impact", value: scores.impact },
-    { label: "Clarity", value: scores.clarity },
+    { label: "成果影响力", value: scores.impact },
+    { label: "表达清晰度", value: scores.clarity },
     { label: "ATS", value: scores.atsCompatibility },
   ];
 

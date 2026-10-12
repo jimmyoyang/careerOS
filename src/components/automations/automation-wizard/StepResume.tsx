@@ -33,11 +33,11 @@ export function StepResume({
         name="resumeId"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Resume for Matching</FormLabel>
+            <FormLabel>匹配使用的简历</FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a resume" />
+                  <SelectValue placeholder="选择简历" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -49,7 +49,7 @@ export function StepResume({
               </SelectContent>
             </Select>
             <FormDescription>
-              Jobs will be matched against this resume
+              将使用此简历进行岗位匹配
             </FormDescription>
             <FormMessage />
           </FormItem>
@@ -57,8 +57,7 @@ export function StepResume({
       />
       {resumes.length === 0 && (
         <p className="text-sm text-orange-600 dark:text-orange-500">
-          No resumes found. Please create a resume with enough content in your
-          profile first.
+          暂无简历，请先在个人资料中创建一份内容完整的简历。
         </p>
       )}
     </>

@@ -1,5 +1,7 @@
 "use client";
 
+import { zhMessage } from "@/lib/i18n/zh-CN";
+
 import { AgentMatchContent } from "@/components/agent/AgentMatchContent";
 import { NoResumesNotice } from "@/components/agent/AgentResultCard/NoResumesNotice";
 import { ResumeSelectionPrompt } from "@/components/agent/AgentResultCard/ResumeSelectionPrompt";
@@ -12,8 +14,7 @@ export function MatchJobResult({ output }: { output: AgentMatchJobResult }) {
   if (output.status === "no_job") {
     return (
       <p className="text-sm">
-        Open the job you want to match first — I score the job you&apos;re
-        looking at.
+        请先打开目标岗位，我会评估您正在查看的岗位。
       </p>
     );
   }
@@ -25,9 +26,9 @@ export function MatchJobResult({ output }: { output: AgentMatchJobResult }) {
   if (output.status === "needs_selection") {
     return (
       <ResumeSelectionPrompt
-        prompt="Which resume should I match against?"
+        prompt="应使用哪份简历进行匹配？"
         resumes={output.resumes}
-        messageFor={(title) => `Match this job against my resume "${title}"`}
+        messageFor={(title) => `请将此岗位与我的简历“${title}”进行匹配。`}
       />
     );
   }
@@ -35,7 +36,7 @@ export function MatchJobResult({ output }: { output: AgentMatchJobResult }) {
   if (output.status === "unreadable") {
     return (
       <p className="text-sm">
-        Couldn&apos;t read <strong>{output.title}</strong> — {output.reason}
+        无法读取 <strong>{output.title}</strong> — {zhMessage(output.reason)}
       </p>
     );
   }
@@ -43,7 +44,7 @@ export function MatchJobResult({ output }: { output: AgentMatchJobResult }) {
   if (output.status === "generation_failed") {
     return (
       <p className="text-sm">
-        Couldn&apos;t match <strong>{output.jobTitle}</strong> — {output.reason}
+        无法匹配 <strong>{output.jobTitle}</strong> — {zhMessage(output.reason)}
       </p>
     );
   }
@@ -53,12 +54,12 @@ export function MatchJobResult({ output }: { output: AgentMatchJobResult }) {
       <AgentMatchContent body={output.body} scores={output.scores} />
       <p className="mt-2 text-xs text-muted-foreground">
         {output.jobTitle}
-        {output.company ? ` at ${output.company}` : ""} · matched against{" "}
+        {output.company ? ` · ${output.company}` : ""} · 匹配简历{" "}
         {output.resumeTitle}
       </p>
       {!output.saved && (
         <p className="mt-1 text-xs text-muted-foreground">
-          Match not saved — {output.saveError}
+          匹配结果未保存： {zhMessage(output.saveError ?? "")}
         </p>
       )}
     </div>

@@ -77,7 +77,7 @@ export function NotesCollapsibleSection({
         : await addNote({ jobId, content: editorContent });
 
       if (result.success) {
-        toastSuccess(`Note ${editingNote ? "updated" : "added"} successfully`);
+        toastSuccess(`笔记已${editingNote ? "更新" : "添加"}`);
         handleCancel();
         loadNotes();
       } else {
@@ -96,7 +96,7 @@ export function NotesCollapsibleSection({
     startTransition(async () => {
       const result = await deleteNote(deleteConfirmId);
       if (result.success) {
-        toastSuccess("Note deleted successfully");
+        toastSuccess("笔记已删除");
         setDeleteConfirmId(null);
         loadNotes();
       } else {
@@ -108,7 +108,7 @@ export function NotesCollapsibleSection({
   const inlineEditor = (
     <div className="border rounded-lg p-4 space-y-3">
       <p className="text-sm font-medium">
-        {editingNote ? "Edit Note" : "Add Note"}
+        {editingNote ? "编辑笔记" : "添加笔记"}
       </p>
       <TiptapEditor
         field={
@@ -128,7 +128,7 @@ export function NotesCollapsibleSection({
           size="sm"
           onClick={handleCancel}
         >
-          Cancel
+          取消
         </Button>
         <Button
           type="button"
@@ -136,7 +136,7 @@ export function NotesCollapsibleSection({
           onClick={handleSave}
           disabled={isPending || !editorContent.trim()}
         >
-          Save
+          保存
           {isPending && <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />}
         </Button>
       </div>
@@ -152,7 +152,7 @@ export function NotesCollapsibleSection({
       <div className="flex items-center gap-2">
         <CollapsibleTrigger className="flex items-center gap-2 hover:opacity-80">
           <StickyNote className="h-4 w-4" />
-          <span className="text-sm font-medium">Notes</span>
+          <span className="text-sm font-medium">笔记</span>
           {notes.length > 0 && (
             <Badge variant="secondary" className="text-xs">
               {notes.length}
@@ -170,13 +170,13 @@ export function NotesCollapsibleSection({
           onClick={handleAddNote}
         >
           <PlusCircle className="h-3.5 w-3.5" />
-          New Note
+          新建笔记
         </Button>
       </div>
       <CollapsibleContent className="mt-3 space-y-3">
         {isAdding && inlineEditor}
         {notes.length === 0 && !isAdding ? (
-          <p className="text-sm text-muted-foreground">No notes yet.</p>
+          <p className="text-sm text-muted-foreground">暂无笔记。</p>
         ) : (
           notes.map((note) =>
             editingNote?.id === note.id ? (
@@ -187,10 +187,10 @@ export function NotesCollapsibleSection({
                 className="border border-destructive rounded-lg p-4 space-y-3"
               >
                 <p className="text-sm font-medium">
-                  Are you sure you want to delete this note?
+                  确定删除这条笔记吗？
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  This action cannot be undone.
+                  此操作无法撤销。
                 </p>
                 <div className="flex justify-end gap-2">
                   <Button
@@ -199,7 +199,7 @@ export function NotesCollapsibleSection({
                     size="sm"
                     onClick={() => setDeleteConfirmId(null)}
                   >
-                    Cancel
+                    取消
                   </Button>
                   <Button
                     type="button"
@@ -208,7 +208,7 @@ export function NotesCollapsibleSection({
                     onClick={handleDeleteConfirm}
                     disabled={isPending}
                   >
-                    Delete
+                    删除
                     {isPending && (
                       <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />
                     )}

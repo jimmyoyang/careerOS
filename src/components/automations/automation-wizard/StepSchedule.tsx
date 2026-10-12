@@ -32,7 +32,7 @@ export function StepSchedule({
       name="scheduleHour"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Daily Run Time</FormLabel>
+          <FormLabel>每日运行时间</FormLabel>
           <Select
             onValueChange={(val) => {
               field.onChange(parseInt(val));
@@ -42,7 +42,7 @@ export function StepSchedule({
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder="Select time" />
+                <SelectValue placeholder="选择时间" />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
@@ -51,7 +51,7 @@ export function StepSchedule({
                   {hour.label}
                   {takenHours.has(hour.value) && (
                     <span className="ml-2 text-xs text-muted-foreground">
-                      In use
+                      已占用
                     </span>
                   )}
                 </SelectItem>
@@ -59,7 +59,7 @@ export function StepSchedule({
             </SelectContent>
           </Select>
           <FormDescription>
-            The automation will run daily at this time (server timezone)
+            自动化将每天在此时间运行（使用服务器时区）
           </FormDescription>
           <FormMessage />
         </FormItem>

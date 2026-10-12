@@ -11,7 +11,7 @@ export function AgentChatTrigger() {
     <Button
       variant="outline"
       className="relative"
-      aria-label={isOpen ? "Close assistant" : "Open assistant"}
+      aria-label={isOpen ? "关闭助手" : "打开助手"}
       onClick={() => (isOpen ? close() : open())}
     >
       {isOpen ? (
@@ -19,7 +19,7 @@ export function AgentChatTrigger() {
       ) : (
         <>
           <MessageSquare className="h-4 w-4" />
-          Chat AI
+          AI 助手
         </>
       )}
       {/* Deliberately no streaming state: nothing generates while the panel
@@ -27,7 +27,7 @@ export function AgentChatTrigger() {
       {approvalPending && (
         <span
           className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary"
-          aria-label="Approval pending"
+          aria-label="待确认"
         />
       )}
     </Button>

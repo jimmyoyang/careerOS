@@ -116,7 +116,7 @@ describe("arcLabelLines", () => {
         },
         12,
       ),
-    ).toEqual(["Jobsync", "28.1h"]);
+    ).toEqual(["Jobsync", "28.1 小时"]);
   });
 
   it("trims a long activity name so it cannot run off the card", () => {
@@ -130,7 +130,7 @@ describe("arcLabelLines", () => {
         },
         12,
       ),
-    ).toEqual(["Interview P…", "4h"]);
+    ).toEqual(["Interview P…", "4 小时"]);
   });
 
   it("trims harder when the card only affords a narrow gutter", () => {
@@ -144,7 +144,7 @@ describe("arcLabelLines", () => {
         },
         7,
       ),
-    ).toEqual(["Interv…", "4h"]);
+    ).toEqual(["Interv…", "4 小时"]);
   });
 });
 

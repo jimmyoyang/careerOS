@@ -58,7 +58,7 @@ export const copyResume = async (
     }
 
     if (!hasMinResumeSections(source.ResumeSections.length)) {
-      throw new Error(buildInsufficientSectionsMessage("creating a copy"));
+      throw new Error(buildInsufficientSectionsMessage("创建副本"));
     }
 
     const existing = await prisma.resume.findMany({

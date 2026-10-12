@@ -81,16 +81,16 @@ function JobTitlesContainer() {
         <Card x-chunk="dashboard-06-chunk-0">
           <ResponsiveCardHeader>
             <div className="flex items-baseline gap-2">
-              <CardTitle>Job Titles</CardTitle>
+              <CardTitle>职位名称</CardTitle>
               {!initialLoading && totalJobTitles > 0 && (
-                <RecordsCount count={titles.length} total={totalJobTitles} label="job titles" />
+                <RecordsCount count={titles.length} total={totalJobTitles} label="职位名称" />
               )}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
               <SearchInput
                 value={searchTerm}
                 onChange={setSearchTerm}
-                placeholder="Search job titles..."
+                placeholder="搜索职位名称…"
               />
               {/* <AddCompany reloadCompanies={reloadJobTitles} /> */}
             </div>

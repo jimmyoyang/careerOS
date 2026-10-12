@@ -23,11 +23,11 @@ describe("AgentChatEmptyState", () => {
   // 15-30s turn on it is latency for text we already know.
   it("answers the add-job suggestion locally instead of calling the model", async () => {
     render(<AgentChatEmptyState />);
-    await userEvent.click(screen.getByText("Add a job posting"));
+    await userEvent.click(screen.getByText("添加招聘信息"));
 
     expect(sendMessage).not.toHaveBeenCalled();
     expect(seedExchange).toHaveBeenCalledWith(
-      "Add a job posting",
+      "添加招聘信息",
       AGENT_ADD_JOB_INTRO,
     );
   });
@@ -35,18 +35,18 @@ describe("AgentChatEmptyState", () => {
   // The other three end in a tool call whose outcome depends on the page.
   it("sends the tool-backed suggestions to the model", async () => {
     render(<AgentChatEmptyState />);
-    await userEvent.click(screen.getByText("Match a job"));
+    await userEvent.click(screen.getByText("匹配岗位"));
 
     expect(seedExchange).not.toHaveBeenCalled();
     expect(sendMessage).toHaveBeenCalledWith({
-      parts: [{ type: "text", text: "Match a job" }],
+      parts: [{ type: "text", text: "匹配岗位" }],
     });
   });
 
   it("does nothing when preflight failed", async () => {
     preflight = { checked: true, ok: false };
     render(<AgentChatEmptyState />);
-    await userEvent.click(screen.getByText("Add a job posting"));
+    await userEvent.click(screen.getByText("添加招聘信息"));
 
     expect(seedExchange).not.toHaveBeenCalled();
     expect(sendMessage).not.toHaveBeenCalled();

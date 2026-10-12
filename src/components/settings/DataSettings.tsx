@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, History, Loader2, Upload } from "lucide-react";
 import { format } from "date-fns";
@@ -42,12 +44,12 @@ interface SnapshotInfo {
 
 function CountGrid({ counts }: { counts: Record<string, number> }) {
   const rows = Object.entries(counts).filter(([, n]) => n > 0);
-  if (rows.length === 0) return <p className="text-sm text-muted-foreground">Nothing.</p>;
+  if (rows.length === 0) return <p className="text-sm text-muted-foreground">无。</p>;
   return (
     <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm sm:grid-cols-3">
       {rows.map(([model, n]) => (
         <div key={model} className="flex justify-between gap-2">
-          <span className="text-muted-foreground">{model}</span>
+          <span className="text-muted-foreground">{zhLabel(model)}</span>
           <span className="font-medium tabular-nums">{n}</span>
         </div>
       ))}
@@ -90,16 +92,16 @@ export default function DataSettings() {
       });
       const json = await res.json();
       if (!res.ok) {
-        toastError(json.error, "Rollback failed");
+        toastError(json.error, "回滚失败");
         return;
       }
       toastSuccess(
-        "Your data has been rolled back. Reload the page to see it.",
-        "Rollback complete",
+        "数据已回滚，刷新页面即可查看。",
+        "回滚完成",
       );
       await loadSnapshots();
     } catch {
-      toastError("Could not reach the server.", "Rollback failed");
+      toastError("无法连接到服务器。", "回滚失败");
     } finally {
       setBusy(false);
     }
@@ -122,12 +124,12 @@ export default function DataSettings() {
       const res = await fetch("/api/backup/import/preflight", { method: "POST", body });
       const json = await res.json();
       if (!res.ok) {
-        toastError(json.error, "Could not read that backup");
+        toastError(json.error, "无法读取备份");
         return;
       }
       setPreflight(json as PreflightResult);
     } catch {
-      toastError("Could not reach the server.", "Could not read that backup");
+      toastError("无法连接到服务器。", "无法读取备份");
     } finally {
       setBusy(false);
     }
@@ -144,7 +146,7 @@ export default function DataSettings() {
       const res = await fetch("/api/backup/import", { method: "POST", body });
       const json = await res.json();
       if (!res.ok) {
-        toastError(json.error, "Import failed");
+        toastError(json.error, "导入失败");
         return;
       }
       const total = Object.values(json.counts as Record<string, number>).reduce(
@@ -154,19 +156,19 @@ export default function DataSettings() {
       // Naming the snapshot is the whole point of taking one — a safety net
       // the user does not know exists is not a safety net.
       toastSuccess(
-        `Restored ${total} rows and ${json.filesWritten} file(s).${
+        `已恢复 ${total} 条记录和 ${json.filesWritten} 个文件。${
           json.snapshotPath
-            ? " Your previous data was saved as a snapshot you can restore below."
+            ? "此前的数据已保存为快照，可在下方恢复。"
             : ""
-        } Re-enter your AI provider API keys, reissue MCP tokens, and reload the page.`,
-        "Import complete",
+        } 请重新输入 AI 服务商的 API 密钥、重新生成 MCP 令牌，并刷新页面。`,
+        "导入完成",
       );
       setPreflight(null);
       setSelected(null);
       if (fileInput.current) fileInput.current.value = "";
       await loadSnapshots();
     } catch {
-      toastError("Could not reach the server.", "Import failed");
+      toastError("无法连接到服务器。", "导入失败");
     } finally {
       setBusy(false);
     }
@@ -176,22 +178,20 @@ export default function DataSettings() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium">Export your data</CardTitle>
+          <CardTitle className="text-lg font-medium">导出数据</CardTitle>
           <CardDescription>
-            Downloads one zip with every job, resume, task, activity and question on
-            this account, plus your uploaded resume files.
+            下载一个 ZIP 文件，包含此账号的全部岗位、简历、任务、活动和问题，以及已上传的简历文件。
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            The file contains <strong>no API keys</strong>, no MCP tokens and no
-            password, so it is safe to store anywhere. It does contain the
-            <strong> full text</strong> of every job description, note and resume.
+            文件中 <strong>不含 API 密钥</strong>、MCP 令牌或密码，但会包含所有岗位描述、笔记和简历的
+            <strong> 完整内容</strong> ，请妥善保管。
           </p>
           <Button asChild>
             <a href="/api/backup/export" download>
               <Download className="mr-2 h-4 w-4" />
-              Download backup
+              下载备份
             </a>
           </Button>
         </CardContent>
@@ -199,16 +199,14 @@ export default function DataSettings() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium">Import a backup</CardTitle>
+          <CardTitle className="text-lg font-medium">导入备份</CardTitle>
           <CardDescription>
-            Replaces everything on this account with the contents of the backup.
-            Your API keys and MCP tokens are left alone; the agent chat history is
-            cleared.
+            使用备份内容替换此账号中的所有数据。API 密钥和 MCP 令牌会保留，AI 助手聊天记录将被清空。
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="backup-file">Backup file</Label>
+            <Label htmlFor="backup-file">备份文件</Label>
             <Input
               id="backup-file"
               ref={fileInput}
@@ -222,7 +220,7 @@ export default function DataSettings() {
           {busy && !preflight && (
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
-              Reading backup…
+              正在读取备份…
             </p>
           )}
 
@@ -230,25 +228,22 @@ export default function DataSettings() {
             <div className="space-y-3 rounded-md border p-4">
               <div className="text-sm">
                 <p>
-                  Exported{" "}
-                  {format(new Date(preflight.manifest.exportedAt), "PPp")} from
-                  JobSync {preflight.manifest.appVersion}
+                  导出时间{" "}
+                  {format(new Date(preflight.manifest.exportedAt), "yyyy年M月d日 HH:mm")} 来自 JobSync {preflight.manifest.appVersion}
                 </p>
                 <p className="text-muted-foreground">
-                  Source account: {preflight.manifest.sourceEmail}
+                  来源账号： {preflight.manifest.sourceEmail}
                 </p>
               </div>
 
               {!preflight.emailMatches && (
                 <p className="rounded-sm bg-destructive/10 p-2 text-sm font-medium text-destructive">
-                  This backup came from a different account
-                  ({preflight.manifest.sourceEmail}). Importing it will still wipe
-                  the account you are signed in to.
+                  此备份来自其他账号（{preflight.manifest.sourceEmail}）。导入仍会清空当前登录账号的数据。
                 </p>
               )}
 
               <div>
-                <p className="mb-1 text-sm font-medium">Backup contains</p>
+                <p className="mb-1 text-sm font-medium">备份内容</p>
                 <CountGrid counts={preflight.manifest.counts} />
               </div>
 
@@ -258,7 +253,7 @@ export default function DataSettings() {
                 disabled={busy}
               >
                 <Upload className="mr-2 h-4 w-4" />
-                Replace my data with this backup
+                使用此备份替换我的数据
               </Button>
             </div>
           )}
@@ -268,10 +263,9 @@ export default function DataSettings() {
       {snapshots.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-medium">Undo an import</CardTitle>
+            <CardTitle className="text-lg font-medium">撤销导入</CardTitle>
             <CardDescription>
-              Every import saves your previous data first. If you imported the
-              wrong file, restore the snapshot from just before it.
+              每次导入前都会保存原有数据。如果导入了错误的文件，可恢复导入前的快照。
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -282,11 +276,11 @@ export default function DataSettings() {
               >
                 <div className="min-w-0 text-sm">
                   <p className="font-medium">
-                    {format(new Date(snapshot.exportedAt), "PPp")}
+                    {format(new Date(snapshot.exportedAt), "yyyy年M月d日 HH:mm")}
                   </p>
                   <p className="text-muted-foreground">
-                    {snapshot.counts.Job ?? 0} jobs, {snapshot.counts.Resume ?? 0}{" "}
-                    resumes &middot; {(snapshot.sizeBytes / 1024 / 1024).toFixed(1)} MB
+                    {snapshot.counts.Job ?? 0} 个岗位， {snapshot.counts.Resume ?? 0}{" "}
+                    份简历 · {(snapshot.sizeBytes / 1024 / 1024).toFixed(1)} MB
                   </p>
                 </div>
                 <Button
@@ -296,7 +290,7 @@ export default function DataSettings() {
                   onClick={() => setRestoring(snapshot)}
                 >
                   <History className="mr-2 h-4 w-4" />
-                  Restore
+                  恢复
                 </Button>
               </div>
             ))}
@@ -310,18 +304,16 @@ export default function DataSettings() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Roll back to this snapshot?</AlertDialogTitle>
+            <AlertDialogTitle>回滚到此快照？</AlertDialogTitle>
             <AlertDialogDescription>
-              Everything on this account will be replaced with the data from{" "}
-              {restoring && format(new Date(restoring.exportedAt), "PPp")}. A
-              snapshot of the current state is saved first, so this is itself
-              undoable.
+              此账号中的全部数据将替换为以下时间的快照数据：{" "}
+              {restoring && format(new Date(restoring.exportedAt), "yyyy年M月d日 HH:mm")}。回滚前会先保存当前状态的快照，因此本次操作也可以撤销。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction onClick={runRollback}>
-              Roll back
+              回滚
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -330,37 +322,35 @@ export default function DataSettings() {
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this account&apos;s data?</AlertDialogTitle>
+            <AlertDialogTitle>删除此账号的数据？</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-2">
                 <p>
-                  This cannot be undone. The following will be permanently deleted
-                  and replaced with the backup&apos;s contents:
+                  此操作无法撤销。以下数据将被永久删除，并替换为备份内容：
                 </p>
                 <ul className="list-inside list-disc text-sm">
                   {destroyed.map(([model, n]) => (
                     <li key={model}>
-                      {n} {model.toLowerCase()}
-                      {n === 1 ? "" : "s"}
+                      {n} 条{zhLabel(model)}
                     </li>
                   ))}
-                  {destroyed.length === 0 && <li>nothing — this account is empty</li>}
+                  {destroyed.length === 0 && <li>无，此账号尚无数据</li>}
                 </ul>
                 {preflight && !preflight.emailMatches && (
                   <p className="font-medium text-destructive">
-                    The backup is from a different account.
+                    此备份来自其他账号。
                   </p>
                 )}
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive-bg text-destructive-foreground hover:bg-destructive-bg/90"
               onClick={runImport}
             >
-              Delete everything and import
+              删除全部数据并导入
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

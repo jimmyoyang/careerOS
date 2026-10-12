@@ -130,6 +130,7 @@ describe("Dashboard Actions", () => {
       expect(Array.isArray(result.data)).toBe(true);
       expect(result.data.length).toBe(7);
       expect(result.data[0]).toHaveProperty("day");
+      expect(result.data[0].day).toMatch(/^\d+月\d+日 周[一二三四五六日]$/);
       expect(result.keys).toEqual(["Applying", "Interviewing"]);
       expect(prisma.activity.findMany).toHaveBeenCalledTimes(1);
     });
@@ -285,6 +286,7 @@ describe("Dashboard Actions", () => {
       expect(result.length).toBe(7);
       result.forEach((item: any) => {
         expect(item.value).toBe(0);
+        expect(item.day).toMatch(/^\d+月\d+日 周[一二三四五六日]$/);
       });
     });
   });

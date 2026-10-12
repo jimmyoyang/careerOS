@@ -10,5 +10,5 @@ export const warnInsufficientResumeSections = (
   action: string,
   hint?: string,
 ): void => {
-  toastError(buildInsufficientSectionsMessage(action, hint), "Not enough content");
+  toastError(buildInsufficientSectionsMessage(action, hint), "简历内容不足");
 };

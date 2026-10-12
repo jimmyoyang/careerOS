@@ -25,7 +25,7 @@ export function AgentResumePicker({
   const pick = (id: string) => {
     const title = resumes.find((r) => r.id === id)?.title;
     if (!title) return;
-    const text = messageFor ? messageFor(title) : `Review my resume "${title}"`;
+    const text = messageFor ? messageFor(title) : `请评估我的简历“${title}”。`;
     // The parts form, matching AgentChatInput — this surface always sends
     // parts, never a bare text shortcut.
     void sendMessage({ parts: [{ type: "text", text }] });
@@ -33,8 +33,8 @@ export function AgentResumePicker({
 
   return (
     <Select onValueChange={pick}>
-      <SelectTrigger aria-label="Select a resume" className="mt-2 w-full">
-        <SelectValue placeholder="Pick a resume" />
+      <SelectTrigger aria-label="选择简历" className="mt-2 w-full">
+        <SelectValue placeholder="选择简历" />
       </SelectTrigger>
       <SelectContent>
         {resumes.map((resume) => (

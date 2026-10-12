@@ -1,3 +1,4 @@
+import { withCjkFallback } from "@/components/pdf-export/cjk-font";
 import { StyleSheet } from "@react-pdf/renderer";
 import { HtmlStyleSet } from "@/components/pdf-export/types";
 import type { ResumeExportSettings } from "@/models/resumeExport.model";
@@ -9,10 +10,11 @@ const GRAY = "#555555";
 
 export function buildProfessionalStyles(settings: ResumeExportSettings) {
   const t = resumeStyleTokens(settings);
+  const font = withCjkFallback(t.font);
 
   const styles = StyleSheet.create({
     page: {
-      fontFamily: t.font.regular,
+      fontFamily: font.regular,
       fontSize: t.fontSize,
       paddingTop: t.marginVertical,
       paddingBottom: t.marginVertical,
@@ -34,20 +36,20 @@ export function buildProfessionalStyles(settings: ResumeExportSettings) {
       alignItems: "flex-end",
     },
     name: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.pt(24),
       color: NEAR_BLACK,
       marginBottom: 16,
     },
     headline: {
-      fontFamily: t.font.regular,
+      fontFamily: font.regular,
       fontSize: t.pt(12),
       color: ACCENT,
       textTransform: "uppercase",
       letterSpacing: 1.2,
     },
     contactLine: {
-      fontFamily: t.font.regular,
+      fontFamily: font.regular,
       fontSize: t.pt(10),
       color: NEAR_BLACK,
       marginBottom: 1,
@@ -65,7 +67,7 @@ export function buildProfessionalStyles(settings: ResumeExportSettings) {
       marginTop: t.sectionSpacing,
     },
     sectionHeadingLabel: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.fontSize,
       color: ACCENT,
       textTransform: "uppercase",
@@ -82,11 +84,11 @@ export function buildProfessionalStyles(settings: ResumeExportSettings) {
       fontSize: t.fontSize,
       marginBottom: 2,
     },
-    bold: { fontFamily: t.font.bold },
-    italic: { fontFamily: t.font.italic },
-    boldItalic: { fontFamily: t.font.boldItalic },
+    bold: { fontFamily: font.bold },
+    italic: { fontFamily: font.italic },
+    boldItalic: { fontFamily: font.boldItalic },
     h2text: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.pt(13),
       marginBottom: 3,
       marginTop: 4,
@@ -98,19 +100,19 @@ export function buildProfessionalStyles(settings: ResumeExportSettings) {
       alignItems: "flex-start",
     },
     entryTitle: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.fontSize,
       color: NEAR_BLACK,
       flex: 1,
     },
     // Use when entryTitle is NOT inside entryHeaderRow (no row sibling to flex against)
     entryTitleBlock: {
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       fontSize: t.fontSize,
       color: NEAR_BLACK,
     },
     entryDate: {
-      fontFamily: t.font.regular,
+      fontFamily: font.regular,
       fontSize: t.pt(10),
       color: GRAY,
       marginLeft: 8,
@@ -156,7 +158,7 @@ export function buildProfessionalStyles(settings: ResumeExportSettings) {
     },
     skillCatLabel: {
       fontSize: t.pt(9),
-      fontFamily: t.font.bold,
+      fontFamily: font.bold,
       textTransform: "uppercase",
       marginBottom: 1,
     },

@@ -79,8 +79,8 @@ describe("JobsActivityCard", () => {
 
     const total = screen.getByTestId("jobs-activity-total");
 
-    expect(within(total).getByText("63.4h")).toBeInTheDocument();
-    expect(within(total).getByText("16 jobs")).toBeInTheDocument();
+    expect(within(total).getByText("63.4小时")).toBeInTheDocument();
+    expect(within(total).getByText("16 个职位")).toBeInTheDocument();
   });
 
   it("labels the slices on the chart instead of in a legend", () => {
@@ -107,12 +107,12 @@ describe("JobsActivityCard", () => {
     render(<JobsActivityCard data={data} />);
 
     const toggle = screen.getByTestId("jobs-activity-toggle-group");
-    await user.click(within(toggle).getByRole("button", { name: "30d" }));
+    await user.click(within(toggle).getByRole("button", { name: "近 30 天" }));
 
     const total = screen.getByTestId("jobs-activity-total");
 
-    expect(within(total).getByText("6.4h")).toBeInTheDocument();
-    expect(within(total).getByText("34 jobs")).toBeInTheDocument();
+    expect(within(total).getByText("6.4小时")).toBeInTheDocument();
+    expect(within(total).getByText("34 个职位")).toBeInTheDocument();
     expect(screen.queryByText("Jobsync")).not.toBeInTheDocument();
     expect(screen.queryByText("Other")).not.toBeInTheDocument();
   });
@@ -129,7 +129,7 @@ describe("JobsActivityCard", () => {
     render(<JobsActivityCard data={data} />);
 
     const toggle = screen.getByTestId("jobs-activity-toggle-group");
-    await user.click(within(toggle).getByRole("button", { name: "30d" }));
+    await user.click(within(toggle).getByRole("button", { name: "近 30 天" }));
 
     const total = screen.getByTestId("jobs-activity-total");
 
@@ -158,7 +158,7 @@ describe("JobsActivityCard", () => {
 
     const total = screen.getByTestId("jobs-activity-total");
 
-    expect(within(total).getByText("63.4h")).toBeInTheDocument();
+    expect(within(total).getByText("63.4小时")).toBeInTheDocument();
     expect(within(total).queryByText("25%")).not.toBeInTheDocument();
   });
 
@@ -181,7 +181,7 @@ describe("JobsActivityCard", () => {
       />,
     );
 
-    expect(screen.getByText("1 job")).toBeInTheDocument();
+    expect(screen.getByText("1 个职位")).toBeInTheDocument();
   });
 
   it("keeps the job count visible when no activity is logged", () => {
@@ -203,9 +203,9 @@ describe("JobsActivityCard", () => {
       />,
     );
 
-    expect(screen.getByText("0h")).toBeInTheDocument();
-    expect(screen.getByText("3 jobs")).toBeInTheDocument();
-    expect(screen.getByText("No activities recorded")).toBeInTheDocument();
+    expect(screen.getByText("0小时")).toBeInTheDocument();
+    expect(screen.getByText("3 个职位")).toBeInTheDocument();
+    expect(screen.getByText("暂无活动记录")).toBeInTheDocument();
     expect(screen.queryByTestId("donut")).not.toBeInTheDocument();
   });
 });

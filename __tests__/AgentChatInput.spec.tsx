@@ -53,22 +53,22 @@ describe("AgentChatInput", () => {
     expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toContain(
       short,
     );
-    expect(screen.queryByText(/pasted/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/粘贴/i)).not.toBeInTheDocument();
   });
 
   it("turns an over-threshold paste into a removable chip", async () => {
     render(<AgentChatInput />);
     await paste(long);
-    expect(screen.getByText(/pasted/i)).toBeInTheDocument();
+    expect(screen.getByText(/粘贴/i)).toBeInTheDocument();
     expect(screen.getByRole("textbox")).toHaveValue("");
-    await userEvent.click(screen.getByRole("button", { name: /remove/i }));
-    expect(screen.queryByText(/pasted/i)).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /移除/i }));
+    expect(screen.queryByText(/粘贴/i)).not.toBeInTheDocument();
   });
 
   it("chips a short job posting, not just a long one", async () => {
     render(<AgentChatInput />);
     await paste(posting);
-    expect(screen.getByText(/pasted/i)).toBeInTheDocument();
+    expect(screen.getByText(/粘贴/i)).toBeInTheDocument();
     expect(screen.getByRole("textbox")).toHaveValue("");
   });
 
@@ -84,7 +84,7 @@ describe("AgentChatInput", () => {
     try {
       render(<AgentChatInput />);
       await paste(long);
-      expect(screen.getByText(/pasted/i)).toBeInTheDocument();
+      expect(screen.getByText(/粘贴/i)).toBeInTheDocument();
     } finally {
       Object.defineProperty(crypto, "randomUUID", {
         configurable: true,
@@ -96,9 +96,9 @@ describe("AgentChatInput", () => {
   it("truncates and labels a paste above the ceiling", async () => {
     render(<AgentChatInput />);
     await paste(huge);
-    expect(screen.getByText(/truncated/i)).toBeInTheDocument();
+    expect(screen.getByText(/截断/i)).toBeInTheDocument();
     await userEvent.type(screen.getByRole("textbox"), "add this");
-    await userEvent.click(screen.getByRole("button", { name: /send/i }));
+    await userEvent.click(screen.getByRole("button", { name: /发送/i }));
     const parts = chat.sendMessage.mock.calls[0][0].parts;
     const pastePart = parts.find((p: any) => p.type === AGENT_PASTE_PART_TYPE);
     expect(pastePart.data.text.length).toBe(
@@ -111,7 +111,7 @@ describe("AgentChatInput", () => {
     render(<AgentChatInput />);
     await paste(long);
     await userEvent.type(screen.getByRole("textbox"), "add this job");
-    await userEvent.click(screen.getByRole("button", { name: /send/i }));
+    await userEvent.click(screen.getByRole("button", { name: /发送/i }));
     const parts = chat.sendMessage.mock.calls[0][0].parts;
     expect(
       parts.some((p: any) => p.type === "text" && p.text === "add this job"),
@@ -127,7 +127,7 @@ describe("AgentChatInput", () => {
     chat.approvalPending = true;
     render(<AgentChatInput />);
     await userEvent.type(screen.getByRole("textbox"), "the company is wrong");
-    await userEvent.click(screen.getByRole("button", { name: /send/i }));
+    await userEvent.click(screen.getByRole("button", { name: /发送/i }));
     expect(chat.sendMessage).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage.mock.calls[0][0].parts[0].text).toBe(
       "the company is wrong",
@@ -137,11 +137,11 @@ describe("AgentChatInput", () => {
   it("shows a held message and says what it is waiting for", () => {
     chat.queued = { parts: [{ type: "text", text: "the company is wrong" }] };
     const { rerender } = render(<AgentChatInput />);
-    expect(screen.getByText(/current reply finishes/i)).toBeInTheDocument();
+    expect(screen.getByText(/当前回复完成/i)).toBeInTheDocument();
     expect(screen.getByText(/the company is wrong/)).toBeInTheDocument();
     chat.approvalPending = true;
     rerender(<AgentChatInput />);
-    expect(screen.getByText(/waiting on your approval/i)).toBeInTheDocument();
+    expect(screen.getByText(/等待您确认/i)).toBeInTheDocument();
   });
 
   it("labels a held paste-only message with its chip", () => {
@@ -155,14 +155,14 @@ describe("AgentChatInput", () => {
       ],
     };
     render(<AgentChatInput />);
-    expect(screen.getByText(/pasted posting · 1,234 chars/i)).toBeInTheDocument();
+    expect(screen.getByText(/已粘贴招聘信息 · 1,234 字符/i)).toBeInTheDocument();
   });
 
   it("hands the discard back to the provider", async () => {
     chat.queued = { parts: [{ type: "text", text: "never mind" }] };
     render(<AgentChatInput />);
     await userEvent.click(
-      screen.getByRole("button", { name: /remove from queue/i }),
+      screen.getByRole("button", { name: /从队列移除/i }),
     );
     expect(chat.clearQueued).toHaveBeenCalled();
   });
@@ -174,13 +174,13 @@ describe("AgentChatInput", () => {
     chat.composerNonce = 1;
     rerender(<AgentChatInput />);
     expect(screen.getByRole("textbox")).toHaveValue("");
-    expect(screen.queryByText(/pasted/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/粘贴/i)).not.toBeInTheDocument();
   });
 
   it("swaps send for stop while streaming", async () => {
     chat.status = "streaming";
     render(<AgentChatInput />);
-    await userEvent.click(screen.getByRole("button", { name: /stop/i }));
+    await userEvent.click(screen.getByRole("button", { name: /停止/i }));
     expect(chat.stop).toHaveBeenCalled();
   });
 
@@ -189,7 +189,7 @@ describe("AgentChatInput", () => {
     render(<AgentChatInput />);
     expect(screen.getByText(/cannot reach ollama/i)).toBeInTheDocument();
     await userEvent.click(
-      screen.getByRole("button", { name: /dismiss error/i }),
+      screen.getByRole("button", { name: /关闭错误提示/i }),
     );
     expect(chat.clearError).toHaveBeenCalled();
   });
@@ -198,9 +198,9 @@ describe("AgentChatInput", () => {
     chat.preflight = {
       checked: true,
       ok: false,
-      error: "Ollama is not reachable.",
+      error: "无法连接到 Ollama。",
     };
     render(<AgentChatInput />);
-    expect(screen.getByRole("button", { name: /send/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /发送/i })).toBeDisabled();
   });
 });

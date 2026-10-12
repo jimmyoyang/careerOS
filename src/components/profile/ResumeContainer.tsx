@@ -111,7 +111,7 @@ function ResumeContainer({
     } catch {
       // Reported by the action itself; the review still goes out.
     }
-    void sendMessage({ parts: [{ type: "text", text: `Review ${title}` }] });
+    void sendMessage({ parts: [{ type: "text", text: `评估 ${title}` }] });
   };
 
   const onReviewClick = () => {
@@ -177,7 +177,7 @@ function ResumeContainer({
     if (!resume?.id) return;
     const { success, message } = await setDefaultResume(resume.id);
     if (success) {
-      toastSuccess("This resume is now your default.");
+      toastSuccess("已将这份简历设为默认。");
       router.refresh();
     } else {
       toastError(message);
@@ -198,13 +198,13 @@ function ResumeContainer({
       />
 
       <DeleteAlertDialog
-        pageTitle="resume"
+        pageTitle="简历"
         open={setDefaultConfirmOpen}
         onOpenChange={setSetDefaultConfirmOpen}
         onDelete={handleSetDefault}
-        alertTitle="Change default resume?"
-        alertDescription="This will make this resume your default, replacing any current default."
-        actionLabel="Set as default"
+        alertTitle="更换默认简历？"
+        alertDescription="将把这份简历设为默认，替换当前默认简历。"
+        actionLabel="设为默认"
         actionVariant="default"
       />
 
@@ -213,7 +213,7 @@ function ResumeContainer({
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Sparkles className="h-4 w-4" />
-              AI Review
+              AI 评估
             </CardTitle>
             <ReviewDetails reviewData={parsedReviewData} />
           </CardHeader>

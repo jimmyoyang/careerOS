@@ -69,7 +69,7 @@ async function renderForm() {
   vi.mocked(getAllActivityTypes).mockResolvedValue(activityTypes);
 
   render(<ActivityForm onClose={onClose} reloadActivities={reloadActivities} />);
-  await screen.findByText("Activity Name");
+  await screen.findByText("活动名称");
 
   return { onClose, reloadActivities };
 }
@@ -77,7 +77,7 @@ async function renderForm() {
 // The form pre-fills valid times, so only the name and type need filling
 async function fillRequiredFields() {
   await user.type(
-    screen.getByPlaceholderText("Ex: Job Search, Learning skill, etc"),
+    screen.getByPlaceholderText("例如：找工作、学习技能等"),
     "Applied to roles"
   );
   await user.click(screen.getByRole("combobox"));
@@ -87,12 +87,12 @@ async function fillRequiredFields() {
 async function setEndTimeToStartOfDay() {
   // 12:00 AM is the earliest instant of the day, so it is always at or before
   // the "now" default start — no dependence on when the suite runs
-  await user.click(screen.getByRole("button", { name: /^End Time/ }));
+  await user.click(screen.getByRole("button", { name: /^结束时间/ }));
 
   const column = (name: string) => within(screen.getByRole("group", { name }));
-  await user.click(column("Hour").getByRole("button", { name: "12" }));
-  await user.click(column("Minute").getByRole("button", { name: "00" }));
-  await user.click(column("AM/PM").getByRole("button", { name: "AM" }));
+  await user.click(column("小时").getByRole("button", { name: "12" }));
+  await user.click(column("分钟").getByRole("button", { name: "00" }));
+  await user.click(column("时段").getByRole("button", { name: "上午" }));
   await user.keyboard("{Escape}");
 }
 
@@ -139,10 +139,10 @@ describe("ActivityForm", () => {
     await renderForm();
 
     // Start Time then End Time, in DOM order
-    const later = screen.getAllByRole("button", { name: "5 minutes later" });
+    const later = screen.getAllByRole("button", { name: "推迟 5 分钟" });
     await user.click(later[1]);
 
-    expect(await screen.findByText(/\(10 min\)/)).toBeInTheDocument();
+    expect(await screen.findByText(/\(10 分钟\)/)).toBeInTheDocument();
   });
 
   it("flags an end time before the start time without submitting", async () => {
@@ -151,7 +151,7 @@ describe("ActivityForm", () => {
     await setEndTimeToStartOfDay();
 
     expect(
-      await screen.findByText("End time must be after the start time")
+      await screen.findByText(/结束时间必须晚于开始时间/)
     ).toBeInTheDocument();
     expect(createActivity).not.toHaveBeenCalled();
   });

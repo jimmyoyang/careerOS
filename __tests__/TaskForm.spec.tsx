@@ -92,28 +92,28 @@ describe("TaskForm Component", () => {
     it("should render the dialog with title 'Add Task'", () => {
       const dialogTitle = screen.getByTestId("task-form-dialog-title");
       expect(dialogTitle).toBeInTheDocument();
-      expect(dialogTitle).toHaveTextContent("Add Task");
+      expect(dialogTitle).toHaveTextContent("添加任务");
     });
 
     it("should show all form fields", () => {
-      expect(screen.getByLabelText(/Title/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Activity Type/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Status/i)).toBeInTheDocument();
-      expect(screen.getByText(/Priority:/i)).toBeInTheDocument();
-      expect(screen.getByText(/% Complete:/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Due Date/i)).toBeInTheDocument();
-      expect(screen.getByText(/Description/i)).toBeInTheDocument();
+      expect(screen.getByRole("textbox", { name: /标题/ })).toBeInTheDocument();
+      expect(screen.getByLabelText(/活动类型/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/状态/i)).toBeInTheDocument();
+      expect(screen.getByText(/优先级：/i)).toBeInTheDocument();
+      expect(screen.getByText(/完成度：/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/截止日期/i)).toBeInTheDocument();
+      expect(screen.getByText(/描述/i)).toBeInTheDocument();
     });
 
     it("should have default values", () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       expect(titleInput).toHaveValue("");
 
-      const statusSelect = screen.getByLabelText(/Status/i);
-      expect(statusSelect).toHaveTextContent("In Progress");
+      const statusSelect = screen.getByLabelText(/状态/i);
+      expect(statusSelect).toHaveTextContent("进行中");
 
-      expect(screen.getByText(/Priority: 5/i)).toBeInTheDocument();
-      expect(screen.getByText(/% Complete: 0%/i)).toBeInTheDocument();
+      expect(screen.getByText(/优先级： 5/i)).toBeInTheDocument();
+      expect(screen.getByText(/完成度： 0%/i)).toBeInTheDocument();
     });
 
     it("should show validation errors when submitting empty form", async () => {
@@ -122,16 +122,16 @@ describe("TaskForm Component", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Title must be at least 2 characters.")
+          screen.getByText("标题至少需要 2 个字符。")
         ).toBeInTheDocument();
       });
     });
 
     it("should successfully submit a new task", async () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "New Test Task");
 
-      const activityTypeCombobox = screen.getByLabelText(/Activity Type/i);
+      const activityTypeCombobox = screen.getByLabelText(/活动类型/i);
       await user.click(activityTypeCombobox);
       const developmentOption = screen.getByRole("option", {
         name: "Development",
@@ -159,7 +159,7 @@ describe("TaskForm Component", () => {
     });
 
     it("should close the dialog when cancel button is clicked", async () => {
-      const cancelBtn = screen.getByRole("button", { name: /cancel/i });
+      const cancelBtn = screen.getByRole("button", { name: /取消/i });
       await user.click(cancelBtn);
 
       expect(mockResetEditTask).toHaveBeenCalledTimes(1);
@@ -167,7 +167,7 @@ describe("TaskForm Component", () => {
     });
 
     it("should display activity types in combobox", async () => {
-      const activityTypeCombobox = screen.getByLabelText(/Activity Type/i);
+      const activityTypeCombobox = screen.getByLabelText(/活动类型/i);
       await user.click(activityTypeCombobox);
 
       const options = screen.getAllByRole("option");
@@ -181,32 +181,32 @@ describe("TaskForm Component", () => {
     });
 
     it("should display all status options", async () => {
-      const statusSelect = screen.getByLabelText(/Status/i);
+      const statusSelect = screen.getByLabelText(/状态/i);
       await user.click(statusSelect);
 
       expect(
-        screen.getByRole("option", { name: "In Progress" })
+        screen.getByRole("option", { name: "进行中" })
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("option", { name: "Complete" })
+        screen.getByRole("option", { name: "已完成" })
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("option", { name: "Needs Attention" })
+        screen.getByRole("option", { name: "需要关注" })
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("option", { name: "Cancelled" })
+        screen.getByRole("option", { name: "已取消" })
       ).toBeInTheDocument();
     });
 
     it("should handle title input correctly", async () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "Test Task Title");
 
       expect(titleInput).toHaveValue("Test Task Title");
     });
 
     it("should validate title minimum length", async () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "A");
 
       const saveBtn = screen.getByTestId("save-task-btn");
@@ -214,13 +214,13 @@ describe("TaskForm Component", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText("Title must be at least 2 characters.")
+          screen.getByText("标题至少需要 2 个字符。")
         ).toBeInTheDocument();
       });
     });
 
     it("should validate due date is not in the past", async () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "Valid Title");
 
       // Note: Due date validation happens at schema level
@@ -273,22 +273,22 @@ describe("TaskForm Component", () => {
     it("should render the dialog with title 'Edit Task'", () => {
       const dialogTitle = screen.getByTestId("task-form-dialog-title");
       expect(dialogTitle).toBeInTheDocument();
-      expect(dialogTitle).toHaveTextContent("Edit Task");
+      expect(dialogTitle).toHaveTextContent("编辑任务");
     });
 
     it("should populate form with existing task data", () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       expect(titleInput).toHaveValue("Existing Task");
 
-      const statusSelect = screen.getByLabelText(/Status/i);
-      expect(statusSelect).toHaveTextContent("Needs Attention");
+      const statusSelect = screen.getByLabelText(/状态/i);
+      expect(statusSelect).toHaveTextContent("需要关注");
 
-      expect(screen.getByText(/Priority: 7/i)).toBeInTheDocument();
-      expect(screen.getByText(/% Complete: 60%/i)).toBeInTheDocument();
+      expect(screen.getByText(/优先级： 7/i)).toBeInTheDocument();
+      expect(screen.getByText(/完成度： 60%/i)).toBeInTheDocument();
     });
 
     it("should successfully submit updated task", async () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.clear(titleInput);
       await user.type(titleInput, "Updated Task Title");
 
@@ -313,23 +313,23 @@ describe("TaskForm Component", () => {
     });
 
     it("should update status correctly", async () => {
-      const statusSelect = screen.getByLabelText(/Status/i);
+      const statusSelect = screen.getByLabelText(/状态/i);
       await user.click(statusSelect);
 
-      const completeOption = screen.getByRole("option", { name: "Complete" });
+      const completeOption = screen.getByRole("option", { name: "已完成" });
       await user.click(completeOption);
 
       await waitFor(() => {
-        expect(statusSelect).toHaveTextContent("Complete");
+        expect(statusSelect).toHaveTextContent("已完成");
       });
     });
 
     it("should handle form reset when cancel is clicked", async () => {
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.clear(titleInput);
       await user.type(titleInput, "Changed Title");
 
-      const cancelBtn = screen.getByRole("button", { name: /cancel/i });
+      const cancelBtn = screen.getByRole("button", { name: /取消/i });
       await user.click(cancelBtn);
 
       expect(mockResetEditTask).toHaveBeenCalledTimes(1);
@@ -357,7 +357,7 @@ describe("TaskForm Component", () => {
         message: "Failed to create task",
       });
 
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "Test Task");
 
       const saveBtn = screen.getByTestId("save-task-btn");
@@ -451,10 +451,10 @@ describe("TaskForm Component", () => {
         />
       );
 
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "New Test Task");
 
-      const activityTypeCombobox = screen.getByLabelText(/Activity Type/i);
+      const activityTypeCombobox = screen.getByLabelText(/活动类型/i);
       await user.click(activityTypeCombobox);
       const developmentOption = screen.getByRole("option", {
         name: "Development",
@@ -534,7 +534,7 @@ describe("TaskForm Component", () => {
         />
       );
 
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "New Test Task");
 
       const saveAndStartBtn = screen.getByTestId("save-and-start-task-btn");
@@ -559,7 +559,7 @@ describe("TaskForm Component", () => {
         />
       );
 
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "New Test Task");
 
       const saveBtn = screen.getByTestId("save-task-btn");

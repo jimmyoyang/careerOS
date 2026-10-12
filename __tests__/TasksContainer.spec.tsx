@@ -232,7 +232,7 @@ describe("TasksContainer Component", () => {
       render(<TasksContainer activityTypes={mockActivityTypes} />);
 
       await waitFor(() => {
-        expect(screen.getByText(/No tasks found/i)).toBeInTheDocument();
+        expect(screen.getByText(/暂无任务/i)).toBeInTheDocument();
       });
     });
   });
@@ -261,7 +261,7 @@ describe("TasksContainer Component", () => {
           screen.getByTestId("task-form-dialog-title")
         ).toBeInTheDocument();
         expect(screen.getByTestId("task-form-dialog-title")).toHaveTextContent(
-          "Add Task"
+          "添加任务"
         );
       });
     });
@@ -292,13 +292,13 @@ describe("TasksContainer Component", () => {
 
       // Click the Delete menu item
       const deleteMenuItem = await screen.findByRole("menuitem", {
-        name: /delete/i,
+        name: /删除/i,
       });
       await user.click(deleteMenuItem);
 
       // Confirm deletion in the alert dialog
       const confirmButton = await screen.findByRole("button", {
-        name: /delete/i,
+        name: /删除/i,
       });
       await user.click(confirmButton);
 
@@ -323,13 +323,13 @@ describe("TasksContainer Component", () => {
 
       // Click the Delete menu item
       const deleteMenuItem = await screen.findByRole("menuitem", {
-        name: /delete/i,
+        name: /删除/i,
       });
       await user.click(deleteMenuItem);
 
       // Confirm deletion in the alert dialog
       const confirmButton = await screen.findByRole("button", {
-        name: /delete/i,
+        name: /删除/i,
       });
       await user.click(confirmButton);
 
@@ -350,14 +350,14 @@ describe("TasksContainer Component", () => {
 
       // Click the Edit Task menu item
       const editMenuItem = await screen.findByRole("menuitem", {
-        name: /edit task/i,
+        name: /编辑任务/i,
       });
       await user.click(editMenuItem);
 
       await waitFor(() => {
         expect(getTaskById).toHaveBeenCalledWith("task-1");
         expect(screen.getByTestId("task-form-dialog-title")).toHaveTextContent(
-          "Edit Task"
+          "编辑任务"
         );
       });
     });
@@ -378,7 +378,7 @@ describe("TasksContainer Component", () => {
 
       // Click the Edit Task menu item
       const editMenuItem = await screen.findByRole("menuitem", {
-        name: /edit task/i,
+        name: /编辑任务/i,
       });
       await user.click(editMenuItem);
 
@@ -405,13 +405,13 @@ describe("TasksContainer Component", () => {
 
       // Hover over Change Status to open submenu
       const changeStatusMenuItem = await screen.findByRole("menuitem", {
-        name: /change status/i,
+        name: /更改状态/i,
       });
       await user.hover(changeStatusMenuItem);
 
       // Click the Complete option in the submenu
       const completeOption = await screen.findByRole("menuitem", {
-        name: "Complete",
+        name: "已完成",
       });
       await user.click(completeOption);
 
@@ -436,13 +436,13 @@ describe("TasksContainer Component", () => {
 
       // Hover over Change Status to open submenu
       const changeStatusMenuItem = await screen.findByRole("menuitem", {
-        name: /change status/i,
+        name: /更改状态/i,
       });
       await user.hover(changeStatusMenuItem);
 
       // Click the Complete option in the submenu
       const completeOption = await screen.findByRole("menuitem", {
-        name: "Complete",
+        name: "已完成",
       });
       await user.click(completeOption);
 
@@ -481,7 +481,7 @@ describe("TasksContainer Component", () => {
         expect(mockRefreshCurrentActivity).toHaveBeenCalledTimes(1);
       });
       expect(
-        screen.queryByText(/Stop current activity and start a new one/i),
+        screen.queryByText(/正在进行中。是否结束并开始新活动/),
       ).not.toBeInTheDocument();
     });
   });
@@ -533,7 +533,7 @@ describe("TasksContainer Component", () => {
 
       expect(startActivityFromTask).not.toHaveBeenCalled();
       expect(
-        await screen.findByText(/"Ongoing Task" is currently in progress/i)
+        await screen.findByText(/“Ongoing Task”正在进行中/i)
       ).toBeInTheDocument();
     });
 
@@ -555,7 +555,7 @@ describe("TasksContainer Component", () => {
       await user.click(startActivityButtons[0]);
 
       const confirmButton = await screen.findByRole("button", {
-        name: "Stop & Start",
+        name: "结束并开始",
       });
       await user.click(confirmButton);
 
@@ -581,10 +581,10 @@ describe("TasksContainer Component", () => {
 
       await screen.findByTestId("task-form-dialog-title");
 
-      const titleInput = screen.getByLabelText(/Title/i);
+      const titleInput = screen.getByRole("textbox", { name: /标题/ });
       await user.type(titleInput, "Brand New Task");
 
-      const activityTypeCombobox = screen.getByLabelText(/Activity Type/i);
+      const activityTypeCombobox = screen.getByLabelText(/活动类型/i);
       await user.click(activityTypeCombobox);
       const developmentOption = screen.getByRole("option", {
         name: "Development",
@@ -648,12 +648,12 @@ describe("TasksContainer Component", () => {
       });
       expect(startActivityFromTask).not.toHaveBeenCalled();
       expect(
-        await screen.findByText(/"Ongoing Task" is currently in progress/i)
+        await screen.findByText(/“Ongoing Task”正在进行中/i)
       ).toBeInTheDocument();
 
       (startActivityFromTask as any).mockResolvedValue({ success: true });
       const confirmButton = screen.getByRole("button", {
-        name: "Stop & Start",
+        name: "结束并开始",
       });
       await user.click(confirmButton);
 
@@ -714,11 +714,11 @@ describe("TasksContainer Component", () => {
     });
 
     it("should toggle status filter", async () => {
-      const filterButton = screen.getByRole("button", { name: /status/i });
+      const filterButton = screen.getByRole("button", { name: /状态/i });
       await user.click(filterButton);
 
       const inProgressCheckbox = screen.getByRole("menuitemcheckbox", {
-        name: "In Progress",
+        name: "进行中",
       });
       expect(inProgressCheckbox).toBeChecked();
 
@@ -735,11 +735,11 @@ describe("TasksContainer Component", () => {
       const groupBySelect = screen.getByRole("combobox");
       await user.click(groupBySelect);
 
-      const dueDateOption = screen.getByRole("option", { name: "Due Date" });
+      const dueDateOption = screen.getByRole("option", { name: "截止日期" });
       await user.click(dueDateOption);
 
       await waitFor(() => {
-        expect(groupBySelect).toHaveTextContent("Due Date");
+        expect(groupBySelect).toHaveTextContent("截止日期");
       });
 
       await waitFor(() => {
@@ -763,7 +763,7 @@ describe("TasksContainer Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText("Task 1")).toBeInTheDocument();
-        expect(screen.queryByText("Load More")).not.toBeInTheDocument();
+        expect(screen.queryByText("加载更多")).not.toBeInTheDocument();
       });
     });
 
@@ -818,7 +818,7 @@ describe("TasksContainer Component", () => {
       render(<TasksContainer activityTypes={mockActivityTypes} />);
 
       await waitFor(() => {
-        expect(screen.queryByText("Load More")).not.toBeInTheDocument();
+        expect(screen.queryByText("加载更多")).not.toBeInTheDocument();
       });
     });
 
@@ -832,10 +832,10 @@ describe("TasksContainer Component", () => {
       render(<TasksContainer activityTypes={mockActivityTypes} />);
 
       await waitFor(() => {
-        expect(screen.getByText(/Showing/i)).toBeInTheDocument();
+        expect(screen.getByText(/显示/i)).toBeInTheDocument();
         expect(
-          screen.getByText("1 to 2", { exact: false })
-        ).toBeInTheDocument();
+          screen.getByText(/已显示/).closest("div")
+        ).toHaveTextContent("已显示 2 / 共 10 条");
         expect(screen.getByText("10", { exact: false })).toBeInTheDocument();
       });
     });
@@ -874,7 +874,7 @@ describe("TasksContainer Component", () => {
 
       render(<TasksContainer activityTypes={mockActivityTypes} />);
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       expect(searchInput).toBeInTheDocument();
     });
 
@@ -900,7 +900,7 @@ describe("TasksContainer Component", () => {
 
       vi.clearAllMocks();
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "Task 1"
@@ -948,7 +948,7 @@ describe("TasksContainer Component", () => {
         expect(screen.getByText("Task 2")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "Task 1"
@@ -983,7 +983,7 @@ describe("TasksContainer Component", () => {
         expect(screen.getByText("Task 1")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "nonexistent"
@@ -994,7 +994,7 @@ describe("TasksContainer Component", () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/No tasks found/i)).toBeInTheDocument();
+        expect(screen.getByText(/暂无任务/i)).toBeInTheDocument();
       });
     });
 
@@ -1012,13 +1012,13 @@ describe("TasksContainer Component", () => {
       });
 
       // Toggle status filter first
-      const filterButton = screen.getByRole("button", { name: /status/i });
+      const filterButton = screen.getByRole("button", { name: /状态/i });
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).click(
         filterButton
       );
 
       const inProgressCheckbox = screen.getByRole("menuitemcheckbox", {
-        name: "In Progress",
+        name: "进行中",
       });
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).click(
         inProgressCheckbox
@@ -1038,7 +1038,7 @@ describe("TasksContainer Component", () => {
       vi.clearAllMocks();
 
       // Now search
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "Task"
@@ -1084,7 +1084,7 @@ describe("TasksContainer Component", () => {
 
       vi.clearAllMocks();
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "Development"
@@ -1131,7 +1131,7 @@ describe("TasksContainer Component", () => {
       });
 
       // Type search term
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "Task"
@@ -1189,7 +1189,7 @@ describe("TasksContainer Component", () => {
 
       vi.clearAllMocks();
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "first search"
@@ -1256,7 +1256,7 @@ describe("TasksContainer Component", () => {
 
       vi.clearAllMocks();
 
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
 
       // Type "Task" rapidly - single userEvent instance handles debouncing correctly
       await typingUser.type(searchInput, "Task");
@@ -1299,7 +1299,7 @@ describe("TasksContainer Component", () => {
       });
 
       // Type search term
-      const searchInput = screen.getByPlaceholderText("Search tasks...");
+      const searchInput = screen.getByPlaceholderText("搜索任务…");
       await userEvent.setup({ advanceTimers: vi.advanceTimersByTime }).type(
         searchInput,
         "Task"

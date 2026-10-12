@@ -15,12 +15,12 @@ export const EMPTY_ATS: AtsConfigValue = {
 };
 
 export const STEPS = [
-  { id: "basics", title: "Basics", description: "Name your automation" },
-  { id: "search", title: "Search", description: "Configure search criteria" },
-  { id: "resume", title: "Resume", description: "Select resume for matching" },
-  { id: "matching", title: "Matching", description: "Set match threshold" },
-  { id: "schedule", title: "Schedule", description: "When to run" },
-  { id: "review", title: "Review", description: "Confirm settings" },
+  { id: "basics", title: "基本信息", description: "命名自动化" },
+  { id: "search", title: "搜索", description: "配置搜索条件" },
+  { id: "resume", title: "简历", description: "选择匹配使用的简历" },
+  { id: "matching", title: "匹配", description: "设置匹配阈值" },
+  { id: "schedule", title: "计划时间", description: "设置运行时间" },
+  { id: "review", title: "确认", description: "确认设置" },
 ];
 
 export const HOURS = Array.from({ length: 24 }, (_, i) => ({

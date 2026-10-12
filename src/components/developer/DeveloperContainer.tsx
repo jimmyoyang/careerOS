@@ -36,7 +36,7 @@ function StatusBanner({ message }: { message: StatusMessage }) {
       )}
       <div className="flex-1">
         <p className="font-semibold">
-          {message.type === "error" ? "Error" : "Success"}
+          {message.type === "error" ? "错误" : "成功"}
         </p>
         <p className="text-sm">{message.text}</p>
       </div>
@@ -58,8 +58,8 @@ export function MockActivitiesCard() {
       text:
         result.message ||
         (result.success
-          ? "Mock activities generated successfully"
-          : "Failed to generate mock activities"),
+          ? "测试活动已生成"
+          : "生成测试活动失败"),
     });
     setIsGenerating(false);
   };
@@ -67,7 +67,7 @@ export function MockActivitiesCard() {
   const handleClear = async () => {
     if (
       !confirm(
-        "Are you sure you want to delete all mock activities? This action cannot be undone.",
+        "确定删除所有测试活动吗？此操作无法撤销。",
       )
     )
       return;
@@ -80,8 +80,8 @@ export function MockActivitiesCard() {
       text:
         result.message ||
         (result.success
-          ? "Mock activities cleared successfully"
-          : "Failed to clear mock activities"),
+          ? "测试活动已清空"
+          : "清空测试活动失败"),
     });
     setIsClearing(false);
   };
@@ -91,18 +91,16 @@ export function MockActivitiesCard() {
       {message && <StatusBanner message={message} />}
       <Card>
         <CardHeader>
-          <CardTitle>Mock Data Management</CardTitle>
+          <CardTitle>测试数据管理</CardTitle>
           <CardDescription>
-            Generate or clear mock activities for testing
+            生成或清空用于测试的活动数据
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-semibold mb-2">Generate Mock Activities</h3>
+            <h3 className="font-semibold mb-2">生成测试活动</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Creates 25+ mock activities for the last 10 days with types:
-              Learning, Side Project 1, Side Project 2, Job Search, and
-              Interview Preparation. Duration is between 20-120 minutes.
+              在最近 10 天生成至少 25 条测试活动，涵盖学习、个人项目 1、个人项目 2、找工作和面试准备，每次时长为 20 至 120 分钟。
             </p>
             <Button
               onClick={handleGenerate}
@@ -112,15 +110,14 @@ export function MockActivitiesCard() {
               {isGenerating && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {isGenerating ? "Generating..." : "Generate Mock Activities"}
+              {isGenerating ? "正在生成…" : "生成测试活动"}
             </Button>
           </div>
 
           <div className="border-t pt-4">
-            <h3 className="font-semibold mb-2">Clear Mock Activities</h3>
+            <h3 className="font-semibold mb-2">清空测试活动</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Deletes only mock activities (marked with [MOCK_DATA] identifier).
-              Regular activities are not affected.
+              仅删除带有 [MOCK_DATA] 标记的测试活动，正常活动不受影响。
             </p>
             <Button
               onClick={handleClear}
@@ -129,7 +126,7 @@ export function MockActivitiesCard() {
               className="w-full"
             >
               {isClearing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isClearing ? "Clearing..." : "Clear Mock Activities"}
+              {isClearing ? "正在清空…" : "清空测试活动"}
             </Button>
           </div>
         </CardContent>
@@ -152,8 +149,8 @@ export function MockProfileCard() {
       text:
         result.message ||
         (result.success
-          ? "Mock profile data generated successfully"
-          : "Failed to generate mock profile data"),
+          ? "测试资料已生成"
+          : "生成测试资料失败"),
     });
     setIsGenerating(false);
   };
@@ -161,7 +158,7 @@ export function MockProfileCard() {
   const handleClear = async () => {
     if (
       !confirm(
-        "Are you sure you want to delete all mock profile data (resumes, companies, locations, job titles)? This cannot be undone.",
+        "确定删除所有测试资料（简历、公司、地点和职位名称）吗？此操作无法撤销。",
       )
     )
       return;
@@ -174,8 +171,8 @@ export function MockProfileCard() {
       text:
         result.message ||
         (result.success
-          ? "Mock profile data cleared successfully"
-          : "Failed to clear mock profile data"),
+          ? "测试资料已清空"
+          : "清空测试资料失败"),
     });
     setIsClearing(false);
   };
@@ -185,21 +182,16 @@ export function MockProfileCard() {
       {message && <StatusBanner message={message} />}
       <Card>
         <CardHeader>
-          <CardTitle>Mock Profile Data</CardTitle>
+          <CardTitle>测试资料</CardTitle>
           <CardDescription>
-            Generate or clear mock companies, locations, job titles, and resumes
-            for testing
+            生成或清空用于测试的公司、地点、职位名称和简历
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-semibold mb-2">Generate Mock Profile Data</h3>
+            <h3 className="font-semibold mb-2">生成测试资料</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Creates 12 FAANG companies, 12 IT-hub locations (US &amp; Canada),
-              15 IT job titles (junior → principal), and 8 resumes covering
-              junior, intermediate, and senior career levels — each with a
-              detailed summary, multi-role work history, and education section.
-              Uses <code>[MOCK_DATA]</code> prefix to tag records.
+              创建 12 家科技公司、12 个美国和加拿大科技中心城市、15 种从初级到首席的技术职位，以及 8 份覆盖初级、中级和高级职级的简历。每份简历包含详细简介、多段工作经历和教育背景。使用 <code>[MOCK_DATA]</code> 前缀标记记录。
             </p>
             <Button
               onClick={handleGenerate}
@@ -209,16 +201,14 @@ export function MockProfileCard() {
               {isGenerating && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {isGenerating ? "Generating..." : "Generate Mock Profile Data"}
+              {isGenerating ? "正在生成…" : "生成测试资料"}
             </Button>
           </div>
 
           <div className="border-t pt-4">
-            <h3 className="font-semibold mb-2">Clear Mock Profile Data</h3>
+            <h3 className="font-semibold mb-2">清空测试资料</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Deletes all mock resumes (titled with <code>[MOCK_DATA]</code>)
-              and their associated sections, then removes mock companies,
-              locations, and job titles. Real data is not affected.
+              删除所有标题带有 <code>[MOCK_DATA]</code>标记的测试简历及其章节，再删除测试公司、地点和职位名称。真实数据不受影响。
             </p>
             <Button
               onClick={handleClear}
@@ -227,7 +217,7 @@ export function MockProfileCard() {
               className="w-full"
             >
               {isClearing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isClearing ? "Clearing..." : "Clear Mock Profile Data"}
+              {isClearing ? "正在清空…" : "清空测试资料"}
             </Button>
           </div>
         </CardContent>
@@ -250,8 +240,8 @@ export function MockJobsCard() {
       text:
         result.message ||
         (result.success
-          ? "Mock jobs generated successfully"
-          : "Failed to generate mock jobs"),
+          ? "测试职位已生成"
+          : "生成测试职位失败"),
     });
     setIsGenerating(false);
   };
@@ -259,7 +249,7 @@ export function MockJobsCard() {
   const handleClear = async () => {
     if (
       !confirm(
-        "Are you sure you want to delete all mock jobs? This action cannot be undone.",
+        "确定删除所有测试职位吗？此操作无法撤销。",
       )
     )
       return;
@@ -272,8 +262,8 @@ export function MockJobsCard() {
       text:
         result.message ||
         (result.success
-          ? "Mock jobs cleared successfully"
-          : "Failed to clear mock jobs"),
+          ? "测试职位已清空"
+          : "清空测试职位失败"),
     });
     setIsClearing(false);
   };
@@ -283,20 +273,16 @@ export function MockJobsCard() {
       {message && <StatusBanner message={message} />}
       <Card>
         <CardHeader>
-          <CardTitle>Mock Jobs Data</CardTitle>
+          <CardTitle>测试职位数据</CardTitle>
           <CardDescription>
-            Generate or clear mock jobs for testing
+            生成或清空用于测试的职位
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-semibold mb-2">Generate Mock Jobs</h3>
+            <h3 className="font-semibold mb-2">生成测试职位</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Creates 30-40 mock jobs spread across the last 30 days using mock
-              profile data (companies, locations, job titles, resumes). Status
-              distribution is realistic: mostly Applied/Rejected, some
-              Interviews, few Offers. Requires mock profile data to be generated
-              first.
+              使用测试资料中的公司、地点、职位名称和简历，在最近 30 天生成 30 至 40 个测试职位。状态以已投递和未通过为主，包含部分面试和少量录用通知。请先生成测试资料。
             </p>
             <Button
               onClick={handleGenerate}
@@ -306,15 +292,14 @@ export function MockJobsCard() {
               {isGenerating && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {isGenerating ? "Generating..." : "Generate Mock Jobs"}
+              {isGenerating ? "正在生成…" : "生成测试职位"}
             </Button>
           </div>
 
           <div className="border-t pt-4">
-            <h3 className="font-semibold mb-2">Clear Mock Jobs</h3>
+            <h3 className="font-semibold mb-2">清空测试职位</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Deletes only mock jobs (marked with [MOCK_DATA] identifier).
-              Regular jobs are not affected.
+              仅删除带有 [MOCK_DATA] 标记的测试职位，正常职位不受影响。
             </p>
             <Button
               onClick={handleClear}
@@ -323,7 +308,7 @@ export function MockJobsCard() {
               className="w-full"
             >
               {isClearing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isClearing ? "Clearing..." : "Clear Mock Jobs"}
+              {isClearing ? "正在清空…" : "清空测试职位"}
             </Button>
           </div>
         </CardContent>

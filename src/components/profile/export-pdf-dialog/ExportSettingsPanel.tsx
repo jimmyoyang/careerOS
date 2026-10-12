@@ -37,12 +37,12 @@ export function ExportSettingsPanel({
   const typographySummary = [
     PDF_FONT_LABELS[settings.font],
     formatSettingValue("fontSize", settings.fontSize),
-    `${formatSettingValue("lineHeight", settings.lineHeight)} line`,
+    `${formatSettingValue("lineHeight", settings.lineHeight)} 倍行距`,
   ].join(" • ");
 
   const layoutSummary = [
-    `${settings.marginVertical} × ${settings.marginHorizontal} pt margins`,
-    `${settings.sectionSpacing}/${settings.entrySpacing} pt spacing`,
+    `${settings.marginVertical} × ${settings.marginHorizontal} 磅页边距`,
+    `${settings.sectionSpacing}/${settings.entrySpacing} 磅间距`,
   ].join(" • ");
 
   return (
@@ -51,17 +51,17 @@ export function ExportSettingsPanel({
       <div className="rounded-lg border bg-muted/40">
         <SelectRow
           id={`${ID_PREFIX}-template`}
-          label="Template"
+          label="模板"
           value={settings.template}
           labels={RESUME_LAYOUT_LABELS}
           onSelect={(template) => onChange({ ...settings, template })}
         />
       </div>
 
-      <DisclosureGroup title="Typography" summary={typographySummary}>
+      <DisclosureGroup title="字体排版" summary={typographySummary}>
         <SelectRow
           id={`${ID_PREFIX}-font`}
-          label="Font"
+          label="字体"
           value={settings.font}
           labels={PDF_FONT_LABELS}
           onSelect={(font) => onChange({ ...settings, font })}
@@ -80,7 +80,7 @@ export function ExportSettingsPanel({
         />
       </DisclosureGroup>
 
-      <DisclosureGroup title="Layout" summary={layoutSummary}>
+      <DisclosureGroup title="布局" summary={layoutSummary}>
         <StepperRow
           idPrefix={ID_PREFIX}
           field="marginVertical"
@@ -116,7 +116,7 @@ export function ExportSettingsPanel({
             onClick={onReset}
             disabled={isDefault}
           >
-            Reset to defaults
+            恢复默认设置
           </Button>
         </div>
       )}

@@ -25,7 +25,11 @@
     "eval:mcp-tools": "npm --prefix evals run eval:mcp-tools",
     "eval:agent-chat": "npm --prefix evals run eval:agent-chat",
     "eval:all": "npm --prefix evals run eval:all",
-    "eval:view": "npm --prefix evals run eval:view"
+    "eval:view": "npm --prefix evals run eval:view",
+    "phone:build": "bash scripts/build-phone.sh",
+    "phone:bridge": "node scripts/phone-bridge.mjs",
+    "phone:test": "node --test services/phone-bridge/*.test.mjs scripts/phone-bridge.test.mjs",
+    "phone:test:device": "node scripts/phone-device-smoke.mjs"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^2.0.4",
@@ -81,6 +85,7 @@
     "p-limit": "^7.3.0",
     "papaparse": "^5.4.1",
     "pdfjs-dist": "6.4.299",
+    "qrcode": "1.5.4",
     "react": "19.2.4",
     "react-day-picker": "^9.12.0",
     "react-dom": "19.2.4",

@@ -14,9 +14,9 @@ export const AddContactFormSchema = z
   .object({
     id: z.string().optional(),
     name: z
-      .string({ error: "Contact name is required." })
-      .min(1, { message: "Contact name cannot be empty." })
-      .max(120, { message: "Contact name must be 120 characters or fewer." }),
+      .string({ error: "请填写联系人姓名。" })
+      .min(1, { message: "联系人姓名不能为空。" })
+      .max(120, { message: "联系人姓名不能超过 120 个字符。" }),
     title: optionalText(120),
     email: z
       .string()
@@ -24,7 +24,7 @@ export const AddContactFormSchema = z
       .optional()
       .refine(
         (v) => !v || z.email().safeParse(v).success,
-        "Please enter a valid email address.",
+        "请输入有效的邮箱地址。",
       ),
     phone: optionalText(40),
     linkedinUrl: z
@@ -55,12 +55,12 @@ export const AddContactFormSchema = z
           endOfToday.setHours(23, 59, 59, 999);
           return date <= endOfToday;
         },
-        { message: "Last contacted date cannot be in the future." },
+        { message: "上次联系日期不能晚于今天。" },
       ),
   })
   .refine(
     (v) => !v.workedFrom || !v.workedTo || v.workedTo >= v.workedFrom,
-    { message: "The end date cannot be before the start date.", path: ["workedTo"] },
+    { message: "结束日期不能早于开始日期。", path: ["workedTo"] },
   );
 
 export type ContactFormValues = z.infer<typeof AddContactFormSchema>;

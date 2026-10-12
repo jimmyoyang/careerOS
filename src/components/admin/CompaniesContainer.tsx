@@ -47,7 +47,7 @@ function CompaniesContainer() {
       const res = await watchBoardCompany(provider, company);
       if (res.success) {
         browse.markWatched(company.token, res.data.companyId);
-        toastSuccess(`${company.name} added to your watchlist`);
+        toastSuccess(`${company.name}已加入关注列表`);
       } else if ("needsConfirm" in res) {
         setPendingMerge({ provider, board: company, existing: res.existing });
       } else {
@@ -64,7 +64,7 @@ function CompaniesContainer() {
     setPendingMerge(null);
     if (res.success) {
       browse.markWatched(board.token, res.data.companyId);
-      toastSuccess(`${board.name} linked and added to your watchlist`);
+      toastSuccess(`${board.name}已关联并加入关注列表`);
     } else if (!("needsConfirm" in res)) {
       toastError(res.message);
     }
@@ -83,12 +83,12 @@ function CompaniesContainer() {
         <Card x-chunk="dashboard-06-chunk-0">
           <ResponsiveCardHeader>
             <div className="flex items-baseline gap-2">
-              <CardTitle>Companies</CardTitle>
+              <CardTitle>公司</CardTitle>
               {!loading && shownCount > 0 && (
                 <RecordsCount
                   count={shownCount}
                   total={shownTotal}
-                  label="companies"
+                  label="公司"
                 />
               )}
             </div>
@@ -97,7 +97,7 @@ function CompaniesContainer() {
               <SearchInput
                 value={searchTerm}
                 onChange={setSearchTerm}
-                placeholder="Search companies..."
+                placeholder="搜索公司…"
               />
               <AddCompany
                 editCompany={editCompany}

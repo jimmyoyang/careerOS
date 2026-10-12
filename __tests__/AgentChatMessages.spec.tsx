@@ -48,7 +48,7 @@ describe("AgentChatMessages", () => {
   it("renders the running card while the tool input is still arriving", () => {
     chat.messages = [assistant([toolPart("input-available")])];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/preparing to add a job/i)).toBeInTheDocument();
+    expect(screen.getByText(/正在准备添加岗位/i)).toBeInTheDocument();
   });
 
   it("renders the approval card for approval-requested", () => {
@@ -56,8 +56,8 @@ describe("AgentChatMessages", () => {
       assistant([toolPart("approval-requested", { approval: { id: "ap1" } })]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.getByText("Needs approval")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
+    expect(screen.getByText("需要确认")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "确认" })).toBeInTheDocument();
   });
 
   it("renders the result card for output-available", () => {
@@ -69,8 +69,8 @@ describe("AgentChatMessages", () => {
       ]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/added/i)).toBeInTheDocument();
-    expect(screen.queryByText("Needs approval")).not.toBeInTheDocument();
+    expect(screen.getByText(/已添加/i)).toBeInTheDocument();
+    expect(screen.queryByText("需要确认")).not.toBeInTheDocument();
   });
 
   it("feeds the approval card the pasted text from the same thread", () => {
@@ -91,7 +91,7 @@ describe("AgentChatMessages", () => {
       assistant([toolPart("approval-requested", { approval: { id: "ap1" } })]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/pasted verbatim/i)).toBeInTheDocument();
+    expect(screen.getByText(/按原文粘贴/i)).toBeInTheDocument();
     expect(screen.getByText(new RegExp(posting.slice(0, 30)))).toBeInTheDocument();
   });
 
@@ -103,7 +103,7 @@ describe("AgentChatMessages", () => {
     expect(chat.regenerate).not.toHaveBeenCalled();
     expect(chat.resumeStream).not.toHaveBeenCalled();
 
-    await userEvent.click(screen.getByRole("button", { name: /continue/i }));
+    await userEvent.click(screen.getByRole("button", { name: /继续/i }));
     expect(chat.regenerate).toHaveBeenCalled();
     expect(chat.resumeStream).not.toHaveBeenCalled();
   });
@@ -112,14 +112,14 @@ describe("AgentChatMessages", () => {
     chat.interruptedTurn = true;
     chat.messages = [assistant([{ type: "text", text: "half a s" }])];
     render(<AgentChatMessages />);
-    await userEvent.click(screen.getByRole("button", { name: /dismiss/i }));
+    await userEvent.click(screen.getByRole("button", { name: /忽略/i }));
     expect(chat.dismissInterrupted).toHaveBeenCalled();
   });
 
   it("offers Continue when a seeded transcript ends with a user message", () => {
     chat.messages = [user([{ type: "text", text: "add a job" }])];
     render(<AgentChatMessages />);
-    expect(screen.getByRole("button", { name: /continue/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /继续/i })).toBeInTheDocument();
   });
 
   it("does not offer Continue while the reply is still in flight", () => {
@@ -127,7 +127,7 @@ describe("AgentChatMessages", () => {
     chat.messages = [user([{ type: "text", text: "add a job" }])];
     render(<AgentChatMessages />);
     expect(
-      screen.queryByRole("button", { name: /continue/i }),
+      screen.queryByRole("button", { name: /继续/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -138,7 +138,7 @@ describe("AgentChatMessages", () => {
     ];
     render(<AgentChatMessages />);
     expect(
-      screen.queryByRole("button", { name: /continue/i }),
+      screen.queryByRole("button", { name: /继续/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -146,7 +146,7 @@ describe("AgentChatMessages", () => {
     chat.status = "submitted";
     chat.messages = [user([{ type: "text", text: "add a job" }])];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/thinking/i)).toBeInTheDocument();
+    expect(screen.getByText(/正在思考/i)).toBeInTheDocument();
   });
 
   it("shows the thinking row after a tool result while the reply is composed", () => {
@@ -159,15 +159,15 @@ describe("AgentChatMessages", () => {
       ]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/thinking/i)).toBeInTheDocument();
+    expect(screen.getByText(/正在思考/i)).toBeInTheDocument();
   });
 
   it("does not double up on the running card, which spins already", () => {
     chat.status = "streaming";
     chat.messages = [assistant([toolPart("input-available")])];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/preparing to add a job/i)).toBeInTheDocument();
-    expect(screen.queryByText(/thinking/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/正在准备添加岗位/i)).toBeInTheDocument();
+    expect(screen.queryByText(/正在思考/i)).not.toBeInTheDocument();
   });
 
   it("does not show the thinking row while an approval is on screen", () => {
@@ -176,14 +176,14 @@ describe("AgentChatMessages", () => {
       assistant([toolPart("approval-requested", { approval: { id: "ap1" } })]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.queryByText(/thinking/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/正在思考/i)).not.toBeInTheDocument();
   });
 
   it("does not show the thinking row once text is arriving", () => {
     chat.status = "streaming";
     chat.messages = [assistant([{ type: "text", text: "I found the" }])];
     render(<AgentChatMessages />);
-    expect(screen.queryByText(/thinking/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/正在思考/i)).not.toBeInTheDocument();
   });
 
   it("does not show the thinking row on a settled transcript", () => {
@@ -192,7 +192,7 @@ describe("AgentChatMessages", () => {
       assistant([{ type: "text", text: "Done." }]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.queryByText(/thinking/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/正在思考/i)).not.toBeInTheDocument();
   });
 
   it("renders assistant text as plain text, never as markdown media", () => {
@@ -258,7 +258,7 @@ describe("AgentChatMessages", () => {
       ]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.queryByText("Impact")).not.toBeInTheDocument();
+    expect(screen.queryByText("成果影响力")).not.toBeInTheDocument();
   });
 
   it("renders a follow-up answer with no score card", () => {
@@ -268,7 +268,7 @@ describe("AgentChatMessages", () => {
       ]),
     ];
     render(<AgentChatMessages />);
-    expect(screen.queryByText("Impact")).not.toBeInTheDocument();
+    expect(screen.queryByText("成果影响力")).not.toBeInTheDocument();
   });
 
   const reviewRunning = {
@@ -285,7 +285,7 @@ describe("AgentChatMessages", () => {
     };
     chat.messages = [assistant([reviewRunning])];
     render(<AgentChatMessages />);
-    expect(screen.getByText("Impact")).toBeInTheDocument();
+    expect(screen.getByText("成果影响力")).toBeInTheDocument();
     expect(screen.queryByText(/SCORES:/)).not.toBeInTheDocument();
     expect(screen.getByTestId("tiptap-content").innerHTML).toContain(
       "<h2>Summary</h2>",
@@ -297,7 +297,7 @@ describe("AgentChatMessages", () => {
     chat.toolStreams = {};
     chat.messages = [assistant([reviewRunning])];
     render(<AgentChatMessages />);
-    expect(screen.getByText(/reviewing your resume/i)).toBeInTheDocument();
+    expect(screen.getByText(/正在评估简历/i)).toBeInTheDocument();
   });
 
   it("renders a running match_job from its streamed text", () => {

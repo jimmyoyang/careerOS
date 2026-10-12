@@ -26,15 +26,15 @@ export const AGENT_CHAT_SYSTEM_PROMPT = [
 // one legal reply — ask for all three. Kept here so it stays in step with
 // that section's required-fields wording.
 export const AGENT_ADD_JOB_INTRO = [
-  "Happy to add it. Paste the job posting here and I'll pull the details out of it.",
+  "请粘贴职位描述，我会提取其中的信息。",
   "",
-  "If you don't have the posting text, tell me:",
+  "如果没有完整的职位描述，请告诉我：",
   "",
-  "- **Company** — who is hiring",
-  "- **Job title** — the role they are hiring for",
-  "- **What the role involves** — one sentence is enough",
+  "- **公司**：招聘方名称",
+  "- **职位名称**：应聘的岗位",
+  "- **工作内容**：一句话说明也可以",
   "",
-  "You will see everything I extracted on a confirmation card before anything is saved.",
+  "保存之前，我会展示确认卡片，请你核对提取的信息。",
 ].join("\n");
 
 // Prompt surface, not documentation — kept beside the prompt so evals assert

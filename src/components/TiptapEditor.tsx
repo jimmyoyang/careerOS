@@ -47,6 +47,8 @@ const Tiptap = ({ field }: { field: ControllerRenderProps<any, any> }) => {
       {editor && (
         <div className="border-input border rounded-md">
           <Toggle
+            aria-label="加粗"
+            title="加粗"
             pressed={editor.isActive("bold")}
             onPressedChange={() => editor.chain().focus().toggleBold().run()}
             size={"sm"}
@@ -54,6 +56,8 @@ const Tiptap = ({ field }: { field: ControllerRenderProps<any, any> }) => {
             <Bold className="w-4 h-4" />
           </Toggle>
           <Toggle
+            aria-label="斜体"
+            title="斜体"
             pressed={editor.isActive("italic")}
             onPressedChange={() => editor.chain().focus().toggleItalic().run()}
             size={"sm"}
@@ -61,6 +65,8 @@ const Tiptap = ({ field }: { field: ControllerRenderProps<any, any> }) => {
             <Italic className="w-4 h-4" />
           </Toggle>
           <Toggle
+            aria-label="二级标题"
+            title="二级标题"
             pressed={editor.isActive("heading", { level: 2 })}
             onPressedChange={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
@@ -70,6 +76,8 @@ const Tiptap = ({ field }: { field: ControllerRenderProps<any, any> }) => {
             <Heading2 className="w-4 h-4" />
           </Toggle>
           <Toggle
+            aria-label="有序列表"
+            title="有序列表"
             pressed={editor.isActive("orderedList")}
             onPressedChange={() =>
               editor.chain().focus().toggleOrderedList().run()
@@ -79,6 +87,8 @@ const Tiptap = ({ field }: { field: ControllerRenderProps<any, any> }) => {
             <ListOrdered className="w-4 h-4" />
           </Toggle>
           <Toggle
+            aria-label="无序列表"
+            title="无序列表"
             pressed={editor.isActive("bulletList")}
             onPressedChange={() =>
               editor.chain().focus().toggleBulletList().run()
@@ -91,7 +101,7 @@ const Tiptap = ({ field }: { field: ControllerRenderProps<any, any> }) => {
       )}
       <EditorContent
         aria-labelledby="job-description-label"
-        placeholder="enter here..."
+        placeholder="请在此输入…"
         editor={editor}
       />
     </div>

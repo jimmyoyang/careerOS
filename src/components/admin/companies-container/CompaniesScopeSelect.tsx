@@ -45,17 +45,17 @@ export function CompaniesScopeSelect({ scope, onScopeChange }: Props) {
       onValueChange={(v) => onScopeChange(v as CompanyScope)}
       onOpenChange={onOpenChange}
     >
-      <SelectTrigger aria-label="Select company scope" className="h-8 w-[180px]">
+      <SelectTrigger aria-label="选择公司范围" className="h-8 w-[180px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Library</SelectLabel>
-          <SelectItem value="mine">My Companies</SelectItem>
-          <SelectItem value="watchlist">Watchlist</SelectItem>
+          <SelectLabel>公司库</SelectLabel>
+          <SelectItem value="mine">我的公司</SelectItem>
+          <SelectItem value="watchlist">关注列表</SelectItem>
         </SelectGroup>
         <SelectGroup>
-          <SelectLabel>Browse boards</SelectLabel>
+          <SelectLabel>浏览招聘平台</SelectLabel>
           {ATS_BOARDS.map((provider) => (
             <SelectItem key={provider} value={`board:${provider}`}>
               {PROVIDER_META[provider].label}

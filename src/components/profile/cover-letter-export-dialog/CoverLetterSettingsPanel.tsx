@@ -39,21 +39,21 @@ export function CoverLetterSettingsPanel({
   const typographySummary = [
     PDF_FONT_LABELS[settings.font],
     formatSettingValue("fontSize", settings.fontSize),
-    `${formatSettingValue("lineHeight", settings.lineHeight)} line`,
+    `${formatSettingValue("lineHeight", settings.lineHeight)} 倍行距`,
   ].join(" • ");
 
   const layoutSummary = [
-    `${settings.marginVertical} × ${settings.marginHorizontal} pt margins`,
-    `${settings.paragraphSpacing} pt paragraphs`,
+    `${settings.marginVertical} × ${settings.marginHorizontal} 磅页边距`,
+    `${settings.paragraphSpacing} 磅段落间距`,
   ].join(" • ");
 
   return (
     <div className="flex flex-col gap-4">
       {/* No Template row: a cover letter has exactly one style. */}
-      <DisclosureGroup title="Typography" summary={typographySummary}>
+      <DisclosureGroup title="字体排版" summary={typographySummary}>
         <SelectRow
           id={`${ID_PREFIX}-font`}
-          label="Font"
+          label="字体"
           value={settings.font}
           labels={PDF_FONT_LABELS}
           onSelect={(font) => onChange({ ...settings, font })}
@@ -72,7 +72,7 @@ export function CoverLetterSettingsPanel({
         />
       </DisclosureGroup>
 
-      <DisclosureGroup title="Layout" summary={layoutSummary}>
+      <DisclosureGroup title="布局" summary={layoutSummary}>
         <StepperRow
           idPrefix={ID_PREFIX}
           field="marginVertical"
@@ -97,8 +97,7 @@ export function CoverLetterSettingsPanel({
           not discoverable from this dialog. */}
       {!hasLetterhead && (
         <p className="text-xs text-muted-foreground">
-          No letterhead — set a default resume with contact info to add your
-          name and contact line.
+          尚无信头。设置一份包含联系方式的默认简历，即可添加姓名和联系方式。
         </p>
       )}
 
@@ -111,7 +110,7 @@ export function CoverLetterSettingsPanel({
             onClick={onReset}
             disabled={isDefault}
           >
-            Reset to defaults
+            恢复默认设置
           </Button>
         </div>
       )}

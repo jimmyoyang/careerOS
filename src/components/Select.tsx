@@ -1,3 +1,4 @@
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import React from "react";
 import {
   Select,
@@ -14,9 +15,10 @@ interface SelectProps {
   label: string;
   options: any[];
   field: ControllerRenderProps<any, any>;
+  translateOptions?: boolean;
 }
 
-function SelectFormCtrl({ label, options, field }: SelectProps) {
+function SelectFormCtrl({ label, options, field, translateOptions = false }: SelectProps) {
   return (
     <>
       <Select
@@ -25,8 +27,8 @@ function SelectFormCtrl({ label, options, field }: SelectProps) {
         name={field.name}
       >
         <FormControl>
-          <SelectTrigger aria-label={`Select ${label}`} className="w-[200px]">
-            <SelectValue placeholder={`Select ${label}`} />
+          <SelectTrigger aria-label={`选择${zhLabel(label)}`} className="w-[200px]">
+            <SelectValue placeholder={`选择${zhLabel(label)}`} />
           </SelectTrigger>
         </FormControl>
         <SelectContent>
@@ -35,7 +37,7 @@ function SelectFormCtrl({ label, options, field }: SelectProps) {
               options.map((option) => {
                 return (
                   <SelectItem key={option.id} value={option.id}>
-                    {option.label ?? option.value ?? option.title}
+                    {translateOptions ? zhLabel(option.label ?? option.value ?? option.title) : (option.label ?? option.value ?? option.title)}
                   </SelectItem>
                 );
               })}

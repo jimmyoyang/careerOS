@@ -38,8 +38,8 @@ describe("AddContact", () => {
     (createContact as any).mockResolvedValue({ success: true, data: { id: "c1" } });
 
     render(<AddContact {...props} />);
-    await user.type(screen.getByLabelText(/^name$/i), "Dave Patel");
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.type(screen.getByLabelText("姓名"), "Dave Patel");
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
     await waitFor(() =>
       expect(createContact).toHaveBeenCalledWith(
@@ -50,21 +50,21 @@ describe("AddContact", () => {
 
   it("blocks a save with no name", async () => {
     render(<AddContact {...props} />);
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
-    expect(await screen.findByText(/name is required|cannot be empty/i)).toBeInTheDocument();
+    expect(await screen.findByText(/联系人姓名不能为空/)).toBeInTheDocument();
     expect(createContact).not.toHaveBeenCalled();
   });
 
   it("prefills the name when asked", () => {
     render(<AddContact {...props} prefillName="Priya" />);
-    expect(screen.getByLabelText(/^name$/i)).toHaveValue("Priya");
+    expect(screen.getByLabelText("姓名")).toHaveValue("Priya");
   });
 
   it("prefills the company when asked", () => {
     render(<AddContact {...props} prefillCompanyId="co1" />);
     expect(
-      screen.getByRole("combobox", { name: /^company$/i }),
+      screen.getByRole("combobox", { name: "公司" }),
     ).toHaveTextContent("Shopify");
   });
 
@@ -72,8 +72,8 @@ describe("AddContact", () => {
     (createContact as any).mockResolvedValue({ success: true, data: { id: "c1" } });
 
     render(<AddContact {...props} prefillCompanyId="co1" />);
-    await user.type(screen.getByLabelText(/^name$/i), "Dave Patel");
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.type(screen.getByLabelText("姓名"), "Dave Patel");
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
     await waitFor(() =>
       expect(createContact).toHaveBeenCalledWith(
@@ -91,22 +91,22 @@ describe("AddContact", () => {
       />,
     );
     expect(
-      screen.getByRole("combobox", { name: /^company$/i }),
-    ).toHaveTextContent(/select company/i);
+      screen.getByRole("combobox", { name: "公司" }),
+    ).toHaveTextContent("选择公司");
   });
 
   it("starts from the prefill again each time the dialog reopens", async () => {
     const { rerender } = render(
       <AddContact {...props} hideTrigger prefillCompanyId="co1" />,
     );
-    await user.type(screen.getByLabelText(/^name$/i), "Half typed");
+    await user.type(screen.getByLabelText("姓名"), "Half typed");
 
     rerender(<AddContact {...props} hideTrigger prefillCompanyId="co1" dialogOpen={false} />);
     rerender(<AddContact {...props} hideTrigger prefillCompanyId="co1" dialogOpen />);
 
-    expect(screen.getByLabelText(/^name$/i)).toHaveValue("");
+    expect(screen.getByLabelText("姓名")).toHaveValue("");
     expect(
-      screen.getByRole("combobox", { name: /^company$/i }),
+      screen.getByRole("combobox", { name: "公司" }),
     ).toHaveTextContent("Shopify");
   });
 
@@ -119,7 +119,7 @@ describe("AddContact", () => {
         editContact={{ id: "c1", name: "Dave Patel" } as any}
       />,
     );
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
     await waitFor(() =>
       expect(updateContact).toHaveBeenCalledWith(
@@ -138,7 +138,7 @@ describe("AddContact", () => {
         editContact={{ id: "c1", name: "Dave Patel", roleId: "r1" } as any}
       />,
     );
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
     await waitFor(() =>
       expect(updateContact).toHaveBeenCalledWith(
@@ -150,9 +150,9 @@ describe("AddContact", () => {
   it("hides the shared-history fields until the role is Reference", () => {
     render(<AddContact {...props} />);
 
-    expect(screen.queryByText(/how you know them/i)).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/relationship/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/worked together at/i)).not.toBeInTheDocument();
+    expect(screen.queryByText("联系背景")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("关系")).not.toBeInTheDocument();
+    expect(screen.queryByText("共事公司")).not.toBeInTheDocument();
   });
 
   it("shows the shared-history fields for a Reference contact", () => {
@@ -163,9 +163,9 @@ describe("AddContact", () => {
       />,
     );
 
-    expect(screen.getByText(/how you know them/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/relationship/i)).toBeInTheDocument();
-    expect(screen.getByText(/worked together at/i)).toBeInTheDocument();
+    expect(screen.getByText("联系背景")).toBeInTheDocument();
+    expect(screen.getByLabelText("关系")).toBeInTheDocument();
+    expect(screen.getByText("共事公司")).toBeInTheDocument();
   });
 
   it("clears the shared history when the role moves off Reference", async () => {
@@ -185,12 +185,12 @@ describe("AddContact", () => {
       />,
     );
 
-    await user.click(screen.getByRole("combobox", { name: /role/i }));
-    await user.click(await screen.findByRole("option", { name: /recruiter/i }));
+    await user.click(screen.getByRole("combobox", { name: "角色" }));
+    await user.click(await screen.findByRole("option", { name: "招聘人员" }));
 
-    expect(screen.queryByLabelText(/relationship/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("关系")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
     await waitFor(() =>
       expect(updateContact).toHaveBeenCalledWith(
@@ -204,8 +204,8 @@ describe("AddContact", () => {
     const onSaved = vi.fn();
 
     render(<AddContact {...props} onSaved={onSaved} />);
-    await user.type(screen.getByLabelText(/^name$/i), "Priya Nair");
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.type(screen.getByLabelText("姓名"), "Priya Nair");
+    await user.click(screen.getByRole("button", { name: "保存" }));
 
     await waitFor(() =>
       expect(onSaved).toHaveBeenCalledWith({

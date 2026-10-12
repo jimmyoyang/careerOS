@@ -57,7 +57,7 @@ describe("TagsContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search skills..."),
+          screen.getByPlaceholderText("搜索技能…"),
         ).toBeInTheDocument();
       });
     });
@@ -71,7 +71,7 @@ describe("TagsContainer Search Functionality", () => {
         expect(getTagList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search skills...");
+      const searchInput = screen.getByPlaceholderText("搜索技能…");
 
       await act(async () => {
         await user.type(searchInput, "P");
@@ -97,7 +97,7 @@ describe("TagsContainer Search Functionality", () => {
         expect(getTagList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search skills...");
+      const searchInput = screen.getByPlaceholderText("搜索技能…");
 
       await act(async () => {
         await user.type(searchInput, "Python");
@@ -140,7 +140,7 @@ describe("TagsContainer Search Functionality", () => {
         expect(screen.getByText("Python")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search skills...");
+      const searchInput = screen.getByPlaceholderText("搜索技能…");
       await act(async () => {
         await user.type(searchInput, "Python");
       });
@@ -177,7 +177,7 @@ describe("TagsContainer Search Functionality", () => {
         expect(screen.getByText("React")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search skills...");
+      const searchInput = screen.getByPlaceholderText("搜索技能…");
       await act(async () => {
         await user.type(searchInput, "React");
       });

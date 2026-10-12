@@ -1,3 +1,4 @@
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { AddJob } from "@/components/myjobs/AddJob";
 import { JOB_SOURCES } from "@/lib/data/jobSourcesData";
 import { JOB_STATUSES } from "@/lib/data/jobStatusesData";
@@ -102,18 +103,18 @@ describe("AddJob Component", () => {
 
     const dialogTitle = screen.getByTestId("add-job-dialog-title");
     expect(dialogTitle).toBeInTheDocument();
-    expect(dialogTitle).toHaveTextContent("Add Job");
+    expect(dialogTitle).toHaveTextContent("添加职位");
   });
   it("moves a Draft job to Applied when a date applied is picked", async () => {
-    const status = screen.getByLabelText("Status");
-    expect(status).toHaveTextContent("Draft");
-    await user.click(screen.getByLabelText("Date Applied"));
+    const status = screen.getByLabelText("状态");
+    expect(status).toHaveTextContent("草稿");
+    await user.click(screen.getByLabelText("投递日期"));
     const days = screen
       .getAllByRole("gridcell")
       .map((cell) => cell.querySelector("button"))
       .filter((b): b is HTMLButtonElement => !!b && !b.disabled);
     await user.click(days[0]);
-    expect(status).toHaveTextContent("Applied");
+    expect(status).toHaveTextContent("已投递");
   });
   it("should open the dialog when clicked on add job button with title 'Edit Job'", async () => {
     // TODO: To be tested with job container and jobs table component
@@ -138,52 +139,52 @@ describe("AddJob Component", () => {
     );
     const dialogTitle = screen.getAllByTestId("add-job-dialog-title")[0];
     expect(dialogTitle).toBeInTheDocument();
-    expect(dialogTitle).toHaveTextContent("Add Job");
+    expect(dialogTitle).toHaveTextContent("添加职位");
   });
   it("should show relevant react-hook-form errors", async () => {
     const saveBtn = screen.getByTestId("save-job-btn");
     await user.click(saveBtn);
-    expect(screen.getByText("Job title is required.")).toBeInTheDocument();
-    expect(screen.getByText("Company name is required.")).toBeInTheDocument();
-    expect(screen.getByText("Location is required.")).toBeInTheDocument();
-    expect(screen.getByText("Source is required.")).toBeInTheDocument();
+    expect(screen.getByText("请填写职位名称。")).toBeInTheDocument();
+    expect(screen.getByText("请填写公司名称。")).toBeInTheDocument();
+    expect(screen.getByText("请填写地点。")).toBeInTheDocument();
+    expect(screen.getByText("请选择来源。")).toBeInTheDocument();
   });
   it("should close the dialog when clicked on cancel button", async () => {
-    const cancelBtn = screen.getByRole("button", { name: /cancel/i });
+    const cancelBtn = screen.getByRole("button", { name: /取消/i });
     const dialog = await screen.findByRole("dialog");
     await user.click(cancelBtn);
     expect(dialog).not.toBeInTheDocument();
   });
   it("should load and show the job title combobox list", async () => {
-    const jobTitleCombobox = screen.getByLabelText("Job Title");
+    const jobTitleCombobox = screen.getByLabelText("职位名称");
     await user.click(jobTitleCombobox);
     const options = screen.getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
     expect(options[0].textContent).toBe("Frontend Developer");
   });
   it("should load and show the company combobox list", async () => {
-    const companyCombobox = screen.getByLabelText("Company");
+    const companyCombobox = screen.getByLabelText("公司");
     await user.click(companyCombobox);
     const options = screen.getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
     expect(options[0].textContent).toBe("Google");
   });
   it("should load and show the location combobox list", async () => {
-    const locationCombobox = screen.getByLabelText("Job Location");
+    const locationCombobox = screen.getByLabelText("工作地点");
     await user.click(locationCombobox);
     const options = screen.getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
     expect(options[0].textContent).toBe("San Francisco");
   });
   it("should load and show the job source combobox list", async () => {
-    const sourceCombobox = screen.getByLabelText("Job Source");
+    const sourceCombobox = screen.getByLabelText("职位来源");
     await user.click(sourceCombobox);
     const options = screen.getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
     expect(options[0].textContent).toBe("Indeed");
   });
   it("should load and show the salary range suggestions", async () => {
-    const salaryRangeCombobox = screen.getByLabelText("Salary Range");
+    const salaryRangeCombobox = screen.getByLabelText("薪资范围");
     await user.click(salaryRangeCombobox);
     const options = screen.getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
@@ -192,50 +193,50 @@ describe("AddJob Component", () => {
   });
 
   it("should accept a typed salary that is not in the suggestions", async () => {
-    const salaryRangeCombobox = screen.getByLabelText("Salary Range");
+    const salaryRangeCombobox = screen.getByLabelText("薪资范围");
     await user.click(salaryRangeCombobox);
-    const input = screen.getByPlaceholderText("Create or Search Salary Range");
+    const input = screen.getByPlaceholderText("创建或搜索薪资范围");
     await user.type(input, "$185k - $210k{Enter}");
 
     await waitFor(() =>
-      expect(screen.getByLabelText("Salary Range")).toHaveTextContent(
+      expect(screen.getByLabelText("薪资范围")).toHaveTextContent(
         "$185k - $210k",
       ),
     );
   });
   const pickStatus = async (label: string) => {
-    await user.click(screen.getByLabelText("Status"));
-    await user.click(screen.getByRole("option", { name: label }));
+    await user.click(screen.getByLabelText("状态"));
+    await user.click(screen.getByRole("option", { name: zhLabel(label) }));
   };
   it("fills today's date on Applied and takes it back on a non-applying status", async () => {
-    const dateApplied = screen.getByLabelText("Date Applied");
+    const dateApplied = screen.getByLabelText("投递日期");
     expect(dateApplied).toBeEnabled();
     await pickStatus("Applied");
-    expect(dateApplied).toHaveTextContent(format(new Date(), "PP"));
+    expect(dateApplied).toHaveTextContent(format(new Date(), "yyyy年M月d日"));
     await pickStatus("Interview");
-    expect(dateApplied).toHaveTextContent(format(new Date(), "PP"));
+    expect(dateApplied).toHaveTextContent(format(new Date(), "yyyy年M月d日"));
     await pickStatus("Draft");
-    expect(dateApplied).toHaveTextContent("Pick a date");
+    expect(dateApplied).toHaveTextContent("选择日期");
   });
   it.each(["Interview", "Offer"])(
     "leaves the date empty when the status is set straight to %s",
     async (label) => {
       await pickStatus(label);
-      expect(screen.getByLabelText("Date Applied")).toHaveTextContent(
-        "Pick a date",
+      expect(screen.getByLabelText("投递日期")).toHaveTextContent(
+        "选择日期",
       );
     },
   );
   it("should load and show the status select list", async () => {
-    const statusSelect = screen.getByLabelText("Status");
+    const statusSelect = screen.getByLabelText("状态");
     await user.click(statusSelect);
     const options = screen.getAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
-    expect(options[0].textContent).toBe("Draft");
+    expect(options[0].textContent).toBe("草稿");
   });
   it("should closes the dialog and submit to save job when clicked on save button", async () => {
     const jobTitleInput = screen.getByRole("combobox", {
-      name: /job title/i,
+      name: /职位名称/i,
     }) as HTMLSelectElement;
     await user.click(jobTitleInput);
     const selectedJobTitle = screen.getByRole("option", {
@@ -243,7 +244,7 @@ describe("AddJob Component", () => {
     });
     await user.click(selectedJobTitle);
 
-    const companyInput = screen.getByRole("combobox", { name: /company/i });
+    const companyInput = screen.getByRole("combobox", { name: /公司/i });
     await user.click(companyInput);
     const selectedCompany = screen.getByRole("option", {
       name: "Amazon",
@@ -251,7 +252,7 @@ describe("AddJob Component", () => {
     await user.click(selectedCompany);
 
     const locationInput = screen.getByRole("combobox", {
-      name: /job location/i,
+      name: /工作地点/i,
     });
     await user.click(locationInput);
     const selectedLocation = screen.getByRole("option", {
@@ -260,7 +261,7 @@ describe("AddJob Component", () => {
     await user.click(selectedLocation);
 
     const sourceInput = screen.getByRole("combobox", {
-      name: /job source/i,
+      name: /职位来源/i,
     });
     await user.click(sourceInput);
     const selectedSource = screen.getByRole("option", {
@@ -268,7 +269,7 @@ describe("AddJob Component", () => {
     });
     await user.click(selectedSource);
 
-    const editableDiv = screen.getByLabelText("Job Description");
+    const editableDiv = screen.getByLabelText("职位描述");
     const pTag = editableDiv.querySelector("div > p");
     if (pTag) {
       pTag.textContent = "New Job Description";
@@ -342,8 +343,8 @@ describe("AddJob Component - Last Used Location/Source", () => {
     );
     await renderAddJob();
 
-    expect(screen.getByLabelText("Job Location")).toHaveTextContent("Remote");
-    expect(screen.getByLabelText("Job Source")).toHaveTextContent("Indeed");
+    expect(screen.getByLabelText("工作地点")).toHaveTextContent("Remote");
+    expect(screen.getByLabelText("职位来源")).toHaveTextContent("Indeed");
   });
 
   it("ignores a last-used id that no longer exists, e.g. the entity was deleted", async () => {
@@ -357,32 +358,32 @@ describe("AddJob Component - Last Used Location/Source", () => {
     );
     await renderAddJob();
 
-    expect(screen.getByLabelText("Job Location")).toHaveTextContent(
-      "Select location",
+    expect(screen.getByLabelText("工作地点")).toHaveTextContent(
+      "选择地点",
     );
-    expect(screen.getByLabelText("Job Source")).toHaveTextContent(
-      "Select source",
+    expect(screen.getByLabelText("职位来源")).toHaveTextContent(
+      "选择来源",
     );
   });
 
   it("saves the selected location and source to localStorage after a successful save", async () => {
     await renderAddJob();
 
-    await user.click(screen.getByRole("combobox", { name: /job title/i }));
+    await user.click(screen.getByRole("combobox", { name: /职位名称/i }));
     await user.click(
       screen.getByRole("option", { name: "Full Stack Developer" }),
     );
 
-    await user.click(screen.getByRole("combobox", { name: /company/i }));
+    await user.click(screen.getByRole("combobox", { name: /公司/i }));
     await user.click(screen.getByRole("option", { name: "Amazon" }));
 
     await user.click(
-      screen.getByRole("combobox", { name: /job location/i }),
+      screen.getByRole("combobox", { name: /工作地点/i }),
     );
     await user.click(screen.getByRole("option", { name: "Remote" }));
 
     await user.click(
-      screen.getByRole("combobox", { name: /job source/i }),
+      screen.getByRole("combobox", { name: /职位来源/i }),
     );
     await user.click(screen.getByRole("option", { name: "Indeed" }));
 
@@ -447,19 +448,19 @@ describe("AddJob Component - Edit Mode", () => {
     await renderEditMode();
 
     const dialogTitle = screen.getByTestId("add-job-dialog-title");
-    expect(dialogTitle).toHaveTextContent("Edit Job");
+    expect(dialogTitle).toHaveTextContent("编辑职位");
 
-    expect(screen.getByLabelText("Job Title")).toHaveTextContent(
+    expect(screen.getByLabelText("职位名称")).toHaveTextContent(
       "Full Stack Developer",
     );
-    expect(screen.getByLabelText("Company")).toHaveTextContent("Amazon");
-    expect(screen.getByLabelText("Job Location")).toHaveTextContent("Remote");
-    expect(screen.getByLabelText("Job Source")).toHaveTextContent("Indeed");
-    expect(screen.getByLabelText("Status")).toHaveTextContent("Applied");
-    expect(screen.getByLabelText("Job URL")).toHaveValue(
+    expect(screen.getByLabelText("公司")).toHaveTextContent("Amazon");
+    expect(screen.getByLabelText("工作地点")).toHaveTextContent("Remote");
+    expect(screen.getByLabelText("职位来源")).toHaveTextContent("Indeed");
+    expect(screen.getByLabelText("状态")).toHaveTextContent("已投递");
+    expect(screen.getByLabelText("职位链接")).toHaveValue(
       "https://example.com/job",
     );
-    expect(screen.getByLabelText("Salary Range")).toHaveTextContent(
+    expect(screen.getByLabelText("薪资范围")).toHaveTextContent(
       "100,000 - 110,000",
     );
   });
@@ -467,7 +468,7 @@ describe("AddJob Component - Edit Mode", () => {
   it("pre-fills a free-text salary that matches no suggestion", async () => {
     await renderEditMode({ salaryRange: "$190k – $220k" } as Partial<JobResponse>);
 
-    expect(screen.getByLabelText("Salary Range")).toHaveTextContent(
+    expect(screen.getByLabelText("薪资范围")).toHaveTextContent(
       "$190k – $220k",
     );
   });
@@ -477,7 +478,7 @@ describe("AddJob Component - Edit Mode", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("add-job-dialog-title")).toHaveTextContent(
-        "Edit Job",
+        "编辑职位",
       );
     });
 
@@ -497,7 +498,7 @@ describe("AddJob Component - Edit Mode", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("add-job-dialog-title")).toHaveTextContent(
-        "Edit Job",
+        "编辑职位",
       );
     });
 
@@ -556,23 +557,23 @@ describe("AddJob Component - Error Handling", () => {
     const user = userEvent.setup({ skipHover: true });
     await user.click(screen.getByTestId("add-job-btn"));
 
-    const jobTitleInput = screen.getByRole("combobox", { name: /job title/i });
+    const jobTitleInput = screen.getByRole("combobox", { name: /职位名称/i });
     await user.click(jobTitleInput);
     await user.click(screen.getByRole("option", { name: "Full Stack Developer" }));
 
-    const companyInput = screen.getByRole("combobox", { name: /company/i });
+    const companyInput = screen.getByRole("combobox", { name: /公司/i });
     await user.click(companyInput);
     await user.click(screen.getByRole("option", { name: "Amazon" }));
 
-    const locationInput = screen.getByRole("combobox", { name: /job location/i });
+    const locationInput = screen.getByRole("combobox", { name: /工作地点/i });
     await user.click(locationInput);
     await user.click(screen.getByRole("option", { name: "Remote" }));
 
-    const sourceInput = screen.getByRole("combobox", { name: /job source/i });
+    const sourceInput = screen.getByRole("combobox", { name: /职位来源/i });
     await user.click(sourceInput);
     await user.click(screen.getByRole("option", { name: "Indeed" }));
 
-    const editableDiv = screen.getByLabelText("Job Description");
+    const editableDiv = screen.getByLabelText("职位描述");
     const pTag = editableDiv.querySelector("div > p");
     if (pTag) {
       pTag.textContent = "Some description";
@@ -583,7 +584,7 @@ describe("AddJob Component - Error Handling", () => {
     await waitFor(() => {
       expect(toastActionResult).toHaveBeenCalledWith(
         expect.objectContaining({ success: false, message: "Failed to save job" }),
-        expect.objectContaining({ success: "Job has been created successfully" }),
+        expect.objectContaining({ success: "职位已创建" }),
       );
     });
   }, 10000);
@@ -617,12 +618,12 @@ describe("AddJob Component - Status Order", () => {
     );
     await user.click(screen.getByTestId("add-job-btn"));
 
-    const status = screen.getByLabelText("Status");
-    expect(status).toHaveTextContent("Draft");
+    const status = screen.getByLabelText("状态");
+    expect(status).toHaveTextContent("草稿");
     await user.click(status);
-    await user.click(screen.getByRole("option", { name: "Applied" }));
-    expect(screen.getByLabelText("Date Applied")).toHaveTextContent(
-      format(new Date(), "PP"),
+    await user.click(screen.getByRole("option", { name: "已投递" }));
+    expect(screen.getByLabelText("投递日期")).toHaveTextContent(
+      format(new Date(), "yyyy年M月d日"),
     );
   });
 });

@@ -50,7 +50,7 @@ function BoardsTable({
 
     if (res.success) {
       onWatched(row.token, res.data.companyId);
-      toastSuccess(`${row.name} added to your watchlist`);
+      toastSuccess(`${row.name}已加入关注列表`);
       return;
     }
     onUnwatched(row.token);
@@ -70,7 +70,7 @@ function BoardsTable({
     setBusy(null);
 
     if (res.success) {
-      toastSuccess(`${row.name} removed from your watchlist`);
+      toastSuccess(`${row.name}已从关注列表移除`);
     } else {
       onWatched(row.token, companyId);
       toastError(res.message);
@@ -81,10 +81,10 @@ function BoardsTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead className="hidden sm:table-cell">Token</TableHead>
-          <TableHead className="hidden sm:table-cell">Provider</TableHead>
-          <TableHead className="text-right">Watch</TableHead>
+          <TableHead>名称</TableHead>
+          <TableHead className="hidden sm:table-cell">标识</TableHead>
+          <TableHead className="hidden sm:table-cell">服务商</TableHead>
+          <TableHead className="text-right">关注</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -99,8 +99,8 @@ function BoardsTable({
                     href={companyBoardUrl(provider, row)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Open ${row.name} job board`}
-                    title="Open job board"
+                    aria-label={`打开${row.name}的招聘平台`}
+                    title="打开招聘平台"
                     className="text-muted-foreground hover:text-foreground"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -120,13 +120,13 @@ function BoardsTable({
                     size="sm"
                     variant="ghost"
                     disabled={busy === row.token}
-                    aria-label={`Unwatch ${row.name}`}
+                    aria-label={`取消关注${row.name}`}
                     onClick={() => unwatch(row)}
                     className="group text-emerald-600 dark:text-emerald-400"
                   >
                     <Check className="h-3.5 w-3.5 group-hover:hidden" />
-                    <span className="group-hover:hidden">Watching</span>
-                    <span className="hidden group-hover:inline">Unwatch</span>
+                    <span className="group-hover:hidden">已关注</span>
+                    <span className="hidden group-hover:inline">取消关注</span>
                   </Button>
                 ) : (
                   <Button
@@ -134,10 +134,10 @@ function BoardsTable({
                     size="sm"
                     variant="outline"
                     disabled={busy === row.token}
-                    aria-label={`Watch ${row.name}`}
+                    aria-label={`关注${row.name}`}
                     onClick={() => watch(row)}
                   >
-                    Watch
+                    关注
                   </Button>
                 )}
               </TableCell>

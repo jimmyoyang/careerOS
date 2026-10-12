@@ -114,7 +114,7 @@ describe("CompanyDetails – header", () => {
   it("goes back using browser history", async () => {
     render(<CompanyDetails details={makeDetails()} />);
 
-    await user.click(screen.getByRole("button", { name: /back to companies/i }));
+    await user.click(screen.getByRole("button", { name: /返回公司列表/i }));
 
     expect(router.back).toHaveBeenCalled();
   });
@@ -123,7 +123,7 @@ describe("CompanyDetails – header", () => {
     (setCompanyWatched as any).mockResolvedValue({ success: true });
     render(<CompanyDetails details={makeDetails()} />);
 
-    await user.click(screen.getByRole("button", { name: /^watch$/i }));
+    await user.click(screen.getByRole("button", { name: /^关注$/i }));
 
     expect(setCompanyWatched).toHaveBeenCalledWith("co1", true);
     await waitFor(() => expect(router.refresh).toHaveBeenCalled());
@@ -132,31 +132,31 @@ describe("CompanyDetails – header", () => {
   it("offers Unwatch for a watched company", () => {
     render(<CompanyDetails details={makeDetails({ watched: true })} />);
 
-    expect(screen.getByRole("button", { name: /unwatch/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /取消关注/i })).toBeInTheDocument();
   });
 
   it("opens the edit dialog", async () => {
     render(<CompanyDetails details={makeDetails()} />);
 
-    await user.click(screen.getByRole("button", { name: /^edit$/i }));
+    await user.click(screen.getByRole("button", { name: /^编辑$/i }));
 
     expect(
-      await screen.findByRole("heading", { name: "Edit Company" }),
+      await screen.findByRole("heading", { name: "编辑公司" }),
     ).toBeInTheDocument();
   });
 
   it("reopens Edit with the saved values after an abandoned change", async () => {
     render(<CompanyDetails details={makeDetails({ industry: "Payments" })} />);
 
-    await user.click(screen.getByRole("button", { name: /^edit$/i }));
-    const industry = await screen.findByLabelText("Industry");
+    await user.click(screen.getByRole("button", { name: /^编辑$/i }));
+    const industry = await screen.findByLabelText("行业");
     await user.clear(industry);
     await user.type(industry, "Half typed");
     await user.keyboard("{Escape}");
 
-    await user.click(screen.getByRole("button", { name: /^edit$/i }));
+    await user.click(screen.getByRole("button", { name: /^编辑$/i }));
 
-    expect(await screen.findByLabelText("Industry")).toHaveValue("Payments");
+    expect(await screen.findByLabelText("行业")).toHaveValue("Payments");
   });
 
   it("lists only the external links the company has", async () => {
@@ -166,16 +166,16 @@ describe("CompanyDetails – header", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: /more links/i }));
+    await user.click(screen.getByRole("button", { name: /更多链接/i }));
 
     expect(
-      screen.getByRole("menuitem", { name: /open website/i }),
+      screen.getByRole("menuitem", { name: /打开网站/i }),
     ).toHaveAttribute("href", "https://stripe.com");
     expect(
-      screen.queryByRole("menuitem", { name: /open careers page/i }),
+      screen.queryByRole("menuitem", { name: /打开招聘页面/i }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("menuitem", { name: /open job board/i }),
+      screen.queryByRole("menuitem", { name: /打开招聘平台/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -186,10 +186,10 @@ describe("CompanyDetails – header", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: /more links/i }));
+    await user.click(screen.getByRole("button", { name: /更多链接/i }));
 
     expect(
-      screen.getByRole("menuitem", { name: /open job board/i }).getAttribute("href"),
+      screen.getByRole("menuitem", { name: /打开招聘平台/i }).getAttribute("href"),
     ).toMatch(/\/stripe$/);
   });
 
@@ -197,7 +197,7 @@ describe("CompanyDetails – header", () => {
     render(<CompanyDetails details={makeDetails()} />);
 
     expect(
-      screen.queryByRole("button", { name: /more links/i }),
+      screen.queryByRole("button", { name: /更多链接/i }),
     ).not.toBeInTheDocument();
   });
 });
@@ -215,17 +215,17 @@ describe("CompanyDetails – summary card", () => {
       />,
     );
 
-    expect(fact("Watchlist")).toHaveTextContent(/^Watched/);
+    expect(fact("关注列表")).toHaveTextContent(/^已关注/);
   });
 
   it("shows Not watched and em dashes for missing attributes", () => {
     render(<CompanyDetails details={makeDetails()} />);
 
-    expect(fact("Watchlist")).toHaveTextContent("Not watched");
-    expect(fact("Board")).toHaveTextContent("—");
-    expect(fact("Industry")).toHaveTextContent("—");
-    expect(fact("Website")).toHaveTextContent("—");
-    expect(fact("Careers page")).toHaveTextContent("—");
+    expect(fact("关注列表")).toHaveTextContent("未关注");
+    expect(fact("招聘平台")).toHaveTextContent("—");
+    expect(fact("行业")).toHaveTextContent("—");
+    expect(fact("网站")).toHaveTextContent("—");
+    expect(fact("招聘页面")).toHaveTextContent("—");
   });
 
   it("counts jobs, applied jobs and distinct contacts", () => {
@@ -245,9 +245,9 @@ describe("CompanyDetails – summary card", () => {
       />,
     );
 
-    expect(fact("Jobs")).toHaveTextContent("2");
-    expect(fact("Applied")).toHaveTextContent("1");
-    expect(fact("Contacts")).toHaveTextContent("2");
+    expect(fact("职位")).toHaveTextContent("2");
+    expect(fact("已投递")).toHaveTextContent("1");
+    expect(fact("联系人")).toHaveTextContent("2");
   });
 });
 
@@ -274,19 +274,19 @@ describe("CompanyDetails – delete", () => {
   it("explains instead of confirming when the company has jobs", async () => {
     render(<CompanyDetails details={makeDetails({ jobs: [job] })} />);
 
-    await user.click(screen.getByRole("button", { name: /^delete$/i }));
+    await user.click(screen.getByRole("button", { name: /^删除$/i }));
 
-    expect(await screen.findByText("Associated jobs exist!")).toBeInTheDocument();
+    expect(await screen.findByText("存在关联职位！")).toBeInTheDocument();
     expect(deleteCompanyById).not.toHaveBeenCalled();
   });
 
   it("still blocks when every job was dismissed, and says so", async () => {
     render(<CompanyDetails details={makeDetails({ dismissedJobsCount: 3 })} />);
 
-    await user.click(screen.getByRole("button", { name: /^delete$/i }));
+    await user.click(screen.getByRole("button", { name: /^删除$/i }));
 
-    expect(await screen.findByText("Associated jobs exist!")).toBeInTheDocument();
-    expect(screen.getByText(/3 of them were dismissed by automations/)).toBeInTheDocument();
+    expect(await screen.findByText("存在关联职位！")).toBeInTheDocument();
+    expect(screen.getByText(/其中 3 个被自动化任务忽略/)).toBeInTheDocument();
   });
 
   it("deletes a company with no jobs and returns to the Library", async () => {
@@ -294,9 +294,9 @@ describe("CompanyDetails – delete", () => {
     searchParams = new URLSearchParams("scope=watchlist");
     render(<CompanyDetails details={makeDetails()} />);
 
-    await user.click(screen.getByRole("button", { name: /^delete$/i }));
+    await user.click(screen.getByRole("button", { name: /^删除$/i }));
     const dialog = await screen.findByRole("alertdialog");
-    await user.click(within(dialog).getByRole("button", { name: /delete/i }));
+    await user.click(within(dialog).getByRole("button", { name: /删除/i }));
 
     await waitFor(() => expect(deleteCompanyById).toHaveBeenCalledWith("co1"));
     expect(router.push).toHaveBeenCalledWith(
@@ -311,9 +311,9 @@ describe("CompanyDetails – delete", () => {
     });
     render(<CompanyDetails details={makeDetails()} />);
 
-    await user.click(screen.getByRole("button", { name: /^delete$/i }));
+    await user.click(screen.getByRole("button", { name: /^删除$/i }));
     const dialog = await screen.findByRole("alertdialog");
-    await user.click(within(dialog).getByRole("button", { name: /delete/i }));
+    await user.click(within(dialog).getByRole("button", { name: /删除/i }));
 
     await waitFor(() =>
       expect(toastError).toHaveBeenCalledWith(
@@ -346,7 +346,7 @@ describe("CompanyDetails – Jobs tab", () => {
   it("opens on the Jobs tab with a count badge", () => {
     render(<CompanyDetails details={makeDetails({ jobs: [job(), job({ id: "j2" })] })} />);
 
-    const tab = screen.getByRole("tab", { name: /jobs/i });
+    const tab = screen.getByRole("tab", { name: /职位/i });
     expect(tab).toHaveAttribute("data-state", "active");
     expect(tab).toHaveTextContent("2");
   });
@@ -363,7 +363,7 @@ describe("CompanyDetails – Jobs tab", () => {
     render(<CompanyDetails details={makeDetails({ jobs: [job()] })} />);
 
     const row = screen.getByRole("row", { name: /backend engineer/i });
-    expect(within(row).getByText("Applied")).toBeInTheDocument();
+    expect(within(row).getByText("已投递")).toBeInTheDocument();
     expect(within(row).getByText("Remote")).toBeInTheDocument();
     expect(within(row).getByText("LinkedIn")).toBeInTheDocument();
     expect(within(row).getByTestId("circular-score")).toHaveTextContent("82%");
@@ -386,7 +386,7 @@ describe("CompanyDetails – Jobs tab", () => {
     );
 
     const row = screen.getByRole("row", { name: /backend engineer/i });
-    expect(within(row).getByText("Not applied")).toBeInTheDocument();
+    expect(within(row).getByText("未投递")).toBeInTheDocument();
     expect(within(row).queryByTestId("circular-score")).not.toBeInTheDocument();
   });
 
@@ -394,9 +394,9 @@ describe("CompanyDetails – Jobs tab", () => {
     render(<CompanyDetails details={makeDetails()} />);
 
     const panel = screen.getByRole("tabpanel");
-    expect(within(panel).getByText("No jobs at this company yet")).toBeInTheDocument();
+    expect(within(panel).getByText("该公司暂无职位")).toBeInTheDocument();
     expect(within(panel).queryByRole("button")).not.toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /jobs/i })).toHaveTextContent(/^Jobs$/);
+    expect(screen.getByRole("tab", { name: /职位/i })).toHaveTextContent(/^职位$/);
   });
 });
 
@@ -445,8 +445,8 @@ describe("CompanyDetails – Contacts tab", () => {
   it("shows only the sections that have people", () => {
     render(<CompanyDetails details={makeDetails({ currentContacts: [dave] })} />);
 
-    expect(screen.getByRole("heading", { name: "Works here" })).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Worked with you here" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "在此任职" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "曾与你共事" })).not.toBeInTheDocument();
   });
 
   it("drops the Company column only in Works here", () => {
@@ -456,7 +456,7 @@ describe("CompanyDetails – Contacts tab", () => {
       />,
     );
 
-    expect(screen.getAllByRole("columnheader", { name: "Company" })).toHaveLength(1);
+    expect(screen.getAllByRole("columnheader", { name: "公司" })).toHaveLength(1);
   });
 
   it("lists someone in both groups twice but counts them once", () => {
@@ -467,24 +467,24 @@ describe("CompanyDetails – Contacts tab", () => {
     );
 
     expect(screen.getAllByText("Dave Patel")).toHaveLength(2);
-    expect(screen.getByRole("tab", { name: /contacts/i })).toHaveTextContent("1");
-    expect(fact("Contacts")).toHaveTextContent("1");
+    expect(screen.getByRole("tab", { name: /联系人/i })).toHaveTextContent("1");
+    expect(fact("联系人")).toHaveTextContent("1");
   });
 
   it("offers Add Contact from the empty state and loads the pickers once", async () => {
     render(<CompanyDetails details={makeDetails()} />);
 
     const panel = screen.getByRole("tabpanel");
-    expect(within(panel).getByText("No contacts at this company yet")).toBeInTheDocument();
+    expect(within(panel).getByText("该公司暂无联系人")).toBeInTheDocument();
 
-    await user.click(within(panel).getByRole("button", { name: "Add Contact" }));
+    await user.click(within(panel).getByRole("button", { name: "添加联系人" }));
     expect(
-      await screen.findByRole("combobox", { name: /^company$/i }),
+      await screen.findByRole("combobox", { name: /^公司$/i }),
     ).toHaveTextContent("Stripe");
 
     await user.keyboard("{Escape}");
-    await user.click(within(panel).getByRole("button", { name: "Add Contact" }));
-    await screen.findByRole("combobox", { name: /^company$/i });
+    await user.click(within(panel).getByRole("button", { name: "添加联系人" }));
+    await screen.findByRole("combobox", { name: /^公司$/i });
 
     expect(getAllCompanies).toHaveBeenCalledTimes(1);
   });
@@ -493,21 +493,21 @@ describe("CompanyDetails – Contacts tab", () => {
     (getContactById as any).mockResolvedValue(dave);
     render(<CompanyDetails details={makeDetails({ currentContacts: [dave] })} />);
 
-    await user.click(screen.getByRole("button", { name: /toggle menu/i }));
-    await user.click(await screen.findByRole("menuitem", { name: /edit contact/i }));
+    await user.click(screen.getByRole("button", { name: /打开菜单/i }));
+    await user.click(await screen.findByRole("menuitem", { name: /编辑联系人/i }));
 
     expect(getContactById).toHaveBeenCalledWith("c1");
-    expect(await screen.findByRole("heading", { name: "Edit Contact" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "编辑联系人" })).toBeInTheDocument();
   });
 
   it("refreshes the page after deleting a contact", async () => {
     (deleteContactById as any).mockResolvedValue({ success: true });
     render(<CompanyDetails details={makeDetails({ currentContacts: [dave] })} />);
 
-    await user.click(screen.getByRole("button", { name: /toggle menu/i }));
-    await user.click(await screen.findByRole("menuitem", { name: /delete/i }));
+    await user.click(screen.getByRole("button", { name: /打开菜单/i }));
+    await user.click(await screen.findByRole("menuitem", { name: /删除/i }));
     const dialog = await screen.findByRole("alertdialog");
-    await user.click(within(dialog).getByRole("button", { name: /delete/i }));
+    await user.click(within(dialog).getByRole("button", { name: /删除/i }));
 
     await waitFor(() => expect(router.refresh).toHaveBeenCalled());
   });

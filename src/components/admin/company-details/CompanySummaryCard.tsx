@@ -48,10 +48,10 @@ export function CompanySummaryCard({
     <Card data-testid="company-summary">
       <CardContent className="pt-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Fact label="Watchlist">
+          <Fact label="关注列表">
             {company.watched ? (
               <>
-                Watched
+                已关注
                 {company.watchedAt && (
                   <span className="block text-sm font-normal text-muted-foreground">
                     {formatDistanceToNow(new Date(company.watchedAt), {
@@ -61,22 +61,22 @@ export function CompanySummaryCard({
                 )}
               </>
             ) : (
-              "Not watched"
+              "未关注"
             )}
           </Fact>
-          <Fact label="Board">
+          <Fact label="招聘平台">
             <BoardCell company={company} />
           </Fact>
-          <Fact label="Industry">{company.industry || "—"}</Fact>
-          <Fact label="Website">
+          <Fact label="行业">{company.industry || "—"}</Fact>
+          <Fact label="网站">
             <HostLink url={company.websiteUrl} />
           </Fact>
-          <Fact label="Careers page">
+          <Fact label="招聘页面">
             <HostLink url={company.careersUrl} />
           </Fact>
-          <Fact label="Jobs">{jobsCount}</Fact>
-          <Fact label="Applied">{appliedCount}</Fact>
-          <Fact label="Contacts">{contactsCount}</Fact>
+          <Fact label="职位">{jobsCount}</Fact>
+          <Fact label="已投递">{appliedCount}</Fact>
+          <Fact label="联系人">{contactsCount}</Fact>
         </div>
       </CardContent>
     </Card>

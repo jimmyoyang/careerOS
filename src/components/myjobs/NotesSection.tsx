@@ -51,7 +51,7 @@ export function NotesSection({
   const handleDelete = async () => {
     const result = await deleteNote(noteIdToDelete);
     toastActionResult(result, {
-      success: "Note deleted successfully",
+      success: "笔记已删除",
       onSuccess: () => loadNotes(),
     });
   };
@@ -81,10 +81,10 @@ export function NotesSection({
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
             {notes.length === 0
-              ? "Notes"
+              ? "笔记"
               : notes.length === 1
-                ? "1 note on this job"
-                : `${notes.length} notes on this job`}
+                ? "该职位有 1 条笔记"
+                : `该职位有 ${notes.length} 条笔记`}
           </span>
           <Button
             variant="outline"
@@ -93,12 +93,12 @@ export function NotesSection({
             onClick={handleAddNote}
           >
             <PlusCircle className="h-3.5 w-3.5" />
-            New Note
+            新建笔记
           </Button>
         </div>
         <div className="mt-3 space-y-3">
           {notes.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No notes yet.</p>
+            <p className="text-sm text-muted-foreground">暂无笔记。</p>
           ) : (
             notes.map((note) => (
               <NoteCard
@@ -120,7 +120,7 @@ export function NotesSection({
         onSaved={handleSaved}
       />
       <DeleteAlertDialog
-        pageTitle="note"
+        pageTitle="笔记"
         open={deleteAlertOpen}
         onOpenChange={setDeleteAlertOpen}
         onDelete={handleDelete}

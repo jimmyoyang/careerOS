@@ -40,7 +40,7 @@ export function ResumeHeader({
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-2">
-        <Button title="Go Back" size="sm" variant="outline" onClick={onBack}>
+        <Button title="返回" size="sm" variant="outline" onClick={onBack}>
           <ArrowLeft />
         </Button>
         <CardTitle>
@@ -55,7 +55,7 @@ export function ResumeHeader({
         </CardTitle>
         {isDefault && (
           <Badge className="border-transparent bg-green-600 text-white hover:bg-green-600/90">
-            Default
+            默认
           </Badge>
         )}
       </div>
@@ -69,7 +69,7 @@ export function ResumeHeader({
         >
           <Sparkles className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Review
+            评估
           </span>
         </Button>
         <DropdownMenu>
@@ -81,7 +81,7 @@ export function ResumeHeader({
           <DropdownMenuContent align="end">
             <DropdownMenuItem className="cursor-pointer" onClick={onExport}>
               <FileDown className="h-4 w-4 mr-2" />
-              Export to PDF
+              导出 PDF
             </DropdownMenuItem>
             {!isDefault && (
               <DropdownMenuItem
@@ -89,7 +89,7 @@ export function ResumeHeader({
                 onClick={() => {
                   if (!hasMinResumeSections(resume.ResumeSections?.length)) {
                     warnInsufficientResumeSections(
-                      "setting this resume as default",
+                      "将这份简历设为默认",
                     );
                     return;
                   }
@@ -97,7 +97,7 @@ export function ResumeHeader({
                 }}
               >
                 <Star className="h-4 w-4 mr-2" />
-                Set as default
+                设为默认
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>

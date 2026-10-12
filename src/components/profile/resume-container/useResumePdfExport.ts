@@ -59,7 +59,7 @@ export function useResumePdfExport(resume: Resume) {
       method: "POST",
       body: formData,
     });
-    if (!res.ok) throw new Error("Upload failed");
+    if (!res.ok) throw new Error("上传失败");
     router.refresh();
   };
 
@@ -69,8 +69,8 @@ export function useResumePdfExport(resume: Resume) {
   ) => {
     if (!canExportResume(resume)) {
       toastError(
-        "Add your contact info and at least one section (Summary, Experience, or Education) before exporting.",
-        "Nothing to export",
+        "请先添加联系方式和至少一个内容模块（个人简介、工作经历或教育经历），再导出。",
+        "暂无可导出的内容",
       );
       return;
     }
@@ -89,13 +89,13 @@ export function useResumePdfExport(resume: Resume) {
       if (!resume.FileId) {
         triggerDownload(blob, filename);
         await uploadPdfAsAttachment(blob, filename, false);
-        toastSuccess("Saved to Downloads and attached to this resume.", "PDF exported");
+        toastSuccess("已保存到下载文件夹，并添加为此简历的附件。", "PDF 已导出");
       } else {
         setPendingPdf({ blob, filename });
         setShowAttachConfirm(true);
       }
     } catch {
-      toastError("Failed to generate PDF. Please try again.");
+      toastError("生成 PDF 失败，请重试。");
     } finally {
       setIsExporting(false);
     }
@@ -110,12 +110,12 @@ export function useResumePdfExport(resume: Resume) {
       triggerDownload(blob, filename);
       if (choice === "replace") {
         await uploadPdfAsAttachment(blob, filename, true);
-        toastSuccess("Saved to Downloads and attachment replaced.", "PDF exported");
+        toastSuccess("已保存到下载文件夹，并替换原有附件。", "PDF 已导出");
       } else {
-        toastSuccess("Saved to your Downloads folder.", "PDF exported");
+        toastSuccess("已保存到下载文件夹。", "PDF 已导出");
       }
     } catch {
-      toastError("Failed to upload PDF. Please try again.");
+      toastError("上传 PDF 失败，请重试。");
     } finally {
       setIsExporting(false);
       setPendingPdf(null);

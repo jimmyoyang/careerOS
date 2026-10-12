@@ -41,17 +41,17 @@ function TagsTable({ tags, reloadTags }: TagsTableProps) {
 
     if (jobCount > 0 || questionCount > 0 || skillCount > 0) {
       const links = [
-        jobCount > 0 ? `${jobCount} job(s)` : "",
-        questionCount > 0 ? `${questionCount} question(s)` : "",
-        skillCount > 0 ? `${skillCount} skill(s)` : "",
+        jobCount > 0 ? `${jobCount} 个职位` : "",
+        questionCount > 0 ? `${questionCount} 道题目` : "",
+        skillCount > 0 ? `${skillCount} 项技能` : "",
       ]
         .filter(Boolean)
-        .join(" and ");
+        .join("和");
 
       setAlert({
         openState: true,
-        title: "Skill is in use!",
-        description: `This skill is linked to ${links} and cannot be deleted.`,
+        title: "技能正在使用中！",
+        description: `该技能关联了${links}，无法删除。`,
         deleteAction: false,
       });
     } else {
@@ -67,7 +67,7 @@ function TagsTable({ tags, reloadTags }: TagsTableProps) {
     if (!tagId) return;
     const { success, message } = await deleteTagById(tagId);
     if (success) {
-      toastSuccess("Skill tag has been deleted successfully");
+      toastSuccess("技能标签已删除");
       reloadTags();
     } else {
       toastError(message);
@@ -79,11 +79,11 @@ function TagsTable({ tags, reloadTags }: TagsTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Skill Label</TableHead>
-            <TableHead className="hidden sm:table-cell">Value</TableHead>
-            <TableHead># Jobs</TableHead>
-            <TableHead># Questions</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>技能名称</TableHead>
+            <TableHead className="hidden sm:table-cell">标识值</TableHead>
+            <TableHead>职位数量</TableHead>
+            <TableHead>题目数量</TableHead>
+            <TableHead>操作</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -104,17 +104,17 @@ function TagsTable({ tags, reloadTags }: TagsTableProps) {
                   <DropdownMenuTrigger asChild>
                     <Button aria-haspopup="true" size="icon" variant="ghost">
                       <MoreVertical className="h-4 w-4" />
-                      <span className="sr-only">Toggle menu</span>
+                      <span className="sr-only">打开菜单</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>操作</DropdownMenuLabel>
                     <DropdownMenuItem
                       className="text-red-600 cursor-pointer"
                       onClick={() => onDeleteTag(tag)}
                     >
                       <Trash className="mr-2 h-4 w-4" />
-                      Delete
+                      删除
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -124,7 +124,7 @@ function TagsTable({ tags, reloadTags }: TagsTableProps) {
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="skill"
+        pageTitle="技能"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteTag(alert.itemId)}

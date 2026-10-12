@@ -36,8 +36,8 @@ function pickFile(name = "backup.zip") {
 describe("DataSettings", () => {
   it("warns that the export holds no credentials but does hold full text", () => {
     render(<DataSettings />);
-    expect(screen.getByText(/no API keys/i)).toBeInTheDocument();
-    expect(screen.getByText(/full text/i)).toBeInTheDocument();
+    expect(screen.getByText(/不含 API 密钥/i)).toBeInTheDocument();
+    expect(screen.getByText(/完整内容/i)).toBeInTheDocument();
   });
 
   it("shows the backup preview after a preflight, without importing", async () => {
@@ -45,7 +45,7 @@ describe("DataSettings", () => {
     render(<DataSettings />);
 
     await userEvent.upload(
-      screen.getByLabelText(/backup file/i),
+      screen.getByLabelText(/备份文件/i),
       pickFile(),
     );
 
@@ -59,36 +59,36 @@ describe("DataSettings", () => {
   it("surfaces a source-email mismatch prominently", async () => {
     mockFetch({ ...preflight, emailMatches: false });
     render(<DataSettings />);
-    await userEvent.upload(screen.getByLabelText(/backup file/i), pickFile());
+    await userEvent.upload(screen.getByLabelText(/备份文件/i), pickFile());
     await waitFor(() =>
-      expect(screen.getByText(/different account/i)).toBeInTheDocument(),
+      expect(screen.getByText(/其他账号/i)).toBeInTheDocument(),
     );
   });
 
   it("states what will be destroyed before the import runs", async () => {
     mockFetch(preflight);
     render(<DataSettings />);
-    await userEvent.upload(screen.getByLabelText(/backup file/i), pickFile());
-    await waitFor(() => screen.getByRole("button", { name: /replace my data/i }));
+    await userEvent.upload(screen.getByLabelText(/备份文件/i), pickFile());
+    await waitFor(() => screen.getByRole("button", { name: /使用此备份替换我的数据/i }));
 
-    await userEvent.click(screen.getByRole("button", { name: /replace my data/i }));
+    await userEvent.click(screen.getByRole("button", { name: /使用此备份替换我的数据/i }));
 
-    expect(await screen.findByText(/4 jobs/i)).toBeInTheDocument();
+    expect(await screen.findByText(/4 条职位/i)).toBeInTheDocument();
   });
 
   it("sends confirmWipe only after the confirmation is accepted", async () => {
     const fetchMock = mockFetch(preflight);
     render(<DataSettings />);
-    await userEvent.upload(screen.getByLabelText(/backup file/i), pickFile());
-    await waitFor(() => screen.getByRole("button", { name: /replace my data/i }));
-    await userEvent.click(screen.getByRole("button", { name: /replace my data/i }));
+    await userEvent.upload(screen.getByLabelText(/备份文件/i), pickFile());
+    await waitFor(() => screen.getByRole("button", { name: /使用此备份替换我的数据/i }));
+    await userEvent.click(screen.getByRole("button", { name: /使用此备份替换我的数据/i }));
 
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({ counts: { Job: 12 }, filesWritten: 2 }),
     });
     await userEvent.click(
-      screen.getByRole("button", { name: /delete everything and import/i }),
+      screen.getByRole("button", { name: /删除全部数据并导入/i }),
     );
 
     await waitFor(() => {
@@ -103,7 +103,7 @@ describe("DataSettings", () => {
   it("shows the error message the route returned", async () => {
     mockFetch({ error: "This backup was made by a different version of JobSync." }, false);
     render(<DataSettings />);
-    await userEvent.upload(screen.getByLabelText(/backup file/i), pickFile());
+    await userEvent.upload(screen.getByLabelText(/备份文件/i), pickFile());
     const { toastError } = await import("@/lib/toast");
     await waitFor(() =>
       expect(toastError).toHaveBeenCalledWith(
@@ -126,8 +126,8 @@ describe("DataSettings", () => {
       },
     ]);
     render(<DataSettings />);
-    expect(await screen.findByText(/undo an import/i)).toBeInTheDocument();
-    expect(screen.getByText(/47 jobs, 3 resumes/i)).toBeInTheDocument();
+    expect(await screen.findByText(/撤销导入/i)).toBeInTheDocument();
+    expect(screen.getByText(/47 个岗位， 3 份简历/i)).toBeInTheDocument();
   });
 
   it("posts the snapshot id only after the rollback is confirmed", async () => {
@@ -141,7 +141,7 @@ describe("DataSettings", () => {
       },
     ]);
     render(<DataSettings />);
-    await userEvent.click(await screen.findByRole("button", { name: /restore/i }));
+    await userEvent.click(await screen.findByRole("button", { name: /恢复/i }));
 
     const rollbackCallBefore = fetchMock.mock.calls.find(
       (c) => c[0] === "/api/backup/rollback",
@@ -152,7 +152,7 @@ describe("DataSettings", () => {
       ok: true,
       json: async () => ({ counts: { Job: 47 }, filesWritten: 3, snapshotPath: "x" }),
     });
-    await userEvent.click(screen.getByRole("button", { name: /^roll back$/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^回滚$/i }));
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(

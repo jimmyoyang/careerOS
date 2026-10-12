@@ -112,7 +112,7 @@ export function TaskForm({
     startTransition(async () => {
       const result = editTask ? await updateTask(data) : await createTask(data);
       toastActionResult<Task>(result, {
-        success: `Task has been ${editTask ? "updated" : "created"} successfully`,
+        success: `任务已${editTask ? "更新" : "创建"}`,
         onSuccess: (task) => {
           reset();
           setDialogOpen(false);
@@ -131,10 +131,10 @@ export function TaskForm({
     onSubmit(data, true),
   );
 
-  const pageTitle = editTask ? "Edit Task" : "Add Task";
+  const pageTitle = editTask ? "编辑任务" : "添加任务";
   const pageDescription = editTask
-    ? "Update the details of this task."
-    : "Add a new task to track.";
+    ? "更新任务详情。"
+    : "添加要跟踪的新任务。";
 
   const closeDialog = () => {
     reset();
@@ -164,9 +164,9 @@ export function TaskForm({
                   name="title"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Title *</FormLabel>
+                      <FormLabel>标题 *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter task title" {...field} />
+                        <Input placeholder="输入任务标题" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -181,7 +181,7 @@ export function TaskForm({
                   name="activityTypeId"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Activity Type</FormLabel>
+                      <FormLabel>活动类型</FormLabel>
                       <FormControl>
                         <Combobox
                           options={activityTypes}
@@ -205,9 +205,9 @@ export function TaskForm({
                   name="status"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Status</FormLabel>
+                      <FormLabel>状态</FormLabel>
                       <SelectFormCtrl
-                        label="Task Status"
+                        label="任务状态"
                         options={statusOptions}
                         field={field}
                       />
@@ -224,7 +224,7 @@ export function TaskForm({
                   name="priority"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Priority: {priorityValue}</FormLabel>
+                      <FormLabel>优先级： {priorityValue}</FormLabel>
                       <FormControl>
                         <Slider
                           min={0}
@@ -236,8 +236,8 @@ export function TaskForm({
                         />
                       </FormControl>
                       <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Low (0)</span>
-                        <span>High (10)</span>
+                        <span>低（0）</span>
+                        <span>高（10）</span>
                       </div>
                       <FormMessage />
                     </FormItem>
@@ -252,7 +252,7 @@ export function TaskForm({
                   name="percentComplete"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>% Complete: {percentCompleteValue}%</FormLabel>
+                      <FormLabel>完成度： {percentCompleteValue}%</FormLabel>
                       <FormControl>
                         <Slider
                           min={0}
@@ -280,7 +280,7 @@ export function TaskForm({
                   name="dueDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Due Date</FormLabel>
+                      <FormLabel>截止日期</FormLabel>
                       <DatePicker
                         field={field}
                         presets={true}
@@ -296,25 +296,25 @@ export function TaskForm({
               {editTask && (
                 <div className="flex flex-col gap-2">
                   <div>
-                    <p className="text-sm font-medium">Created</p>
+                    <p className="text-sm font-medium">创建时间</p>
                     <p className="text-sm text-muted-foreground">
                       {editTask.createdAt
                         ? format(
                             new Date(editTask.createdAt),
-                            "MMM d, yyyy h:mm a",
+                            "yyyy年M月d日 HH:mm",
                           )
-                        : "N/A"}
+                        : "暂无"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Updated</p>
+                    <p className="text-sm font-medium">更新时间</p>
                     <p className="text-sm text-muted-foreground">
                       {editTask.updatedAt
                         ? format(
                             new Date(editTask.updatedAt),
-                            "MMM d, yyyy h:mm a",
+                            "yyyy年M月d日 HH:mm",
                           )
-                        : "N/A"}
+                        : "暂无"}
                     </p>
                   </div>
                 </div>
@@ -327,7 +327,7 @@ export function TaskForm({
                   name="description"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>描述</FormLabel>
                       <FormControl>
                         <TiptapEditor field={field} />
                       </FormControl>
@@ -346,7 +346,7 @@ export function TaskForm({
                       className="mt-2 md:mt-0 w-full"
                       onClick={closeDialog}
                     >
-                      Cancel
+                      取消
                     </Button>
                   </div>
                   {onSaveAndStart && (
@@ -358,7 +358,7 @@ export function TaskForm({
                       disabled={isPending}
                       data-testid="save-and-start-task-btn"
                     >
-                      Save & Start
+                      保存并开始
                     </Button>
                   )}
                   <Button
@@ -366,7 +366,7 @@ export function TaskForm({
                     disabled={isPending}
                     data-testid="save-task-btn"
                   >
-                    Save
+                    保存
                     {isPending && (
                       <Loader className="h-4 w-4 shrink-0 spinner ml-2" />
                     )}

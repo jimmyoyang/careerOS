@@ -23,7 +23,7 @@ export function StepMatching({
       name="matchThreshold"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Match Threshold: {field.value}%</FormLabel>
+          <FormLabel>匹配阈值： {field.value}%</FormLabel>
           <FormControl>
             <Slider
               min={0}
@@ -34,9 +34,7 @@ export function StepMatching({
             />
           </FormControl>
           <FormDescription>
-            Only save listings whose AI match score reaches this threshold.
-            Analyzed listings that score below it are discarded — set it lower
-            to keep more.
+            仅保存 AI 匹配评分达到此阈值的岗位。低于阈值的已分析岗位会被丢弃，降低阈值可保留更多岗位。
           </FormDescription>
           <FormMessage />
         </FormItem>

@@ -42,7 +42,7 @@ import ResumeContainer from "@/components/profile/ResumeContainer";
 const resume: Resume = { id: "r1", title: "Senior Engineer Resume" };
 
 const clickReview = () =>
-  userEvent.click(screen.getByRole("button", { name: /^review$/i }));
+  userEvent.click(screen.getByRole("button", { name: /^评估$/ }));
 
 describe("ResumeContainer — Review button", () => {
   beforeEach(() => {
@@ -57,7 +57,7 @@ describe("ResumeContainer — Review button", () => {
 
     expect(chat.clear).toHaveBeenCalled();
     expect(chat.sendMessage).toHaveBeenCalledWith({
-      parts: [{ type: "text", text: "Review Senior Engineer Resume" }],
+      parts: [{ type: "text", text: "评估 Senior Engineer Resume" }],
     });
 
     // Opening first is what stops a failed clear from leaving a dead button.
@@ -83,17 +83,17 @@ describe("ResumeContainer — Review button", () => {
     await clickReview();
 
     expect(
-      screen.getByText(/waiting for your approval/i),
+      screen.getByText(/等待你确认/),
     ).toBeInTheDocument();
     expect(chat.clear).not.toHaveBeenCalled();
     expect(chat.sendMessage).not.toHaveBeenCalled();
 
     await userEvent.click(
-      screen.getByRole("button", { name: /clear and review/i }),
+      screen.getByRole("button", { name: /清空并评估/i }),
     );
     expect(chat.clear).toHaveBeenCalled();
     expect(chat.sendMessage).toHaveBeenCalledWith({
-      parts: [{ type: "text", text: "Review Senior Engineer Resume" }],
+      parts: [{ type: "text", text: "评估 Senior Engineer Resume" }],
     });
   });
 
@@ -101,7 +101,7 @@ describe("ResumeContainer — Review button", () => {
     chat.approvalPending = true;
     render(<ResumeContainer resume={resume} defaultResumeId={null} />);
     await clickReview();
-    await userEvent.click(screen.getByRole("button", { name: /^cancel$/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^取消$/ }));
 
     expect(chat.clear).not.toHaveBeenCalled();
     expect(chat.sendMessage).not.toHaveBeenCalled();

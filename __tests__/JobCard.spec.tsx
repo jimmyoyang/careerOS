@@ -64,16 +64,16 @@ describe("JobCard", () => {
 
   it("shows the applied date when present and 'Not applied' otherwise", () => {
     const { unmount } = renderCard(makeJob());
-    expect(screen.getByText("Jun 1, 2024")).toBeInTheDocument();
+    expect(screen.getByText("2024年6月1日")).toBeInTheDocument();
     unmount();
 
     renderCard(makeJob({ appliedDate: null as unknown as Date, applied: false }));
-    expect(screen.getByText("Not applied")).toBeInTheDocument();
+    expect(screen.getByText("未投递")).toBeInTheDocument();
   });
 
   it("shows Applied for an applied job with no date", () => {
     renderCard(makeJob({ appliedDate: null as unknown as Date, applied: true }));
-    expect(screen.queryByText("Not applied")).not.toBeInTheDocument();
+    expect(screen.queryByText("未投递")).not.toBeInTheDocument();
   });
 
   it("renders the match score, or a Match button when there is none", () => {
@@ -82,7 +82,7 @@ describe("JobCard", () => {
     unmount();
 
     renderCard(makeJob({ matchScore: null }));
-    expect(screen.getByRole("link", { name: /match/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /匹配/i })).toHaveAttribute(
       "href",
       "/dashboard/myjobs/job-1?tab=match&match=1",
     );
@@ -91,8 +91,8 @@ describe("JobCard", () => {
   it("shows a Dismissed badge for dismissed discovered jobs", () => {
     renderCard(makeJob({ discoveryStatus: "dismissed" }));
 
-    expect(screen.getByText("Dismissed")).toBeInTheDocument();
-    expect(screen.queryByText("Applied")).not.toBeInTheDocument();
+    expect(screen.getByText("已忽略")).toBeInTheDocument();
+    expect(screen.queryByText("已投递")).not.toBeInTheDocument();
   });
 
   it("shows an Expired badge for past-due draft jobs", () => {
@@ -103,7 +103,7 @@ describe("JobCard", () => {
       }),
     );
 
-    expect(screen.getByText("Expired")).toBeInTheDocument();
+    expect(screen.getByText("已过期")).toBeInTheDocument();
   });
 
   it("shows a notes count badge only when the job has notes", () => {

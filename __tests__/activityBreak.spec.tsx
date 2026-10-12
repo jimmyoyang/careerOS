@@ -68,7 +68,7 @@ describe("BreakModal", () => {
 
     // Started 5 minutes into a 15-minute break.
     expect(screen.getByText("10:00")).toBeInTheDocument();
-    expect(screen.getByText("Break")).toBeInTheDocument();
+    expect(screen.getByText("休息")).toBeInTheDocument();
   });
 
   it("counts overtime once the planned break is used up", () => {
@@ -85,7 +85,7 @@ describe("BreakModal", () => {
     renderModal();
 
     expect(screen.getByText("+05:00")).toBeInTheDocument();
-    expect(screen.getByText("Break over")).toBeInTheDocument();
+    expect(screen.getByText("休息结束")).toBeInTheDocument();
     expect(toastSuccess).toHaveBeenCalledTimes(1);
   });
 
@@ -97,8 +97,8 @@ describe("BreakModal", () => {
 
     expect(value.startBreak).not.toHaveBeenCalled();
     expect(
-      screen.getByRole("button", { name: "Start break" }),
-    ).toHaveTextContent("Start");
+      screen.getByRole("button", { name: "开始休息（播放按钮）" }),
+    ).toHaveTextContent("开始");
     // Full planned length, not counting down.
     expect(screen.getByText("15:00")).toBeInTheDocument();
   });
@@ -108,7 +108,7 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal();
-    await user.click(screen.getByRole("button", { name: "Start break" }));
+    await user.click(screen.getByRole("button", { name: "开始休息（播放按钮）" }));
 
     expect(value.startBreak).toHaveBeenCalledWith(15);
   });
@@ -118,12 +118,12 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal();
-    await user.click(screen.getByRole("button", { name: "30 min" }));
+    await user.click(screen.getByRole("button", { name: "30 分钟" }));
 
     expect(value.setBreakLength).not.toHaveBeenCalled();
     expect(screen.getByText("30:00")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Start break" }));
+    await user.click(screen.getByRole("button", { name: "开始休息（播放按钮）" }));
 
     expect(value.startBreak).toHaveBeenCalledWith(30);
   });
@@ -134,7 +134,7 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal({ onClose });
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", { name: "关闭" }));
 
     expect(onClose).toHaveBeenCalled();
     expect(value.startBreak).not.toHaveBeenCalled();
@@ -146,7 +146,7 @@ describe("BreakModal", () => {
     renderModal();
 
     expect(
-      screen.queryByRole("button", { name: "Close" }),
+      screen.queryByRole("button", { name: "关闭" }),
     ).not.toBeInTheDocument();
   });
 
@@ -156,8 +156,8 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal({ onClose });
-    const pause = screen.getByRole("button", { name: "Resume activity" });
-    expect(pause).toHaveTextContent("Resume");
+    const pause = screen.getByRole("button", { name: "继续活动（播放按钮）" });
+    expect(pause).toHaveTextContent("继续");
     await user.click(pause);
 
     expect(value.endBreak).toHaveBeenCalled();
@@ -170,7 +170,7 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal({ onClose });
-    await user.click(screen.getByRole("button", { name: "Resume Activity" }));
+    await user.click(screen.getByRole("button", { name: "继续活动" }));
 
     expect(value.endBreak).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
@@ -183,9 +183,9 @@ describe("BreakModal", () => {
 
     renderModal({ onClose });
     expect(
-      screen.queryByRole("button", { name: "Resume Activity" }),
+      screen.queryByRole("button", { name: "继续活动" }),
     ).not.toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Start Break" }));
+    await user.click(screen.getByRole("button", { name: "开始休息" }));
 
     expect(value.startBreak).toHaveBeenCalledWith(15);
     expect(onClose).not.toHaveBeenCalled();
@@ -197,13 +197,13 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal({ onClose });
-    await user.click(screen.getByRole("button", { name: "Stop Activity" }));
+    await user.click(screen.getByRole("button", { name: "结束活动" }));
 
     const confirm = await screen.findByRole("alertdialog");
     expect(value.stopActivity).not.toHaveBeenCalled();
 
     await user.click(
-      within(confirm).getByRole("button", { name: "Stop Activity" }),
+      within(confirm).getByRole("button", { name: "结束活动" }),
     );
 
     expect(value.stopActivity).toHaveBeenCalled();
@@ -216,10 +216,10 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal({ onClose });
-    await user.click(screen.getByRole("button", { name: "Stop Activity" }));
+    await user.click(screen.getByRole("button", { name: "结束活动" }));
 
     const confirm = await screen.findByRole("alertdialog");
-    await user.click(within(confirm).getByRole("button", { name: "Cancel" }));
+    await user.click(within(confirm).getByRole("button", { name: "取消" }));
 
     expect(value.stopActivity).not.toHaveBeenCalled();
     expect(onClose).not.toHaveBeenCalled();
@@ -231,7 +231,7 @@ describe("BreakModal", () => {
     (useActivity as any).mockReturnValue(value);
 
     renderModal();
-    await user.click(screen.getByRole("button", { name: "30 min" }));
+    await user.click(screen.getByRole("button", { name: "30 分钟" }));
 
     expect(value.setBreakLength).toHaveBeenCalledWith(30);
   });
@@ -242,7 +242,7 @@ describe("BreakModal", () => {
 
     renderModal();
     await user.click(
-      screen.getByRole("button", { name: "Increase break length" }),
+      screen.getByRole("button", { name: "延长休息时间" }),
     );
 
     expect(value.setBreakLength).toHaveBeenCalledWith(20);
@@ -292,7 +292,7 @@ describe("ActivityBanner break button", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Take a break" }));
+    await user.click(screen.getByRole("button", { name: "休息一下" }));
 
     expect(onStartBreak).toHaveBeenCalled();
   });
@@ -308,7 +308,7 @@ describe("ActivityBanner break button", () => {
     );
 
     expect(
-      screen.queryByRole("button", { name: "Take a break" }),
+      screen.queryByRole("button", { name: "休息一下" }),
     ).not.toBeInTheDocument();
   });
 });

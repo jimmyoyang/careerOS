@@ -1,5 +1,6 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { Check, ChevronsUpDown, CirclePlus, Loader } from "lucide-react";
 import { ControllerRenderProps } from "react-hook-form";
 
@@ -51,7 +52,9 @@ export function Combobox({
   fullWidth,
 }: ComboboxProps) {
   // Placeholder text only; the accessible name comes from FormLabel/FormControl
-  const displayName = label ?? field.name;
+  const fieldLabels: Record<string, string> = { title: "职位", company: "公司", location: "地点", source: "来源", contactRole: "联系人角色", activityType: "活动类型", workedAtCompany: "共事公司", salaryRange: "薪资范围" };
+  const displayName = label ? zhLabel(label) : fieldLabels[field.name] ?? "选项";
+  const displayOption = (value: string) => ["source", "contactRole", "activityType", "status"].includes(field.name) ? zhLabel(value) : value;
   const [newOption, setNewOption] = useState<string>("");
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
@@ -150,9 +153,8 @@ export function Combobox({
           >
             <span className="min-w-0 truncate">
               {field.value
-                ? (options.find((option) => option.id === field.value)?.label ??
-                  (freeText ? field.value : null))
-                : `Select ${displayName}`}
+                ? displayOption(options.find((option) => option.id === field.value)?.label ?? (freeText ? field.value : ""))
+                : `选择${displayName}`}
             </span>
 
             {isPending ? (
@@ -172,8 +174,8 @@ export function Combobox({
         )}
       >
         <Command
-          filter={(value, search) =>
-            value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
+          filter={(value, search, keywords = []) =>
+            [value, ...keywords].some((text) => text.toLowerCase().includes(search.toLowerCase())) ? 1 : 0
           }
         >
           <CommandInput
@@ -182,7 +184,7 @@ export function Combobox({
               setNewOption(val);
               onSearchChange?.(val);
             }}
-            placeholder={`${creatable ? "Create or " : ""}Search ${displayName}`}
+            placeholder={`${creatable ? "创建或" : ""}搜索${displayName}`}
             onKeyDown={(e) => handleEnterKey(e)}
           />
           <CommandList>
@@ -199,19 +201,20 @@ export function Combobox({
               {creatable ? (
                 <>
                   <CirclePlus className="h-4 w-4" />
-                  <p>Create: </p>
+                  <p>创建： </p>
                   <p className="block max-w-48 truncate font-semibold text-primary">
                     {newOption}
                   </p>
                 </>
               ) : (
-                <p className="font-semibold text-primary">No source found!</p>
+                <p className="font-semibold text-primary">未找到匹配项</p>
               )}
             </CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
                   value={option.value}
+                  keywords={[displayOption(option.label)]}
                   key={option.id}
                   onSelect={() => {
                     if (field.onChange) {
@@ -226,7 +229,7 @@ export function Combobox({
                       option.id === field.value ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {option.label}
+                  {displayOption(option.label)}
                 </CommandItem>
               ))}
             </CommandGroup>

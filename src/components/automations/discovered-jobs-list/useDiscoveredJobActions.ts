@@ -26,13 +26,13 @@ export function useDiscoveredJobActions(
     try {
       const result = await analyzeDiscoveredJob(jobId);
       if (result.success) {
-        toastSuccess("AI match score is ready.", "Match analyzed");
+        toastSuccess("AI 匹配评分已生成。", "匹配分析完成");
         onRefresh();
       } else {
         toastError(result.message);
       }
     } catch {
-      toastError("Failed to analyze job");
+      toastError("分析岗位失败");
     } finally {
       setLoadingAction(null);
     }
@@ -43,13 +43,13 @@ export function useDiscoveredJobActions(
     try {
       const result = await acceptDiscoveredJob(job.id);
       if (result.success) {
-        toastSuccess("The job has been added to your tracked jobs.", "Job accepted");
+        toastSuccess("已将此岗位添加到跟踪列表。", "岗位已接受");
         onRefresh();
       } else {
         toastError(result.message);
       }
     } catch {
-      toastError("Failed to accept job");
+      toastError("接受岗位失败");
     } finally {
       setLoadingAction(null);
     }
@@ -60,13 +60,13 @@ export function useDiscoveredJobActions(
     try {
       const result = await dismissDiscoveredJob(jobId);
       if (result.success) {
-        toastSuccess("Job dismissed");
+        toastSuccess("岗位已忽略");
         onRefresh();
       } else {
         toastError(result.message);
       }
     } catch {
-      toastError("Failed to dismiss job");
+      toastError("忽略岗位失败");
     } finally {
       setLoadingAction(null);
     }

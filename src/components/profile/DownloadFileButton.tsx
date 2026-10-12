@@ -28,7 +28,7 @@ export function DownloadFileButton(
       link.click();
       window.URL.revokeObjectURL(url); // Clean up
     } else {
-      console.error("Failed to download file");
+      console.error("文件下载失败");
     }
   };
 
@@ -36,7 +36,7 @@ export function DownloadFileButton(
     <button
       className="flex items-center"
       onClick={handleDownload}
-      title={`Download ${fileName}`}
+      title={`下载 ${fileName}`}
     >
       <div>{fileTitle}</div>
       <Paperclip className="h-3.5 w-3.5 ml-1" />

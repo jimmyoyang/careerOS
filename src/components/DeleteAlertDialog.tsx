@@ -1,3 +1,4 @@
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import type { ReactNode } from "react";
 import {
   AlertDialog,
@@ -29,9 +30,9 @@ export function DeleteAlertDialog({
   onOpenChange,
   onDelete,
   alertTitle,
-  alertDescription = "This action cannot be undone. This will permanently delete and remove data from server.",
+  alertDescription = "此操作无法撤销，数据将被永久删除。",
   deleteAction = true,
-  actionLabel = "Delete",
+  actionLabel = "删除",
   actionVariant = "destructive",
 }: DeleteAlertDialogProps) {
   return (
@@ -39,7 +40,7 @@ export function DeleteAlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {alertTitle ?? `Are you sure you want to delete this ${pageTitle}?`}
+            {alertTitle ?? `确定删除此${zhLabel(pageTitle)}吗？`}
           </AlertDialogTitle>
           {/* asChild: a description may carry a list, which cannot nest in a p. */}
           <AlertDialogDescription asChild>
@@ -47,7 +48,7 @@ export function DeleteAlertDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>取消</AlertDialogCancel>
           {deleteAction && (
             <AlertDialogAction
               className={buttonVariants({ variant: actionVariant })}

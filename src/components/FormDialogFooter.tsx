@@ -24,11 +24,11 @@ export function FormDialogFooter({
             className="mt-2 md:mt-0 w-full"
             onClick={onCancel}
           >
-            Cancel
+            取消
           </Button>
         </div>
         <Button type="submit" disabled={saveDisabled}>
-          Save
+          保存
           {isPending && <Loader className="h-4 w-4 shrink-0 spinner" />}
         </Button>
       </DialogFooter>

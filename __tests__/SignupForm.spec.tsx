@@ -26,78 +26,78 @@ describe("SignupForm Component", () => {
   });
 
   it("renders the SignupForm component correctly", () => {
-    expect(screen.getByLabelText("Full Name")).toBeInTheDocument();
-    expect(screen.getByLabelText("Email")).toBeInTheDocument();
-    expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    expect(screen.getByLabelText("姓名")).toBeInTheDocument();
+    expect(screen.getByLabelText("邮箱")).toBeInTheDocument();
+    expect(screen.getByLabelText("密码")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /create an account/i }),
+      screen.getByRole("button", { name: /注册账号/ }),
     ).toBeInTheDocument();
   });
 
   it("should display invalid name error when name is too short", async () => {
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "A" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Name must be at least 2 characters."),
+        screen.getByText("姓名至少需要 2 个字符。"),
       ).toBeInTheDocument();
     });
   });
 
   it("should display invalid email error when email format is incorrect", async () => {
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), {
+    fireEvent.change(screen.getByLabelText("邮箱"), {
       target: { value: "invalid-email" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Please enter a valid email."),
+        screen.getByText("请输入有效的邮箱地址。"),
       ).toBeInTheDocument();
     });
   });
 
   it("should display email minimum length error", async () => {
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), {
+    fireEvent.change(screen.getByLabelText("邮箱"), {
       target: { value: "a@" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Email must be at least 3 characters."),
+        screen.getByText("邮箱至少需要 3 个字符。"),
       ).toBeInTheDocument();
     });
   });
 
   it("should display password minimum length error", async () => {
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), {
+    fireEvent.change(screen.getByLabelText("邮箱"), {
       target: { value: "john@example.com" },
     });
-    fireEvent.change(screen.getByLabelText("Password"), {
+    fireEvent.change(screen.getByLabelText("密码"), {
       target: { value: "short" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Password must be at least 6 characters."),
+        screen.getByText("密码至少需要 6 个字符。"),
       ).toBeInTheDocument();
     });
   });
@@ -106,20 +106,20 @@ describe("SignupForm Component", () => {
     const errorMessage = "An account with this email already exists.";
     (signup as any).mockResolvedValueOnce({ error: errorMessage });
 
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), {
+    fireEvent.change(screen.getByLabelText("邮箱"), {
       target: { value: "john@example.com" },
     });
-    fireEvent.change(screen.getByLabelText("Password"), {
+    fireEvent.change(screen.getByLabelText("密码"), {
       target: { value: "password123" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+      expect(screen.getByText("该邮箱已注册，请直接登录。")).toBeInTheDocument();
     });
     expect(signup).toHaveBeenCalledWith({
       name: "John Doe",
@@ -134,20 +134,20 @@ describe("SignupForm Component", () => {
     (signup as any).mockResolvedValueOnce({ success: true });
     (authenticate as any).mockResolvedValueOnce(authError);
 
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), {
+    fireEvent.change(screen.getByLabelText("邮箱"), {
       target: { value: "john@example.com" },
     });
-    fireEvent.change(screen.getByLabelText("Password"), {
+    fireEvent.change(screen.getByLabelText("密码"), {
       target: { value: "password123" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
-      expect(screen.getByText(authError)).toBeInTheDocument();
+      expect(screen.getByText("操作失败，请稍后重试。")).toBeInTheDocument();
     });
     expect(signup).toHaveBeenCalledWith({
       name: "John Doe",
@@ -162,17 +162,17 @@ describe("SignupForm Component", () => {
     (signup as any).mockResolvedValueOnce({ success: true });
     (authenticate as any).mockResolvedValueOnce(null);
 
-    fireEvent.change(screen.getByLabelText("Full Name"), {
+    fireEvent.change(screen.getByLabelText("姓名"), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText("Email"), {
+    fireEvent.change(screen.getByLabelText("邮箱"), {
       target: { value: "john@example.com" },
     });
-    fireEvent.change(screen.getByLabelText("Password"), {
+    fireEvent.change(screen.getByLabelText("密码"), {
       target: { value: "password123" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create an account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /注册账号/ }));
 
     await waitFor(() => {
       expect(signup).toHaveBeenCalledWith({

@@ -46,7 +46,7 @@ describe("ContactsTable", () => {
       <ContactsTable contacts={[contact]} reloadContacts={vi.fn()} editContact={vi.fn()} />,
     );
 
-    expect(screen.getByRole("columnheader", { name: "Company" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "公司" })).toBeInTheDocument();
     expect(screen.getByText("Shopify")).toBeInTheDocument();
   });
 
@@ -60,10 +60,10 @@ describe("ContactsTable", () => {
       />,
     );
 
-    expect(screen.queryByRole("columnheader", { name: "Company" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("columnheader", { name: "公司" })).not.toBeInTheDocument();
     expect(screen.queryByText("Shopify")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /expand dave patel/i }));
+    await user.click(screen.getByRole("button", { name: /展开 Dave Patel/i }));
 
     expect(screen.getByText("Met at a meetup").closest("td")).toHaveAttribute("colspan", "7");
   });

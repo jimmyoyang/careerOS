@@ -18,10 +18,10 @@ export function MatchJobButton({ jobId }: { jobId: string }) {
         variant="outline"
         className="shrink-0"
         disabled
-        title="The assistant is busy"
+        title="助手正在处理其他请求"
       >
         <Sparkles className="h-3.5 w-3.5 mr-1" />
-        Match
+        匹配
       </Button>
     );
   }
@@ -30,7 +30,7 @@ export function MatchJobButton({ jobId }: { jobId: string }) {
     <Button asChild size="sm" variant="outline" className="shrink-0">
       <Link href={`/dashboard/myjobs/${jobId}?tab=match&match=1`}>
         <Sparkles className="h-3.5 w-3.5 mr-1" />
-        Match
+        匹配
       </Link>
     </Button>
   );

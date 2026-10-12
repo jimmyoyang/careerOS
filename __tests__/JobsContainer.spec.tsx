@@ -250,7 +250,7 @@ describe("JobsContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search jobs..."),
+          screen.getByPlaceholderText("搜索职位…"),
         ).toBeInTheDocument();
       });
     });
@@ -266,11 +266,11 @@ describe("JobsContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search jobs..."),
+          screen.getByPlaceholderText("搜索职位…"),
         ).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
 
       await act(async () => {
         await user.type(searchInput, "Amazon");
@@ -292,7 +292,7 @@ describe("JobsContainer Search Functionality", () => {
         expect(getJobsList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
 
       await act(async () => {
         await user.type(searchInput, "A");
@@ -325,7 +325,7 @@ describe("JobsContainer Search Functionality", () => {
         expect(getJobsList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
 
       await act(async () => {
         await user.type(searchInput, "Amazon");
@@ -370,7 +370,7 @@ describe("JobsContainer Search Functionality", () => {
         expect(getJobsList).toHaveBeenCalledTimes(1);
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
 
       // Type to trigger search
       await act(async () => {
@@ -413,12 +413,12 @@ describe("JobsContainer Search Functionality", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByPlaceholderText("Search jobs..."),
+          screen.getByPlaceholderText("搜索职位…"),
         ).toBeInTheDocument();
       });
 
       // Type in search
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "Developer");
       });
@@ -437,7 +437,7 @@ describe("JobsContainer Search Functionality", () => {
         await user.click(filterTrigger);
       });
 
-      const appliedOption = screen.getByRole("option", { name: "Applied" });
+      const appliedOption = screen.getByRole("option", { name: "已投递" });
       await act(async () => {
         await user.click(appliedOption);
       });
@@ -461,7 +461,7 @@ describe("JobsContainer Search Functionality", () => {
       });
 
       // Type in search
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "Amazon");
       });
@@ -480,7 +480,7 @@ describe("JobsContainer Search Functionality", () => {
         await user.click(filterTrigger);
       });
 
-      const interviewOption = screen.getByRole("option", { name: "Interview" });
+      const interviewOption = screen.getByRole("option", { name: "面试中" });
       await act(async () => {
         await user.click(interviewOption);
       });
@@ -505,7 +505,7 @@ describe("JobsContainer Search Functionality", () => {
       });
 
       // First type in search
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "Developer");
       });
@@ -520,7 +520,7 @@ describe("JobsContainer Search Functionality", () => {
         await user.click(filterTrigger);
       });
 
-      const appliedOption = screen.getByRole("option", { name: "Applied" });
+      const appliedOption = screen.getByRole("option", { name: "已投递" });
       await act(async () => {
         await user.click(appliedOption);
       });
@@ -535,7 +535,7 @@ describe("JobsContainer Search Functionality", () => {
       });
 
       const noneOption = screen.getByRole("option", {
-        name: "All (Except Dismissed)",
+        name: "全部（不含已忽略）",
       });
       await act(async () => {
         await user.click(noneOption);
@@ -571,7 +571,7 @@ describe("JobsContainer Search Functionality", () => {
         expect(screen.getByText("Google")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "Amazon");
       });
@@ -605,7 +605,7 @@ describe("JobsContainer Search Functionality", () => {
         expect(screen.getByText("Amazon")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "test");
       });
@@ -685,7 +685,7 @@ describe("JobsContainer Search Functionality", () => {
       });
 
       // Type search
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "Developer");
       });
@@ -732,7 +732,7 @@ describe("JobsContainer Search Functionality", () => {
         expect(screen.getByText("Amazon")).toBeInTheDocument();
       });
 
-      const searchInput = screen.getByPlaceholderText("Search jobs...");
+      const searchInput = screen.getByPlaceholderText("搜索职位…");
       await act(async () => {
         await user.type(searchInput, "test");
       });
@@ -843,7 +843,7 @@ describe("JobsContainer Search Functionality", () => {
         await user.click(filterTrigger);
       });
 
-      const appliedOption = screen.getByRole("option", { name: "Applied" });
+      const appliedOption = screen.getByRole("option", { name: "已投递" });
       await act(async () => {
         await user.click(appliedOption);
       });
@@ -1131,7 +1131,7 @@ describe("JobsContainer Search Functionality", () => {
       renderComponent();
       await waitFor(() => expect(getJobsList).toHaveBeenCalledTimes(1));
 
-      await user.click(screen.getByRole("button", { name: /^Company/ }));
+      await user.click(screen.getByRole("button", { name: /^公司/ }));
 
       await waitFor(() => {
         expect(getJobsList).toHaveBeenLastCalledWith(
@@ -1144,7 +1144,7 @@ describe("JobsContainer Search Functionality", () => {
       renderComponent();
       await waitFor(() => expect(getJobsList).toHaveBeenCalledTimes(1));
 
-      await user.click(screen.getByRole("button", { name: /^Applied/ }));
+      await user.click(screen.getByRole("button", { name: /^已投递/ }));
 
       await waitFor(() => {
         expect(getJobsList).toHaveBeenLastCalledWith(
@@ -1157,11 +1157,11 @@ describe("JobsContainer Search Functionality", () => {
       renderComponent();
       await waitFor(() => expect(getJobsList).toHaveBeenCalledTimes(1));
 
-      await user.type(screen.getByPlaceholderText("Search jobs..."), "Amazon");
+      await user.type(screen.getByPlaceholderText("搜索职位…"), "Amazon");
       await act(async () => {
         vi.advanceTimersByTime(300);
       });
-      await user.click(screen.getByRole("button", { name: /^Company/ }));
+      await user.click(screen.getByRole("button", { name: /^公司/ }));
 
       await waitFor(() => {
         expect(getJobsList).toHaveBeenLastCalledWith(
@@ -1173,8 +1173,8 @@ describe("JobsContainer Search Functionality", () => {
     it("cycles natural → reversed → off", async () => {
       renderComponent();
       await waitFor(() => expect(getJobsList).toHaveBeenCalledTimes(1));
-      const header = () => screen.getByRole("columnheader", { name: /^Title/ });
-      const button = () => screen.getByRole("button", { name: /^Title/ });
+      const header = () => screen.getByRole("columnheader", { name: /^标题/ });
+      const button = () => screen.getByRole("button", { name: /^标题/ });
 
       await user.click(button());
       await waitFor(() => expect(header()).toHaveAttribute("aria-sort", "ascending"));
@@ -1202,8 +1202,8 @@ describe("JobsContainer Search Functionality", () => {
         .mockReturnValueOnce(older.promise)
         .mockReturnValueOnce(newer.promise);
 
-      await user.click(screen.getByRole("button", { name: /^Company/ }));
-      await user.click(screen.getByRole("button", { name: /^Company/ }));
+      await user.click(screen.getByRole("button", { name: /^公司/ }));
+      await user.click(screen.getByRole("button", { name: /^公司/ }));
 
       await act(async () => {
         newer.resolve({ success: true, data: [mockJobs[1]], total: 1 });

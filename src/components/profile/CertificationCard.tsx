@@ -44,7 +44,7 @@ function CertificationCard({
               >
                 <Edit className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Edit
+                  编辑
                 </span>
               </Button>
             </CardHeader>
@@ -52,13 +52,13 @@ function CertificationCard({
               <h3>{organization}</h3>
               <CardDescription>
                 {issueDate && (
-                  <>Issued: {format(new Date(issueDate), "MMM yyyy")}</>
+                  <>颁发日期： {format(new Date(issueDate), "yyyy年M月")}</>
                 )}
                 {issueDate && expirationDate && " · "}
                 {expirationDate ? (
-                  <>Expires: {format(new Date(expirationDate), "MMM yyyy")}</>
+                  <>到期日期： {format(new Date(expirationDate), "yyyy年M月")}</>
                 ) : (
-                  issueDate && " · No Expiration"
+                  issueDate && " · 长期有效"
                 )}
               </CardDescription>
               {credentialUrl && (
@@ -68,7 +68,7 @@ function CertificationCard({
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm text-blue-500 hover:underline mt-1"
                 >
-                  View Credential
+                  查看证书
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
               )}

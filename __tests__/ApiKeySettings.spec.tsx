@@ -50,7 +50,7 @@ describe("ApiKeySettings — Ollama connection probe", () => {
 
     await waitFor(() => expect(getUserSettings).toHaveBeenCalled());
     expect(checkOllamaConnection).not.toHaveBeenCalled();
-    expect(screen.queryByText(/Ollama is (not )?running/)).toBeNull();
+    expect(screen.queryByText(/Ollama (正在运行|未运行)/)).toBeNull();
   });
 
   it("probes Ollama when it is the selected provider", async () => {
@@ -59,7 +59,7 @@ describe("ApiKeySettings — Ollama connection probe", () => {
     render(<ApiKeySettings />);
 
     await waitFor(() =>
-      expect(screen.getByText("Ollama is running")).toBeInTheDocument(),
+      expect(screen.getByText("Ollama 正在运行")).toBeInTheDocument(),
     );
     expect(checkOllamaConnection).toHaveBeenCalledWith(AiProvider.OLLAMA);
   });
@@ -90,7 +90,7 @@ describe("ApiKeySettings — clearing a stored base URL", () => {
     render(<ApiKeySettings />);
 
     await waitFor(() =>
-      expect(screen.getByText("Reset to default")).toBeInTheDocument(),
+      expect(screen.getByText("恢复默认值")).toBeInTheDocument(),
     );
   });
 });

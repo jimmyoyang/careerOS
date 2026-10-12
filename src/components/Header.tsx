@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { PanelLeft, Briefcase } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { type FormEvent, useState } from "react";
+import { PanelLeft, Briefcase, Search } from "lucide-react";
 
 import { Button } from "./ui/button";
 import {
@@ -13,18 +17,27 @@ import { SIDEBAR_LINKS } from "@/lib/constants";
 import SidebarToggle from "./SidebarToggle";
 import { AgentChatTrigger } from "./AgentChatTrigger";
 
-async function Header() {
+function Header() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  const submitSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const value = query.trim();
+    router.push(value ? `/dashboard/search?q=${encodeURIComponent(value)}` : "/dashboard/search");
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
             <PanelLeft className="h-5 w-5" />
-            <span className="sr-only">Toggle Menu</span>
+            <span className="sr-only">展开导航</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="sm:max-w-xs">
-          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          <SheetTitle className="sr-only">导航菜单</SheetTitle>
           <nav className="grid gap-6 text-lg font-medium">
             <SheetClose asChild>
               <Link
@@ -32,7 +45,7 @@ async function Header() {
                 className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
               >
                 <Briefcase className="h-5 w-5 transition-all group-hover:scale-110" />
-                <span className="sr-only">JobSync</span>
+                <span className="sr-only">CareerOS</span>
               </Link>
             </SheetClose>
             {SIDEBAR_LINKS.map((item) => {
@@ -56,18 +69,20 @@ async function Header() {
         </SheetContent>
       </Sheet>
       <SidebarToggle />
-      <h1 className="font-semibold">
-        JobSync<span className="hidden sm:inline"> - Job Search Assistant</span>
-      </h1>
-      <div className="relative ml-auto flex-1 md:grow-0">
-        {/* <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          id="search"
+      <Link href="/dashboard" className="shrink-0 font-semibold">CareerOS<span className="hidden xl:inline"> · 招聘工作台</span></Link>
+      <form onSubmit={submitSearch} className="relative ml-auto hidden w-full max-w-sm md:block">
+        <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+        <input
+          id="global-job-search"
           type="search"
-          placeholder="Search..."
-          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-        /> */}
-      </div>
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="搜索职位、公司或技能"
+          aria-label="搜索职位、公司或技能"
+          className="h-9 w-full rounded-lg border bg-background pl-9 pr-3 text-sm outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+        />
+      </form>
+      <Link href="/dashboard/search" className="ml-auto inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted md:hidden"><Search className="h-4 w-4" /><span className="sr-only">职位搜索</span></Link>
 
       <AgentChatTrigger />
     </header>

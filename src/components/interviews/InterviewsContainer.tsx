@@ -54,12 +54,12 @@ function InterviewsContainer({
       <Card x-chunk="dashboard-interviews-chunk-0">
         <ResponsiveCardHeader>
           <div className="flex items-baseline gap-2">
-            <CardTitle>Interviews</CardTitle>
+            <CardTitle>面试</CardTitle>
             {!list.initialLoading && list.total > 0 && (
               <RecordsCount
                 count={list.interviews.length}
                 total={list.total}
-                label="interviews"
+                label="面试"
               />
             )}
           </div>
@@ -75,7 +75,7 @@ function InterviewsContainer({
             <SearchInput
               value={searchTerm}
               onChange={setSearchTerm}
-              placeholder="Search interviews..."
+              placeholder="搜索面试…"
             />
           </div>
         </ResponsiveCardHeader>
@@ -85,8 +85,8 @@ function InterviewsContainer({
           ) : list.interviews.length === 0 ? (
             <p className="py-10 text-center text-sm text-muted-foreground">
               {filtered
-                ? "No interviews match these filters."
-                : "No interviews yet. Add an interview stage on a job's Timeline tab and it appears here."}
+                ? "没有符合筛选条件的面试。"
+                : "暂无面试。在职位的进展记录中添加面试阶段后，就会显示在这里。"}
             </p>
           ) : (
             <>

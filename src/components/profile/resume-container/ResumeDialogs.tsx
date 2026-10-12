@@ -26,19 +26,18 @@ export function AttachPdfDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Replace existing attachment?</AlertDialogTitle>
+          <AlertDialogTitle>替换现有附件？</AlertDialogTitle>
           <AlertDialogDescription>
-            This resume already has a file attached. Would you like to replace
-            it with the exported PDF?
+            这份简历已有附件，是否用导出的 PDF 替换？
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>取消</AlertDialogCancel>
           <Button variant="outline" onClick={() => onChoice("download-only")}>
-            Download only
+            仅下载
           </Button>
           <AlertDialogAction onClick={() => onChoice("replace")}>
-            Replace attachment
+            替换附件
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -59,16 +58,15 @@ export function ClearChatBeforeReviewDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Clear the assistant conversation?</AlertDialogTitle>
+          <AlertDialogTitle>清空助手对话？</AlertDialogTitle>
           <AlertDialogDescription>
-            A job is waiting for your approval in the assistant. Starting a
-            review clears the conversation, and that job will not be saved.
+            助手中有一个职位等待你确认。开始评估将清空对话，该职位不会保存。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>
-            Clear and review
+            清空并评估
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -89,19 +87,18 @@ export function DiscardImportDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Discard import?</AlertDialogTitle>
+          <AlertDialogTitle>放弃导入？</AlertDialogTitle>
           <AlertDialogDescription>
-            This will delete this resume and its attached file. Unsaved
-            suggestions will be lost.
+            将删除这份简历及其附件，未保存的建议也会丢失。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive-bg text-destructive-foreground hover:bg-destructive-bg/90"
             onClick={onConfirm}
           >
-            Discard import
+            放弃导入
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

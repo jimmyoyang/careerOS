@@ -5,7 +5,7 @@ import { test, expect, uniqueName, type CleanupRegistry } from "./fixtures";
 async function navigateToSkills(page: Page) {
   await page.goto("/dashboard/admin?tab=skills");
   await page.waitForLoadState("networkidle");
-  await page.getByRole("button", { name: /new skill/i }).waitFor({
+  await page.getByRole("button", { name: /新建技能/i }).waitFor({
     state: "visible",
   });
 }
@@ -20,19 +20,19 @@ async function createSkill(
   skillName: string,
   cleanup: CleanupRegistry,
 ) {
-  await page.getByRole("button", { name: /new skill/i }).click();
-  await expect(page.getByText("Add New Skill")).toBeVisible();
+  await page.getByRole("button", { name: /新建技能/i }).click();
+  await expect(page.getByText("添加技能")).toBeVisible();
 
-  await page.getByLabel("Skill Name").fill(skillName);
-  await page.getByRole("button", { name: /save/i }).click();
+  await page.getByLabel("技能名称").fill(skillName);
+  await page.getByRole("button", { name: /保存/i }).click();
   cleanup.tag(skillName);
 
   // Wait for the dialog to fully close before touching the search box —
   // filling it while the dialog is still closing is a no-op (the input
   // isn't interactable yet), leaving the search term empty.
-  await expect(page.getByText("Add New Skill")).not.toBeVisible();
+  await expect(page.getByText("添加技能")).not.toBeVisible();
 
-  const searchInput = page.getByPlaceholder("Search skills...");
+  const searchInput = page.getByPlaceholder("搜索技能…");
   await searchInput.fill(skillName);
   await expect(
     page.getByRole("cell", { name: skillName, exact: true }),
@@ -55,7 +55,7 @@ test.describe("Admin Skills search", () => {
     await createSkill(page, skillA, cleanup);
     await createSkill(page, skillB, cleanup);
 
-    const searchInput = page.getByPlaceholder("Search skills...");
+    const searchInput = page.getByPlaceholder("搜索技能…");
     await searchInput.fill(skillA);
 
     await expect(

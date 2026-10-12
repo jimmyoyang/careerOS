@@ -24,7 +24,7 @@ import {
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark", "system"], {
-    error: "Please select a theme.",
+    error: "请选择主题。",
   }),
 });
 
@@ -73,13 +73,13 @@ function DisplaySettings() {
       const result = await updateDisplaySettings({ theme: data.theme });
       if (result.success) {
         setTheme(data.theme);
-        toastSuccess("Your selected theme has been saved.");
+        toastSuccess("已保存您选择的主题。");
       } else {
-        toastError(result.message || "Failed to save display settings.");
+        toastError(result.message || "保存显示设置失败。");
       }
     } catch (error) {
       console.error("Error saving display settings:", error);
-      toastError("Failed to save display settings.");
+      toastError("保存显示设置失败。");
     } finally {
       setIsSaving(false);
     }
@@ -89,14 +89,14 @@ function DisplaySettings() {
     return (
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium">Appearance</h3>
+          <h3 className="text-lg font-medium">外观</h3>
           <p className="text-sm text-muted-foreground">
-            Customize the look and feel of the application.
+            自定义应用的显示外观。
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Loading settings...</span>
+          <span>正在加载设置…</span>
         </div>
       </div>
     );
@@ -105,9 +105,9 @@ function DisplaySettings() {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium">Appearance</h3>
+        <h3 className="text-lg font-medium">外观</h3>
         <p className="text-sm text-muted-foreground">
-          Customize the look and feel of the application.
+          自定义应用的显示外观。
         </p>
       </div>
       <div className="@container">
@@ -118,9 +118,9 @@ function DisplaySettings() {
               name="theme"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel>Theme</FormLabel>
+                  <FormLabel>主题</FormLabel>
                   <FormDescription>
-                    Select the theme for the app.
+                    选择应用主题。
                   </FormDescription>
                   <FormMessage />
                   <RadioGroup
@@ -135,7 +135,7 @@ function DisplaySettings() {
                         </FormControl>
                         <LightThemeElement />
                         <span className="block w-full p-2 text-center font-normal">
-                          Light
+                          浅色
                         </span>
                       </FormLabel>
                     </FormItem>
@@ -146,7 +146,7 @@ function DisplaySettings() {
                         </FormControl>
                         <DarkThemeElement />
                         <span className="block w-full p-2 text-center font-normal">
-                          Dark
+                          深色
                         </span>
                       </FormLabel>
                     </FormItem>
@@ -161,7 +161,7 @@ function DisplaySettings() {
                           <LightThemeElement />
                         )}
                         <span className="block w-full p-2 text-center font-normal">
-                          System
+                          跟随系统
                         </span>
                       </FormLabel>
                     </FormItem>
@@ -172,7 +172,7 @@ function DisplaySettings() {
 
             <Button type="submit" disabled={isSaving}>
               {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save
+              保存
             </Button>
           </form>
         </Form>

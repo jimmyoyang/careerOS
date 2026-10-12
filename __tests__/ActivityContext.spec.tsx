@@ -108,7 +108,7 @@ describe("ActivityContext", () => {
         );
       });
       expect((stopActivityById as any).mock.calls[0]).toHaveLength(2);
-      expect(toastSuccess).toHaveBeenCalledWith("Activity stopped successfully");
+      expect(toastSuccess).toHaveBeenCalledWith("活动已结束");
       await waitFor(() =>
         expect(screen.getByTestId("current")).toHaveTextContent("none"),
       );
@@ -126,7 +126,7 @@ describe("ActivityContext", () => {
       await waitFor(() => {
         expect(toastError).toHaveBeenCalledWith(
           expect.stringContaining(
-            `less than ${APP_CONSTANTS.ACTIVITY_MIN_DURATION_MINUTES} minutes`,
+            `活动时长不足 ${APP_CONSTANTS.ACTIVITY_MIN_DURATION_MINUTES} 分钟`,
           ),
         );
       });
@@ -138,7 +138,7 @@ describe("ActivityContext", () => {
     it("keeps the activity when the stop fails and it is still running", async () => {
       (stopActivityById as any).mockResolvedValue({
         success: false,
-        message: "Failed to stop activity.",
+        message: "结束活动失败。",
       });
 
       await startWith(activityFixture({ id: "act-fail" }));
@@ -150,7 +150,7 @@ describe("ActivityContext", () => {
       await user.click(screen.getByText("Stop"));
 
       await waitFor(() => {
-        expect(toastError).toHaveBeenCalledWith("Failed to stop activity.");
+        expect(toastError).toHaveBeenCalledWith("结束活动失败。");
       });
       expect(screen.getByTestId("current")).toHaveTextContent("act-fail");
     });
@@ -158,7 +158,7 @@ describe("ActivityContext", () => {
     it("clears the stale activity when the stop fails because it no longer exists", async () => {
       (stopActivityById as any).mockResolvedValue({
         success: false,
-        message: "Failed to stop activity.",
+        message: "结束活动失败。",
       });
 
       await startWith(activityFixture({ id: "act-gone" }));
@@ -172,7 +172,7 @@ describe("ActivityContext", () => {
     it("adopts the activity that is actually running when the local one is stale", async () => {
       (stopActivityById as any).mockResolvedValue({
         success: false,
-        message: "Failed to stop activity.",
+        message: "结束活动失败。",
       });
 
       await startWith(activityFixture({ id: "act-stale" }));

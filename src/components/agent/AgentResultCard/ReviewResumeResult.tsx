@@ -1,5 +1,7 @@
 "use client";
 
+import { zhMessage } from "@/lib/i18n/zh-CN";
+
 import { AgentReviewContent } from "@/components/agent/AgentReviewContent";
 import { NoResumesNotice } from "@/components/agent/AgentResultCard/NoResumesNotice";
 import { ResumeSelectionPrompt } from "@/components/agent/AgentResultCard/ResumeSelectionPrompt";
@@ -14,13 +16,13 @@ export function ReviewResumeResult({ output }: { output: AgentReviewResumeResult
   }
 
   if (output.status === "needs_selection") {
-    return <ResumeSelectionPrompt prompt="Which resume?" resumes={output.resumes} />;
+    return <ResumeSelectionPrompt prompt="请选择简历" resumes={output.resumes} />;
   }
 
   if (output.status === "unreadable" || output.status === "generation_failed") {
     return (
       <p className="text-sm">
-        Couldn&apos;t review <strong>{output.title}</strong> — {output.reason}
+        无法评估 <strong>{output.title}</strong> — {zhMessage(output.reason)}
       </p>
     );
   }
@@ -30,7 +32,7 @@ export function ReviewResumeResult({ output }: { output: AgentReviewResumeResult
       <AgentReviewContent body={output.body} scores={output.scores} />
       {!output.saved && (
         <p className="mt-2 text-xs text-muted-foreground">
-          Review not saved — {output.saveError}
+          评估结果未保存： {zhMessage(output.saveError ?? "")}
         </p>
       )}
     </div>

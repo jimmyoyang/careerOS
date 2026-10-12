@@ -43,9 +43,9 @@ export function MatchDetails({ matchData, discoveredAt }: MatchDetailsProps) {
           matchData.descriptionCompleteness !== "full" && (
             <Badge
               variant="secondary"
-              title="Scored from an incomplete job description — re-run the match after adding the full posting."
+              title="此评分基于不完整的岗位描述。补充完整招聘信息后，请重新匹配。"
             >
-              Provisional score
+              暂定评分
             </Badge>
           )}
       </div>
@@ -58,8 +58,7 @@ export function MatchDetails({ matchData, discoveredAt }: MatchDetailsProps) {
         <div className="space-y-2">
           <p className="text-sm">{matchData.summary}</p>
           <p className="text-xs text-muted-foreground italic">
-            This match was saved before the latest update. Re-run the match for
-            the full breakdown.
+            此匹配结果保存于最近一次更新之前。重新匹配可获取完整分析。
           </p>
         </div>
       ) : null}
@@ -67,7 +66,7 @@ export function MatchDetails({ matchData, discoveredAt }: MatchDetailsProps) {
       <div className="text-xs text-muted-foreground space-y-1">
         {matchData.resumeTitle && (
           <p>
-            Matched with resume:{" "}
+            匹配使用的简历：{" "}
             {matchData.resumeId ? (
               <Link
                 href={`/dashboard/profile/resume/${matchData.resumeId}`}
@@ -82,7 +81,7 @@ export function MatchDetails({ matchData, discoveredAt }: MatchDetailsProps) {
         )}
         {matchData.provider && (
           <p>
-            Model:{" "}
+            模型：{" "}
             <span className="font-medium">
               {matchData.provider}
               {matchData.model ? ` / ${matchData.model}` : ""}
@@ -91,9 +90,9 @@ export function MatchDetails({ matchData, discoveredAt }: MatchDetailsProps) {
         )}
         <p>
           {matchData.matchedAt
-            ? `Matched on ${format(new Date(matchData.matchedAt), "MMM d, yyyy 'at' h:mm a")}`
+            ? `匹配时间 ${format(new Date(matchData.matchedAt), "yyyy年M月d日 HH:mm")}`
             : discoveredAt
-              ? `Discovered on ${format(new Date(discoveredAt), "MMM d, yyyy 'at' h:mm a")}`
+              ? `发现时间 ${format(new Date(discoveredAt), "yyyy年M月d日 HH:mm")}`
               : null}
         </p>
       </div>

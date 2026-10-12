@@ -27,9 +27,9 @@ import { createTag } from "@/actions/tag.actions";
 
 const AddTagFormSchema = z.object({
   label: z
-    .string({ error: "Skill label is required." })
-    .min(1, { message: "Skill label cannot be empty." })
-    .max(60, { message: "Skill label must be 60 characters or fewer." }),
+    .string({ error: "请输入技能名称。" })
+    .min(1, { message: "技能名称不能为空。" })
+    .max(60, { message: "技能名称不能超过 60 个字符。" }),
 });
 
 type AddTagProps = {
@@ -56,12 +56,12 @@ function AddTag({ reloadTags }: AddTagProps) {
     startTransition(async () => {
       const result = await createTag(values.label);
       if (result?.success) {
-        toastSuccess("Skill tag has been added successfully.");
+        toastSuccess("技能标签已添加。");
         setDialogOpen(false);
         reset();
         reloadTags();
       } else {
-        toastError(result?.message ?? "Failed to create skill tag.");
+        toastError(result?.message ?? "创建技能标签失败。");
       }
     });
   };
@@ -76,15 +76,15 @@ function AddTag({ reloadTags }: AddTagProps) {
       >
         <PlusCircle className="h-3.5 w-3.5" />
         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-          New Skill
+          新建技能
         </span>
       </Button>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Skill</DialogTitle>
+            <DialogTitle>添加技能</DialogTitle>
             <DialogDescription>
-              Add a new skill tag to use across your job applications.
+              添加可用于求职申请的技能标签。
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -94,9 +94,9 @@ function AddTag({ reloadTags }: AddTagProps) {
                 name="label"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Skill Name</FormLabel>
+                    <FormLabel>技能名称</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. React, AWS, Python" {...field} />
+                      <Input placeholder="例如：React、AWS、Python" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,10 +108,10 @@ function AddTag({ reloadTags }: AddTagProps) {
                   variant="outline"
                   onClick={() => setDialogOpen(false)}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit" disabled={isPending}>
-                  Save
+                  保存
                   {isPending && (
                     <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />
                   )}

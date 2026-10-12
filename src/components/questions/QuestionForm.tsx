@@ -55,7 +55,7 @@ export function QuestionForm({
     resolver: zodResolver(AddQuestionFormSchema),
     defaultValues: {
       question: "",
-      answer: "TBD",
+      answer: "待填写",
       tagIds: [],
     },
   });
@@ -85,7 +85,7 @@ export function QuestionForm({
     } else {
       reset({
         question: "",
-        answer: "TBD",
+        answer: "待填写",
         tagIds: [],
       });
     }
@@ -98,7 +98,7 @@ export function QuestionForm({
         : await createQuestion(data);
 
       if (success) {
-        toastSuccess(`Question has been ${editQuestion ? "updated" : "created"} successfully`);
+        toastSuccess(`题目已${editQuestion ? "更新" : "创建"}`);
         reset();
         setDialogOpen(false);
         resetEditQuestion();
@@ -109,10 +109,10 @@ export function QuestionForm({
     });
   }
 
-  const pageTitle = editQuestion ? "Edit Question" : "Add Question";
+  const pageTitle = editQuestion ? "编辑题目" : "添加题目";
   const pageDescription = editQuestion
-    ? "Update this question in your question bank."
-    : "Add a question to your question bank.";
+    ? "更新题库中的这道题目。"
+    : "向题库添加一道题目。";
 
   const closeDialog = () => {
     reset();
@@ -140,9 +140,9 @@ export function QuestionForm({
                 name="question"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Question *</FormLabel>
+                    <FormLabel>题目 *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter interview question" {...field} />
+                      <Input placeholder="输入面试题目" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -154,7 +154,7 @@ export function QuestionForm({
                 name="tagIds"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Skill Tags</FormLabel>
+                    <FormLabel>技能标签</FormLabel>
                     <FormControl>
                       <TagInput
                         availableTags={localAvailableTags}
@@ -172,7 +172,7 @@ export function QuestionForm({
                 name="answer"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Answer *</FormLabel>
+                    <FormLabel>答案 *</FormLabel>
                     <FormControl>
                       <TiptapEditor field={field} />
                     </FormControl>
@@ -188,10 +188,10 @@ export function QuestionForm({
                   className="mt-2 md:mt-0"
                   onClick={closeDialog}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit">
-                  Save
+                  保存
                   {isPending && (
                     <Loader className="h-4 w-4 shrink-0 spinner ml-2" />
                   )}

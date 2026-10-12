@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import {
   Table,
   TableBody,
@@ -86,22 +88,22 @@ const priorityConfig: Record<
   low: {
     icon: ArrowDown,
     color: "text-green-600 bg-green-100 dark:bg-green-900/30",
-    label: "Low",
+    label: "低",
   },
   medium: {
     icon: ArrowRight,
     color: "text-cyan-600 bg-cyan-100 dark:bg-cyan-900/30",
-    label: "Medium",
+    label: "中",
   },
   high: {
     icon: ArrowUp,
     color: "text-orange-600 bg-orange-100 dark:bg-orange-900/30",
-    label: "High",
+    label: "高",
   },
   critical: {
     icon: Flame,
     color: "text-red-600 bg-red-100 dark:bg-red-900/30",
-    label: "Critical",
+    label: "紧急",
   },
 };
 
@@ -148,7 +150,7 @@ function groupTasksByActivityType(tasks: Task[]): Record<string, Task[]> {
   const groups: Record<string, Task[]> = {};
 
   tasks.forEach((task) => {
-    const key = task.activityType?.label || "No Activity Type";
+    const key = zhLabel(task.activityType?.label || "无活动类型");
     if (!groups[key]) {
       groups[key] = [];
     }
@@ -232,8 +234,8 @@ function TasksTable({
           )}
           aria-label={
             task.status === "complete"
-              ? "Mark as in progress"
-              : "Mark as complete"
+              ? "标记为进行中"
+              : "标记为已完成"
           }
         >
           {task.status === "complete" && <Check className="h-3 w-3" />}
@@ -249,7 +251,7 @@ function TasksTable({
           <button
             onClick={() => editTask(task.id)}
             className="text-left hover:underline cursor-pointer"
-            aria-label={`Edit ${task.title}`}
+            aria-label={`编辑${task.title}`}
           >
             {task.title}
           </button>
@@ -258,7 +260,7 @@ function TasksTable({
               <TooltipTrigger asChild>
                 <AlignLeft
                   className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
-                  aria-label="Has description"
+                  aria-label="有描述"
                   data-testid="task-description-indicator"
                 />
               </TooltipTrigger>
@@ -270,7 +272,7 @@ function TasksTable({
         </span>
       </TableCell>
       <TableCell className="py-1 px-2">
-        {task.activityType?.label || "—"}
+        {zhLabel(task.activityType?.label || "—")}
       </TableCell>
       <TableCell className="hidden md:table-cell py-1 px-2">
         <StatusBadge
@@ -310,24 +312,24 @@ function TasksTable({
               data-testid="task-actions-menu-btn"
             >
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">Toggle menu</span>
+              <span className="sr-only">打开菜单</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[200px]">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>操作</DropdownMenuLabel>
             <DropdownMenuGroup>
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => editTask(task.id)}
               >
                 <Pencil className="mr-2 h-4 w-4" />
-                Edit Task
+                编辑任务
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <Tags className="mr-2 h-4 w-4" />
-                  Change Status
+                  更改状态
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent className="p-0">
@@ -352,7 +354,7 @@ function TasksTable({
                 onClick={() => onStartActivity(task.id)}
               >
                 <CirclePlay className="mr-2 h-4 w-4" />
-                Start Activity
+                开始活动
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -360,7 +362,7 @@ function TasksTable({
                 onClick={() => onDeleteTask(task.id)}
               >
                 <Trash className="mr-2 h-4 w-4" />
-                Delete
+                删除
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -368,7 +370,7 @@ function TasksTable({
       </TableCell>
       <TableCell className="hidden sm:table-cell py-1 px-1">
         <Button
-          title="Start Activity"
+          title="开始活动"
           aria-haspopup="true"
           size="icon"
           variant="ghost"
@@ -388,22 +390,22 @@ function TasksTable({
     <TableHeader>
       <TableRow>
         <TableHead className="w-[24px] h-9 px-1">
-          <span className="sr-only">Complete</span>
+          <span className="sr-only">已完成</span>
         </TableHead>
-        <TableHead className="h-9 px-2">Title</TableHead>
-        <TableHead className="h-9 px-2">Activity Type</TableHead>
-        <TableHead className="hidden md:table-cell h-9 px-2">Status</TableHead>
+        <TableHead className="h-9 px-2">标题</TableHead>
+        <TableHead className="h-9 px-2">活动类型</TableHead>
+        <TableHead className="hidden md:table-cell h-9 px-2">状态</TableHead>
         <TableHead className="hidden md:table-cell h-9 px-2 text-center">
-          Priority
+          优先级
         </TableHead>
         <TableHead className="hidden md:table-cell h-9 px-2 text-center">
-          % Complete
+          完成度
         </TableHead>
         <TableHead className="h-9 px-1">
-          <span className="sr-only">Actions</span>
+          <span className="sr-only">操作</span>
         </TableHead>
         <TableHead className="hidden sm:table-cell h-9 px-1">
-          <span className="sr-only">Start Activity</span>
+          <span className="sr-only">开始活动</span>
         </TableHead>
       </TableRow>
     </TableHeader>
@@ -423,7 +425,7 @@ function TasksTable({
         </div>
       ))}
       <DeleteAlertDialog
-        pageTitle="task"
+        pageTitle="任务"
         open={alertOpen}
         onOpenChange={setAlertOpen}
         onDelete={() => deleteTask(taskIdToDelete)}
@@ -433,13 +435,13 @@ function TasksTable({
 
   const formatDateLabel = (dateStr: string) => {
     const date = parse(dateStr, "yyyy-MM-dd", new Date());
-    return isToday(date) ? "Today" : format(date, "MMM d, yyyy");
+    return isToday(date) ? "今天" : format(date, "yyyy年M月d日");
   };
 
   if (tasks.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
-        No tasks found. Create your first task to get started.
+        暂无任务，创建第一个任务即可开始。
       </div>
     );
   }
@@ -458,7 +460,7 @@ function TasksTable({
     return renderGroupedTables(
       groupOrder
         .filter((group) => groupedTasks[group].length > 0)
-        .map((group) => [group, groupedTasks[group]]),
+        .map((group) => [({ Overdue: "已逾期", Today: "今天", Tomorrow: "明天", "This Week": "本周", Later: "以后", "No Due Date": "无截止日期" })[group], groupedTasks[group]]),
     );
   }
 
@@ -487,7 +489,7 @@ function TasksTable({
         <TableBody>{tasks.map(renderTaskRow)}</TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="task"
+        pageTitle="任务"
         open={alertOpen}
         onOpenChange={setAlertOpen}
         onDelete={() => deleteTask(taskIdToDelete)}

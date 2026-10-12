@@ -35,16 +35,16 @@ describe("BoardsTable", () => {
   it("marks a row as watched by token, not by name", () => {
     renderTable();
     expect(
-      screen.getByRole("button", { name: /watch anthropic/i }),
+      screen.getByRole("button", { name: /关注Anthropic/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /unwatch ramp/i }),
+      screen.getByRole("button", { name: /取消关注Ramp/i }),
     ).toBeInTheDocument();
   });
 
   it("links each row to its public board", () => {
     renderTable();
-    const link = screen.getByRole("link", { name: /open anthropic job board/i });
+    const link = screen.getByRole("link", { name: /打开Anthropic的招聘平台/i });
     expect(link).toHaveAttribute("href", "https://jobs.ashbyhq.com/anthropic");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
@@ -57,7 +57,7 @@ describe("BoardsTable", () => {
     });
     renderTable({ onWatched });
 
-    await user.click(screen.getByRole("button", { name: /watch anthropic/i }));
+    await user.click(screen.getByRole("button", { name: /关注Anthropic/i }));
 
     await waitFor(() =>
       expect(onWatched).toHaveBeenCalledWith("anthropic", "new-id"),
@@ -73,7 +73,7 @@ describe("BoardsTable", () => {
     });
     renderTable({ onWatched, onUnwatched });
 
-    await user.click(screen.getByRole("button", { name: /watch anthropic/i }));
+    await user.click(screen.getByRole("button", { name: /关注Anthropic/i }));
 
     await waitFor(() => expect(onUnwatched).toHaveBeenCalledWith("anthropic"));
   });
@@ -87,7 +87,7 @@ describe("BoardsTable", () => {
     });
     renderTable({ onNeedsMerge });
 
-    await user.click(screen.getByRole("button", { name: /watch anthropic/i }));
+    await user.click(screen.getByRole("button", { name: /关注Anthropic/i }));
 
     await waitFor(() =>
       expect(onNeedsMerge).toHaveBeenCalledWith({
@@ -103,7 +103,7 @@ describe("BoardsTable", () => {
     (setCompanyWatched as any).mockResolvedValue({ success: true });
     renderTable({ onUnwatched });
 
-    await user.click(screen.getByRole("button", { name: /unwatch ramp/i }));
+    await user.click(screen.getByRole("button", { name: /取消关注Ramp/i }));
 
     await waitFor(() => {
       expect(setCompanyWatched).toHaveBeenCalledWith("company-ramp", false);

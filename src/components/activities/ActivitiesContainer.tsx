@@ -63,7 +63,7 @@ function ActivitiesContainer() {
           toastError(message);
         }
       } catch (error) {
-        toastError("Failed to load activities. Please try again.");
+        toastError("加载活动失败，请重试。");
       } finally {
         setInitialLoading(false);
         setLoadingMore(false);
@@ -161,16 +161,16 @@ function ActivitiesContainer() {
     <Card>
       <ResponsiveCardHeader>
         <div className="flex items-baseline gap-2">
-          <CardTitle>Activities</CardTitle>
+          <CardTitle>活动</CardTitle>
           {!initialLoading && totalActivities > 0 && (
-            <RecordsCount count={activitiesList.length} total={totalActivities} label="activities" />
+            <RecordsCount count={activitiesList.length} total={totalActivities} label="活动" />
           )}
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
           <SearchInput
             value={searchTerm}
             onChange={setSearchTerm}
-            placeholder="Search activities..."
+            placeholder="搜索活动…"
           />
           <Dialog open={activityFormOpen} onOpenChange={setActivityFormOpen}>
             <DialogTrigger asChild>
@@ -182,15 +182,15 @@ function ActivitiesContainer() {
               >
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  New Activity
+                  新建活动
                 </span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[725px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Add New Activity</DialogTitle>
+                <DialogTitle>添加活动</DialogTitle>
                 <DialogDescription>
-                  Log a new activity to track your time and progress.
+                  记录新活动，跟踪时间和进展。
                 </DialogDescription>
               </DialogHeader>
               <div className="p-4">

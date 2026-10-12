@@ -43,10 +43,8 @@ function JobLocationsTable({
     if (totalJobs > 0) {
       setAlert({
         openState: true,
-        title: "Associated jobs exist!",
-        description: `This location has ${totalJobs} associated job${
-          totalJobs === 1 ? "" : "s"
-        } (applied or not). Remove or reassign them before deleting this location.`,
+        title: "存在关联职位！",
+        description: `该工作地点关联了 ${totalJobs} 个职位（包括未投递的职位）。请先删除或调整这些职位的关联，再删除该工作地点。`,
         deleteAction: false,
       });
     } else {
@@ -61,7 +59,7 @@ function JobLocationsTable({
     if (locationId) {
       const { success, message } = await deleteJobLocationById(locationId);
       if (success) {
-        toastSuccess(`Job location has been deleted successfully`);
+        toastSuccess("工作地点已删除");
         reloadJobLocations();
       } else {
         toastError(message);
@@ -73,13 +71,13 @@ function JobLocationsTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Location</TableHead>
-            <TableHead className="hidden sm:table-cell">Value</TableHead>
-            <TableHead>Total Jobs</TableHead>
-            <TableHead>Jobs Applied</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>地点</TableHead>
+            <TableHead className="hidden sm:table-cell">标识值</TableHead>
+            <TableHead>职位总数</TableHead>
+            <TableHead>已投递职位</TableHead>
+            <TableHead>操作</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -120,18 +118,18 @@ function JobLocationsTable({
                     <DropdownMenuTrigger asChild>
                       <Button aria-haspopup="true" size="icon" variant="ghost">
                         <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">打开菜单</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>操作</DropdownMenuLabel>
                       {location._count?.jobsApplied ? (
                         <DropdownMenuItem className="cursor-pointer" asChild>
                           <Link
                             href={`/dashboard/myjobs?location=${encodeURIComponent(location.value)}&applied=true`}
                           >
                             <Briefcase className="mr-2 h-4 w-4" />
-                            View Jobs
+                            查看职位
                           </Link>
                         </DropdownMenuItem>
                       ) : null}
@@ -140,7 +138,7 @@ function JobLocationsTable({
                         onClick={() => onDeleteJobLocation(location)}
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        删除
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -151,7 +149,7 @@ function JobLocationsTable({
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="location"
+        pageTitle="地点"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteJobLocation(alert.itemId!)}

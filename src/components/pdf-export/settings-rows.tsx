@@ -110,7 +110,7 @@ export function StepperRow({
           variant="outline"
           size="icon"
           className="h-7 w-7 shrink-0"
-          aria-label={`Decrease ${spec.label}`}
+          aria-label={`减小${spec.label}`}
           disabled={value <= spec.min}
           onClick={() => stepBy(-1)}
         >
@@ -136,7 +136,7 @@ export function StepperRow({
           variant="outline"
           size="icon"
           className="h-7 w-7 shrink-0"
-          aria-label={`Increase ${spec.label}`}
+          aria-label={`增大${spec.label}`}
           disabled={value >= spec.max}
           onClick={() => stepBy(1)}
         >

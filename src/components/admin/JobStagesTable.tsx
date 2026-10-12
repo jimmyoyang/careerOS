@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import { Button } from "../ui/button";
 
@@ -46,10 +48,8 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
     if (stages > 0) {
       setAlert({
         openState: true,
-        title: "Stage type is in use!",
-        description: `This stage type is used by ${stages} job stage${
-          stages === 1 ? "" : "s"
-        }. Change or remove those stages before deleting the type.`,
+        title: "阶段类型正在使用中！",
+        description: `有 ${stages} 个求职阶段使用该类型。请先更改或删除这些阶段，再删除该类型。`,
         deleteAction: false,
       });
     } else {
@@ -61,7 +61,7 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
     if (typeId) {
       const { success, message } = await deleteJobStageTypeById(typeId);
       if (success) {
-        toastSuccess("Stage type has been deleted successfully");
+        toastSuccess("阶段类型已删除");
         reloadTypes();
       } else {
         toastError(message);
@@ -102,12 +102,12 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Stage</TableHead>
-            <TableHead>Parent Status</TableHead>
-            <TableHead className="hidden sm:table-cell">Order</TableHead>
-            <TableHead>Stages</TableHead>
+            <TableHead>阶段</TableHead>
+            <TableHead>所属状态</TableHead>
+            <TableHead className="hidden sm:table-cell">顺序</TableHead>
+            <TableHead>阶段</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">操作</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -115,7 +115,7 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
           {types.map((type: JobStageTypeRef, index: number) => {
             return (
               <TableRow key={type.id}>
-                <TableCell className="font-medium">{type.label}</TableCell>
+                <TableCell className="font-medium">{zhLabel(type.label)}</TableCell>
                 <TableCell>
                   {type.Status && (
                     <StatusBadge
@@ -135,17 +135,17 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
                     <DropdownMenuTrigger asChild>
                       <Button aria-haspopup="true" size="icon" variant="ghost">
                         <MoreVertical className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">打开菜单</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>操作</DropdownMenuLabel>
                       <DropdownMenuItem
                         className="cursor-pointer"
                         onClick={() => onEdit(type)}
                       >
                         <Pencil className="mr-2 h-4 w-4" />
-                        Edit
+                        编辑
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="cursor-pointer"
@@ -153,7 +153,7 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
                         onClick={() => move(index, -1)}
                       >
                         <ArrowUp className="mr-2 h-4 w-4" />
-                        Move Up
+                        上移
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="cursor-pointer"
@@ -161,14 +161,14 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
                         onClick={() => move(index, 1)}
                       >
                         <ArrowDown className="mr-2 h-4 w-4" />
-                        Move Down
+                        下移
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="text-red-600 cursor-pointer"
                         onClick={() => onDeleteType(type)}
                       >
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete
+                        删除
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -179,7 +179,7 @@ function JobStagesTable({ types, reloadTypes, onEdit }: JobStagesTableProps) {
         </TableBody>
       </Table>
       <DeleteAlertDialog
-        pageTitle="stage type"
+        pageTitle="阶段类型"
         open={alert.openState}
         onOpenChange={() => setAlert({ openState: false, deleteAction: false })}
         onDelete={() => deleteType(alert.itemId!)}

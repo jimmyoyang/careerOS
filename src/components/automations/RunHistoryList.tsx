@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel, zhMessage } from "@/lib/i18n/zh-CN";
+
 import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { Fragment } from "react";
@@ -139,7 +141,7 @@ export function RunHistoryList({
     const result = await deleteAutomationRun(deleteRunId);
     setDeleteRunId(null);
     if (result.success) {
-      toastSuccess("Run deleted");
+      toastSuccess("运行记录已删除");
       onDelete?.();
     } else {
       toastError(result.message);
@@ -151,9 +153,9 @@ export function RunHistoryList({
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <History className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium">No runs yet</h3>
+          <h3 className="text-lg font-medium">暂无运行记录</h3>
           <p className="text-muted-foreground text-center mt-2">
-            Run history will appear here once the automation runs.
+            自动化运行后，记录会显示在这里。
           </p>
         </CardContent>
       </Card>
@@ -164,24 +166,24 @@ export function RunHistoryList({
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Run History</CardTitle>
+          <CardTitle>运行记录</CardTitle>
           {totalRuns > 0 && (
-            <RecordsCount count={runs.length} total={totalRuns} label="runs" />
+            <RecordsCount count={runs.length} total={totalRuns} label="次运行" />
           )}
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Status</TableHead>
-                <TableHead>Started</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead className="text-center">Searched</TableHead>
-                <TableHead className="text-center">New</TableHead>
-                <TableHead className="text-center">Processed</TableHead>
-                <TableHead className="text-center">Matched</TableHead>
-                <TableHead className="text-center">Saved</TableHead>
-                <TableHead>Error</TableHead>
+                <TableHead>状态</TableHead>
+                <TableHead>开始时间</TableHead>
+                <TableHead>耗时</TableHead>
+                <TableHead className="text-center">已检索</TableHead>
+                <TableHead className="text-center">新增</TableHead>
+                <TableHead className="text-center">已处理</TableHead>
+                <TableHead className="text-center">已匹配</TableHead>
+                <TableHead className="text-center">已保存</TableHead>
+                <TableHead>错误</TableHead>
                 <TableHead />
               </TableRow>
             </TableHeader>
@@ -206,15 +208,15 @@ export function RunHistoryList({
                         <div className="flex items-center gap-2">
                           <StatusIcon className={`h-4 w-4 ${config.color}`} />
                           <Badge variant={config.variant}>
-                            {run.status.replace("_", " ")}
+                            {zhLabel(run.status)}
                           </Badge>
                         </div>
                       </TableCell>
                       <TableCell>
-                        {format(new Date(run.startedAt), "MMM d, h:mm a")}
+                        {format(new Date(run.startedAt), "M月d日 HH:mm")}
                       </TableCell>
                       <TableCell>
-                        {duration !== null ? `${duration}s` : "-"}
+                        {duration !== null ? `${duration}秒` : "-"}
                       </TableCell>
                       <TableCell className="text-center">
                         {run.jobsSearched}
@@ -237,7 +239,7 @@ export function RunHistoryList({
                             variant="outline"
                             className="max-w-md whitespace-normal"
                           >
-                            {run.blockedReason || run.errorMessage}
+                            {zhMessage(run.blockedReason || run.errorMessage || "")}
                           </Badge>
                         )}
                       </TableCell>
@@ -259,7 +261,7 @@ export function RunHistoryList({
                               <Fragment key={stage.key}>
                                 {i > 0 && <span className="opacity-50">→</span>}
                                 <span>
-                                  {stage.label}{" "}
+                                  {zhLabel(stage.label)}{" "}
                                   <span className="font-medium text-foreground">
                                     {stage.count}
                                   </span>
@@ -293,7 +295,7 @@ export function RunHistoryList({
       </Card>
 
       <DeleteAlertDialog
-        pageTitle="run"
+        pageTitle="运行记录"
         open={!!deleteRunId}
         onOpenChange={(open) => !open && setDeleteRunId(null)}
         onDelete={handleDelete}

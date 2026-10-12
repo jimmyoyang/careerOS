@@ -27,10 +27,10 @@ import { createActivityType } from "@/actions/activity.actions";
 
 const AddActivityTypeFormSchema = z.object({
   label: z
-    .string({ error: "Activity type label is required." })
-    .min(1, { message: "Activity type label cannot be empty." })
+    .string({ error: "请输入活动类型名称。" })
+    .min(1, { message: "活动类型名称不能为空。" })
     .max(60, {
-      message: "Activity type label must be 60 characters or fewer.",
+      message: "活动类型名称不能超过 60 个字符。",
     }),
 });
 
@@ -58,12 +58,12 @@ function AddActivityType({ reloadActivityTypes }: AddActivityTypeProps) {
     startTransition(async () => {
       try {
         await createActivityType(values.label);
-        toastSuccess("Activity type has been added successfully.");
+        toastSuccess("活动类型已添加。");
         setDialogOpen(false);
         reset();
         reloadActivityTypes();
       } catch {
-        toastError("Failed to create activity type.");
+        toastError("创建活动类型失败。");
       }
     });
   };
@@ -78,15 +78,15 @@ function AddActivityType({ reloadActivityTypes }: AddActivityTypeProps) {
       >
         <PlusCircle className="h-3.5 w-3.5" />
         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-          New Activity Type
+          新建活动类型
         </span>
       </Button>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Activity Type</DialogTitle>
+            <DialogTitle>添加活动类型</DialogTitle>
             <DialogDescription>
-              Add a new activity type to categorize your activities and tasks.
+              添加活动类型，用于分类活动和任务。
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -96,10 +96,10 @@ function AddActivityType({ reloadActivityTypes }: AddActivityTypeProps) {
                 name="label"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Activity Type Name</FormLabel>
+                    <FormLabel>活动类型名称</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. Networking, Interview Prep"
+                        placeholder="例如：拓展人脉、面试准备"
                         {...field}
                       />
                     </FormControl>
@@ -113,10 +113,10 @@ function AddActivityType({ reloadActivityTypes }: AddActivityTypeProps) {
                   variant="outline"
                   onClick={() => setDialogOpen(false)}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit" disabled={isPending}>
-                  Save
+                  保存
                   {isPending && (
                     <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />
                   )}

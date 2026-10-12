@@ -2,21 +2,21 @@ import { z } from "zod";
 
 export const SignupFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: "姓名至少需要 2 个字符。",
   }),
   email: z
     .string({
-      error: "Email is required.",
+      error: "请填写邮箱。",
     })
     .min(3, {
-      message: "Email must be at least 3 characters.",
+      message: "邮箱至少需要 3 个字符。",
     })
-    .email("Please enter a valid email."),
+    .email("请输入有效的邮箱地址。"),
   password: z
     .string({
-      error: "Please enter your password.",
+      error: "请输入密码。",
     })
     .min(6, {
-      message: "Password must be at least 6 characters.",
+      message: "密码至少需要 6 个字符。",
     }),
 });

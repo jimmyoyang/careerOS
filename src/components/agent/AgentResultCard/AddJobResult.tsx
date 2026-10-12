@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel, zhMessage } from "@/lib/i18n/zh-CN";
+
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import type { AgentAddJobResult } from "@/models/agent.model";
@@ -17,7 +19,7 @@ export function AddJobResult({
   if (output.validationError) {
     return (
       <p className="text-sm">
-        Could not add the job — {output.displayError ?? output.validationError}
+        无法添加岗位： {zhMessage(output.displayError ?? output.validationError)}
       </p>
     );
   }
@@ -26,15 +28,14 @@ export function AddJobResult({
     return (
       <div className="text-sm">
         <p>
-          Already tracked: <strong>{output.duplicateOf.title}</strong> at{" "}
-          <strong>{output.duplicateOf.company}</strong>. No second job was
-          created.
+          已在跟踪： <strong>{output.duplicateOf.title}</strong> ·{" "}
+          <strong>{output.duplicateOf.company}</strong>。未重复创建岗位。
         </p>
         <Link
           className="text-xs underline"
           href={`/dashboard/myjobs/${output.duplicateOf.id}`}
         >
-          Open the existing job
+          打开已有岗位
         </Link>
       </div>
     );
@@ -43,39 +44,39 @@ export function AddJobResult({
   const newEntities = output.resolutions
     .filter((r) => r.created)
     .map((r) => r.label);
-  const jobTitle = typeof input.jobTitle === "string" ? input.jobTitle : "job";
+  const jobTitle = typeof input.jobTitle === "string" ? input.jobTitle : "岗位";
   const company = typeof input.company === "string" ? input.company : undefined;
 
   return (
     <div className="text-sm">
       <p>
-        Added <strong>{jobTitle}</strong>
-        {company ? ` at ${company}` : ""}.
+        已添加 <strong>{jobTitle}</strong>
+        {company ? ` · ${company}` : ""}.
       </p>
       {output.jobId && (
         <Link
           className="text-xs underline"
           href={`/dashboard/myjobs/${output.jobId}`}
         >
-          Open the job
+          打开岗位
         </Link>
       )}
       {newEntities.length > 0 && (
         <p className="mt-1 text-xs text-muted-foreground">
-          New: {newEntities.join(", ")}
+          新增： {newEntities.join(", ")}
         </p>
       )}
       {output.descriptionChars !== undefined && (
         <p className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
           <span>
-            Description ·{" "}
+            描述 ·{" "}
             {output.descriptionSource === "pasted"
-              ? "pasted verbatim"
-              : "model-supplied"}{" "}
-            · {output.descriptionChars} chars
+              ? "按原文粘贴"
+              : "模型提取"}{" "}
+            · {output.descriptionChars} 字符
           </span>
           {output.descriptionCompleteness && (
-            <Badge variant="outline">{output.descriptionCompleteness}</Badge>
+            <Badge variant="outline">{zhLabel(output.descriptionCompleteness)}</Badge>
           )}
         </p>
       )}

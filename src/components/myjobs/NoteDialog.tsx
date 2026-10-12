@@ -66,7 +66,7 @@ export function NoteDialog({
         : await addNote(data);
 
       if (result.success) {
-        toastSuccess(`Note ${editNote ? "updated" : "added"} successfully`);
+        toastSuccess(`笔记已${editNote ? "更新" : "添加"}`);
         form.reset({ jobId, content: "" });
         onOpenChange(false);
         onSaved();
@@ -80,11 +80,11 @@ export function NoteDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{editNote ? "Edit Note" : "Add Note"}</DialogTitle>
+          <DialogTitle>{editNote ? "编辑笔记" : "添加笔记"}</DialogTitle>
           <DialogDescription>
             {editNote
-              ? "Update this note on the job application."
-              : "Add a note to this job application."}
+              ? "更新这条求职申请的笔记。"
+              : "为这条求职申请添加笔记。"}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -107,10 +107,10 @@ export function NoteDialog({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                取消
               </Button>
               <Button type="submit" disabled={isPending}>
-                Save
+                保存
                 {isPending && (
                   <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />
                 )}

@@ -39,14 +39,13 @@ export function AutomationDetailDialogs({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Abort this run?</AlertDialogTitle>
+            <AlertDialogTitle>中止本次运行？</AlertDialogTitle>
             <AlertDialogDescription>
-              The run will stop after the current step. Jobs already discovered
-              are kept; remaining jobs won&apos;t be processed.
+              当前步骤完成后将停止运行。已发现的岗位会保留，其余岗位将不再处理。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep running</AlertDialogCancel>
+            <AlertDialogCancel>继续运行</AlertDialogCancel>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
               onClick={(e) => {
@@ -54,7 +53,7 @@ export function AutomationDetailDialogs({
                 onAbortRun();
               }}
             >
-              Abort run
+              中止运行
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -66,21 +65,19 @@ export function AutomationDetailDialogs({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Automation</AlertDialogTitle>
+            <AlertDialogTitle>删除自动化</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this automation? This action
-              cannot be undone. Discovered jobs will remain but lose their
-              automation reference.
+              确定删除此自动化？此操作无法撤销。已发现的岗位将保留，但会解除与此自动化的关联。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>取消</AlertDialogCancel>
             <AlertDialogAction
               onClick={onDelete}
               disabled={isDeleting}
               className="bg-destructive-bg text-destructive-foreground hover:bg-destructive-bg/90"
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? "正在删除…" : "删除"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

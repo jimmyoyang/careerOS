@@ -61,16 +61,16 @@ export function TasksToolbar({
   return (
     <ResponsiveCardHeader>
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <CardTitle>Tasks</CardTitle>
+        <CardTitle>任务</CardTitle>
         {!initialLoading && totalTasks > 0 && (
-          <RecordsCount count={tasksCount} total={totalTasks} label="tasks" />
+          <RecordsCount count={tasksCount} total={totalTasks} label="任务" />
         )}
       </div>
       <div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
         <SearchInput
           value={searchTerm}
           onChange={onSearchTermChange}
-          placeholder="Search tasks..."
+          placeholder="搜索任务…"
         />
         {mounted ? (
           <DropdownMenu>
@@ -78,12 +78,12 @@ export function TasksToolbar({
               <Button variant="outline" size="sm" className="h-8 gap-1">
                 <Filter className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Status
+                  状态
                 </span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+              <DropdownMenuLabel>按状态筛选</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {(Object.keys(TASK_STATUSES) as TaskStatus[]).map((status) => (
                 <DropdownMenuCheckboxItem
@@ -100,7 +100,7 @@ export function TasksToolbar({
           <Button variant="outline" size="sm" className="h-8 gap-1">
             <Filter className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Status
+              状态
             </span>
           </Button>
         )}
@@ -108,24 +108,24 @@ export function TasksToolbar({
           <Select value={groupBy} onValueChange={onGroupByChange}>
             <SelectTrigger className="w-[140px] h-8">
               <ListFilter className="h-3.5 w-3.5" />
-              <SelectValue placeholder="Group by" />
+              <SelectValue placeholder="分组方式" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Group by</SelectLabel>
+                <SelectLabel>分组方式</SelectLabel>
                 <SelectSeparator />
-                <SelectItem value="none">None</SelectItem>
-                <SelectItem value="createdDate">Created Date</SelectItem>
-                <SelectItem value="dueDate">Due Date</SelectItem>
-                <SelectItem value="updatedDate">Updated Date</SelectItem>
-                <SelectItem value="activityType">Activity Type</SelectItem>
+                <SelectItem value="none">无</SelectItem>
+                <SelectItem value="createdDate">创建日期</SelectItem>
+                <SelectItem value="dueDate">截止日期</SelectItem>
+                <SelectItem value="updatedDate">更新日期</SelectItem>
+                <SelectItem value="activityType">活动类型</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         ) : (
           <Button variant="outline" size="sm" className="h-8 gap-1 w-[140px]">
             <ListFilter className="h-3.5 w-3.5" />
-            <span>Group by</span>
+            <span>分组方式</span>
           </Button>
         )}
         <Button
@@ -137,7 +137,7 @@ export function TasksToolbar({
         >
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            New Task
+            新建任务
           </span>
         </Button>
       </div>

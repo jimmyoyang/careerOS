@@ -11,7 +11,7 @@ import {
 async function navigateToDashboard(page: Page) {
   await page.goto("/dashboard");
   await expect(
-    page.getByRole("heading", { name: "Dashboard", exact: true }),
+    page.getByRole("heading", { name: "把每一次探索，变成下一步成长", exact: true }),
   ).toBeVisible();
 }
 
@@ -21,10 +21,10 @@ async function navigateToDashboard(page: Page) {
 // handshake until the Stop button actually disappears.
 async function stopRunningActivity(page: Page) {
   const stopButton = page.getByRole("button", {
-    name: "Stop Activity",
+    name: "结束活动",
     exact: true,
   });
-  const confirmSwitchBtn = page.getByRole("button", { name: "Stop & Start" });
+  const confirmSwitchBtn = page.getByRole("button", { name: "结束并开始" });
   await expect(async () => {
     if (await stopButton.isVisible().catch(() => false)) {
       await stopButton.click({ force: true });
@@ -49,16 +49,16 @@ async function createTaskWithActivityType(
 ) {
   await page.getByTestId("add-task-btn").click({ force: true });
   await expect(page.getByTestId("task-form-dialog-title")).toBeVisible();
-  const titleInput = page.getByPlaceholder("Enter task title");
+  const titleInput = page.getByPlaceholder("输入任务标题");
   await titleInput.waitFor({ state: "visible" });
   await titleInput.fill(title);
   await titleInput.blur();
 
-  await page.getByText("Select activityType").click({ force: true });
+  await page.getByText("选择活动类型").click({ force: true });
   await page
-    .getByPlaceholder("Create or Search activityType")
+    .getByPlaceholder("创建或搜索活动类型")
     .fill(activityType);
-  const createOption = page.getByText(`Create: ${activityType}`);
+  const createOption = page.getByText(`创建： ${activityType}`);
   const existingOption = page.getByRole("option", {
     name: activityType,
     exact: true,
@@ -70,7 +70,7 @@ async function createTaskWithActivityType(
     await createOption.click({ force: true });
   }
   await expect(
-    page.getByPlaceholder("Create or Search activityType"),
+    page.getByPlaceholder("创建或搜索活动类型"),
   ).not.toBeVisible({ timeout: 15000 });
   cleanup.activityType(activityType);
 
@@ -95,21 +95,21 @@ async function createCompletedActivity(
   await page.goto("/dashboard/activities");
   await page.getByTestId("add-activity-btn").waitFor({ state: "visible" });
   await page.getByTestId("add-activity-btn").click();
-  await expect(page.getByText("Add New Activity")).toBeVisible();
+  await expect(page.getByText("添加活动")).toBeVisible();
 
   await page
-    .getByPlaceholder("Ex: Job Search, Learning skill, etc")
+    .getByPlaceholder("例如：找工作、学习技能等")
     .fill(activityName);
   await selectOrCreate(
     page,
-    "Activity Type",
-    "Create or Search activityType",
+    "活动类型",
+    "创建或搜索活动类型",
     activityType,
   );
   cleanup.activityType(activityType);
 
   await page.getByTestId("save-activity-btn").click();
-  await expect(page.getByText("Add New Activity")).not.toBeVisible({
+  await expect(page.getByText("添加活动")).not.toBeVisible({
     timeout: 10000,
   });
   cleanup.activity(activityName);
@@ -123,8 +123,8 @@ test.describe("Dashboard page", () => {
     const jobText = uniqueName("dashboard applied job");
     await createNewJob(page, jobText, cleanup, {
       beforeSave: async (page) => {
-        await page.getByLabel("Select Job Status").click();
-        await page.getByRole("option", { name: "Applied", exact: true }).click();
+        await page.getByLabel("选择职位状态").click();
+        await page.getByRole("option", { name: "已投递", exact: true }).click();
       },
     });
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
@@ -132,14 +132,14 @@ test.describe("Dashboard page", () => {
     await navigateToDashboard(page);
 
     await expect(
-      page.getByRole("button", { name: "Add Job", exact: true }),
+      page.getByRole("button", { name: "添加职位", exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Add Task", exact: true }),
+      page.getByRole("button", { name: "添加待办", exact: true }),
     ).toBeVisible();
 
     await expect(
-      page.getByRole("heading", { name: "Jobs & Activity", exact: true }),
+      page.getByRole("heading", { name: "职位与活动", exact: true }),
     ).toBeVisible();
     // The merged donut's center reports the applied-job count for the active
     // period. The job created above is applied today, so the default 7d tab
@@ -150,23 +150,23 @@ test.describe("Dashboard page", () => {
     await expect(
       page
         .getByTestId("jobs-activity-total")
-        .getByText(/^[1-9]\d* jobs?$/),
+        .getByText(/^[1-9]\d* 个职位$/),
     ).toBeVisible();
 
     await expect(
-      page.getByRole("heading", { name: "Recent Jobs", exact: true }),
+      page.getByRole("heading", { name: "最近 职位", exact: true }),
     ).toBeVisible();
     await expect(page.getByRole("link", { name: jobText })).toBeVisible();
 
     await expect(
-      page.getByRole("heading", { name: "Weekly Jobs", exact: true }),
+      page.getByRole("heading", { name: "本周 职位", exact: true }),
     ).toBeVisible();
 
     await expect(
-      page.getByRole("heading", { name: "Activity Calendar", exact: true }),
+      page.getByRole("heading", { name: "活动日历", exact: true }),
     ).toBeVisible();
     const currentYear = new Date().getFullYear().toString();
-    await page.getByLabel("Select year").click();
+    await page.getByLabel("选择年份").click();
     await expect(
       page.getByRole("option", { name: currentYear, exact: true }),
     ).toBeVisible();
@@ -175,38 +175,38 @@ test.describe("Dashboard page", () => {
   test("should navigate to create a new job, task, question, and automation from dashboard quick actions", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "Add Job", exact: true }).click();
+    await page.getByRole("button", { name: "添加职位", exact: true }).click();
     await expect(page).toHaveURL(/\/dashboard\/myjobs/);
     await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
-    await page.getByRole("button", { name: "Cancel" }).click();
+    await page.getByRole("button", { name: "取消" }).click();
     await expect(page.getByTestId("add-job-dialog-title")).not.toBeVisible();
 
     await navigateToDashboard(page);
-    await page.getByRole("button", { name: "Add Task", exact: true }).click();
+    await page.getByRole("button", { name: "添加待办", exact: true }).click();
     await expect(page).toHaveURL(/\/dashboard\/tasks/);
     await expect(page.getByTestId("task-form-dialog-title")).toBeVisible();
-    await page.getByRole("button", { name: "Cancel" }).click();
+    await page.getByRole("button", { name: "取消" }).click();
     await expect(page.getByTestId("task-form-dialog-title")).not.toBeVisible();
 
     await navigateToDashboard(page);
     await page
-      .getByRole("button", { name: "Add Question", exact: true })
+      .getByRole("button", { name: "添加题目", exact: true })
       .click();
     await expect(page).toHaveURL(/\/dashboard\/questions/);
     await expect(page.getByTestId("question-form-dialog-title")).toBeVisible();
-    await page.getByRole("button", { name: "Cancel" }).click();
+    await page.getByRole("button", { name: "取消" }).click();
     await expect(
       page.getByTestId("question-form-dialog-title"),
     ).not.toBeVisible();
 
     await navigateToDashboard(page);
     await page
-      .getByRole("button", { name: "Add Automation", exact: true })
+      .getByRole("button", { name: "添加自动任务", exact: true })
       .click();
     await expect(page).toHaveURL(/\/dashboard\/automations/);
     const wizard = page.getByRole("dialog");
-    await expect(wizard.getByText("Step 1 of 6")).toBeVisible();
-    await wizard.getByRole("button", { name: "Close" }).click();
+    await expect(wizard.getByText("步骤 1 / 6")).toBeVisible();
+    await wizard.getByRole("button", { name: "关闭" }).click();
     await expect(wizard).not.toBeVisible();
   });
 
@@ -220,15 +220,15 @@ test.describe("Dashboard page", () => {
     ).toHaveClass(/bg-primary/);
 
     const recentToggle = page.getByTestId("recent-card-toggle-group");
-    await recentToggle.getByRole("button", { name: "Activities" }).click();
+    await recentToggle.getByRole("button", { name: "活动" }).click();
     await expect(
-      page.getByRole("heading", { name: "Recent Activities", exact: true }),
+      page.getByRole("heading", { name: "最近 活动", exact: true }),
     ).toBeVisible();
 
     const weeklyToggle = page.getByTestId("weekly-chart-toggle-group");
-    await weeklyToggle.getByRole("button", { name: "Activities" }).click();
+    await weeklyToggle.getByRole("button", { name: "活动" }).click();
     await expect(
-      page.getByRole("heading", { name: "Weekly Activities", exact: true }),
+      page.getByRole("heading", { name: "本周 活动", exact: true }),
     ).toBeVisible();
   });
 
@@ -252,7 +252,7 @@ test.describe("Dashboard page", () => {
     await taskRow.getByTestId("task-start-activity-btn").click({ force: true });
     // If another activity was already running (e.g. from a concurrently
     // running spec), confirm the switch instead of hanging on the dialog.
-    const confirmSwitchBtn = page.getByRole("button", { name: "Stop & Start" });
+    const confirmSwitchBtn = page.getByRole("button", { name: "结束并开始" });
     try {
       await confirmSwitchBtn.waitFor({ state: "visible", timeout: 3000 });
       await confirmSwitchBtn.click();
@@ -260,7 +260,7 @@ test.describe("Dashboard page", () => {
       // No conflicting activity, continue.
     }
     await expect(
-      page.getByRole("button", { name: "Stop Activity", exact: true }),
+      page.getByRole("button", { name: "结束活动", exact: true }),
     ).toBeVisible({ timeout: 10000 });
 
     await stopRunningActivity(page);
@@ -268,7 +268,7 @@ test.describe("Dashboard page", () => {
     await navigateToDashboard(page);
     await page
       .getByTestId("recent-card-toggle-group")
-      .getByRole("button", { name: "Activities" })
+      .getByRole("button", { name: "活动" })
       .click();
     await expect(page.getByText(taskTitle, { exact: true })).not.toBeVisible();
   });
@@ -284,7 +284,7 @@ test.describe("Dashboard page", () => {
     await navigateToDashboard(page);
     await page
       .getByTestId("recent-card-toggle-group")
-      .getByRole("button", { name: "Activities" })
+      .getByRole("button", { name: "活动" })
       .click();
 
     const activityRow = page
@@ -301,7 +301,7 @@ test.describe("Dashboard page", () => {
 
     // If another activity was already running (e.g. from a concurrently
     // running spec), confirm the switch instead of hanging on the dialog.
-    const confirmSwitchBtn = page.getByRole("button", { name: "Stop & Start" });
+    const confirmSwitchBtn = page.getByRole("button", { name: "结束并开始" });
     try {
       await confirmSwitchBtn.waitFor({ state: "visible", timeout: 3000 });
       await confirmSwitchBtn.click();
@@ -310,7 +310,7 @@ test.describe("Dashboard page", () => {
     }
 
     await expect(
-      page.getByRole("button", { name: "Stop Activity", exact: true }),
+      page.getByRole("button", { name: "结束活动", exact: true }),
     ).toBeVisible({ timeout: 10000 });
 
     await stopRunningActivity(page);

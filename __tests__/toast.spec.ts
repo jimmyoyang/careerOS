@@ -44,7 +44,7 @@ describe("toastError", () => {
 
   it("falls back to a generic message when no message is given", () => {
     toastError();
-    expect(toast.error).toHaveBeenCalledWith("Something went wrong. Please try again.");
+    expect(toast.error).toHaveBeenCalledWith("操作失败，请重试。");
   });
 });
 
@@ -83,6 +83,6 @@ describe("toastActionResult", () => {
   it("falls back to the generic message when result is undefined and no error override is given", () => {
     toastActionResult(undefined, { success: "Job has been created successfully" });
 
-    expect(toast.error).toHaveBeenCalledWith("Something went wrong. Please try again.");
+    expect(toast.error).toHaveBeenCalledWith("操作失败，请重试。");
   });
 });

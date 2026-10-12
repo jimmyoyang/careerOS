@@ -129,9 +129,9 @@ function ApiKeySettings() {
       if (!verifyData.success) {
         const title =
           verifyData.reason === "unreachable"
-            ? `Cannot reach ${PROVIDERS.find((p) => p.id === provider)?.name ?? provider}`
-            : "Verification failed";
-        toastError(verifyData.error || "Could not verify the key", title);
+            ? `无法连接到 ${PROVIDERS.find((p) => p.id === provider)?.name ?? provider}`
+            : "验证失败";
+        toastError(verifyData.error || "无法验证密钥", title);
         return;
       }
 
@@ -142,16 +142,16 @@ function ApiKeySettings() {
         sensitive: providerConfig?.sensitive ?? true,
       });
       if (saveResult.success) {
-        toastSuccess(`${PROVIDERS.find((p) => p.id === provider)?.name} key verified and saved.`, "API key saved");
+        toastSuccess(`${PROVIDERS.find((p) => p.id === provider)?.name} 密钥已验证并保存。`, "API 密钥已保存");
         setEditingProvider(null);
         setInputValue("");
         await fetchKeys();
       } else {
-        toastError(saveResult.message || "Failed to save API key", "Save failed");
+        toastError(saveResult.message || "保存 API 密钥失败", "保存失败");
       }
     } catch (error) {
       console.error("Error saving API key:", error);
-      toastError("An unexpected error occurred");
+      toastError("发生意外错误");
     } finally {
       setVerifying(false);
     }
@@ -162,10 +162,10 @@ function ApiKeySettings() {
     try {
       const result = await deleteApiKey(provider);
       if (result.success) {
-        toastSuccess(`${PROVIDERS.find((p) => p.id === provider)?.name} key removed.`, "API key deleted");
+        toastSuccess(`${PROVIDERS.find((p) => p.id === provider)?.name} 密钥已移除。`, "API 密钥已删除");
         await fetchKeys();
       } else {
-        toastError(result.message || "Failed to delete API key");
+        toastError(result.message || "删除 API 密钥失败");
       }
     } catch (error) {
       console.error("Error deleting API key:", error);
@@ -183,14 +183,14 @@ function ApiKeySettings() {
     return (
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium">API Keys</h3>
+          <h3 className="text-lg font-medium">API 密钥</h3>
           <p className="text-sm text-muted-foreground">
-            Manage your API keys for AI providers and external services.
+            管理 AI 服务商和外部服务的 API 密钥。
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Loading keys...</span>
+          <span>正在加载密钥…</span>
         </div>
       </div>
     );
@@ -199,10 +199,9 @@ function ApiKeySettings() {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium">API Keys</h3>
+        <h3 className="text-lg font-medium">API 密钥</h3>
         <p className="text-sm text-muted-foreground">
-          Manage your API keys for AI providers and external services. Keys are
-          encrypted and stored securely.
+          管理 AI 服务商和外部服务的 API 密钥。密钥会加密后安全存储。
         </p>
       </div>
 
@@ -222,7 +221,7 @@ function ApiKeySettings() {
                       {provider.description}
                       {isBaseUrl && (
                         <span className="block text-xs text-muted-foreground/70 mt-0.5">
-                          Default: {provider.id === "ollama" ? defaultOllamaUrl : provider.placeholder}
+                          默认值： {provider.id === "ollama" ? defaultOllamaUrl : provider.placeholder}
                         </span>
                       )}
                     </CardDescription>
@@ -235,7 +234,7 @@ function ApiKeySettings() {
                         : existingKey.displayValue || existingKey.last4}
                     </Badge>
                   ) : (
-                    <Badge variant="secondary">Not configured</Badge>
+                    <Badge variant="secondary">未配置</Badge>
                   )}
                 </div>
               </CardHeader>
@@ -245,17 +244,17 @@ function ApiKeySettings() {
                     {ollamaChecking ? (
                       <div className="flex items-center gap-1 text-muted-foreground text-sm">
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        <span>Checking...</span>
+                        <span>正在检查…</span>
                       </div>
                     ) : ollamaConnected === true ? (
                       <div className="flex items-center gap-1 text-green-600 text-sm">
                         <CheckCircle className="h-3.5 w-3.5 shrink-0" />
-                        <span>Ollama is running</span>
+                        <span>Ollama 正在运行</span>
                       </div>
                     ) : ollamaConnected === false ? (
                       <div className="flex items-center gap-1 text-red-600 text-sm">
                         <XCircle className="h-3.5 w-3.5 shrink-0" />
-                        <span>Ollama is not running</span>
+                        <span>Ollama 未运行</span>
                       </div>
                     ) : null}
                     <Button
@@ -275,7 +274,7 @@ function ApiKeySettings() {
                   <div className="space-y-3">
                     <div>
                       <Label htmlFor={`key-${provider.id}`}>
-                        {isBaseUrl ? "Base URL" : "API Key"}
+                        {isBaseUrl ? "服务地址" : "API 密钥"}
                       </Label>
                       <Input
                         id={`key-${provider.id}`}
@@ -299,14 +298,14 @@ function ApiKeySettings() {
                         {verifying && (
                           <Loader2 className="mr-2 h-3 w-3 animate-spin" />
                         )}
-                        Verify & Save
+                        验证并保存
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={handleCancel}
                       >
-                        Cancel
+                        取消
                       </Button>
                     </div>
                   </div>
@@ -321,7 +320,7 @@ function ApiKeySettings() {
                       }}
                     >
                       <Plus className="h-3 w-3 mr-1" />
-                      {existingKey ? "Update Key" : "Add Key"}
+                      {existingKey ? "更新密钥" : "添加密钥"}
                     </Button>
                     {existingKey && (
                       <AlertDialog>
@@ -338,7 +337,7 @@ function ApiKeySettings() {
                               <Trash2 className="h-3 w-3" />
                             )}
                             {isBaseUrl && (
-                              <span className="ml-1">Reset to default</span>
+                              <span className="ml-1">恢复默认值</span>
                             )}
                           </Button>
                         </AlertDialogTrigger>
@@ -346,14 +345,13 @@ function ApiKeySettings() {
                           <AlertDialogHeader>
                             <AlertDialogTitle>
                               {isBaseUrl
-                                ? `Reset ${provider.name} Base URL`
-                                : "Delete API Key"}
+                                ? `重置 ${provider.name} 服务地址`
+                                : "删除 API 密钥"}
                             </AlertDialogTitle>
                             <AlertDialogDescription>
                               {isBaseUrl ? (
                                 <>
-                                  Clear the saved {provider.name} base URL?
-                                  JobSync will use the server default,{" "}
+                                  清除已保存的 {provider.name} 服务地址？JobSync 将使用服务器默认地址{" "}
                                   {provider.id === "ollama"
                                     ? defaultOllamaUrl
                                     : provider.placeholder}
@@ -361,20 +359,18 @@ function ApiKeySettings() {
                                 </>
                               ) : (
                                 <>
-                                  Are you sure you want to delete your{" "}
-                                  {provider.name} key? The system will fall back
-                                  to the server environment variable if
-                                  available.
+                                  确定要删除您的{" "}
+                                  {provider.name} 密钥吗？如果服务器环境变量中已配置密钥，系统将改用该密钥。
                                 </>
                               )}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => handleDelete(provider.id)}
                             >
-                              {isBaseUrl ? "Reset" : "Delete"}
+                              {isBaseUrl ? "重置" : "删除"}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>

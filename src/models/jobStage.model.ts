@@ -71,12 +71,12 @@ export const AddJobStageFormSchema = z
     setAsCurrent: z.boolean().default(true),
   })
   .refine((data) => !!data.stageTypeId || !!data.customLabel?.trim(), {
-    message: "Pick a stage or enter a custom stage name.",
+    message: "请选择阶段或填写自定义阶段名称。",
     path: ["stageTypeId"],
   })
   .refine(
     (data) => !data.customLabel?.trim() || !!data.customStatusId,
-    { message: "Pick the status this custom stage means.", path: ["customStatusId"] },
+    { message: "请选择自定义阶段对应的状态。", path: ["customStatusId"] },
   );
 
 export type AddJobStageValues = z.infer<typeof AddJobStageFormSchema>;

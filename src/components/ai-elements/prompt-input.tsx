@@ -415,7 +415,7 @@ export type PromptInputActionAddAttachmentsProps = ComponentProps<
 };
 
 export const PromptInputActionAddAttachments = ({
-  label = "Add photos or files",
+  label = "添加照片或文件",
   ...props
 }: PromptInputActionAddAttachmentsProps) => {
   const attachments = usePromptInputAttachments();
@@ -442,7 +442,7 @@ export type PromptInputActionAddScreenshotProps = ComponentProps<
 };
 
 export const PromptInputActionAddScreenshot = ({
-  label = "Take screenshot",
+  label = "截取屏幕",
   onSelect,
   ...props
 }: PromptInputActionAddScreenshotProps) => {
@@ -582,7 +582,7 @@ export const PromptInput = ({
       if (incoming.length && accepted.length === 0) {
         onError?.({
           code: "accept",
-          message: "No files match the accepted types.",
+          message: "没有符合支持类型的文件。",
         });
         return;
       }
@@ -592,7 +592,7 @@ export const PromptInput = ({
       if (accepted.length > 0 && sized.length === 0) {
         onError?.({
           code: "max_file_size",
-          message: "All files exceed the maximum size.",
+          message: "所有文件均超过大小限制。",
         });
         return;
       }
@@ -607,7 +607,7 @@ export const PromptInput = ({
         if (typeof capacity === "number" && sized.length > capacity) {
           onError?.({
             code: "max_files",
-            message: "Too many files. Some were not added.",
+            message: "文件数量过多，部分文件未添加。",
           });
         }
         const next: (FileUIPart & { id: string })[] = [];
@@ -646,7 +646,7 @@ export const PromptInput = ({
       if (incoming.length && accepted.length === 0) {
         onError?.({
           code: "accept",
-          message: "No files match the accepted types.",
+          message: "没有符合支持类型的文件。",
         });
         return;
       }
@@ -656,7 +656,7 @@ export const PromptInput = ({
       if (accepted.length > 0 && sized.length === 0) {
         onError?.({
           code: "max_file_size",
-          message: "All files exceed the maximum size.",
+          message: "所有文件均超过大小限制。",
         });
         return;
       }
@@ -671,7 +671,7 @@ export const PromptInput = ({
       if (typeof capacity === "number" && sized.length > capacity) {
         onError?.({
           code: "max_files",
-          message: "Too many files. Some were not added.",
+          message: "文件数量过多，部分文件未添加。",
         });
       }
 
@@ -907,12 +907,12 @@ export const PromptInput = ({
     <>
       <input
         accept={accept}
-        aria-label="Upload files"
+        aria-label="上传文件"
         className="hidden"
         multiple={multiple}
         onChange={handleChange}
         ref={inputRef}
-        title="Upload files"
+        title="上传文件"
         type="file"
       />
       <form
@@ -957,7 +957,7 @@ export const PromptInputTextarea = ({
   onChange,
   onKeyDown,
   className,
-  placeholder = "What would you like to know?",
+  placeholder = "您想了解什么？",
   ...props
 }: PromptInputTextareaProps) => {
   const controller = useOptionalPromptInputController();
@@ -1249,7 +1249,7 @@ export const PromptInputSubmit = ({
 
   return (
     <InputGroupButton
-      aria-label={isGenerating ? "Stop" : "Submit"}
+      aria-label={isGenerating ? "停止" : "提交"}
       className={cn(className)}
       onClick={handleClick}
       size={size}

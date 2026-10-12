@@ -23,7 +23,7 @@ export function StructureWithAiCard({
       <ResponsiveCardHeader>
         <div>
           <p className="text-sm text-muted-foreground">
-            A file is attached. Structure it into sections using AI.
+            已有附件，可使用 AI 将内容整理为简历模块。
           </p>
           {aiModel.provider === "ollama" &&
             ollamaConnected === false &&
@@ -47,7 +47,7 @@ export function StructureWithAiCard({
           ) : (
             <Sparkles className="h-4 w-4 mr-2" />
           )}
-          {isStructuring ? "Structuring…" : "Structure with AI"}
+          {isStructuring ? "正在整理…" : "使用 AI 整理"}
         </Button>
       </ResponsiveCardHeader>
     </Card>

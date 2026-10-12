@@ -13,17 +13,17 @@ export const PROVIDER_META: Record<
 > = {
   greenhouse: {
     label: "Greenhouse",
-    urlHint: "Or paste a boards.greenhouse.io link",
+    urlHint: "或粘贴 boards.greenhouse.io 链接",
     searchExample: "Anthropic",
   },
   lever: {
     label: "Lever",
-    urlHint: "Or paste a jobs.lever.co link or token",
+    urlHint: "或粘贴 jobs.lever.co 链接或标识",
     searchExample: "Netflix",
   },
   ashby: {
     label: "Ashby",
-    urlHint: "Or paste a jobs.ashbyhq.com link or token",
+    urlHint: "或粘贴 jobs.ashbyhq.com 链接或标识",
     searchExample: "Ramp",
   },
 };

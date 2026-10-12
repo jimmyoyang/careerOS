@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useState } from "react";
 import { useActivity } from "@/context/ActivityContext";
 import { ActivityBanner } from "./ActivityBanner";
@@ -20,7 +22,7 @@ export function GlobalActivityBanner() {
       <div className="px-4 sm:px-6">
         <ActivityBanner
           title={currentActivity.activityName}
-          typeLabel={activityType?.label || "Activity"}
+          typeLabel={zhLabel(activityType?.label || "活动")}
           onStopActivity={stopActivity}
           onStartBreak={
             isOnBreak || breakOpen ? undefined : () => setBreakOpen(true)

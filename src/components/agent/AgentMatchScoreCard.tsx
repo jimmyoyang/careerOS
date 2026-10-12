@@ -1,5 +1,7 @@
 "use client";
 
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { RadialChartComponent } from "@/components/RadialChartSvg";
 import { Badge } from "@/components/ui/badge";
 import type { JobMatchScores } from "@/models/ai.schemas";
@@ -30,7 +32,7 @@ export function AgentMatchScoreCard({
           variant={recommendationVariant(scores.recommendation)}
           className="mt-2 capitalize"
         >
-          {scores.recommendation}
+          {zhLabel(scores.recommendation)}
         </Badge>
       )}
     </div>

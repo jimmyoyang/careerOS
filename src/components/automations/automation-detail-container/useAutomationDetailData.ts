@@ -77,7 +77,7 @@ export function useAutomationDetailData(automationId: string) {
           setAutomation(automationResult.data);
           setRuns(automationResult.data.runs || []);
         } else {
-          toastError(automationResult.message || "Automation not found");
+          toastError(automationResult.message || "未找到自动化");
           router.push("/dashboard/automations");
           return;
         }
@@ -97,7 +97,7 @@ export function useAutomationDetailData(automationId: string) {
           }
         }
       } catch (error) {
-        toastError("Failed to load automation details");
+        toastError("加载自动化详情失败");
       }
       if (showLoading) setLoading(false);
     },

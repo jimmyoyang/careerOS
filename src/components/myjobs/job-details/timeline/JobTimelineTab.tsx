@@ -37,9 +37,9 @@ export function JobTimelineTab({
     return (
       <JobTabEmptyState
         icon={CalendarClock}
-        title="No stages recorded yet"
-        description="Add the first stage to start this job's timeline. Its status stays as it is until a stage sets it."
-        actionLabel="Add stage"
+        title="暂无阶段记录"
+        description="添加首个阶段，开始记录求职进展。职位状态将在阶段设置后更新。"
+        actionLabel="添加阶段"
         onAction={onAddStage}
         actionTestId="timeline-add-stage-btn"
       />

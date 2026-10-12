@@ -1,3 +1,4 @@
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { TopActivityType } from "@/actions/dashboard.actions";
 
 // Donut hues, validated for colorblind separation against each theme's
@@ -20,7 +21,7 @@ export const OTHER_SLICE_ID = "__other__";
 // as two identically-labeled slices/bars.
 export function otherBucketLabel(topLabels: string[]): string {
   return topLabels.includes(OTHER_ACTIVITY_LABEL)
-    ? "Other activity types"
+    ? "其他活动类型"
     : OTHER_ACTIVITY_LABEL;
 }
 
@@ -121,10 +122,11 @@ export function arcLabelLines(
   slice: DonutSlice,
   maxChars: number,
 ): [string, string] {
+  const displayLabel = zhLabel(slice.label);
   const name =
-    slice.label.length > maxChars
-      ? `${slice.label.slice(0, maxChars - 1).trimEnd()}…`
-      : slice.label;
+    displayLabel.length > maxChars
+      ? `${displayLabel.slice(0, maxChars - 1).trimEnd()}…`
+      : displayLabel;
 
-  return [name, `${slice.value}h`];
+  return [name, `${slice.value} 小时`];
 }

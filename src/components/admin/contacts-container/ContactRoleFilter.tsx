@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 
 import {
   Select,
@@ -24,14 +26,14 @@ export function ContactRoleFilter({ roles, roleId, onRoleChange }: Props) {
       value={roleId ?? ALL}
       onValueChange={(v) => onRoleChange(v === ALL ? undefined : v)}
     >
-      <SelectTrigger aria-label="Filter by role" className="h-8 w-[160px]">
+      <SelectTrigger aria-label="按角色筛选" className="h-8 w-[160px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={ALL}>All roles</SelectItem>
+        <SelectItem value={ALL}>全部角色</SelectItem>
         {roles.map((role) => (
           <SelectItem key={role.id} value={role.id}>
-            {role.label}
+            {zhLabel(role.label)}
           </SelectItem>
         ))}
       </SelectContent>

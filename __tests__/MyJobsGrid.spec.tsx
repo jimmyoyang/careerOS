@@ -84,14 +84,14 @@ describe("MyJobsGrid", () => {
       }),
     ]);
 
-    await user.click(screen.getAllByRole("button", { name: "Delete Job" })[1]);
+    await user.click(screen.getAllByRole("button", { name: "删除职位" })[1]);
 
     expect(
-      screen.getByText("Are you sure you want to delete this job?"),
+      screen.getByText("确定删除此职位吗？"),
     ).toBeInTheDocument();
     expect(deleteJob).not.toHaveBeenCalled();
 
-    await user.click(screen.getByRole("button", { name: "Delete" }));
+    await user.click(screen.getByRole("button", { name: "删除" }));
 
     expect(deleteJob).toHaveBeenCalledWith("job-2");
   });

@@ -226,7 +226,7 @@ function useAgentChatValue(initialMessages: UIMessage[]) {
       setInterruptedTurn(true);
       // The one abort the user gets no on-screen signal for — the panel they
       // would have read it in is the thing that just went away.
-      toastInfo("Generation stopped. Reopen the assistant to continue.");
+      toastInfo("生成已停止，重新打开助手即可继续。");
     }
     setIsOpen(false);
     releaseRail(AGENT_CHAT_PANEL_ID);
@@ -245,7 +245,7 @@ function useAgentChatValue(initialMessages: UIMessage[]) {
         checked: true,
         ok: false,
         error:
-          "No AI model is configured. Pick one in Settings to use the assistant.",
+          "尚未配置 AI 模型，请先在设置中选择模型后再使用助手。",
         provider,
       });
       return;
@@ -261,7 +261,7 @@ function useAgentChatValue(initialMessages: UIMessage[]) {
       ok: result.isConnected,
       error: result.isConnected
         ? undefined
-        : (result.error ?? "Ollama is not reachable."),
+        : (result.error ?? "无法连接到 Ollama。"),
       provider,
       model: ai.model,
     });
@@ -302,7 +302,7 @@ function useAgentChatValue(initialMessages: UIMessage[]) {
     setToolStreams({});
     setQueued(undefined);
     // Clearing an idle conversation aborted nothing worth reporting.
-    if (wasStreaming) toastInfo("Conversation cleared and generation stopped.");
+    if (wasStreaming) toastInfo("对话已清空，生成已停止。");
   }, [chat]);
 
   const approvalPending = useMemo(

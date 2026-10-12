@@ -27,8 +27,8 @@ export function CompanyJobsTab({ jobs }: CompanyJobsTabProps) {
     return (
       <JobTabEmptyState
         icon={Briefcase}
-        title="No jobs at this company yet"
-        description="Jobs you add or accept from an automation for this company show up here."
+        title="该公司暂无职位"
+        description="你添加的或从自动化任务中收录的该公司职位会显示在这里。"
       />
     );
   }
@@ -37,12 +37,12 @@ export function CompanyJobsTab({ jobs }: CompanyJobsTabProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Title</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="hidden md:table-cell">Location</TableHead>
-          <TableHead className="hidden md:table-cell">Applied</TableHead>
-          <TableHead>Match</TableHead>
-          <TableHead className="hidden md:table-cell">Source</TableHead>
+          <TableHead>标题</TableHead>
+          <TableHead>状态</TableHead>
+          <TableHead className="hidden md:table-cell">地点</TableHead>
+          <TableHead className="hidden md:table-cell">已投递</TableHead>
+          <TableHead>匹配</TableHead>
+          <TableHead className="hidden md:table-cell">来源</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -67,10 +67,10 @@ export function CompanyJobsTab({ jobs }: CompanyJobsTabProps) {
             </TableCell>
             <TableCell className="hidden md:table-cell">
               {job.appliedDate
-                ? format(new Date(job.appliedDate), "PP")
+                ? format(new Date(job.appliedDate), "yyyy年M月d日")
                 : job.applied
-                  ? "Applied"
-                  : "Not applied"}
+                  ? "已投递"
+                  : "未投递"}
             </TableCell>
             <TableCell>
               {job.matchScore != null ? (

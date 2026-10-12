@@ -57,32 +57,32 @@ describe("JobStagesContainer", () => {
     render(<JobStagesContainer />);
 
     expect(
-      await screen.findByText("Final / Onsite Interview"),
+      await screen.findByText("终面 / 现场面试"),
     ).toBeInTheDocument();
-    expect(screen.getByText("Interview")).toBeInTheDocument();
+    expect(screen.getByText("面试中")).toBeInTheDocument();
     expect(screen.getByText("6")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
   });
 
   it("refuses to delete a type that is in use, naming the count", async () => {
     render(<JobStagesContainer />);
-    await screen.findByText("Final / Onsite Interview");
+    await screen.findByText("终面 / 现场面试");
 
-    await user.click(screen.getAllByRole("button", { name: /toggle menu/i })[0]);
-    await user.click(await screen.findByText("Delete"));
+    await user.click(screen.getAllByRole("button", { name: /打开菜单/i })[0]);
+    await user.click(await screen.findByText("删除"));
 
-    expect(await screen.findByText(/used by 3 job stages/)).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /^Delete$/ })).toBeNull();
+    expect(await screen.findByText(/有 3 个求职阶段使用该类型/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^删除$/ })).toBeNull();
     expect(deleteJobStageTypeById).not.toHaveBeenCalled();
   });
 
   it("moves a type down by swapping sort order with its neighbour", async () => {
     (updateJobStageType as any).mockResolvedValue({ success: true });
     render(<JobStagesContainer />);
-    await screen.findByText("Final / Onsite Interview");
+    await screen.findByText("终面 / 现场面试");
 
-    await user.click(screen.getAllByRole("button", { name: /toggle menu/i })[0]);
-    await user.click(await screen.findByText("Move Down"));
+    await user.click(screen.getAllByRole("button", { name: /打开菜单/i })[0]);
+    await user.click(await screen.findByText("下移"));
 
     await waitFor(() =>
       expect(updateJobStageType).toHaveBeenCalledWith(
@@ -102,9 +102,9 @@ describe("JobStagesContainer", () => {
 
   it("searches stage types by label", async () => {
     render(<JobStagesContainer />);
-    await screen.findByText("Final / Onsite Interview");
+    await screen.findByText("终面 / 现场面试");
 
-    await user.type(screen.getByPlaceholderText("Search stages..."), "onsite");
+    await user.type(screen.getByPlaceholderText("搜索阶段…"), "onsite");
 
     await waitFor(() =>
       expect(getJobStageTypeList).toHaveBeenCalledWith(

@@ -1,3 +1,4 @@
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { BADGE_COLORS, BadgeColor } from "@/lib/badge-colors";
@@ -12,7 +13,7 @@ interface StatusBadgeProps {
 export function StatusBadge({ label, color, className }: StatusBadgeProps) {
   return (
     <Badge variant="outline" className={cn(BADGE_COLORS[color], className)}>
-      {label}
+      {zhLabel(label)}
     </Badge>
   );
 }

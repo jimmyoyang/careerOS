@@ -71,16 +71,16 @@ describe("MyJobsTable", () => {
     expect(screen.getByText("Software Engineer")).toBeInTheDocument();
     expect(screen.getByText("Acme Corp")).toBeInTheDocument();
     expect(screen.getByText("Remote")).toBeInTheDocument();
-    const statusButton = screen.getByRole("button", { name: /Change status/ });
-    expect(within(statusButton).getByText("Applied")).toBeInTheDocument();
+    const statusButton = screen.getByRole("button", { name: /更改状态/ });
+    expect(within(statusButton).getByText("已投递")).toBeInTheDocument();
   });
 
   it("shows a Dismissed badge for discovered jobs regardless of status", () => {
     renderTable([makeJob({ discoveryStatus: "dismissed", Status: { id: "1", label: "Applied", value: "applied" } })]);
 
-    expect(screen.getByText("Dismissed")).toBeInTheDocument();
-    const statusButton = screen.getByRole("button", { name: /Change status/ });
-    expect(within(statusButton).queryByText("Applied")).not.toBeInTheDocument();
+    expect(screen.getByText("已忽略")).toBeInTheDocument();
+    const statusButton = screen.getByRole("button", { name: /更改状态/ });
+    expect(within(statusButton).queryByText("已投递")).not.toBeInTheDocument();
   });
 
   it("shows an Expired badge for past-due draft jobs", () => {
@@ -91,7 +91,7 @@ describe("MyJobsTable", () => {
       }),
     ]);
 
-    expect(screen.getByText("Expired")).toBeInTheDocument();
+    expect(screen.getByText("已过期")).toBeInTheDocument();
   });
 
   it("does not show Expired for past-due jobs that are not drafts", () => {
@@ -102,9 +102,9 @@ describe("MyJobsTable", () => {
       }),
     ]);
 
-    expect(screen.queryByText("Expired")).not.toBeInTheDocument();
-    const statusButton = screen.getByRole("button", { name: /Change status/ });
-    expect(within(statusButton).getByText("Applied")).toBeInTheDocument();
+    expect(screen.queryByText("已过期")).not.toBeInTheDocument();
+    const statusButton = screen.getByRole("button", { name: /更改状态/ });
+    expect(within(statusButton).getByText("已投递")).toBeInTheDocument();
   });
 
   it("renders a match score when present, and a Match button otherwise", () => {
@@ -123,7 +123,7 @@ describe("MyJobsTable", () => {
         onSort={vi.fn()}
       />,
     );
-    expect(screen.getByRole("link", { name: /match/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /匹配/i })).toHaveAttribute(
       "href",
       "/dashboard/myjobs/job-1?tab=match&match=1",
     );
@@ -134,10 +134,10 @@ describe("MyJobsTable", () => {
     try {
       renderTable([makeJob({ matchScore: null })]);
       expect(
-        screen.queryByRole("link", { name: /match/i }),
+        screen.queryByRole("link", { name: /匹配/i }),
       ).not.toBeInTheDocument();
       // The sortable "Match" column header is also a button named /match/i now.
-      const matchButtons = screen.getAllByRole("button", { name: /match/i });
+      const matchButtons = screen.getAllByRole("button", { name: /匹配/i });
       expect(matchButtons.some((b) => (b as HTMLButtonElement).disabled)).toBe(
         true,
       );
@@ -172,7 +172,7 @@ describe("MyJobsTable", () => {
       renderTable([makeJob()]);
 
       await user.click(screen.getByTestId("job-actions-menu-btn"));
-      await user.click(screen.getByText("View Details"));
+      await user.click(screen.getByText("查看详情"));
 
       expect(mockPush).toHaveBeenCalledWith("/dashboard/myjobs/job-1");
     });
@@ -180,7 +180,7 @@ describe("MyJobsTable", () => {
     it("calls editJob with the job id when Edit Job is clicked", async () => {
       const { editJob } = renderTable([makeJob()]);
 
-      await user.click(screen.getByRole("button", { name: "Edit Job" }));
+      await user.click(screen.getByRole("button", { name: "编辑职位" }));
 
       expect(editJob).toHaveBeenCalledWith("job-1");
     });
@@ -189,7 +189,7 @@ describe("MyJobsTable", () => {
       const { onAddNote } = renderTable([makeJob()]);
 
       await user.click(screen.getByTestId("job-actions-menu-btn"));
-      await user.click(screen.getByText("Add a Note"));
+      await user.click(screen.getByText("添加笔记"));
 
       expect(onAddNote).toHaveBeenCalledWith("job-1");
     });
@@ -197,13 +197,13 @@ describe("MyJobsTable", () => {
     it("opens the delete confirmation dialog and calls deleteJob on confirm", async () => {
       const { deleteJob } = renderTable([makeJob()]);
 
-      await user.click(screen.getByRole("button", { name: "Delete Job" }));
+      await user.click(screen.getByRole("button", { name: "删除职位" }));
 
       expect(
-        screen.getByText("Are you sure you want to delete this job?"),
+        screen.getByText("确定删除此职位吗？"),
       ).toBeInTheDocument();
 
-      await user.click(screen.getByRole("button", { name: "Delete" }));
+      await user.click(screen.getByRole("button", { name: "删除" }));
 
       expect(deleteJob).toHaveBeenCalledWith("job-1");
     });
@@ -215,7 +215,7 @@ describe("MyJobsTable", () => {
       await user.click(screen.getByTestId("job-actions-menu-btn"));
       await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}");
       await user.keyboard("{ArrowRight}");
-      await screen.findByText("Interview");
+      await screen.findByText("面试中");
     };
 
     it("disables the current status option in the Change status submenu", async () => {
@@ -223,7 +223,7 @@ describe("MyJobsTable", () => {
 
       await openChangeStatusSubmenu();
 
-      const appliedOption = screen.getAllByText("Applied").find(
+      const appliedOption = screen.getAllByText("已投递").find(
         (el) => el.closest('[role="menuitem"]'),
       );
       expect(appliedOption?.closest('[role="menuitem"]')).toHaveAttribute(
@@ -254,19 +254,19 @@ describe("MyJobsTable", () => {
       renderTable([makeJob()]);
 
       await user.click(
-        screen.getByRole("button", { name: "Change status, currently Applied" }),
+        screen.getByRole("button", { name: "更改状态，当前为已投递" }),
       );
 
-      expect(await screen.findByText("Interview")).toBeInTheDocument();
+      expect(await screen.findByText("面试中")).toBeInTheDocument();
     });
 
     it("calls onChangeJobStatus with the job id and selected status", async () => {
       const { onChangeJobStatus } = renderTable([makeJob()]);
 
       await user.click(
-        screen.getByRole("button", { name: "Change status, currently Applied" }),
+        screen.getByRole("button", { name: "更改状态，当前为已投递" }),
       );
-      await user.click(await screen.findByText("Interview"));
+      await user.click(await screen.findByText("面试中"));
 
       expect(onChangeJobStatus).toHaveBeenCalledWith("job-1", {
         id: "2",
@@ -279,10 +279,10 @@ describe("MyJobsTable", () => {
       renderTable([makeJob()]);
 
       await user.click(
-        screen.getByRole("button", { name: "Change status, currently Applied" }),
+        screen.getByRole("button", { name: "更改状态，当前为已投递" }),
       );
 
-      const appliedOption = (await screen.findAllByText("Applied")).find((el) =>
+      const appliedOption = (await screen.findAllByText("已投递")).find((el) =>
         el.closest('[role="menuitem"]'),
       );
       expect(appliedOption?.closest('[role="menuitem"]')).toHaveAttribute(

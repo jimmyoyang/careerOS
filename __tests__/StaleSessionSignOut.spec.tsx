@@ -7,6 +7,6 @@ describe("StaleSessionSignOut", () => {
     render(<StaleSessionSignOut signOutAction={signOutAction} />);
 
     await waitFor(() => expect(signOutAction).toHaveBeenCalled());
-    expect(screen.getByText(/signing you out/i)).toBeInTheDocument();
+    expect(screen.getByText(/登录状态已失效，正在退出/)).toBeInTheDocument();
   });
 });

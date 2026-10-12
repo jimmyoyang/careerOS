@@ -86,7 +86,7 @@ export function EntityStringChipInput({
     startCreate(async () => {
       const created = await createOption(lbl);
       if (!created) {
-        toastError(`Failed to create ${noun}.`);
+        toastError(`创建失败： ${noun}.`);
         return;
       }
       setOptions((prev) =>
@@ -120,7 +120,7 @@ export function EntityStringChipInput({
         >
           <Command shouldFilter={false}>
             <CommandInput
-              placeholder={`Search or create ${noun}...`}
+              placeholder={`搜索或创建 ${noun}...`}
               value={input}
               onValueChange={setInput}
             />
@@ -128,14 +128,14 @@ export function EntityStringChipInput({
               {isLoading && (
                 <div className="flex items-center gap-2 p-3 text-sm text-muted-foreground">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Loading...
+                  正在加载…
                 </div>
               )}
               {!isLoading && !input.trim() && filtered.length === 0 && (
-                <CommandEmpty>No {noun}s found. Type to create one.</CommandEmpty>
+                <CommandEmpty>无 {noun}。输入内容即可创建。</CommandEmpty>
               )}
               {input.trim() && alreadyAdded && (
-                <CommandEmpty>Already added.</CommandEmpty>
+                <CommandEmpty>已添加。</CommandEmpty>
               )}
               {filtered.length > 0 && (
                 <CommandGroup>
@@ -162,7 +162,7 @@ export function EntityStringChipInput({
                     ) : (
                       <CirclePlus className="h-4 w-4 mr-2" />
                     )}
-                    Create &quot;{input.trim()}&quot;
+                    创建“{input.trim()}”
                   </CommandItem>
                 </CommandGroup>
               )}

@@ -1,5 +1,6 @@
 "use client";
 
+import { zhCN } from "date-fns/locale";
 import * as React from "react";
 import {
   ChevronDownIcon,
@@ -27,6 +28,7 @@ function Calendar({
 
   return (
     <DayPicker
+      locale={zhCN}
       showOutsideDays={showOutsideDays}
       className={cn(
         "bg-background group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
@@ -37,7 +39,7 @@ function Calendar({
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString("default", { month: "short" }),
+          date.toLocaleString("zh-CN", { month: "short" }),
         ...formatters,
       }}
       classNames={{

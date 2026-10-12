@@ -33,12 +33,12 @@ import {
 
 const AddJobStageTypeFormSchema = z.object({
   label: z
-    .string({ error: "Stage name is required." })
-    .min(1, { message: "Stage name cannot be empty." })
-    .max(80, { message: "Stage name must be 80 characters or fewer." }),
+    .string({ error: "请输入阶段名称。" })
+    .min(1, { message: "阶段名称不能为空。" })
+    .max(80, { message: "阶段名称不能超过 80 个字符。" }),
   statusId: z
-    .string({ error: "Parent status is required." })
-    .min(1, { message: "Pick the status this stage means." }),
+    .string({ error: "请选择所属状态。" })
+    .min(1, { message: "请选择该阶段对应的状态。" }),
 });
 
 type AddJobStageTypeProps = {
@@ -88,7 +88,7 @@ function AddJobStageType({
           )
         : await createJobStageType(values.label, values.statusId);
       toastActionResult(res, {
-        success: `Stage has been ${type ? "updated" : "added"} successfully.`,
+        success: `阶段已${type ? "更新" : "添加"}。`,
         onSuccess: () => {
           onOpenChange(false);
           reset();
@@ -103,11 +103,10 @@ function AddJobStageType({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {type ? "Edit Stage" : "Add New Stage"}
+            {type ? "编辑阶段" : "添加阶段"}
           </DialogTitle>
           <DialogDescription>
-            Stages are the steps a job moves through — each one belongs to a
-            status, which the job takes on when the stage becomes current.
+            阶段记录求职流程中的各个步骤。每个阶段对应一种状态，成为当前阶段后会同步更新职位状态。
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -117,10 +116,10 @@ function AddJobStageType({
               name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Stage Name</FormLabel>
+                  <FormLabel>阶段名称</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. Take-home Exercise"
+                      placeholder="例如：课后测试"
                       {...field}
                     />
                   </FormControl>
@@ -133,9 +132,10 @@ function AddJobStageType({
               name="statusId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Parent Status</FormLabel>
+                  <FormLabel>所属状态</FormLabel>
                   <SelectFormCtrl
-                    label="status"
+                      translateOptions
+                    label="状态"
                     options={statuses}
                     field={field}
                   />
@@ -149,10 +149,10 @@ function AddJobStageType({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                取消
               </Button>
               <Button type="submit" disabled={isPending}>
-                Save
+                保存
                 {isPending && (
                   <Loader className="ml-2 h-4 w-4 shrink-0 spinner" />
                 )}

@@ -43,10 +43,10 @@ function AddResumeSummary({
 }: AddResumeSummaryProps) {
   const [isPending, startTransition] = useTransition();
 
-  const pageTitle = summaryToEdit ? "Edit Summary" : "Add Summary";
+  const pageTitle = summaryToEdit ? "编辑个人简介" : "添加个人简介";
   const pageDescription = summaryToEdit
-    ? "Update the professional summary on your resume."
-    : "Add a professional summary to your resume.";
+    ? "更新简历中的个人简介。"
+    : "向简历添加个人简介。";
 
   const form = useForm<z.infer<typeof AddSummarySectionFormSchema>>({
     resolver: zodResolver(AddSummarySectionFormSchema),
@@ -84,9 +84,9 @@ function AddResumeSummary({
       } else {
         reset();
         setDialogOpen(false);
-        toastSuccess(`Summary has been ${
-          summaryToEdit ? "updated" : "created"
-        } successfully`);
+        toastSuccess(`个人简介已${
+          summaryToEdit ? "更新" : "添加"
+        }`);
       }
     });
   };
@@ -112,9 +112,9 @@ function AddResumeSummary({
                 name="sectionTitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Section Title</FormLabel>
+                    <FormLabel>模块标题</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Ex: Summary" />
+                      <Input {...field} placeholder="例如：个人简介" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -128,7 +128,7 @@ function AddResumeSummary({
                 name="content"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Resume Summary</FormLabel>
+                    <FormLabel>个人简介</FormLabel>
                     <FormControl>
                       <TiptapEditor field={field} />
                     </FormControl>

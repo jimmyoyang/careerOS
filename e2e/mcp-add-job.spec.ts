@@ -13,17 +13,17 @@ test.describe("MCP add_job", () => {
     const company = uniqueName("mcp company");
 
     await page.goto("/dashboard/settings");
-    await page.getByText("MCP Access").click();
-    await page.getByRole("button", { name: "Generate" }).click();
-    await page.getByPlaceholder("e.g. Claude Desktop").fill(tokenName);
-    await page.getByRole("button", { name: "Generate" }).click();
+    await page.getByText("MCP 访问").click();
+    await page.getByRole("button", { name: "生成" }).click();
+    await page.getByPlaceholder("例如 Claude Desktop").fill(tokenName);
+    await page.getByRole("button", { name: "生成" }).click();
     cleanup.mcpToken(tokenName);
 
-    const revealDialog = page.getByRole("dialog", { name: "Token Created" });
+    const revealDialog = page.getByRole("dialog", { name: "令牌已创建" });
     await expect(revealDialog).toBeVisible();
     const token = await revealDialog.getByRole("textbox").inputValue();
     expect(token).toMatch(/^jsync_/);
-    await page.getByRole("button", { name: "I saved my token" }).click();
+    await page.getByRole("button", { name: "我已保存令牌" }).click();
 
     const transport = new StreamableHTTPClientTransport(
       new URL("/api/mcp", baseURL),

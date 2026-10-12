@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { useEffect, useState, useTransition } from "react";
 import { CalendarDays, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -62,39 +64,36 @@ export function StageDetailPanel({
       <>
         {isCurrent && (
           <p>
-            This is the current stage. Deleting it makes the furthest-along
-            dated stage current, and the job&apos;s status follows that stage.
+            这是当前阶段。删除后，日期最靠后的阶段将成为当前阶段，职位状态也会随之更新。
           </p>
         )}
         {hasLinks && (
           <>
-            <p className={cn(isCurrent && "mt-2")}>Deleting it also removes:</p>
+            <p className={cn(isCurrent && "mt-2")}>删除该阶段还会移除：</p>
             <ul className="mt-1.5 list-disc space-y-1 pl-5">
               {interviewerCount > 0 && (
                 <li>
                   <span className="font-semibold text-foreground">
-                    {interviewerCount} linked{" "}
-                    {interviewerCount === 1 ? "interviewer" : "interviewers"}
+                    {interviewerCount} 位已关联的面试官
                   </span>{" "}
-                  on this stage
+                  与该阶段的关联
                 </li>
               )}
               {prepCount > 0 && (
                 <li>
                   <span className="font-semibold text-foreground">
-                    {prepCount} prep{" "}
-                    {prepCount === 1 ? "question" : "questions"}
+                    {prepCount} 道准备题目
                   </span>{" "}
-                  on this stage, and which of them were asked
+                  及其在该阶段的提问记录
                 </li>
               )}
             </ul>
             <p className="mt-2">
               {interviewerCount > 0 && prepCount > 0
-                ? "Nothing is removed from the job's Contacts tab or your question bank."
+                ? "职位的联系人列表和题库中的内容都会保留。"
                 : interviewerCount > 0
-                  ? "Nothing is removed from the job's Contacts tab."
-                  : "Nothing is removed from your question bank."}
+                  ? "职位的联系人列表中的内容会保留。"
+                  : "题库中的内容会保留。"}
             </p>
           </>
         )}
@@ -106,7 +105,7 @@ export function StageDetailPanel({
     startTransition(async () => {
       const res = await deleteJobStage(stage.id);
       toastActionResult(res, {
-        success: "Stage has been deleted",
+        success: "阶段已删除",
         onSuccess: onChanged,
       });
     });
@@ -116,10 +115,10 @@ export function StageDetailPanel({
     <div className="flex-1 rounded-lg border bg-card p-6">
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2.5">
-          <h3 className="text-lg font-bold">{stage.StageType.label}</h3>
+          <h3 className="text-lg font-bold">{zhLabel(stage.StageType.label)}</h3>
           {isCurrent && (
             <StatusBadge
-              label="CURRENT STAGE"
+              label="当前阶段"
               color="emerald"
               className="text-[11px] font-bold"
             />
@@ -130,7 +129,7 @@ export function StageDetailPanel({
             variant="outline"
             size="icon"
             className="h-8 w-8 cursor-pointer"
-            aria-label={`Edit ${stage.StageType.label}`}
+            aria-label={`编辑${zhLabel(stage.StageType.label)}`}
             onClick={onEdit}
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -139,7 +138,7 @@ export function StageDetailPanel({
             variant="outline"
             size="icon"
             className="h-8 w-8 cursor-pointer text-destructive hover:text-destructive"
-            aria-label={`Delete ${stage.StageType.label}`}
+            aria-label={`删除${zhLabel(stage.StageType.label)}`}
             onClick={() => setDeleteOpen(true)}
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -161,10 +160,10 @@ export function StageDetailPanel({
         <Tabs value={tab} onValueChange={setTab} className="mt-4">
           <TabsList className="h-auto w-full justify-start gap-6 rounded-none border-b bg-transparent p-0">
             <TabsTrigger value="overview" className={TAB_TRIGGER}>
-              Overview
+              概览
             </TabsTrigger>
             <TabsTrigger value="interviewer" className={TAB_TRIGGER}>
-              Interviewer
+              面试官
               {stage.interviewers.length > 0 && (
                 <span className="ml-2 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
                   {stage.interviewers.length}
@@ -172,10 +171,10 @@ export function StageDetailPanel({
               )}
             </TabsTrigger>
             <TabsTrigger value="prep" className={TAB_TRIGGER}>
-              Prep List
+              准备清单
               {total > 0 && (
                 <span className="ml-2 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
-                  {asked} of {total}
+                  {asked} / {total}
                 </span>
               )}
             </TabsTrigger>
@@ -206,11 +205,11 @@ export function StageDetailPanel({
       )}
 
       <DeleteAlertDialog
-        pageTitle="stage"
+        pageTitle="阶段"
         open={deleteOpen}
         onOpenChange={setDeleteOpen}
         onDelete={onDelete}
-        alertTitle={`Delete the ${stage.StageType.label} stage?`}
+        alertTitle={`删除“${zhLabel(stage.StageType.label)}”阶段？`}
         alertDescription={deleteDescription}
       />
     </div>

@@ -78,7 +78,7 @@ describe("JobContactsTab", () => {
       />,
     );
     expect(screen.getByText("Sarah Cole")).toBeInTheDocument();
-    expect(screen.getByText("Recruiter")).toBeInTheDocument();
+    expect(screen.getByText("招聘人员")).toBeInTheDocument();
   });
 
   it("shows the last contacted date when the contact has one", () => {
@@ -93,7 +93,7 @@ describe("JobContactsTab", () => {
         onLinksChange={vi.fn()}
       />,
     );
-    expect(screen.getByText(/last contacted aug 1, 2026/i)).toBeInTheDocument();
+    expect(screen.getByText(/最近联系 2026年8月1日/i)).toBeInTheDocument();
   });
 
   it("omits the last contacted date when the contact has none", () => {
@@ -104,12 +104,12 @@ describe("JobContactsTab", () => {
         onLinksChange={vi.fn()}
       />,
     );
-    expect(screen.queryByText(/last contacted/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/最近联系/i)).not.toBeInTheDocument();
   });
 
   it("shows an empty state with no links", () => {
     render(<JobContactsTab jobId="j1" links={[]} onLinksChange={vi.fn()} />);
-    expect(screen.getByText(/no contacts on this job/i)).toBeInTheDocument();
+    expect(screen.getByText(/该职位暂无联系人/i)).toBeInTheDocument();
   });
 
   it("does not fetch the picker lists until the add form is opened", () => {
@@ -132,13 +132,13 @@ describe("JobContactsTab", () => {
         onLinksChange={vi.fn()}
       />,
     );
-    await user.click(screen.getByRole("button", { name: /add contact/i }));
+    await user.click(screen.getByRole("button", { name: /添加联系人/i }));
 
     await waitFor(() => expect(getAllContacts).toHaveBeenCalledTimes(1));
     expect(getAllContactRoles).toHaveBeenCalledTimes(1);
 
-    await user.click(screen.getByRole("button", { name: /cancel/i }));
-    await user.click(screen.getByRole("button", { name: /add contact/i }));
+    await user.click(screen.getByRole("button", { name: /取消/i }));
+    await user.click(screen.getByRole("button", { name: /添加联系人/i }));
 
     expect(getAllContacts).toHaveBeenCalledTimes(1);
   });
@@ -155,8 +155,8 @@ describe("JobContactsTab", () => {
         onLinksChange={onLinksChange}
       />,
     );
-    await user.click(screen.getByRole("button", { name: /remove sarah cole/i }));
-    await user.click(await screen.findByRole("button", { name: "Delete" }));
+    await user.click(screen.getByRole("button", { name: /移除Sarah Cole/i }));
+    await user.click(await screen.findByRole("button", { name: "删除" }));
 
     await waitFor(() => expect(removeJobContact).toHaveBeenCalledWith("jc1"));
     await waitFor(() => expect(getJobContacts).toHaveBeenCalledWith("j1"));

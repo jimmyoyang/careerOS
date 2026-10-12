@@ -1,4 +1,6 @@
 "use client";
+import { zhLabel } from "@/lib/i18n/zh-CN";
+
 import { Check, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -66,7 +68,7 @@ export function StageHistoryList({
   return (
     <div className="rounded-lg border bg-card p-2.5">
       <h3 className="px-2.5 py-2 text-xs font-bold tracking-wide text-muted-foreground">
-        STAGE HISTORY
+        阶段历史
       </h3>
 
       {/* The complete history lives here, and only here: every stage is
@@ -99,7 +101,7 @@ export function StageHistoryList({
                     isCurrent && "font-extrabold text-emerald-600 dark:text-emerald-400",
                   )}
                 >
-                  {stage.StageType.label}
+                  {zhLabel(stage.StageType.label)}
                 </span>
                 <span
                   className={cn(
@@ -111,7 +113,7 @@ export function StageHistoryList({
                 >
                   {formatStageDate(stage.occurredAt)}
                 </span>
-                {isCurrent && <span className="sr-only">Current stage</span>}
+                {isCurrent && <span className="sr-only">当前阶段</span>}
               </button>
             </li>
           );
@@ -128,7 +130,7 @@ export function StageHistoryList({
               nextReached={false}
             />
             <span className="flex-1 truncate text-[13px] font-semibold">
-              {type.label}
+              {zhLabel(type.label)}
             </span>
             <span className="text-xs">—</span>
           </li>
@@ -142,7 +144,7 @@ export function StageHistoryList({
         data-testid="timeline-add-stage-btn"
       >
         <Plus className="mr-1.5 h-3.5 w-3.5" />
-        Add stage
+        添加阶段
       </Button>
     </div>
   );

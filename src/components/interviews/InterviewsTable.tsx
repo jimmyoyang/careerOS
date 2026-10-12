@@ -29,17 +29,17 @@ function InterviewsTable({
       <TableHeader>
         <TableRow>
           <TableHead className="w-8">
-            <span className="sr-only">Expand</span>
+            <span className="sr-only">展开</span>
           </TableHead>
-          <TableHead>When</TableHead>
-          <TableHead>Job</TableHead>
-          <TableHead>Round</TableHead>
-          <TableHead className="hidden md:table-cell">Format</TableHead>
-          <TableHead className="hidden lg:table-cell">Interviewers</TableHead>
-          <TableHead className="hidden sm:table-cell">Prep</TableHead>
-          <TableHead>Outcome</TableHead>
+          <TableHead>时间</TableHead>
+          <TableHead>职位</TableHead>
+          <TableHead>轮次</TableHead>
+          <TableHead className="hidden md:table-cell">形式</TableHead>
+          <TableHead className="hidden lg:table-cell">面试官</TableHead>
+          <TableHead className="hidden sm:table-cell">准备</TableHead>
+          <TableHead>结果</TableHead>
           <TableHead>
-            <span className="sr-only">Actions</span>
+            <span className="sr-only">操作</span>
           </TableHead>
         </TableRow>
       </TableHeader>
