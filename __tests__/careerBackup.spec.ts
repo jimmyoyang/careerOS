@@ -6,9 +6,9 @@ import { buildCreateData, IdMap } from "@/lib/backup/idmap";
 const groups = ["CareerEvidence", "CareerJobContext", "CareerMaterial", "CareerRun", "CareerEvent"] as const;
 
 describe("Career backup contract", () => {
-  it("exports format 2 while accepting format 1 and defaulting absent Career groups", () => {
-    expect(BACKUP_FORMAT_VERSION).toBe(2);
-    for (const formatVersion of [1, 2]) {
+  it("exports format 3 while accepting formats 1 and 2 and defaulting absent Career groups", () => {
+    expect(BACKUP_FORMAT_VERSION).toBe(3);
+    for (const formatVersion of [1, 2, 3]) {
       expect(ManifestSchema.safeParse({ formatVersion, appVersion: "1", exportedAt: "now", sourceEmail: "a@b.c", counts: {} }).success).toBe(true);
     }
     const data = BackupDataSchema.parse({});

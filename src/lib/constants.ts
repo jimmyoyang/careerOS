@@ -478,6 +478,11 @@ export const SIDEBAR_LINKS = [
     label: "简历中心",
   },
   {
+    icon: UserRound,
+    route: "/dashboard/recruiting",
+    label: "求职资料与账号",
+  },
+  {
     icon: Sheet,
     route: "/dashboard/admin",
     label: "资料库",

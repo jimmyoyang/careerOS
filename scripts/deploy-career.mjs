@@ -128,7 +128,7 @@ if (action === "rollback") {
   );
   await fs.writeFile(
     path.join(release, "run-web.cjs"),
-    `const fs = require('node:fs');\nObject.assign(process.env, JSON.parse(fs.readFileSync(${JSON.stringify(configPath)}, 'utf8')));\nrequire('./server.js');\n`,
+    `const fs = require('node:fs');\nObject.assign(process.env, JSON.parse(fs.readFileSync(${JSON.stringify(configPath)}, 'utf8')));\nprocess.env.PHONE_BRIDGE_STATE_DIR ??= ${JSON.stringify(path.join(source, 'data', 'phone-bridge'))};\nrequire('./server.js');\n`,
   );
 } else throw new Error("Expected deploy, rollback, or stop.");
 labels.forEach(optionalStop);

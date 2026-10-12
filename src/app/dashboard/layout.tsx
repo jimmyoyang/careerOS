@@ -13,6 +13,7 @@ import { APP_CONSTANTS } from "@/lib/constants";
 import { getCurrentUser } from "@/utils/user.utils";
 import StaleSessionSignOut from "@/components/StaleSessionSignOut";
 import { signOut } from "@/auth";
+import { RecruitingDraftProvider } from "@/components/recruiting/RecruitingDraftProvider";
 
 export default async function RootLayout({
   children,
@@ -54,7 +55,7 @@ export default async function RootLayout({
                     shrinks this box without changing the viewport width. */}
                 <main className="@container/main flex-1 p-4 sm:px-4 sm:py-0">
                   <div className="items-start gap-4 md:gap-4 @3xl/main:grid @3xl/main:grid-cols-3">
-                    {children}
+                    <RecruitingDraftProvider userId={user.id}>{children}</RecruitingDraftProvider>
                   </div>
                 </main>
               </SidebarInset>

@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { RecruitingDataSchema } from "@/lib/recruiting/contracts";
 
-export const BACKUP_FORMAT_VERSION = 2;
+export const BACKUP_FORMAT_VERSION = 3;
 
 export const ManifestSchema = z.object({
-  formatVersion: z.union([z.literal(1), z.literal(BACKUP_FORMAT_VERSION)]),
+  formatVersion: z.union([z.literal(1), z.literal(2), z.literal(BACKUP_FORMAT_VERSION)]),
   appVersion: z.string(),
   exportedAt: z.string(),
   sourceEmail: z.string(),
@@ -402,7 +403,15 @@ const CareerEvent = z.object({
 const group = <T extends z.ZodTypeAny>(schema: T) =>
   z.array(schema).default([]);
 
+const RecruitingProfile = z.object({
+  id, revision: int.positive(), createdAt: dt, updatedAt: dt,
+  dataJson: str.max(2 * 1024 * 1024).refine((value) => {
+    try { return RecruitingDataSchema.safeParse(JSON.parse(value)).success; } catch { return false; }
+  }, "Invalid recruiting profile"),
+});
+
 export const BackupDataSchema = z.object({
+  RecruitingProfile: group(RecruitingProfile).refine((rows) => rows.length <= 1, "Only one recruiting profile per user"),
   CareerEvidence: group(CareerEvidence),
   CareerJobContext: group(CareerJobContext),
   CareerMaterial: group(CareerMaterial),

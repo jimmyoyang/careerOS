@@ -1,0 +1,22 @@
+// @vitest-environment node
+import { beforeEach, afterEach, expect, it, vi } from "vitest";
+import { RecruitingDataSchema } from "@/lib/recruiting/contracts";
+vi.mock("@/utils/user.utils",()=>({getCurrentUser:vi.fn()}));
+vi.mock("@/lib/huawei/client",async actual=>({...await actual<typeof import("@/lib/huawei/client")>(),listHuaweiJobs:vi.fn(),getHuaweiJob:vi.fn()}));
+vi.mock("@/lib/huawei/import",()=>({importHuaweiJob:vi.fn()}));
+vi.mock("@/lib/recruiting/store",async actual=>({...await actual<typeof import("@/lib/recruiting/store")>(),getRecruitingProfile:vi.fn()}));
+vi.mock("@/lib/recruiting/bridge",()=>({getRecruitingDevices:vi.fn()}));
+import {getCurrentUser} from "@/utils/user.utils";
+import {getRecruitingProfile} from "@/lib/recruiting/store";
+import {getRecruitingDevices} from "@/lib/recruiting/bridge";
+import {listHuaweiJobs} from "@/lib/huawei/client";
+import {getHuaweiAccountsAction,previewHuaweiLoginAction,listHuaweiJobsAction,getHuaweiJobAction,importHuaweiJobAction} from "@/actions/huawei.actions";
+const profile=()=>({revision:3,data:RecruitingDataSchema.parse({emails:[{id:"e",address:"test@example.com"}],phones:[{id:"p",number:"13800000002",deviceId:"dev2"}],accounts:[{id:"a",platform:"huawei",phoneId:"p",emailId:"e",confirmed:true},{id:"x",platform:"not-huawei",phoneId:"p",confirmed:true}]})});
+beforeEach(()=>{vi.resetAllMocks();vi.mocked(getCurrentUser).mockResolvedValue({id:"owner"} as never);vi.mocked(getRecruitingProfile).mockResolvedValue(profile());});
+afterEach(()=>vi.unstubAllEnvs());
+it("rejects all unauthenticated entrypoints before upstream or private data access",async()=>{vi.mocked(getCurrentUser).mockResolvedValue(null);for(const call of [()=>getHuaweiAccountsAction(),()=>previewHuaweiLoginAction("a",3),()=>listHuaweiJobsAction({recruitmentType:"campus",keyword:"",page:1}),()=>getHuaweiJobAction("1"),()=>importHuaweiJobAction({advertisementId:"1",intentionId:"2"},"12345678")]) expect((await call()).ok).toBe(false);expect(getRecruitingProfile).not.toHaveBeenCalled();expect(listHuaweiJobs).not.toHaveBeenCalled();});
+it("limits account list to own exact Huawei platform and minimal fields",async()=>{const result=await getHuaweiAccountsAction();expect(getRecruitingProfile).toHaveBeenCalledWith("owner");expect(result).toEqual({ok:true,data:{revision:3,accounts:[{id:"a",label:"huawei",loginMethod:"sms",confirmed:true}]}});});
+it("rejects foreign platform and stale revision",async()=>{expect((await previewHuaweiLoginAction("x",3)).ok).toBe(false);expect((await previewHuaweiLoginAction("a",2)).ok).toBe(false);expect(getRecruitingDevices).not.toHaveBeenCalled();});
+it("uses explicitly bound phone and email even when device is absent",async()=>{vi.mocked(getRecruitingDevices).mockResolvedValue([]);const result=await previewHuaweiLoginAction("a",3);expect(result.ok).toBe(true);if(result.ok){expect(result.data.binding.phone).toBe("+8613800000002");expect(result.data.binding.email).toBe("test@example.com");expect(result.data.device).toBeNull();expect(result.data.warning).toMatch(/设备/);}});
+it("rejects unconfirmed account and never defaults to another phone",async()=>{const p=profile();p.data.accounts[0].confirmed=false;vi.mocked(getRecruitingProfile).mockResolvedValue(p);expect((await previewHuaweiLoginAction("a",3)).ok).toBe(false);p.data.accounts[0].confirmed=true;p.data.accounts[0].phoneId="";expect((await previewHuaweiLoginAction("a",3)).ok).toBe(false);});
+it("honors feature disable switch",async()=>{vi.stubEnv("CAREER_ENABLED","false");expect((await getHuaweiAccountsAction()).ok).toBe(false);expect(getRecruitingProfile).not.toHaveBeenCalled();});

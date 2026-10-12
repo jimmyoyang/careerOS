@@ -25,6 +25,7 @@ import { writeSnapshot } from "./snapshot";
 import { log } from "@/lib/telemetry";
 import { isResumeFilePath } from "@/lib/resumeFiles";
 import { BackupDataSchema, type BackupData, type BackupManifest } from "./schema";
+import { RecruitingDataSchema } from "@/lib/recruiting/contracts";
 
 export interface PreflightResult {
   manifest: BackupManifest;
@@ -322,6 +323,7 @@ async function restoreBackup(
         const tx = transaction as unknown as Tx;
 
         await assertLease(transaction);
+        const priorRecruiting = await transaction.recruitingProfile.findUnique({ where: { userId }, select: { revision: true } });
         await wipe(tx, userId);
         await insertLookups(tx, data, idMap, userId, statusByValue);
 
@@ -361,10 +363,19 @@ async function restoreBackup(
           const spec = MODEL_SPECS[model];
           const rows = rowsFor(data, model);
           counts[model] = rows.length;
+          // Keep a revision tombstone when an older backup clears this dossier.
+          // Otherwise a stale tab can become current again after the next save.
+          if (model === "RecruitingProfile" && rows.length === 0 && priorRecruiting) {
+            await transaction.recruitingProfile.create({ data: { userId, revision: priorRecruiting.revision + 1, dataJson: JSON.stringify(RecruitingDataSchema.parse({})) } });
+            counts[model] = 1;
+          }
 
           for (const row of rows) {
             let payload = buildCreateData(model, row, idMap, userId);
 
+            if (model === "RecruitingProfile") {
+              payload = { ...payload, revision: Math.max(priorRecruiting?.revision ?? 0, Number(payload.revision)) + 1 };
+            }
             if (model === "File") {
               const { fileMissing: _marker, ...rest } = payload;
               payload = {

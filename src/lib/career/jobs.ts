@@ -20,9 +20,10 @@ export async function importJob(
   userId: string,
   input: ImportInput,
   idempotencyKey: string,
+  origin?: { postingKey: string; source: { label: string; value: string }; requestIdentity?: string },
 ): Promise<{ jobId: string; duplicate: boolean }> {
   const data = ImportSchema.parse(input);
-  const requestHash = hash(data);
+  const requestHash = hash(origin?.requestIdentity ?? (origin ? { data, origin } : data));
   const previous = await db.careerRun.findUnique({
     where: { userId_idempotencyKey: { userId, idempotencyKey } },
   });
@@ -61,7 +62,7 @@ export async function importJob(
     jobUrl: data.url || null,
     createdVia: "careeros",
   });
-  const key = postingKey(data);
+  const key = origin?.postingKey ?? postingKey(data);
   const source = {
     url: data.url,
     referral: data.referral,
@@ -101,7 +102,11 @@ export async function importJob(
         },
       });
     } else {
-      const job = await tx.job.create({ data: fields });
+      const jobSource = origin ? await tx.jobSource.upsert({
+        where: { value_createdBy: { value: origin.source.value, createdBy: userId } },
+        update: {}, create: { ...origin.source, createdBy: userId },
+      }) : null;
+      const job = await tx.job.create({ data: { ...fields, ...(jobSource ? { jobSourceId: jobSource.id } : {}) } });
       jobId = job.id;
       await tx.careerJobContext.create({
         data: {
