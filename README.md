@@ -1,4 +1,6 @@
-# JobSync
+# CareerOS
+
+本仓库是基于 JobSync 的 CareerOS 定制版本，开发更新维护在 `charles` 分支。首次获取项目请使用下方 Quick Start 中的分支克隆命令；其余 JobSync 功能说明保留供参考。
 
 <p align="center"><strong>The self-hosted job search assistant with AI-powered resume review, job matching, and automated discovery</strong></p>
 
@@ -50,8 +52,8 @@ JobSync is a free, open-source companion for your job search: track applications
 Make sure [Docker](https://www.docker.com) is installed and running, then:
 
 ```sh
-git clone https://github.com/Gsync/jobsync.git
-cd jobsync
+git clone --branch charles --single-branch https://github.com/Charles2530/careerOS.git
+cd careerOS
 docker compose up
 ```
 
