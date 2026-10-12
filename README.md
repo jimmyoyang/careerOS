@@ -94,7 +94,7 @@ CareerOS 是基于 JobSync 定制的自托管求职管理工具，面向中文�
 推荐使用仓库内的 [CareerOS Compose 配置](docker-compose.career.yml)，它同时启动网站和中文简历编译服务。需要 Git、Docker 与 Docker Compose，以及用于生成随机密钥的 OpenSSL。
 
 ```sh
-git clone --branch charles --single-branch https://github.com/Charles2530/careerOS.git
+git clone --branch charles --single-branch git@github.com:jimmyoyang/careerOS.git
 cd careerOS
 ```
 
