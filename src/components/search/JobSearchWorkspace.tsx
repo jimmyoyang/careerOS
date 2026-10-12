@@ -48,6 +48,10 @@ export function JobSearchWorkspace({ sources, locations, statuses, titles = [] }
         <div><h2 className="font-semibold">华为公开招聘</h2><p className="mt-1 text-sm text-muted-foreground">查询官网校招与实习职位，选择意向后导入并准备申请。</p></div>
         <Button asChild variant="outline"><Link href="/dashboard/huawei">查询华为公开职位</Link></Button>
       </section>
+      <section className="flex flex-wrap items-center justify-between gap-4 rounded-xl border bg-card p-4 sm:p-5">
+        <div><h2 className="font-semibold">字节公开招聘</h2><p className="mt-1 text-sm text-muted-foreground">查询官网校招与实习职位，导入后核对手机号并准备申请。</p></div>
+        <Button asChild variant="outline"><Link href="/dashboard/bytedance">查询字节公开职位</Link></Button>
+      </section>
       <section className="rounded-xl border bg-card p-4 sm:p-5">
         <div className="mb-4 flex items-center gap-2 text-sm font-medium"><SlidersHorizontal className="h-4 w-4 text-[#cf0a2c]" />筛选已收录职位</div>
         <div className="grid gap-3 sm:grid-cols-2 @3xl/main:grid-cols-4">

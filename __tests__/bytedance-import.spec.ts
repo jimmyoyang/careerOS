@@ -1,0 +1,20 @@
+// @vitest-environment node
+import fs from "node:fs";
+import { randomUUID } from "node:crypto";
+import { beforeAll, afterAll, beforeEach, expect, it, vi } from "vitest";
+import { seedAccount } from "./helpers/backupTestDb";
+const ctx = await vi.hoisted(async () => { const h = await import("./helpers/backupTestDb"); const c = h.makeTestDbUrl(); h.pushSchema(c.url); return c; });
+vi.mock("@/lib/db", async () => { const { PrismaClient } = await import("@prisma/client"); return { default: new PrismaClient({ datasources: { db: { url: ctx.url } } }) }; });
+vi.mock("@/lib/bytedance/client", async actual => ({ ...await actual<typeof import("@/lib/bytedance/client")>(), getBytedanceJob: vi.fn() }));
+import db from "@/lib/db";
+import { getBytedanceJob } from "@/lib/bytedance/client";
+import { importBytedanceJob } from "@/lib/bytedance/import";
+const detail={id:"7667878785178552629",code:"A123",title:"软件工程师",location:"北京",category:"研发",recruitmentType:"campus" as const,project:"2027届校园招聘",publishedAt:"2026-07-29T00:00:00.000Z",url:"https://jobs.bytedance.com/campus/position/7667878785178552629/detail",responsibilities:"研发组件",requirements:"熟悉 TypeScript"};
+let owner:string;let other:string;
+beforeAll(async()=>{owner=await seedAccount(db,"byte@example.com");other=await seedAccount(db,"byte-other@example.com");});
+afterAll(async()=>{await db.$disconnect();fs.rmSync(ctx.dir,{recursive:true,force:true});});
+beforeEach(()=>{vi.mocked(getBytedanceJob).mockReset().mockResolvedValue({...detail});});
+it("imports verified official detail with source, cohort from project and unknown deadline",async()=>{const result=await importBytedanceJob(owner,detail.id,randomUUID());const job=await db.job.findUniqueOrThrow({where:{id:result.jobId},include:{careerContext:true,JobSource:true}});expect(job.JobSource?.value).toBe("bytedance-campus");expect(job.careerContext).toMatchObject({platform:"bytedance",cohort:"2027",recruitmentType:"campus"});expect(job.careerContext?.rawJd).toContain("熟悉 TypeScript");expect(job.dueDate).toBeNull();expect(job.jobUrl).toBe(detail.url);});
+it("deduplicates by official ID per user and replays successfully without contacting offline upstream",async()=>{const key=randomUUID();const first=await importBytedanceJob(owner,detail.id,key);vi.mocked(getBytedanceJob).mockRejectedValue(new Error("offline"));const replay=await importBytedanceJob(owner,detail.id,key);expect(replay.jobId).toBe(first.jobId);expect(getBytedanceJob).toHaveBeenCalledTimes(1);vi.mocked(getBytedanceJob).mockResolvedValue({...detail,requirements:"changed"});const dup=await importBytedanceJob(owner,detail.id,randomUUID());expect(dup.duplicate).toBe(true);expect(dup.jobId).toBe(first.jobId);expect((await importBytedanceJob(other,detail.id,randomUUID())).jobId).not.toBe(first.jobId);await expect(importBytedanceJob(owner,"99",key)).rejects.toMatchObject({code:"IDEMPOTENCY_CONFLICT"});});
+it("keeps unknown internship cohort rather than deriving it from publication date",async()=>{vi.mocked(getBytedanceJob).mockResolvedValue({...detail,id:"999",recruitmentType:"internship",project:"日常实习"});const result=await importBytedanceJob(owner,"999",randomUUID());expect((await db.careerJobContext.findUniqueOrThrow({where:{jobId:result.jobId}})).cohort).toBe("");});
+it("rejects incomplete detail and invalid input without recording a job",async()=>{const before=await db.job.count();vi.mocked(getBytedanceJob).mockResolvedValue({...detail,requirements:""});await expect(importBytedanceJob(owner,detail.id,randomUUID())).rejects.toThrow();await expect(importBytedanceJob(owner,detail.id,"bad")).rejects.toThrow();await expect(importBytedanceJob(owner,"https://evil.test",randomUUID())).rejects.toThrow();expect(await db.job.count()).toBe(before);});
