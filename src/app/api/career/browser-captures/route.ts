@@ -15,7 +15,7 @@ const CaptureSchema = z.object({
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Authorization, Content-Type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 };
 
 function json(body: unknown, status = 200) {
@@ -24,6 +24,13 @@ function json(body: unknown, status = 200) {
 
 export function OPTIONS() {
   return new Response(null, { status: 204, headers: corsHeaders });
+}
+
+export async function GET(request: Request) {
+  const auth = await resolveMcpToken(request);
+  if (!auth.ok) return json({ ok: false, error: auth.error }, auth.status);
+  if (!auth.scopes.includes("jobs:write")) return json({ ok: false, error: "需要 jobs:write 权限" }, 403);
+  return json({ ok: true, service: "careerOS", capabilities: ["jobs:write"] });
 }
 
 export async function POST(request: Request) {

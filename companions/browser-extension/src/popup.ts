@@ -1,4 +1,4 @@
-import { syncCapture, type BackendCapture } from "./backend.js";
+import { checkConnection, syncCapture, type BackendCapture } from "./backend.js";
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const input = (id: string) => $(id) as HTMLInputElement;
 const textarea = (id: string) => $(id) as HTMLTextAreaElement;
@@ -50,6 +50,18 @@ async function requestBackendPermission(baseUrl: string) {
   if (await chrome.permissions.contains({ origins: [pattern] })) return true;
   return chrome.permissions.request({ origins: [pattern] });
 }
+async function testConnection() {
+  const backendUrl = input("backendUrl").value.trim();
+  const apiToken = input("apiToken").value.trim();
+  try {
+    if (!(await requestBackendPermission(backendUrl))) throw new Error("未授予后端地址访问权限");
+    await chrome.storage.local.set({ backendUrl, apiToken });
+    const result = await checkConnection(backendUrl, apiToken);
+    showStatus(`连接成功：${result.service}，已启用 ${result.capabilities.join("、")}。`);
+  } catch (error) {
+    showStatus(`连接失败：${error instanceof Error ? error.message : "请求失败"}`);
+  }
+}
 async function save() {
   if (!current) return;
   current = { ...current, title: input("title").value.trim(), company: input("company").value.trim(), location: input("location").value.trim(), description: textarea("description").value.trim(), missing: [] };
@@ -70,4 +82,5 @@ async function save() {
 }
 $("capture").addEventListener("click", () => void capture());
 $("save").addEventListener("click", () => void save());
+$("testConnection").addEventListener("click", () => void testConnection());
 void loadState();

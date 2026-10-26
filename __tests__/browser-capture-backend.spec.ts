@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { syncCapture } from "@/../companions/browser-extension/src/backend";
+import { checkConnection, syncCapture } from "@/../companions/browser-extension/src/backend";
 
 const draft = {
   title: "后端工程师",
@@ -12,6 +12,21 @@ const draft = {
 };
 
 describe("browser capture backend client", () => {
+  it("checks an authorized CareerOS connection", async () => {
+    const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: true, service: "careerOS", capabilities: ["jobs:write"] }), { status: 200 }));
+    await expect(checkConnection("http://localhost:3737/", "jsync_token", fetcher)).resolves.toEqual({ service: "careerOS", capabilities: ["jobs:write"] });
+    expect(fetcher).toHaveBeenCalledWith("http://localhost:3737/api/career/browser-captures", expect.objectContaining({ method: "GET", headers: { Authorization: "Bearer jsync_token" } }));
+  });
+
+  it("rejects a connection check when the token is missing", async () => {
+    await expect(checkConnection("http://localhost:3737", "")).rejects.toThrow("请填写 CareerOS API Token");
+  });
+
+  it("surfaces authentication and backend errors from a connection check", async () => {
+    const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: false, error: "需要 jobs:write 权限" }), { status: 403 }));
+    await expect(checkConnection("http://localhost:3737", "jsync_token", fetcher)).rejects.toThrow("需要 jobs:write 权限");
+  });
+
   it("posts a capture to CareerOS with the bearer token", async () => {
     const fetcher = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: true, created: true, jobId: "job-1" }), { status: 201 }));
     await expect(syncCapture("http://localhost:3737/", "jsync_token", draft, fetcher)).resolves.toEqual({ created: true, duplicate: false, jobId: "job-1" });

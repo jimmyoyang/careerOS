@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@/lib/mcp/auth", () => ({ resolveMcpToken: vi.fn() }));
 vi.mock("@/lib/jobs/createJobFromNames", () => ({ createJobFromNames: vi.fn() }));
 
-import { POST } from "@/app/api/career/browser-captures/route";
+import { GET, POST } from "@/app/api/career/browser-captures/route";
 import { resolveMcpToken } from "@/lib/mcp/auth";
 import { createJobFromNames } from "@/lib/jobs/createJobFromNames";
 
@@ -15,6 +15,7 @@ const body = {
   sourceUrl: "https://jobs.example.test/detail/123",
 };
 const request = (value: unknown, token = "jsync_token") => new Request("http://localhost/api/career/browser-captures", { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(value) });
+const healthRequest = (token = "jsync_token") => new Request("http://localhost/api/career/browser-captures", { headers: { Authorization: `Bearer ${token}` } });
 
 describe("POST /api/career/browser-captures", () => {
   beforeEach(() => {
@@ -49,5 +50,32 @@ describe("POST /api/career/browser-captures", () => {
     const response = await POST(request(body));
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true, created: false, duplicate: true, jobId: "job-existing" });
+  });
+});
+
+describe("GET /api/career/browser-captures", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(resolveMcpToken).mockResolvedValue({ ok: true, userId: "user-1", tokenName: "browser", scopes: ["jobs:write"] });
+  });
+
+  it("rejects a missing or invalid token", async () => {
+    vi.mocked(resolveMcpToken).mockResolvedValue({ ok: false, status: 401, error: "Invalid token" });
+    const response = await GET(healthRequest("bad-token"));
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ ok: false, error: "Invalid token" });
+  });
+
+  it("requires the jobs:write scope", async () => {
+    vi.mocked(resolveMcpToken).mockResolvedValue({ ok: true, userId: "user-1", tokenName: "browser", scopes: [] });
+    const response = await GET(healthRequest());
+    expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({ ok: false, error: "需要 jobs:write 权限" });
+  });
+
+  it("returns a healthy backend response for an authorized token", async () => {
+    const response = await GET(healthRequest());
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true, service: "careerOS", capabilities: ["jobs:write"] });
   });
 });

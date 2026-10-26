@@ -5,7 +5,7 @@
   <main>
     <header><strong>CareerOS</strong><span>本地岗位采集</span></header>
     <button id="capture" type="button">读取当前页面</button>
-    <p id="status" role="status">不会访问 CareerOS 或外部接口。</p>
+    <p id="status" role="status">先读取当前页面，再按需保存或同步到 CareerOS。</p>
     <section id="preview" hidden>
       <label>职位<input id="title" maxlength="200"></label>
       <label>公司<input id="company" maxlength="200"></label>
@@ -18,6 +18,7 @@
       <h2>CareerOS 后端</h2>
       <label>后端地址<input id="backendUrl" value="http://localhost:3737" placeholder="http://localhost:3737"></label>
       <label>API Token<input id="apiToken" type="password" placeholder="在 CareerOS 设置中创建 jobs:write Token"></label>
+      <button id="testConnection" type="button">测试后端连接</button>
       <p class="hint">填写后，保存岗位会同时写入 CareerOS；不填写仍可保存在浏览器本地。</p>
     </section>
     <section><h2>最近采集</h2><ul id="recent"><li>暂无记录</li></ul></section>
