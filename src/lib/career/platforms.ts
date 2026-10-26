@@ -63,6 +63,20 @@ const PLATFORM_META: Record<string, PlatformMeta> = {
     accent: "#ff6a00",
     surface: "#fff7ed",
   },
+  meituan: {
+    key: "meituan",
+    label: "美团",
+    shortLabel: "美",
+    accent: "#00a9f4",
+    surface: "#effaff",
+  },
+  "meituan-campus": {
+    key: "meituan-campus",
+    label: "美团校招",
+    shortLabel: "美",
+    accent: "#00a9f4",
+    surface: "#effaff",
+  },
 };
 
 const FALLBACK: PlatformMeta = {

@@ -93,7 +93,7 @@ export const ImportSchema = z.object({
     ])
     .default(""),
   platform: z
-    .enum(["unknown", "huawei", "bytedance", "other"])
+    .enum(["unknown", "huawei", "bytedance", "tencent", "alibaba", "meituan", "other"])
     .default("unknown"),
   recruitmentType: z
     .enum(["unknown", "campus", "internship", "experienced"])

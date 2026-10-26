@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { FileUp, Plus } from "lucide-react";
-import { importJobAction, parseTableAction } from "@/actions/career";
+import { FileUp, Plus, Search } from "lucide-react";
+import { importDomesticJobAction, importJobAction, parseTableAction, searchDomesticJobsAction } from "@/actions/career";
 import type { ImportInput } from "@/lib/career/contracts";
+import { domesticJobToImport, domesticPostingKey, domesticSource, type DomesticJob, type DomesticProvider } from "@/lib/domestic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -69,6 +70,9 @@ function JobFields({
             <option value="unknown">未知</option>
             <option value="huawei">华为</option>
             <option value="bytedance">字节跳动</option>
+            <option value="tencent">腾讯</option>
+            <option value="alibaba">阿里巴巴</option>
+            <option value="meituan">美团</option>
             <option value="other">其他</option>
           </select>
         </Field>
@@ -135,7 +139,33 @@ export function ImportJobs({
   const [preview, setPreview] = useState(false);
   const { run, busy: actionBusy, error } = useCareerAction(onChanged);
   const [batchBusy, setBatchBusy] = useState(false);
+  const [domesticProvider, setDomesticProvider] = useState<DomesticProvider>("tencent");
+  const [domesticKeyword, setDomesticKeyword] = useState("");
+  const [domesticJobs, setDomesticJobs] = useState<DomesticJob[]>([]);
+  const [domesticTotal, setDomesticTotal] = useState(0);
+  const [domesticPage, setDomesticPage] = useState(1);
+  const [domesticBusy, setDomesticBusy] = useState(false);
+  const [domesticError, setDomesticError] = useState("");
   const busy = actionBusy || batchBusy;
+  const searchDomestic = async (page = 1) => {
+    setDomesticBusy(true);
+    setDomesticError("");
+    const result = await searchDomesticJobsAction(domesticProvider, domesticKeyword, page);
+    if (result.ok) {
+      setDomesticJobs(result.data.jobs);
+      setDomesticTotal(result.data.total);
+      setDomesticPage(page);
+    } else setDomesticError(result.error.message);
+    setDomesticBusy(false);
+  };
+  const importDomestic = async (item: DomesticJob) => {
+    const input = domesticJobToImport(item);
+    const result = await run(() => importDomesticJobAction(input, crypto.randomUUID(), domesticPostingKey(item), domesticSource(item)));
+    if (result) {
+      setMessage(result.duplicate ? "该公开岗位已存在，已关联来源。" : "公开岗位已导入。");
+      onImported(result.jobId);
+    }
+  };
   const importOne = async () => {
     const result = await run(() => importJobAction(job, crypto.randomUUID()));
     if (result) {
@@ -158,6 +188,46 @@ export function ImportJobs({
 
   return (
     <div className="grid items-start gap-6 xl:grid-cols-[1.35fr_1fr]">
+      <Section
+        title="国内大厂公开岗位"
+        description="从腾讯、阿里巴巴、美团公开招聘站搜索岗位，确认后写入 CareerOS。系统按平台和公开岗位编号去重。"
+      >
+        <div className="grid gap-3 sm:grid-cols-[10rem_1fr_auto]">
+          <select className={selectClass} value={domesticProvider} onChange={(event) => setDomesticProvider(event.target.value as DomesticProvider)}>
+            <option value="tencent">腾讯</option>
+            <option value="alibaba">阿里巴巴</option>
+            <option value="meituan">美团</option>
+          </select>
+          <Input value={domesticKeyword} placeholder="例如：后端、算法、产品经理" onChange={(event) => setDomesticKeyword(event.target.value)} />
+          <Button type="button" disabled={domesticBusy || !domesticKeyword.trim()} onClick={() => void searchDomestic()}>
+            <Search className="h-4 w-4" />搜索
+          </Button>
+        </div>
+        {domesticError && <ActionError message={domesticError} />}
+        {domesticJobs.length > 0 && (
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">共 {domesticTotal} 个岗位，本页显示 {domesticJobs.length} 个</p>
+            {domesticJobs.map((item) => (
+              <article key={`${item.platform}:${item.postingId}`} className="rounded-xl border p-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1">
+                    <h3 className="font-medium">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.company} · {item.location || "地点未知"}</p>
+                  </div>
+                  <Button type="button" size="sm" disabled={busy} onClick={() => void importDomestic(item)}>导入 CareerOS</Button>
+                </div>
+                <p className="mt-3 line-clamp-3 whitespace-pre-wrap text-sm leading-6 text-muted-foreground">{item.description || "暂无岗位描述"}</p>
+                <a className="mt-2 inline-block text-xs text-primary underline" href={item.sourceUrl || item.url} target="_blank" rel="noreferrer">查看官方来源</a>
+              </article>
+            ))}
+            <div className="flex items-center justify-between gap-3 text-sm">
+              <Button type="button" variant="outline" size="sm" disabled={domesticBusy || domesticPage <= 1} onClick={() => void searchDomestic(domesticPage - 1)}>上一页</Button>
+              <span>第 {domesticPage} 页</span>
+              <Button type="button" variant="outline" size="sm" disabled={domesticBusy || domesticJobs.length === 0 || domesticPage * 10 >= domesticTotal} onClick={() => void searchDomestic(domesticPage + 1)}>下一页</Button>
+            </div>
+          </div>
+        )}
+      </Section>
       <Section
         title="导入一份岗位描述"
         description="从原始招聘信息开始。未知项可以留空，系统不会补造截止日期或任职条件。"
