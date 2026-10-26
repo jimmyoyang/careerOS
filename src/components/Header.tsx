@@ -28,10 +28,10 @@ function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border/70 bg-card/90 px-3 shadow-sm backdrop-blur-xl sm:static sm:mx-4 sm:mt-4 sm:h-16 sm:px-4 lg:mx-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button size="icon" variant="outline" className="sm:hidden">
+          <Button size="icon" variant="outline" className="rounded-xl sm:hidden">
             <PanelLeft className="h-5 w-5" />
             <span className="sr-only">展开导航</span>
           </Button>
@@ -69,7 +69,7 @@ function Header() {
         </SheetContent>
       </Sheet>
       <SidebarToggle />
-      <Link href="/dashboard" className="shrink-0 font-semibold">CareerOS<span className="hidden xl:inline"> · 招聘工作台</span></Link>
+      <Link href="/dashboard" className="shrink-0 text-sm font-semibold tracking-tight sm:text-base">CareerOS<span className="hidden xl:inline text-muted-foreground"> · 招聘工作台</span></Link>
       <form onSubmit={submitSearch} className="relative ml-auto hidden w-full max-w-sm md:block">
         <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
         <input
@@ -79,7 +79,7 @@ function Header() {
           onChange={(event) => setQuery(event.target.value)}
           placeholder="搜索职位、公司或技能"
           aria-label="搜索职位、公司或技能"
-          className="h-9 w-full rounded-lg border bg-background pl-9 pr-3 text-sm outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-10 w-full rounded-xl border-border/70 bg-muted/60 pl-9 pr-3 text-sm outline-none ring-offset-background transition focus:bg-background focus-visible:ring-2 focus-visible:ring-ring"
         />
       </form>
       <Link href="/dashboard/search" className="ml-auto inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted md:hidden"><Search className="h-4 w-4" /><span className="sr-only">职位搜索</span></Link>

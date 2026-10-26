@@ -53,11 +53,11 @@ export default async function Dashboard() {
   const sourceHighlights = Array.from(platformCounts.values());
   return (
     <>
-      <div className="col-span-3 mb-4 space-y-4">
+      <div className="col-span-3 mb-4 space-y-5">
         <CareerWorkspaceHero resumeCount={resumeList?.success ? resumeList.total : null} appliedCount={summary30Days.jobsApplied} />
         <div className="grid gap-4 @3xl/main:grid-cols-2">
           <PlatformHighlights sources={sourceHighlights} />
-          <div className="space-y-4 rounded-xl border bg-card p-5">
+          <div className="app-surface space-y-4 p-5 sm:p-6">
             <h2 className="text-lg font-semibold">简历准备</h2>
             <p className="text-sm leading-6 text-muted-foreground">{defaultResumeId ? "已设置默认简历。可以继续完善内容，或选择职位进行匹配。" : "先创建或导入简历，完善至少两个内容模块，再将常用版本设为默认。"}</p>
             <ol className="space-y-2 text-sm text-muted-foreground"><li>1. 导入 PDF / DOCX 或在线填写</li><li>2. 核对联系方式、教育与工作经历</li><li>3. 匹配职位，导出用于申请的 PDF</li></ol>
@@ -68,7 +68,7 @@ export default async function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="@container grid grid-cols-1 auto-rows-max items-start gap-2 md:gap-2 @3xl/main:col-span-2">
+      <div className="@container grid grid-cols-1 auto-rows-max items-start gap-4 @3xl/main:col-span-2">
         <div className="grid gap-2 @lg:grid-cols-4">
           <JobsApplied />
           <JobsActivityCard
@@ -99,7 +99,7 @@ export default async function Dashboard() {
       <div className="@3xl/main:relative @3xl/main:self-stretch">
         <RecentCardToggle jobs={recentJobs} activities={recentActivities} />
       </div>
-      <div className="w-full col-span-3">
+      <div className="col-span-3 w-full">
         <ActivityCalendar
           years={activityCalendarDataKeys}
           dataByYear={activityCalendarData}

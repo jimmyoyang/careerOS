@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | CareerOS",
     default: "CareerOS",
   },
-  description: "求职申请与简历管理工作台",
+  description: "CareerOS：把岗位、真实经历、简历材料和申请进度放在同一个求职工作台。",
 };
 
 interface Props {

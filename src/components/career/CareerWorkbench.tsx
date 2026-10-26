@@ -69,7 +69,7 @@ export function CareerWorkbench({
   };
 
   return (
-    <div className="col-span-3 mx-auto w-full min-w-0 max-w-7xl space-y-7 py-6">
+    <div className="career-workspace-shell col-span-3 mx-auto w-full min-w-0 max-w-7xl space-y-7 px-1 py-6 sm:px-2 lg:py-8">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="mb-2 flex items-center gap-2">
@@ -100,7 +100,7 @@ export function CareerWorkbench({
       <ActionError message={error} />
       {workspace && (
         <>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {[
               {
                 label: "岗位总数",
@@ -120,7 +120,7 @@ export function CareerWorkbench({
                 icon: FileText,
               },
             ].map(({ label, value, icon: Icon }) => (
-              <div key={label} className="rounded-xl border bg-card p-4 sm:p-5">
+              <div key={label} className="app-surface p-4 sm:p-5">
                 <div className="mb-3 flex items-center justify-between gap-2 text-muted-foreground">
                   <span className="text-xs sm:text-sm">{label}</span>
                   <Icon className="hidden h-4 w-4 sm:block" />
