@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CareerOS 本地岗位采集</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <main>
+    <header><strong>CareerOS</strong><span>本地岗位采集</span></header>
+    <button id="capture" type="button">读取当前页面</button>
+    <p id="status" role="status">不会访问 CareerOS 或外部接口。</p>
+    <section id="preview" hidden>
+      <label>职位<input id="title" maxlength="200"></label>
+      <label>公司<input id="company" maxlength="200"></label>
+      <label>地点<input id="location" maxlength="120"></label>
+      <label>岗位描述<textarea id="description" maxlength="12000" rows="8"></textarea></label>
+      <p id="missing" class="warning"></p>
+      <button id="save" type="button">保存到本地</button>
+    </section>
+    <section><h2>最近采集</h2><ul id="recent"><li>暂无记录</li></ul></section>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

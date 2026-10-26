@@ -29,7 +29,9 @@
     "phone:build": "bash scripts/build-phone.sh",
     "phone:bridge": "node scripts/phone-bridge.mjs",
     "phone:test": "node --test services/phone-bridge/*.test.mjs scripts/phone-bridge.test.mjs",
-    "phone:test:device": "node scripts/phone-device-smoke.mjs"
+    "phone:test:device": "node scripts/phone-device-smoke.mjs",
+    "browser:test": "vitest run __tests__/browser-capture-extractor.spec.ts",
+    "browser:build": "node scripts/build-browser-extension.mjs"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^2.0.4",

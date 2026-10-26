@@ -84,3 +84,4 @@ evals/*/_investigate-*
 /android/.kotlin/
 /android/**/build/
 /android/local.properties
+/companions/browser-extension/dist/

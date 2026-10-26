@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "CareerOS 本地岗位采集",
+  "version": "0.1.0",
+  "description": "读取当前网页的岗位信息，在浏览器本地预览和保存。",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {
+    "default_title": "采集到 CareerOS",
+    "default_popup": "popup.html"
+  }
+}

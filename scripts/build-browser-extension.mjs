@@ -1,0 +1,16 @@
+import { mkdir, cp, rm } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import path from "node:path";
+const exec = promisify(execFile);
+const root = process.cwd();
+const extension = path.join(root, "companions/browser-extension");
+const dist = path.join(extension, "dist");
+await rm(dist, { recursive: true, force: true });
+await mkdir(dist, { recursive: true });
+await exec(process.execPath, [path.join(root, "node_modules/typescript/bin/tsc"), "-p", path.join(extension, "tsconfig.json")]);
+await cp(path.join(extension, "manifest.json"), path.join(dist, "manifest.json"));
+await cp(path.join(extension, "src/popup.html"), path.join(dist, "popup.html"));
+await cp(path.join(extension, "src/popup.css"), path.join(dist, "popup.css"));
+await rm(path.join(dist, "extractor.js"), { force: true });
+console.log(`Browser extension built at ${dist}`);
