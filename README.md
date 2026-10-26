@@ -26,7 +26,7 @@ CareerOS 是一个自托管求职管理工具，面向中文求职场景。你�
 | 资料库与题库 | 管理公司、联系人、面试问题及答案 | 支持关联岗位和复用准备内容 |
 | 自动任务 | 配置 Greenhouse、Lever、Ashby 公司岗位发现与候选审核 | 需要配置来源、目标和模型；不覆盖全部招聘网站 |
 | AI 助手 | 对话式简历评审、岗位匹配、求职信和岗位录入 | 先在设置中选择模型；写入操作有确认步骤 |
-| 数据与扩展 | 导出 / 导入备份；可选 MCP；Android 手机伴侣与 Phone Bridge | CareerOS 部署配置默认关闭 MCP，手机端需单独配对 |
+| 数据与扩展 | 导出 / 导入备份；可选 MCP、浏览器本地采集扩展；Android 手机伴侣与 Phone Bridge | CareerOS 部署配置默认关闭 MCP，手机端需单独配对 |
 
 ## 界面与流程
 
@@ -223,6 +223,17 @@ node scripts/deploy-career.mjs stop
 ```
 
 部署会在迁移前备份数据库；`rollback` 切换代码版本，**不会自动还原数据库**。涉及数据结构变化时，应结合备份处理兼容性。
+
+## 浏览器岗位采集扩展
+
+[companions/browser-extension](companions/browser-extension) 提供 Chromium Manifest V3 扩展。扩展读取当前岗位页并预览字段；填写 CareerOS 后端地址和「设置 → MCP 访问」中创建的 `jobs:write` 令牌后，会调用 `/api/career/browser-captures`，通过现有岗位解析、URL 去重和 Prisma 写入流程保存到当前账号。未填写令牌时仍可只保存在浏览器本地。
+
+```sh
+npm run browser:test
+npm run browser:build
+```
+
+构建后在 `chrome://extensions` 开启开发者模式，加载 `companions/browser-extension/dist`。完整步骤和权限说明见扩展目录中的 README。
 
 ## 手机伴侣
 

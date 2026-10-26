@@ -14,8 +14,14 @@
       <p id="missing" class="warning"></p>
       <button id="save" type="button">保存到本地</button>
     </section>
+    <section>
+      <h2>CareerOS 后端</h2>
+      <label>后端地址<input id="backendUrl" value="http://localhost:3737" placeholder="http://localhost:3737"></label>
+      <label>API Token<input id="apiToken" type="password" placeholder="在 CareerOS 设置中创建 jobs:write Token"></label>
+      <p class="hint">填写后，保存岗位会同时写入 CareerOS；不填写仍可保存在浏览器本地。</p>
+    </section>
     <section><h2>最近采集</h2><ul id="recent"><li>暂无记录</li></ul></section>
   </main>
-  <script src="popup.js"></script>
+  <script type="module" src="popup.js"></script>
 </body>
 </html>

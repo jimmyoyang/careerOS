@@ -1,4 +1,3 @@
-export {};
 type CaptureDocument = {
   title: string;
   url: string;
@@ -7,7 +6,7 @@ type CaptureDocument = {
   text: string;
 };
 
-type JobDraft = {
+type ContentJobDraft = {
   title: string;
   company: string;
   location: string;
@@ -28,7 +27,7 @@ const findLine = (text: string, label: RegExp) => {
   const line = text.split(/[\n\r]+/).map(clean).find((item) => label.test(item));
   return line ? line.replace(label, "").replace(/^[:：\s]+/, "").trim() : "";
 };
-function extract(document: CaptureDocument): JobDraft {
+function extract(document: CaptureDocument): ContentJobDraft {
   const rawTitle = first(document.meta["og:title"], document.title, document.headings[0]);
   const titleParts = splitTitle(rawTitle);
   const title = titleParts.title;

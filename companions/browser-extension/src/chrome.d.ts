@@ -13,6 +13,10 @@ declare namespace chrome {
       function set(items: Record<string, unknown>): Promise<void>;
     }
   }
+  namespace permissions {
+    function contains(details: { origins: string[] }): Promise<boolean>;
+    function request(details: { origins: string[] }): Promise<boolean>;
+  }
   namespace runtime {
     function onMessageAddListener(listener: (message: unknown, sender: unknown, sendResponse: (value: unknown) => void) => void): void;
     const lastError: { message?: string } | undefined;

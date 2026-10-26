@@ -30,7 +30,7 @@
     "phone:bridge": "node scripts/phone-bridge.mjs",
     "phone:test": "node --test services/phone-bridge/*.test.mjs scripts/phone-bridge.test.mjs",
     "phone:test:device": "node scripts/phone-device-smoke.mjs",
-    "browser:test": "vitest run __tests__/browser-capture-extractor.spec.ts",
+    "browser:test": "vitest run __tests__/browser-capture-extractor.spec.ts __tests__/browser-capture-backend.spec.ts __tests__/browser-capture-route.spec.ts",
     "browser:build": "node scripts/build-browser-extension.mjs"
   },
   "dependencies": {
