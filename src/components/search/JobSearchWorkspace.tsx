@@ -34,7 +34,7 @@ export function JobSearchWorkspace({ sources, locations, statuses, titles = [] }
   const pageCount = Math.max(1, Math.ceil(search.total / SEARCH_PAGE_SIZE));
   return (
     <div className="career-workspace-shell col-span-3 mx-auto w-full min-w-0 max-w-7xl space-y-6 py-4 sm:py-8">
-      <section className="career-search-hero rounded-2xl px-5 py-8 text-white sm:px-10 sm:py-12">
+      <section className="career-search-hero relative overflow-hidden rounded-3xl px-5 py-8 text-white shadow-[0_24px_70px_-32px_rgba(159,8,37,0.65)] sm:px-10 sm:py-12">
         <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-white/80">CAREEROS · 多平台职位中心</p>
         <h1 className="text-3xl font-semibold sm:text-4xl">集中查找，逐一准备</h1>
         <p className="mt-3 text-sm leading-6 text-white/90">搜索已保存和导入的职位，按来源比较机会，查看简历匹配与申请进展。</p>
@@ -44,15 +44,15 @@ export function JobSearchWorkspace({ sources, locations, statuses, titles = [] }
           <Button type="submit" className="h-11 shrink-0 bg-[#cf0a2c] px-5 text-white hover:bg-[#b70926]">搜索</Button>
         </form>
       </section>
-      <section className="flex flex-wrap items-center justify-between gap-4 rounded-xl border bg-card p-4 sm:p-5">
+      <section className="app-surface flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5">
         <div><h2 className="font-semibold">华为公开招聘</h2><p className="mt-1 text-sm text-muted-foreground">查询官网校招与实习职位，选择意向后导入并准备申请。</p></div>
         <Button asChild variant="outline"><Link href="/dashboard/huawei">查询华为公开职位</Link></Button>
       </section>
-      <section className="flex flex-wrap items-center justify-between gap-4 rounded-xl border bg-card p-4 sm:p-5">
+      <section className="app-surface flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5">
         <div><h2 className="font-semibold">字节公开招聘</h2><p className="mt-1 text-sm text-muted-foreground">查询官网校招与实习职位，导入后核对手机号并准备申请。</p></div>
         <Button asChild variant="outline"><Link href="/dashboard/bytedance">查询字节公开职位</Link></Button>
       </section>
-      <section className="rounded-xl border bg-card p-4 sm:p-5">
+      <section className="app-surface p-4 sm:p-5">
         <div className="mb-4 flex items-center gap-2 text-sm font-medium"><SlidersHorizontal className="h-4 w-4 text-[#cf0a2c]" />筛选已收录职位</div>
         <div className="grid gap-3 sm:grid-cols-2 @3xl/main:grid-cols-4">
           <Filter label="来源平台" value={search.source} options={sources.map((source) => ({ ...source, label: zhLabel(source.label) }))} onChange={(source) => search.update({ source, q: search.draftQuery.trim() })} />
@@ -71,11 +71,11 @@ export function JobSearchWorkspace({ sources, locations, statuses, titles = [] }
         </div>
       </div>
       {search.loading ? (
-        <div role="status" className="flex min-h-48 items-center justify-center rounded-xl border bg-card"><Loader2 className="h-6 w-6 animate-spin text-[#cf0a2c]" /><span className="sr-only">正在加载职位</span></div>
+        <div role="status" className="app-surface flex min-h-48 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-[#cf0a2c]" /><span className="sr-only">正在加载职位</span></div>
       ) : search.error ? (
-        <div role="alert" className="space-y-3 rounded-xl border bg-card p-6"><p>{search.error}</p><Button onClick={search.retry}>重试</Button></div>
+        <div role="alert" className="app-surface space-y-3 p-6"><p>{search.error}</p><Button onClick={search.retry}>重试</Button></div>
       ) : search.jobs.length === 0 ? (
-        <div className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-6 text-center">
+        <div className="app-surface flex min-h-56 flex-col items-center justify-center gap-3 p-6 text-center">
           <BriefcaseBusiness className="h-10 w-10 text-muted-foreground/50" />
           <p className="font-medium">暂时没有匹配的职位</p>
           <p className="text-sm text-muted-foreground">调整筛选条件，或先添加职位。这里显示已收录记录，不代表平台实时职位数量。</p>

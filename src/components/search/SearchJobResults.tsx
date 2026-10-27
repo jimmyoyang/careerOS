@@ -9,7 +9,7 @@ import { JobResponse, getWorkplaceTypeLabel } from "@/models/job.model";
 
 export function SearchJobResults({ jobs, view }: { jobs: JobResponse[]; view: string }) {
   if (view === "table") return (
-    <div className="overflow-x-auto rounded-xl border bg-card">
+    <div className="app-surface overflow-x-auto">
       <table className="w-full text-left text-sm">
         <caption className="sr-only">职位搜索结果</caption>
         <thead className="border-b bg-muted/50"><tr>{["职位", "公司", "地点", "来源", "状态", "简历匹配"].map((heading) => <th scope="col" key={heading} className="whitespace-nowrap p-4">{heading}</th>)}</tr></thead>

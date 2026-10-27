@@ -1,6 +1,7 @@
 import { getResumeList } from "@/actions/profile.actions";
 import { AutomationContainer } from "@/components/automations/AutomationContainer";
 import { APP_CONSTANTS } from "@/lib/constants";
+import { PageHeader } from "@/components/PageHeader";
 
 export default async function AutomationsPage() {
   const resumeResult = await getResumeList(
@@ -15,7 +16,8 @@ export default async function AutomationsPage() {
     })) || [];
 
   return (
-    <div className="col-span-3">
+    <div className="col-span-3 min-w-0">
+      <PageHeader title="自动任务" description="配置岗位发现、筛选和候选审核，让重复工作按计划运行。" />
       <AutomationContainer resumes={resumes} />
     </div>
   );

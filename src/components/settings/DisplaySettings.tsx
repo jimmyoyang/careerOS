@@ -87,7 +87,7 @@ function DisplaySettings() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="app-surface space-y-4 p-5 sm:p-6">
         <div>
           <h3 className="text-lg font-medium">外观</h3>
           <p className="text-sm text-muted-foreground">
@@ -103,7 +103,7 @@ function DisplaySettings() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="app-surface space-y-4 p-5 sm:p-6">
       <div>
         <h3 className="text-lg font-medium">外观</h3>
         <p className="text-sm text-muted-foreground">

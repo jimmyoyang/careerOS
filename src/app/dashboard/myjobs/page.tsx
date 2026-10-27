@@ -6,6 +6,7 @@ import { getAllCompanies } from "@/actions/company.actions";
 import { getAllJobTitles } from "@/actions/jobtitle.actions";
 import { getAllJobLocations } from "@/actions/jobLocation.actions";
 import { getAllTags } from "@/actions/tag.actions";
+import { PageHeader } from "@/components/PageHeader";
 
 export const metadata: Metadata = {
   title: "职位跟踪 | CareerOS",
@@ -22,7 +23,8 @@ async function MyJobs() {
       getAllTags(),
     ]);
   return (
-    <div className="col-span-3">
+    <div className="col-span-3 min-w-0">
+      <PageHeader title="职位跟踪" description="统一管理岗位来源、申请状态、联系人和下一步行动。" />
       <JobsContainer
         companies={companies}
         titles={titles}
