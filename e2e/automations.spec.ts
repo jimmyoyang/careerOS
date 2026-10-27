@@ -22,7 +22,7 @@ async function createResumeForMatching(
   await expect(row).toBeVisible({ timeout: 20000 });
   await row.getByTestId("document-actions-menu-btn").click();
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
-  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible();
 
   // Section 1: Summary
   await page.getByRole("button", { name: "添加模块" }).click();
@@ -115,11 +115,7 @@ async function createGreenhouseAutomation(
   await submitWizard(page, dialog, /创建自动化/, name);
 }
 
-// Submits the wizard's final step and waits for the row to appear. The footer's
-// "Next" and submit buttons render at the same position, so React reuses one
-// <button> DOM node and just morphs its `type` from "button" to "submit" — the
-// last "Next" click's default action can therefore already submit the form. So
-// only click submit if that auto-submit didn't fire, and gate on the outcome.
+// Reaching Review must not create/update the automation before confirmation.
 async function submitWizard(
   page: Page,
   dialog: Locator,
@@ -128,11 +124,10 @@ async function submitWizard(
 ) {
   const link = page.getByRole("link", { name: expectName });
   const submit = dialog.getByRole("button", { name: submitName });
-  if (!(await link.isVisible().catch(() => false))) {
-    if (await submit.isEnabled().catch(() => false)) {
-      await submit.click().catch(() => {});
-    }
-  }
+  await page.waitForLoadState("networkidle");
+  await expect(submit).toBeVisible();
+  await expect(submit).toBeEnabled();
+  await submit.click();
   await expect(link).toBeVisible({ timeout: 20000 });
 }
 
@@ -327,13 +322,13 @@ test.describe("Automations", () => {
     // Matching -> Schedule
     await dialog.getByRole("button", { name: "下一步" }).click();
 
-    // hourA (taken by automation A) is flagged "In use" in the picker.
+    // hourA (taken by automation A) is flagged "已占用" in the picker.
     await dialog.getByRole("combobox").click();
     await expect(
       page
         .getByRole("option")
         .filter({ hasText: labelA })
-        .filter({ hasText: "In use" }),
+        .filter({ hasText: "已占用" }),
     ).toBeVisible();
 
     // Picking the taken hour and clicking Next surfaces the clash error and

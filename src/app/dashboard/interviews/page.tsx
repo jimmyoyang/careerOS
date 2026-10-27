@@ -7,7 +7,7 @@ import { getStatusList } from "@/actions/job.actions";
 import { PageHeader } from "@/components/PageHeader";
 
 export const metadata: Metadata = {
-  title: "面试 | CareerOS",
+  title: "面试",
 };
 
 async function Interviews() {

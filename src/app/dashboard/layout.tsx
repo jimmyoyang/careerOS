@@ -49,7 +49,7 @@ export default async function RootLayout({
             <div className="soft-grid flex min-h-screen w-full flex-col bg-muted/30">
               <Sidebar user={user} signOutAction={signOutAction} />
               <SidebarInset>
-                <Header />
+                <Header user={user} signOutAction={signOutAction} />
                 <GlobalActivityBanner />
                 {/* Container, not viewport, queries: the docked chat panel
                     shrinks this box without changing the viewport width. */}

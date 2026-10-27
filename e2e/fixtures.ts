@@ -24,7 +24,7 @@ export async function selectOrCreate(
   placeholder: string,
   value: string,
 ) {
-  await page.getByLabel(label).click();
+  await page.getByLabel(label, { exact: true }).click();
   const input = page.getByPlaceholder(placeholder);
   await input.click();
   await input.fill(value);
@@ -54,7 +54,7 @@ export async function selectOrCreateWithEnter(
   placeholder: string,
   value: string,
 ) {
-  await page.getByLabel(label).click();
+  await page.getByLabel(label, { exact: true }).click();
   const input = page.getByPlaceholder(placeholder);
   await input.click();
   await input.fill(value);
@@ -87,7 +87,7 @@ export async function createNewJob(
   // "Add Job") when starting from /dashboard, or the myjobs page's own inline
   // trigger (labeled "New Job", from AddJob.tsx) when already on
   // /dashboard/myjobs — createNewJob is called from both contexts.
-  await page.getByRole("button", { name: /^(新建|添加)?职位$/ }).click();
+  await page.getByRole("button", { name: /^(新建|添加)职位$/ }).click();
   await expect(page).toHaveURL(/\/dashboard\/myjobs/);
   // Dashboard's "Job" button auto-opens the dialog via ?add-job=true.
   await expect(page.getByTestId("add-job-dialog-title")).toBeVisible();
@@ -164,8 +164,18 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   // Auto-login every test and land on the dashboard.
   page: async ({ page, baseURL }, use) => {
-    await page.goto("/");
-    await login(page);
+    if (process.env.E2E_ISOLATED_ACCOUNTS === "true") {
+      // Production builds deliberately disable the cleanup API. A fresh
+      // account per test keeps schedules and records isolated without it.
+      await page.goto("/signup");
+      await page.getByLabel("姓名", { exact: true }).fill("浏览器验收");
+      await page.getByLabel("邮箱", { exact: true }).fill(`qa-${randomUUID()}@example.com`);
+      await page.getByLabel("密码", { exact: true }).fill("password123");
+      await page.locator("form").getByRole("button", { name: "注册账号", exact: true }).click();
+    } else {
+      await page.goto("/");
+      await login(page);
+    }
     await expect(page).toHaveURL(baseURL + "/dashboard");
     await use(page);
   },
@@ -204,6 +214,7 @@ export const test = base.extend<Fixtures>({
     });
     // page.request carries the session cookie; page is still alive here
     // because cleanup tears down before the page fixture.
+    if (process.env.E2E_ISOLATED_ACCOUNTS === "true") return;
     const res = await page.request.post("/api/test/cleanup", {
       data: {
         jobIds,

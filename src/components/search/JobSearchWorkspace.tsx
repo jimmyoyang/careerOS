@@ -36,7 +36,7 @@ export function JobSearchWorkspace({ sources, locations, statuses, titles = [] }
     <div className="career-workspace-shell col-span-3 mx-auto w-full min-w-0 max-w-7xl space-y-6 py-4 sm:py-8">
       <section className="career-search-hero relative overflow-hidden rounded-3xl px-5 py-8 text-white shadow-[0_24px_70px_-32px_rgba(159,8,37,0.65)] sm:px-10 sm:py-12">
         <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-white/80">CAREEROS · 多平台职位中心</p>
-        <h1 className="text-3xl font-semibold sm:text-4xl">集中查找，逐一准备</h1>
+        <h2 className="text-3xl font-semibold sm:text-4xl">集中查找，逐一准备</h2>
         <p className="mt-3 text-sm leading-6 text-white/90">搜索已保存和导入的职位，按来源比较机会，查看简历匹配与申请进展。</p>
         <form onSubmit={(event) => { event.preventDefault(); search.submit(); }} className="mt-7 flex max-w-2xl items-center gap-2 rounded-xl bg-white p-2">
           <Search className="ml-2 hidden h-5 w-5 shrink-0 text-slate-500 sm:block" />

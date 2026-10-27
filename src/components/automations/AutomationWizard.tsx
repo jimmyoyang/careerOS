@@ -146,19 +146,20 @@ export function AutomationWizard({
               )}
               {step < STEPS.length - 1 ? (
                 <Button
+                  key="next"
                   type="button"
-                  onClick={nextStep}
+                  onClick={(event) => { event.preventDefault(); nextStep(); }}
                   disabled={!canGoNext()}
                 >
                   下一步
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               ) : (
-                <Button type="submit" disabled={isSubmitting}>
+                <Button key="submit" type="submit" disabled={isSubmitting}>
                   {isSubmitting && (
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                   )}
-                  {editAutomation ? "更新" : "创建"} 自动化
+                  {editAutomation ? "更新自动化" : "创建自动化"}
                 </Button>
               )}
             </DialogFooter>

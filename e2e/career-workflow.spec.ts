@@ -127,7 +127,7 @@ test("CareerOS imports an exact JD, reviews facts, and produces a guarded prepar
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
-  if (process.env.E2E_PRODUCTION !== "true") {
+  if (process.env.E2E_PRODUCTION !== "true" && process.env.E2E_ISOLATED_ACCOUNTS !== "true") {
     const cleared = await page.request.post("/api/test/cleanup", {
       data: { careerEvidenceTitles: [evidenceTitle] },
     });

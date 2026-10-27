@@ -103,7 +103,6 @@ export default function RecruitingWorkspace() {
     finally { setBusy(""); }
   }
   return <div className="mx-auto w-full max-w-5xl space-y-6 pb-12">
-    <header className="space-y-2"><h1 className="text-2xl font-semibold">求职资料与账号</h1><p className="text-sm text-muted-foreground">集中维护网申资料，以及每个招聘账号实际使用的邮箱、手机号和接码设备。</p></header>
     {error && <div role="alert" className="rounded-md border border-destructive/40 p-4 text-sm text-destructive">{error}</div>}
     {loading ? <p role="status">正在读取资料…</p> : !draft || !saved ? <Button onClick={() => void load()}>重新读取资料</Button> : <>
       {recoveryNotice && <p role="status" className="rounded-lg border bg-muted p-3 text-sm">{recoveryNotice}</p>}

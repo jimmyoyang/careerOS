@@ -4,6 +4,7 @@ import {
   domesticPostingKey,
   domesticSource,
   searchDomesticJobs,
+  getDomesticJobDetails,
   type DomesticJob,
 } from "@/lib/domestic";
 
@@ -47,6 +48,32 @@ describe("domestic public job adapters", () => {
       .mockResolvedValueOnce(new Response("ok", { status: 200, headers: { "set-cookie": "XSRF-TOKEN=csrf-1; Path=/" } }))
       .mockResolvedValueOnce(response({ success: true, content: { totalCount: 1, datas: [{ id: "ali-1", name: "算法工程师", workLocations: ["杭州"], modifyTime: 1790000000000, positionUrl: "/off-campus/position-detail?positionId=ali-1", description: "参与算法研发" }] } }));
     await expect(searchDomesticJobs("alibaba", "算法", 1, fetcher)).resolves.toEqual({ total: 1, jobs: [expect.objectContaining({ company: "阿里巴巴", title: "算法工程师", location: "杭州", description: "参与算法研发", postingId: "ali-1", platform: "alibaba" })] });
+    expect(new Headers(fetcher.mock.calls[1][1].headers).get("Cookie")).toBe("XSRF-TOKEN=csrf-1");
+  });
+
+  it("does not mistake an upstream business error for no matching jobs", async () => {
+    const fetcher = vi.fn().mockResolvedValue(response({ code: 403, msg: "访问受限" }));
+    await expect(searchDomesticJobs("meituan", "数据", 1, fetcher)).rejects.toThrow("美团");
+  });
+
+  it("bounds requests and avoids stale cached job listings", async () => {
+    const fetcher = vi.fn().mockResolvedValue(response({ Code: 200, Data: { Count: 0, Posts: [] } }));
+    await searchDomesticJobs("tencent", "数据", 1, fetcher);
+    expect(fetcher.mock.calls[0][1]).toMatchObject({ cache: "no-store", signal: expect.any(AbortSignal) });
+  });
+
+  it("does not fabricate a job description when the source omits it", () => {
+    expect(domesticJobToImport({ title: "工程师", company: "腾讯", description: "", location: "", url: "", platform: "tencent", postingId: "1" }).rawJd).toBe("");
+  });
+
+  it("fetches Tencent requirements before importing a search result", async () => {
+    const job: DomesticJob = { title: "工程师", company: "腾讯", description: "摘要", location: "", platform: "tencent", postingId: "1001", url: "https://careers.tencent.com/jobdesc.html?postId=123456" };
+    const fetcher = vi.fn().mockResolvedValue(response({ Code: 200, Data: { RecruitPostId: 1001, RecruitPostName: "工程师", Responsibility: "完整职责", Requirement: "任职要求", PostURL: job.url } }));
+    const details = await getDomesticJobDetails(job, fetcher);
+    expect(domesticJobToImport(details).rawJd).toBe("完整职责\n\n任职要求");
+    expect(fetcher).toHaveBeenCalledWith(expect.stringContaining("/ByPostId?postId=123456"), expect.anything());
+    await expect(getDomesticJobDetails({ ...job, url: "http://127.0.0.1/" }, fetcher)).rejects.toThrow("来源");
+    expect(fetcher).toHaveBeenCalledTimes(1);
   });
 
   it("maps Meituan search results and reports upstream errors", async () => {

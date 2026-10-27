@@ -9,7 +9,7 @@ import { getAllTags } from "@/actions/tag.actions";
 import { PageHeader } from "@/components/PageHeader";
 
 export const metadata: Metadata = {
-  title: "职位跟踪 | CareerOS",
+  title: "职位跟踪",
 };
 
 async function MyJobs() {

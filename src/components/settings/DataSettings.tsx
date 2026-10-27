@@ -160,7 +160,7 @@ export default function DataSettings() {
           json.snapshotPath
             ? "此前的数据已保存为快照，可在下方恢复。"
             : ""
-        } 请重新输入 AI 服务商的 API 密钥、重新生成 MCP 令牌，并刷新页面。`,
+        } 此账号已有的 API 密钥和 MCP 令牌已保留，请刷新页面查看数据。`,
         "导入完成",
       );
       setPreflight(null);
@@ -326,7 +326,7 @@ export default function DataSettings() {
             <AlertDialogDescription asChild>
               <div className="space-y-2">
                 <p>
-                  此操作无法撤销。以下数据将被永久删除，并替换为备份内容：
+                  以下数据将替换为备份内容。导入前会自动保存当前数据的快照，可在下方恢复：
                 </p>
                 <ul className="list-inside list-disc text-sm">
                   {destroyed.map(([model, n]) => (

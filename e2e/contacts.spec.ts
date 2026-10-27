@@ -8,8 +8,7 @@ import {
   type CleanupRegistry,
 } from "./fixtures";
 
-// selectOrCreate with an exact label: its substring match also hits the
-// "Filter by role" select and the "Contacts" tabpanel. Same popover-close wait.
+// Match the combobox role so a tabpanel with the same label is excluded.
 async function pick(
   page: Page,
   scope: Locator | Page,
@@ -17,7 +16,7 @@ async function pick(
   placeholder: string,
   value: string,
 ) {
-  await scope.getByLabel(label, { exact: true }).click();
+  await scope.getByRole("combobox", { name: label, exact: true }).click();
   const input = page.getByPlaceholder(placeholder);
   await input.fill(value);
   const createOption = page.getByText(`创建： ${value}`);
@@ -270,7 +269,7 @@ test.describe("Job Contacts tab", () => {
     await page.getByRole("button", { name: "添加联系人" }).click();
 
     // The picker has no create path; what's typed carries into the dialog
-    await page.getByLabel("联系人", { exact: true }).click();
+    await page.getByRole("combobox", { name: "联系人", exact: true }).click();
     await page.getByPlaceholder("搜索联系人").fill(name);
     await page.keyboard.press("Escape");
     await page.getByRole("button", { name: "新建联系人" }).click();
@@ -280,7 +279,7 @@ test.describe("Job Contacts tab", () => {
     await dialog.getByRole("button", { name: "保存" }).click();
     cleanup.contact(name);
     await expect(dialog).not.toBeVisible();
-    await expect(page.getByLabel("联系人", { exact: true })).toContainText(
+    await expect(page.getByRole("combobox", { name: "联系人", exact: true })).toContainText(
       name,
     );
 

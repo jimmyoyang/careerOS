@@ -19,7 +19,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "招聘工作台 | CareerOS",
+  title: "招聘工作台",
 };
 
 export default async function Dashboard() {

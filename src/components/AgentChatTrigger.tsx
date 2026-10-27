@@ -10,7 +10,7 @@ export function AgentChatTrigger() {
   return (
     <Button
       variant="outline"
-      className="relative"
+      className="relative h-10 w-10 shrink-0 px-0 sm:w-auto sm:px-4"
       aria-label={isOpen ? "关闭助手" : "打开助手"}
       onClick={() => (isOpen ? close() : open())}
     >
@@ -19,7 +19,7 @@ export function AgentChatTrigger() {
       ) : (
         <>
           <MessageSquare className="h-4 w-4" />
-          AI 助手
+          <span className="hidden sm:inline">AI 助手</span>
         </>
       )}
       {/* Deliberately no streaming state: nothing generates while the panel

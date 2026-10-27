@@ -32,7 +32,7 @@ test.describe("Profile page", () => {
     await deleteResume(page, resumeTitle);
     // Assert on the persistent outcome (row removed) rather than the toast,
     // which auto-dismisses after 5s and can vanish before the poll under load.
-    await expect(page.locator("tbody")).not.toContainText(resumeTitle, {
+    await expect(page.getByRole("row", { name: new RegExp(resumeTitle) })).toHaveCount(0, {
       timeout: 20000,
     });
   });
@@ -82,7 +82,7 @@ test.describe("Profile page", () => {
     await expect(
       page.getByRole("heading", { name: "编辑联系方式" }),
     ).toBeVisible();
-    await page.getByLabel("名").fill("Jane");
+    await page.getByLabel("名", { exact: true }).fill("Jane");
     await page.getByRole("button", { name: "保存" }).click();
     await expect(page.getByRole("heading", { name: "Jane Doe" })).toBeVisible();
   });
@@ -268,9 +268,9 @@ async function addContactInfo(
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
   await page.getByRole("button", { name: "添加模块" }).click();
   await page.getByRole("menuitem", { name: "添加联系方式" }).click();
-  await page.getByLabel("名").waitFor({ state: "visible" });
-  await page.getByLabel("名").click();
-  await page.getByLabel("名").fill(firstName);
+  await page.getByLabel("名", { exact: true }).waitFor({ state: "visible" });
+  await page.getByLabel("名", { exact: true }).click();
+  await page.getByLabel("名", { exact: true }).fill(firstName);
   await page.getByLabel("姓").click();
   await page.getByLabel("姓").fill(lastName);
   await page.getByLabel("个人简介标题").click();
@@ -293,7 +293,7 @@ async function addSummary(page: Page, resumeTitle: string, summaryText: string) 
     .getByTestId("document-actions-menu-btn")
     .click();
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
-  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: resumeTitle, exact: true })).toBeVisible();
   await page.getByRole("button", { name: "添加模块" }).click();
   await page.getByRole("menuitem", { name: "添加个人简介" }).click();
   await page.getByLabel("模块标题").fill("Summary");
@@ -315,7 +315,7 @@ async function addEducation(
     .getByTestId("document-actions-menu-btn")
     .click({ force: true });
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
-  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: resumeTitle, exact: true })).toBeVisible();
   await page.getByRole("button", { name: "添加模块" }).click();
   await page.getByRole("menuitem", { name: "添加教育经历" }).click();
   // Wait for the dialog to open
@@ -371,7 +371,7 @@ async function addExperience(
     .getByTestId("document-actions-menu-btn")
     .click();
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
-  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: resumeTitle, exact: true })).toBeVisible();
   await page.getByRole("button", { name: "添加模块" }).click();
   await page.getByRole("menuitem", { name: "添加工作经历" }).click();
   // Wait for the dialog to open
@@ -417,7 +417,7 @@ async function addSkill(
     .getByTestId("document-actions-menu-btn")
     .click();
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
-  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: resumeTitle, exact: true })).toBeVisible();
   await page.getByRole("button", { name: "添加模块" }).click();
   await page.getByRole("menuitem", { name: "添加技能" }).click();
   await page.getByRole("combobox", { name: "搜索或添加技能…" }).click();
@@ -440,7 +440,7 @@ async function addCertification(
     .getByTestId("document-actions-menu-btn")
     .click();
   await page.getByRole("link", { name: "查看或编辑简历" }).click();
-  await expect(page.getByRole("heading", { name: "简历" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: resumeTitle, exact: true })).toBeVisible();
   await page.getByRole("button", { name: "添加模块" }).click();
   await page
     .getByRole("menuitem", { name: "添加证书或执照" })

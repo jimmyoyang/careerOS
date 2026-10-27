@@ -12,7 +12,7 @@ test("an interview stage added on a job appears on the Interviews page", async (
   await page.getByTestId("timeline-add-stage-btn").click();
   await page.getByTestId("stage-type-select").click();
   const search = page.getByPlaceholder("搜索阶段");
-  await search.fill("Final / Onsite Interview");
+  await search.fill("终面 / 现场面试");
   await page
     .getByRole("option", { name: "终面 / 现场面试", exact: true })
     .click();

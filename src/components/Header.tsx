@@ -15,9 +15,12 @@ import {
 } from "@/components/ui/sheet";
 import { SIDEBAR_LINKS } from "@/lib/constants";
 import SidebarToggle from "./SidebarToggle";
+import { ProfileDropdown } from "./ProfileDropdown";
+import { TooltipProvider } from "./ui/tooltip";
+import type { CurrentUser } from "@/models/user.model";
 import { AgentChatTrigger } from "./AgentChatTrigger";
 
-function Header() {
+function Header({ user, signOutAction }: { user: CurrentUser; signOutAction: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
@@ -28,17 +31,17 @@ function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border/70 bg-card/90 px-3 shadow-sm backdrop-blur-xl sm:static sm:mx-4 sm:mt-4 sm:h-16 sm:px-4 lg:mx-6">
+    <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-2 rounded-2xl border border-border/70 bg-card/90 px-3 shadow-sm backdrop-blur-xl sm:static sm:mx-4 sm:mt-4 sm:h-16 sm:gap-3 sm:px-4 lg:mx-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button size="icon" variant="outline" className="rounded-xl sm:hidden">
+          <Button size="icon" variant="outline" className="shrink-0 rounded-xl sm:hidden">
             <PanelLeft className="h-5 w-5" />
             <span className="sr-only">展开导航</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="sm:max-w-xs">
+        <SheetContent side="left" className="overflow-y-auto sm:max-w-xs">
           <SheetTitle className="sr-only">导航菜单</SheetTitle>
-          <nav className="grid gap-6 text-lg font-medium">
+          <nav className="grid gap-2 text-base font-medium">
             <SheetClose asChild>
               <Link
                 href="/dashboard"
@@ -57,7 +60,7 @@ function Header() {
                 <SheetClose asChild key={item.label}>
                   <Link
                     href={item.route}
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    className="flex min-h-11 items-center gap-4 rounded-xl px-2.5 text-muted-foreground hover:bg-muted hover:text-foreground"
                   >
                     <item.icon className="h-5 w-5" />
                     {item.label}
@@ -85,6 +88,11 @@ function Header() {
       <Link href="/dashboard/search" className="ml-auto inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted md:hidden"><Search className="h-4 w-4" /><span className="sr-only">职位搜索</span></Link>
 
       <AgentChatTrigger />
+      <div className="w-10 shrink-0 sm:hidden">
+        <TooltipProvider>
+          <ProfileDropdown user={user} expanded={false} signOutAction={signOutAction} />
+        </TooltipProvider>
+      </div>
     </header>
   );
 }

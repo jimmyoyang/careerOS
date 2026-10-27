@@ -22,7 +22,7 @@ async function createTask(
   await titleInput.blur();
 
   if (options?.activityType) {
-    await page.getByText("选择活动类型").click({ force: true });
+    await page.getByRole("combobox", { name: "活动类型", exact: true }).click();
     await page
       .getByPlaceholder("创建或搜索活动类型")
       .fill(options.activityType);
@@ -389,7 +389,7 @@ test.describe("Tasks Management", () => {
 
       await expect(
         page.locator("[data-sonner-toast]").filter({
-          hasText: "Cannot start an activity from a completed or cancelled task",
+          hasText: "已完成或已取消的待办不能开始活动。",
         }),
       ).toBeVisible();
     });

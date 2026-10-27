@@ -158,7 +158,7 @@ export function AddStageDialog({
                   <FormLabel>阶段</FormLabel>
                   <div data-testid="stage-type-select">
                     <Combobox
-                      options={stageTypes}
+                      options={stageTypes.map((type) => ({ ...type, label: zhLabel(type.label) }))}
                       field={field}
                       fullWidth
                       label="stage"

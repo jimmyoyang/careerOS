@@ -49,7 +49,7 @@ export function ProfileDropdown({
                 aria-label="用户菜单"
                 className="navlink h-10 w-full text-muted-foreground hover:text-foreground"
               >
-                <span className="relative flex h-full w-14 shrink-0 items-center justify-center">
+                <span className="relative flex h-full w-10 shrink-0 items-center justify-center">
                   <UserAvatar user={user} />
                   {version?.updateAvailable && (
                     <>
@@ -115,7 +115,7 @@ export function ProfileDropdown({
             <form action={signOutAction}>
               <button type="submit" className="flex w-full items-center">
                 <PowerIcon className="w-5 mr-2" />
-                <div className="hidden md:block">退出登录</div>
+                <span>退出登录</span>
               </button>
             </form>
           </DropdownMenuItem>

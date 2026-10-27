@@ -123,6 +123,8 @@ CareerOS 是一个自托管求职管理工具，面向中文求职场景。你�
 
 点击「导入 CareerOS」后，系统会把公开岗位转换为普通岗位记录，保留原始描述、来源平台和岗位编号。重复导入同一平台的同一岗位编号会关联已有岗位，不会创建重复记录。公开招聘接口发生错误时，页面会显示可重试的错误，不会把错误误报成空结果。
 
+腾讯导入会额外读取官网详情，包含列表中省略的任职要求。阿里查询使用官网返回的临时会话 Cookie 与 CSRF 标识；单次网络请求最长等待 15 秒。搜索支持回车提交、分页与空结果提示。已保存的岗位保留导入时的原文快照，重复导入只追加来源，不覆盖旧内容。
+
 该功能只读取公开招聘信息并写入 CareerOS，不会登录招聘网站、接收验证码、勾选协议或代替用户提交申请。
 
 ## 快速启动
@@ -293,6 +295,19 @@ npm run build
 npm run test:e2e
 npm run phone:test
 ```
+
+真实招聘站测试位于 [e2e/public-jobs-live.spec.ts](e2e/public-jobs-live.spec.ts)，默认关闭。启用后会实际查询五家官网、读取详情并写入测试数据库；腾讯、阿里、美团还会验证刷新后持久化和重复导入。它不会向官网投递申请。
+
+先在独立数据库和上传目录启动测试实例，再运行下面的命令。`E2E_EXTERNAL_SERVER=true` 复用该实例；`E2E_ISOLATED_ACCOUNTS=true` 为每条测试注册独立账号，因此也能检查关闭了清理 API 的生产构建。测试数据留在该独立数据库中，验收结束后可删除测试目录。不要把地址指向日常使用的实例。
+
+```sh
+E2E_BASE_URL=http://localhost:3740 E2E_EXTERNAL_SERVER=true \
+  E2E_CHANNEL=chrome E2E_ISOLATED_ACCOUNTS=true E2E_LIVE_SOURCES=true \
+  npx playwright test e2e/public-jobs-live.spec.ts e2e/navigation.spec.ts \
+  e2e/career-workflow.spec.ts --project=chromium --workers=2
+```
+
+`E2E_CHANNEL=chrome` 使用本机 Chrome；使用 Playwright 自带 Chromium 时可省略。第三方官网可能变更接口或限流，真实联网测试失败时应检查实际响应，不能用固定返回值替代验收。AI 生成还需要在设置中配置可用的模型服务；未配置模型不影响手动导入、事实确认、材料编译和归档。
 
 ## 当前边界
 

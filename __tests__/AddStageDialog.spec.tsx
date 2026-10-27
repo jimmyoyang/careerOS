@@ -91,7 +91,7 @@ describe("AddStageDialog", () => {
     render(<AddStageDialog {...props} />);
 
     await openStageTypePicker();
-    await userEvent.click(screen.getByRole("option", { name: "Offer" }));
+    await userEvent.click(screen.getByRole("option", { name: "录用通知" }));
     await userEvent.click(screen.getByRole("button", { name: "添加阶段" }));
 
     expect(addJobStage).toHaveBeenCalledWith(

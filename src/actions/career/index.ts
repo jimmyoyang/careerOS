@@ -32,7 +32,7 @@ import {
 import { createPlan, recordApplication } from "@/lib/career/applications";
 import { transaction } from "@/lib/career/transaction";
 import { event } from "@/lib/career/audit";
-import { searchDomesticJobs, type DomesticProvider } from "@/lib/domestic";
+import { domesticJobToImport, domesticPostingKey, domesticSource, getDomesticJobDetails, searchDomesticJobs, type DomesticJob, type DomesticProvider } from "@/lib/domestic";
 
 async function action<T>(operation: (userId: string) => Promise<T>) {
   try {
@@ -165,8 +165,18 @@ export async function searchDomesticJobsAction(provider: DomesticProvider, keywo
     }
   });
 }
-export async function importDomesticJobAction(input: ImportInput, key: string, postingKey: string, source: { label: string; value: string }) {
-  return action((userId) => importJob(userId, input, keySchema.parse(key), { postingKey: z.string().min(16).max(200).parse(postingKey), source: { label: z.string().min(1).max(100).parse(source.label), value: z.string().min(1).max(100).parse(source.value) } }));
+export async function importDomesticJobAction(job: DomesticJob, key: string) {
+  return action(async (userId) => {
+    z.enum(["tencent", "alibaba", "meituan"]).parse(job.platform);
+    z.string().min(1).max(120).parse(job.postingId);
+    let detail: DomesticJob;
+    try {
+      detail = await getDomesticJobDetails(job);
+    } catch (error) {
+      throw new CareerError("UPSTREAM_UNAVAILABLE", error instanceof Error ? error.message : "岗位详情暂时不可用", true);
+    }
+    return importJob(userId, domesticJobToImport(detail), keySchema.parse(key), { postingKey: domesticPostingKey(detail), source: domesticSource(detail) });
+  });
 }
 export async function parseTableAction(text: string) {
   return action(async () =>

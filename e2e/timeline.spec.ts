@@ -63,7 +63,7 @@ test("linking an interviewer to a stage puts them on the job's Contacts tab", as
   await page.getByTestId("update-status-menu-btn").click();
   await page.getByRole("menuitem", { name: "添加面试官" }).click();
 
-  await page.getByPlaceholder("姓名").fill(contactName);
+  await page.getByRole("textbox", { name: "姓名", exact: true }).fill(contactName);
   cleanup.contact(contactName);
   await page.getByRole("button", { name: "添加联系人" }).click();
   await expect(

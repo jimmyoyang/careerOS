@@ -35,6 +35,7 @@ import {
 import { addDays } from "date-fns";
 import { z } from "zod";
 import { toastActionResult } from "@/lib/toast";
+import { zhLabel } from "@/lib/i18n/zh-CN";
 import {
   Form,
   FormControl,
@@ -418,7 +419,7 @@ export function AddJob({
                                 <RadioGroupItem value={key} />
                               </FormControl>
                               <FormLabel className="font-normal">
-                                {value}
+                                {zhLabel(value)}
                               </FormLabel>
                             </FormItem>
                           ))}
@@ -452,7 +453,7 @@ export function AddJob({
                                   <RadioGroupItem value={key} />
                                 </FormControl>
                                 <FormLabel className="font-normal">
-                                  {value}
+                                  {zhLabel(value)}
                                 </FormLabel>
                               </FormItem>
                             ),

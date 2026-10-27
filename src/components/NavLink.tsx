@@ -40,9 +40,9 @@ function NavLink({ label, Icon, route, pathname, expanded }: NavLinkProps) {
             className="absolute left-1 top-2 h-7 w-1 rounded-full bg-primary"
         />
       )}
-      {/* Fixed-width lead box (= collapsed rail width) so the icon sits at the
+      {/* Fixed-width lead box (= collapsed rail width minus padding) so the icon sits at the
           same spot in both states and never moves during the slide. */}
-      <span className="flex h-full w-12 shrink-0 items-center justify-center">
+      <span className="flex h-full w-10 shrink-0 items-center justify-center">
         <Icon className="h-5 w-5 shrink-0" strokeWidth={1.7} />
       </span>
       <span

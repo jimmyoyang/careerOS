@@ -23,7 +23,7 @@ test.describe("Add New Job", () => {
       page.getByPlaceholder("将职位链接粘贴到这里"),
     ).toHaveValue("www.google.com");
     await expect(page.getByLabel("职位名称")).toContainText(jobText);
-    await expect(page.getByLabel("公司")).toContainText(
+    await expect(page.getByLabel("公司", { exact: true })).toContainText(
       `company ${jobText.replace(/\s+/g, "-")}`,
     );
     await expect(page.getByLabel("工作地点")).toContainText(
@@ -291,7 +291,7 @@ test.describe("Add New Job", () => {
     await expect(page.getByRole("row", { name: jobText }).first()).toBeVisible();
 
     await page.getByTestId("job-filter-select").click();
-    await page.getByRole("option", { name: "未通过", exact: true }).click();
+    await page.getByRole("option", { name: "已拒绝", exact: true }).click();
     await expect(page.getByRole("row", { name: jobText })).not.toBeVisible();
 
     await page.getByTestId("job-filter-select").click();
@@ -333,7 +333,7 @@ test.describe("Add New Job", () => {
       .first()
       .click();
     await expect(page.getByLabel("职位名称")).toContainText(jobText);
-    await expect(page.getByLabel("公司")).toContainText(`company ${suffix}`);
+    await expect(page.getByLabel("公司", { exact: true })).toContainText(`company ${suffix}`);
     await expect(page.getByLabel("工作地点")).toContainText(
       `location ${suffix}`,
     );

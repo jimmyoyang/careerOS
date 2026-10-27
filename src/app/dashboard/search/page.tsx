@@ -6,7 +6,7 @@ import { getAllJobTitles } from "@/actions/jobtitle.actions";
 import { JobSearchWorkspace } from "@/components/search/JobSearchWorkspace";
 import { PageHeader } from "@/components/PageHeader";
 
-export const metadata: Metadata = { title: "职位搜索 | CareerOS" };
+export const metadata: Metadata = { title: "职位搜索" };
 
 export default async function SearchPage() {
   const [sources, locations, statuses, titles] = await Promise.all([
